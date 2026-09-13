@@ -22,22 +22,22 @@ d = {
  "islak": {k: {n: {"m2": P.ISLAK_M2_DETAY[k][n], "poligon": ring(g)}
                for n, g in v.items() if n != "tum"} for k, v in P.ISLAK.items()},
  "ekipman": [{"kod": k, "ad": a, "poligon": ring(g),
-              "h": 1.45 if k=="A" else (1.70 if k in ("B","C") else 0.55)}
+              "tip": P.EK_TIP[k[0]], "h": P.EK_H[k[0]]}
              for k, a, g in P.ekipman_poligonlari()],
  "mobilya": [{"ad": a, "poligon": ring(g), "tip": t,
               "h": 1.05 if t=="banko" else (1.85 if t=="dolap" else 0.45)}
              for a, g, t in P.MOBILYA],
- "hex": {"merkez": list(P.EKIPMAN[0][5]), "kenar": round(P.HEX_S,3), "m2": P.HEX_M2},
+ "ring": dict(P.RING, merkez=list(P.EKIPMAN[0][5]), kenar=round(P.HEX_S,3)),
  "cephe": [[list(a), list(b)] for a, b in P.CEPHE],
  "kapilar": [{"nokta": list(k[0]), "genislik": k[1], "aci": k[2], "etiket": k[3]}
              for k in P.KAPILAR],
  "aydinlatma": [[round(x,2), round(y,2)] for x, y in __import__("draw").aydinlatma_izgara(None)],
  "kameralar": [
-   {"ad":"01_giristen_arenaya","baslik":"Girişten arenaya",
+   {"ad":"01_giristen_arenaya","baslik":"Girişten ringe",
     "poz":[1.10,1.70,1.60],"hedef":[7.00,0.95,6.10],"fov":70},
-   {"ad":"02_arenadan_soyunmaya","baslik":"Arenadan soyunma bloğuna",
+   {"ad":"02_arenadan_soyunmaya","baslik":"Ringden soyunma bloğuna",
     "poz":[3.20,1.70,6.60],"hedef":[9.35,1.05,4.20],"fov":66},
-   {"ad":"03_agirlik_alani","baslik":"Serbest ağırlık alanı",
+   {"ad":"03_agirlik_alani","baslik":"Ring ve serbest ağırlık alanı",
     "poz":[5.90,1.68,7.90],"hedef":[4.30,0.85,0.80],"fov":72},
    {"ad":"04_banko_karsilama","baslik":"Banko ve karşılama",
     "poz":[8.05,1.65,1.25],"hedef":[1.50,1.00,5.60],"fov":70},

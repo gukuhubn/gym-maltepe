@@ -1,6 +1,6 @@
 # Maltepe / İdealtepe — Mobilya Mağazası → Fonksiyonel Antrenman Stüdyosu
 
-Ön tasarım ve yatırım dosyası · **Rev A** · 13 Eylül 2026
+Ön tasarım ve yatırım dosyası · **Rev B** · 13 Eylül 2026
 
 ## Teslimatlar (`output/`)
 

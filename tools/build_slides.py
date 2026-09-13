@@ -121,7 +121,7 @@ def s3(c):
     h.txt(c, x2+9*mm, TOP-48*mm, f"{h.tl(P.A['ic_toplam'],2)} m²", h.FB, 34, HexColor("#FFFFFF"))
     h.txt(c, x2+9*mm, TOP-56*mm, "net iç kullanım alanı", h.F, 8, HexColor("#8FA6BE"))
     yy=TOP-70*mm
-    for t in ["Her iki bahçe de kapatılsa 161,0 m² — yine eşiğin altında.",
+    for t in ["Bahçeler kapatılmayacak — açık kullanımda kalır, alan hesabına girmez.",
               "Yönetmelik METNİ salon için m² şartı getirmiyor: soyunma ≥8 m² ve dinlenme ≥15 m² diyor.",
               "Bu iki şart mevcut planda sağlanıyor (8,24 / 8,49 ve 17,33 m²).",
               "Karar teknik değil İDARİ. Tek yol: İstanbul GSİM'den YAZILI ÖN GÖRÜŞ."]:
@@ -136,14 +136,14 @@ def s4(c):
       ("R1","ÖN GÖRÜŞ OLUMLU", h.GREEN,
        ["Mevcut alan yeterli görülür","Bu dosya olduğu gibi uygulanır","Ek maliyet yok",
         "Tadilat hemen başlar","EN HIZLI SENARYO"]),
-      ("R2","ALAN KAZANIMI GEREKİR", h.AMBER,
-       ["Arka bahçe kapatılır → 136,60 m²","İmar + tadilat ruhsatı gerekir",
-        "Kat malikleri muvafakati şart","Takvim 8–16 hafta uzar",
-        "170 m² yine sağlanamayabilir"]),
-      ("R3","KAPSAM REVİZYONU", h.RED,
-       ["Randevulu kişisel antrenman stüdyosu","GSİM tescil kapsamı daraltılır",
-        "Belediye NACE kodu buna göre","HUKUKİ GÖRÜŞ ŞART",
-        "Yanlış kod = kapatma riski"])]):
+      ("R2","KAPSAM REVİZYONU", h.AMBER,
+       ["Randevulu kişisel antrenman stüdyosu","Ring bire bir çalışmaya zaten uygun",
+        "GSİM tescil kapsamı daraltılır","Belediye NACE kodu buna göre",
+        "HUKUKİ GÖRÜŞ ŞART"]),
+      ("R3","SÖZLEŞME YOLU", h.RED,
+       ["Mesele mimari değil, ticarî","Kira sözleşmesinde fesih / indirim",
+        "Avukatla değerlendirme","Gerekirse mal sahibiyle müzakere",
+        "Geciktikçe manevra alanı daralır"])]):
         x=L+i*(kw+7*mm)
         kut(c, x, BOT+6*mm, kw, kh, True, col)
         c.setFillColor(col); c.circle(x+13*mm, BOT+6*mm+kh-13*mm, 5.4*mm, 0, 1)
@@ -153,7 +153,7 @@ def s4(c):
         for t in md:
             c.setFillColor(col); c.circle(x+10*mm, yy+1.2*mm, 1.0*mm, 0, 1)
             yy=h.para(c, x+14*mm, yy+2.6*mm, t, kw-22*mm, h.F, 8, HexColor("#DCE6EF"), 10.2)-4.6*mm
-    alt(c, "Her üç rotada da ön görüş alınmadan imalata başlanması, tescil reddi hâlinde tüm harcamayı riske atar.")
+    alt(c, "Ön görüş alınmadan imalata başlanması tüm harcamayı riske atar. Bahçe kapatarak alan kazanımı işveren kararıyla kapsam dışıdır.")
 
 def _plan(c, x, y, w, hgt, mod="oneri"):
     v=D.View(c, x, y, w, hgt, pad=5*mm)
@@ -378,7 +378,7 @@ def s12(c):
 
 def build(path="output/Gym_Sunum_16x9.pdf"):
     c=canvas.Canvas(path, pagesize=(W,HH))
-    c.setTitle("Maltepe / İdealtepe — Gym Dönüşümü · Sunum (Rev A)")
+    c.setTitle(f"Maltepe / İdealtepe — Gym Dönüşümü · Sunum ({P.REV})")
     for fn in (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12):
         fn(c); c.showPage()
     c.save(); print("→", path)

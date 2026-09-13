@@ -111,8 +111,8 @@ def ekipman(v, dolgu=True, etiketli=True):
                 poly(v, P.hex_poly(*P.EKIPMAN[0][5], s=P.HEX_S*i/4.0),
                      stroke=HexColor("#EBD3B6"), lw=0.5)
             cx,cy=P.EKIPMAN[0][5]
-            etiket(v,(cx,cy),"TRIMODE ARENA",5.6,HexColor("#FFFFFF"),h.FB,"c",dy=1.6)
-            etiket(v,(cx,cy),"10,60 m² · 4 katman",4.8,HexColor("#F6E7D4"),h.F,"c",dy=-3.0)
+            etiket(v,(cx,cy),"ALTIGEN RİNG",5.6,HexColor("#FFFFFF"),h.FB,"c",dy=1.6)
+            etiket(v,(cx,cy),"10,60 m² · 4 sıra halat",4.8,HexColor("#F6E7D4"),h.F,"c",dy=-3.0)
         else:
             poly(v, g, fill=HexColor("#333940") if dolgu else None,
                  stroke=HexColor("#1C1C1C"), lw=0.6, alpha=0.92)

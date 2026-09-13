@@ -150,36 +150,37 @@ for col,w in zip("ABCDEF",[46,20,20,20,11,10]): s1.column_dimensions[col].width=
 
 # ─────────────────────────── 3. EKİPMAN ───────────────────────────────────────
 s3=wb.create_sheet("3 · Ekipman (işverence temin)")
-s3.merge_cells("A1:G1"); st(s3["A1"],True,14,WHITE,NAVY,"left")
+s3.merge_cells("A1:H1"); st(s3["A1"],True,14,WHITE,NAVY,"left")
 s3["A1"]="EKİPMAN BİLGİ SAYFASI — BÜTÇE DIŞI"
-s3.merge_cells("A2:G2"); st(s3["A2"],False,9,"FF6B7078",CREAM,"left")
+s3.merge_cells("A2:H2"); st(s3["A2"],False,9,"FF6B7078",CREAM,"left")
 s3["A2"]=("Ekipman işverence satın alınmıştır; bu dosyadaki maliyet kalemlerine dâhil değildir. "
           "Marka/model listesi geldiğinde aşağıdaki sütunlar doldurulmalıdır.")
-for j,x in enumerate(["Kod","Ekipman","En (cm)","Boy (cm)","Adet","Footprint (m²)",
-                      "Marka / model (işveren dolduracak)"],1):
+for j,x in enumerate(["Kod","Ekipman","En (cm)","Boy (cm)","Yükseklik (m)","Adet",
+                      "Footprint (m²)","Marka / model (işveren dolduracak)"],1):
     st(s3.cell(3,j,x),True,10,WHITE,NAVY2,"center",True)
 r=4
-for kod,ad,en,boy,adet,_,_ in P.EKIPMAN:
+for kod,ad,en,boy,adet,_,_,tip,hh in P.EKIPMAN:
     alt=LIGHT if r%2==0 else WHITE
     st(s3.cell(r,1,kod),True,10,"FF16273D",alt,"center")
     st(s3.cell(r,2,ad),False,10,"FF1C1C1C",alt,"left",True)
     st(s3.cell(r,3,en if en else "altıgen"),False,10,"FF1C1C1C",alt,"right")
     st(s3.cell(r,4,boy if boy else "10,60 m²"),False,10,"FF1C1C1C",alt,"right")
-    st(s3.cell(r,5,adet),False,10,"FF1C1C1C",alt,"center")
+    st(s3.cell(r,5,hh),False,10,"FF1C1C1C",alt,"right",fmt="#,##0.00")
+    st(s3.cell(r,6,adet),False,10,"FF1C1C1C",alt,"center")
     fp = P.HEX_M2 if en is None else round(en*boy/10000*adet,2)
-    st(s3.cell(r,6,fp),False,10,"FF1C1C1C",alt,"right",fmt="#,##0.00")
-    st(s3.cell(r,7,None),False,10,"FF16273D","FFFFF6E8","left")
+    st(s3.cell(r,7,fp),False,10,"FF1C1C1C",alt,"right",fmt="#,##0.00")
+    st(s3.cell(r,8,None),False,10,"FF16273D","FFFFF6E8","left")
     r+=1
 st(s3.cell(r,2,"TOPLAM FOOTPRINT"),True,11,WHITE,NAVY,"right")
-for j in (1,3,4,5,7): st(s3.cell(r,j,None),True,11,WHITE,NAVY)
-st(s3.cell(r,5,f"=SUM(E4:E{r-1})"),True,11,WHITE,NAVY,"center")
-st(s3.cell(r,6,f"=SUM(F4:F{r-1})"),True,11,WHITE,NAVY,"right",fmt="#,##0.00")
+for j in (1,3,4,5,8): st(s3.cell(r,j,None),True,11,WHITE,NAVY)
+st(s3.cell(r,6,f"=SUM(F4:F{r-1})"),True,11,WHITE,NAVY,"center")
+st(s3.cell(r,7,f"=SUM(G4:G{r-1})"),True,11,WHITE,NAVY,"right",fmt="#,##0.00")
 r+=2
 st(s3.cell(r,2,"Salon brüt alanı"),False,10,"FF1C1C1C",LIGHT,"left")
-st(s3.cell(r,6,P.A["salon"]),False,10,"FF1C1C1C",LIGHT,"right",fmt="#,##0.00"); r+=1
+st(s3.cell(r,7,P.A["salon"]),False,10,"FF1C1C1C",LIGHT,"right",fmt="#,##0.00"); r+=1
 st(s3.cell(r,2,"Serbest sirkülasyon / çalışma alanı"),False,10,"FF1C1C1C",LIGHT,"left")
-st(s3.cell(r,6,f"={P.A['salon']}-F{r-3}"),False,10,"FF1C1C1C",LIGHT,"right",fmt="#,##0.00")
-for col,w in zip("ABCDEFG",[8,44,12,12,8,16,40]): s3.column_dimensions[col].width=w
+st(s3.cell(r,7,f"={P.A['salon']}-G{r-3}"),False,10,"FF1C1C1C",LIGHT,"right",fmt="#,##0.00")
+for col,w in zip("ABCDEFGH",[8,44,12,12,14,8,16,40]): s3.column_dimensions[col].width=w
 
 # ─────────────────────────── 4. VARSAYIMLAR ───────────────────────────────────
 s4=wb.create_sheet("4 · Varsayımlar")

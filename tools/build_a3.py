@@ -92,7 +92,9 @@ def s02(c):
       f"Özel Beden Eğitimi ve Spor Tesisleri mevzuatının il müdürlüklerince yaygın uygulanan biçiminde "
       f"spor salonlarında en az 125 m² çalışma alanı, 15'er m² kadın/erkek soyunma odası ve 15 m² dinlenme "
       f"salonu ile toplam en az 170 m² ve 2,50 m tavan yüksekliği aranmaktadır. Bu birimin net iç alanı "
-      f"{h.tl(P.A['ic_toplam'],2)} m²'dir; ön ve arka bahçenin ikisi birden kapatılsa dahi 161,0 m² ile eşiğin altında kalır. "
+      f"{h.tl(P.A['ic_toplam'],2)} m²'dir. Kapalı alanı artırmak için bahçelerin kapatılması "
+      f"işveren kararıyla kapsam dışıdır: ön ({h.tl(P.A['on_bahce'],2)} m²) ve arka bahçe "
+      f"({h.tl(P.A['arka_bahce'],2)} m²) açık kullanımda kalır ve hiçbir alan hesabına girmez. "
       f"Buna karşılık yönetmelik metninin kendisi salon için asgari m² şartı getirmez — yalnızca soyunma odası "
       f"için 8 m² ve dinlenme salonu için 15 m² der; bu iki şart mevcut planda sağlanmaktadır (8,24 / 8,49 ve 17,33 m²). "
       f"Karar bu nedenle teknik değil idaridir ve tek çözüm yolu İstanbul GSİM'den YAZILI ÖN GÖRÜŞ almaktır. "
@@ -103,19 +105,21 @@ def s02(c):
       ("R1","ÖN GÖRÜŞ OLUMLU",
        "GSİM yönetmelik metnini esas alır ve mevcut alanı yeterli görür. Bu dosya olduğu gibi uygulanır; "
        "ek maliyet yoktur. En hızlı senaryo — tadilat 3. adımda başlar."),
-      ("R2","ALAN KAZANIMI GEREKİR",
-       "Arka bahçenin (32,82 m²) kapatılması gündeme gelir → 136,60 m². İmar izni, tadilat/yapı ruhsatı ve "
-       "kat malikleri muvafakati gerekir; takvim 8–16 hafta uzar, bütçeye kaba inşaat + doğrama kalemi eklenir. "
-       "170 m² eşiği yine sağlanamayacağı için tek başına yeterli olmayabilir."),
-      ("R3","KAPSAM REVİZYONU",
+      ("R2","KAPSAM REVİZYONU",
        "Tesis, çok kullanıcılı 'spor salonu' yerine randevulu kişisel antrenman / özel ders stüdyosu olarak "
-       "konumlanır. GSİM tescil kapsamı ve belediye NACE kodu buna göre seçilir. Hukuki görüş şarttır; "
-       "yanlış kodla açılış, denetimde kapatma riski taşır.")]):
+       "konumlanır; ring zaten bire bir ve küçük grup çalışmasına uygundur. GSİM tescil kapsamı ve belediye "
+       "NACE kodu buna göre seçilir. Hukuki görüş şarttır; yanlış kodla açılış denetimde kapatma riski taşır."),
+      ("R3","SÖZLEŞME YOLU",
+       "İki rota da kapanırsa mesele mimari değil ticarîdir: kira sözleşmesindeki fesih veya indirim "
+       "imkânı avukatla değerlendirilir, gerekirse mal sahibiyle yeniden görüşülür. Bu yüzden ön görüş "
+       "başvurusu ilk aydan geç kalmamalıdır — sözleşmede manevra alanı süreyle daralır.")]):
         h.kart(c, L+i*(kw3+6*mm), ky3, kw3, 44*mm, no, ttl, body,
                h.GREEN if i==0 else (h.AMBER if i==1 else h.RED))
     h.txt(c, L, ky3-6*mm,
       "Her üç rotada da ortak olan tek şey şudur: yazılı ön görüş alınmadan imalata başlanması, tescil reddi "
-      "hâlinde harcanan tüm tadilat bedelini geri dönüşü olmayan biçimde riske atar.", h.F, 6.6, h.RED)
+      "hâlinde harcanan tüm tadilat bedelini geri dönüşü olmayan biçimde riske atar. "
+      "Bahçelerin kapatılması yoluyla alan kazanımı işveren kararıyla değerlendirme dışıdır.",
+      h.F, 6.6, h.RED)
 
 # ══ 3 UYGUNLUK KONTROL ═════════════════════════════════════════════════════════
 def s03(c):
@@ -144,8 +148,9 @@ def s03(c):
     h.txt(c, L, yy-8*mm, "KIRMIZI MADDELER — ÇÖZÜM VE MALİYET ETKİSİ", h.FB, 8.5, h.RED)
     krows=[
      ["Çalışma alanı / toplam tesis alanı eşiği",
-      "GSİM'den yazılı ön görüş (R1). Olumsuzsa arka bahçe kapatma (R2) veya kapsam revizyonu (R3)",
-      "Ön görüş: harç dışında maliyetsiz · R2: kaba inşaat + doğrama, ayrı keşif · R3: hukuki görüş bedeli"],
+      "GSİM'den yazılı ön görüş (R1). Olumsuzsa kapsam revizyonu (R2) veya kira sözleşmesi yolu (R3). "
+      "Bahçe kapatarak alan kazanımı işveren kararıyla kapsam dışıdır",
+      "Ön görüş: harç dışında maliyetsiz · R2: hukuki görüş bedeli · R3: sözleşme müzakeresi"],
      ["Bağımsız bölüm niteliği / iskân",
       "Tapu ve yapı kullanma izin belgesinin çıkarılması; niteliği uygun değilse tapu tashihi",
       "Belge temini düşük bedelli; tashih gerekirse süre etkisi 4–10 hafta"],
@@ -237,14 +242,16 @@ def s05(c):
     D.kuzey_ok(v, L+pw-13*mm, y-13*mm); D.olcek_cubugu(v, L+5*mm, BOT+13*mm)
     h.lejant(c, L+5*mm, BOT+3*mm,
         [(D.C_YENI,"Yeni imalat"),(D.C_DUVAR,"Mevcut — korunuyor"),(D.C_CEPHE,"Cephe doğraması"),
-         (HexColor("#B87333"),"TRIMODE arena"),(HexColor("#333940"),"Ekipman (işverence temin)")])
+         (HexColor("#B87333"),"Altıgen ring"),(HexColor("#333940"),"Ekipman (işverence temin)")])
     x2=L+pw+7*mm; w2=CW-pw-7*mm; yy=y
     h.txt(c, x2, yy-4*mm, "EKİPMAN YERLEŞİMİ — mevcut ölçüler", h.FB, 8, h.NAVY)
     rows=[]
-    for kod,ad,en,boy,adet,_,_ in P.EKIPMAN:
-        rows.append([kod, ad, "altıgen" if en is None else f"{en}×{boy}", str(adet)])
-    yy=h.tablo(c, x2, yy-7*mm, [("Kod",0.10),("Ekipman",0.60),("Ölçü (cm)",0.20),("Ad.",0.10)],
-               rows, w2, satir_h=5.8*mm, fs=6.4, hizala=["c","l","r","c"])
+    for kod,ad,en,boy,adet,_,_,tip,hh in P.EKIPMAN:
+        rows.append([kod, ad, "altıgen · 10,60 m²" if en is None else f"{en}×{boy}",
+                     f"{hh:.2f}".replace(".",","), str(adet)])
+    yy=h.tablo(c, x2, yy-7*mm, [("Kod",0.09),("Ekipman",0.52),("Ölçü (cm)",0.20),
+                                ("Yük. (m)",0.11),("Ad.",0.08)],
+               rows, w2, satir_h=5.8*mm, fs=6.3, hizala=["c","l","r","r","c"])
     h.txt(c, x2, yy-7*mm, "SİRKÜLASYON VE ACİL ÇIKIŞ ANALİZİ", h.FB, 8, h.NAVY)
     rows2=[["Salon brüt alanı", f"{h.tl(P.A['salon'],2)} m²"],
            ["Ekipman + arena footprint", f"{h.tl(P.EK_ALAN,2)} m²"],
@@ -746,7 +753,7 @@ def s12(c):
 # ══ BUILD ══════════════════════════════════════════════════════════════════════
 def build(path="output/Gym_Donusum_Dosyasi_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
-    c.setTitle("Maltepe / İdealtepe — Gym Dönüşüm Dosyası (Rev A)")
+    c.setTitle(f"Maltepe / İdealtepe — Gym Dönüşüm Dosyası ({P.REV})")
     c.setAuthor("Ön tasarım dosyası"); c.setSubject(P.PROJE)
     for fn in (s01,s02,s03,s04,s05,s06,s07,s08,s09,s10,s11,s12):
         fn(c); c.showPage()

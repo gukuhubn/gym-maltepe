@@ -91,7 +91,8 @@ ul{{padding-left:20px}} li{{margin:5px 0;color:#C9D6E4;font-size:13.5px}}
  <div class="uyari"><b>EN KRİTİK BULGU —</b> Mevzuatın il müdürlüklerince yaygın uygulanan
  biçiminde spor salonlarında en az 125 m² çalışma alanı, 15'er m² kadın/erkek soyunma ve 15 m²
  dinlenme salonu ile toplam en az 170 m² aranmaktadır. Bu birimin net iç alanı
- {P.A['ic_toplam']:.2f} m²'dir; iki bahçe de kapatılsa 161,0 m² ile eşiğin altında kalır.
+ {P.A['ic_toplam']:.2f} m²'dir. Kapalı alanı artırmak için bahçelerin kapatılması işveren kararıyla
+ kapsam dışıdır — ön ve arka bahçe açık kullanımda kalır, hiçbir alan hesabına girmez.
  Yönetmelik metninin kendisi salon için m² şartı getirmez (soyunma ≥8 m², dinlenme ≥15 m² der) ve
  bu iki şart mevcut planda sağlanır. Yatırımın ilk adımı imalat değil,
  İstanbul GSİM'den alınacak <b>yazılı ön görüş</b>tür.</div>

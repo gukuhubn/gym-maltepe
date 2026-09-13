@@ -1,7 +1,7 @@
 # BUILD NOTES — Maltepe / İdealtepe Gym Dönüşümü
 
 **MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU**
-Rev A · 13 Eylül 2026 · fiyat referansı **Eylül 2026 piyasa mertebesi**
+Rev B · 13 Eylül 2026 · fiyat referansı **Eylül 2026 piyasa mertebesi**
 
 ---
 
@@ -182,3 +182,38 @@ yaklaşık %40'ını oluşturur — TL/m² değerinin konut yenilemesi çıpalar
    ve hijyen şartı, birimin bodrum katta olup olmadığı (bodrumda özel havalandırma zorunlu),
    İlçe Sağlık Müdürlüğü raporu ve personel hijyen eğitimi belgesi, çevresel gürültü
    değerlendirme raporu, kullanım değişikliğinden doğabilecek otopark/sığınak yükümlülüğü.
+
+---
+
+## 10 · Rev B — işveren geri bildirimiyle yapılan üç düzeltme
+
+**1 · Bahçeler gym'e katılmıyor.** Ön (24,39 m²) ve arka bahçe (32,82 m²) açık kullanımda kalır ve
+hiçbir alan hesabına girmez — zaten 103,78 m²'lik net iç alana dâhil değildi. Değişen tek şey karar
+ağacıdır: eski R2 rotası (arka bahçenin kapatılarak 136,60 m²'ye çıkılması) **kaldırıldı**. Yerine
+gelen rotalar:
+
+| | Rota | İçerik |
+|---|---|---|
+| R1 | Ön görüş olumlu | Dosya olduğu gibi uygulanır, ek maliyet yok |
+| R2 | Kapsam revizyonu | Randevulu kişisel antrenman / özel ders stüdyosu; tescil kapsamı ve NACE kodu buna göre; hukuki görüş şart |
+| R3 | Sözleşme yolu | Mesele mimari değil ticarî: kira sözleşmesindeki fesih/indirim imkânı avukatla değerlendirilir |
+
+Uygunluk sayfasındaki iki kırmızı maddenin “gerekli aksiyon” metni ve risk kaydındaki ilk satır
+buna göre güncellendi.
+
+**2 · Ortadaki hacim gerçek bir RİNG.** Önceki modelde altıgen, yatay çubuklardan oluşan bakır
+renkli bir “rig” olarak kurulmuştu ve render'larda ahşap bir yapı gibi okunuyordu. Yeniden
+modellendi: 30 cm yüksekliğinde kanvas kaplı platform, koyu gri etek ve ince kırmızı şerit,
+**altı adet koyu kırmızı vinil pedli çelik köşe direği** ve direkler arasında **dört sıra siyah ring
+halatı** (kotlar 0,35 / 0,70 / 1,05 / 1,40 m). Ringde ahşap kullanılmamıştır; malzemeler çelik,
+vinil ped, halat ve kanvastır. Teknik tanım `tools/proj.py` içindeki `RING` sözlüğündedir ve hem 3B
+modeli hem render prompt'larını besler. Paftalardaki etiket de
+“TRIMODE ARENA — altıgen ring, 4 sıra halat” olarak değişti.
+
+**3 · Ekipmanlar render'da görünüyor.** Ekipman artık düz kutu değil; her biri tipine göre tanınır
+kütle olarak modellendi (koşu bandı: bant + yan raylar + konsol · kondisyon bisikleti: volan, sele,
+gidon · dambıl rafı: iki katlı raf + dambıllar · kablo çapraz: iki ağırlık takozlu kule + makara
+kolları + barfiks · çok fonksiyonlu istasyon: takoz, oturma ve sırt pedi). Render prompt'ları da her
+makineyi adıyla ve konumuyla sayıyor, “düz kutu bırakma, referansta olmayan makine uydurma”
+talimatını içeriyor. Ekipman **bütçe dışıdır** — işverence temin edilmiştir; BoQ'nun 3. sayfasında
+yalnızca bilgi olarak, artık yükseklik sütunuyla birlikte listelenir.

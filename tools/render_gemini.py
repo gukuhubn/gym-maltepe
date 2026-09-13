@@ -11,14 +11,28 @@ D     = json.load(open("data/dimensions.json"))
 SRC   = Path("work/model"); OUT = Path("output/render"); OUT.mkdir(parents=True, exist_ok=True)
 
 ORTAK = (
- "Photorealistic architectural interior visualisation of a small boutique functional-training gym "
- "converted from a furniture shop in Istanbul. Keep the EXACT camera position, focal length, "
- "perspective, room proportions, wall and column positions, ceiling height and the position and "
- "footprint of every object in the supplied massing render — change only materials, lighting and "
- "realism. Do not add, remove or move any wall, opening, machine or rig. "
- "Total interior floor area is 104 m²; clear ceiling height 3.2 m. "
- "The hexagonal four-tier steel training rig in the centre covers 10.6 m². "
- "No brand names, no logos, no readable text anywhere. No people unless stated. "
+ "Photorealistic architectural interior visualisation of a small boutique combat-and-functional "
+ "training gym converted from a furniture shop in Istanbul. "
+ "Keep the EXACT camera position, focal length, perspective, room proportions, wall and column "
+ "positions, ceiling height and the position, footprint and height of every object in the supplied "
+ "massing render — change only materials, lighting and realism. Do not add, remove or move any wall, "
+ "opening, machine or structure. Total interior floor area is 104 m²; clear ceiling height 3.2 m.\n\n"
+ "THE CENTREPIECE IS A HEXAGONAL BOXING / MMA TRAINING RING, 10.6 m²: a low canvas-covered "
+ "platform about 30 cm high with a dark charcoal apron and a thin red trim line, SIX padded steel "
+ "corner posts wrapped in dark red vinyl pads, and FOUR rows of black ring ropes running between "
+ "the posts on every side, with visible rope tension and turnbuckles. "
+ "It is a real ring — NOT a wooden frame, NOT a timber rack, NOT shelving, NOT a pergola, NOT a "
+ "gazebo. There must be NO WOOD, NO TIMBER BEAMS and NO OAK-COLOURED STRUCTURE anywhere in the "
+ "centre of the room. Ring materials are steel, vinyl padding, rope and canvas only.\n\n"
+ "THE OWNER'S EQUIPMENT MUST BE CLEARLY VISIBLE AND RECOGNISABLE AS REAL GYM MACHINES, exactly "
+ "where the massing render places them: two commercial treadmills with running decks, side rails "
+ "and upright consoles; one upright exercise bike with a flywheel, saddle and handlebar console; "
+ "two low two-tier dumbbell racks loaded with hex dumbbells; one cable-crossover / functional "
+ "trainer with two tall weight-stack towers, adjustable pulley arms and a pull-up bar across the "
+ "top; one multi-station weight machine with a weight stack, seat pad and back pad. "
+ "Render these as believable professional equipment with realistic proportions — do not leave them "
+ "as plain boxes and do not invent extra machines that are not in the reference render.\n\n"
+ "No brand names, no logos, no readable text anywhere. No people. "
  "Shot on a 24 mm tilt-shift lens, vertical lines perfectly vertical, f/8, natural interior light "
  "balanced with the ceiling linear LEDs, clean architectural photography, high dynamic range, "
  "no fisheye distortion, no lens flare."
@@ -38,13 +52,18 @@ STIL = {
 }
 KAMERA = {
  "01_giristen_arenaya": "View from the entrance door looking diagonally across the hall towards the "
-   "hexagonal rig; the reception counter is on the left, the glazed shopfront behind the camera.",
- "02_arenadan_soyunmaya": "View across the training floor towards the two changing-room blocks on "
-   "the east wall; their doors and the partition wall are visible.",
- "03_agirlik_alani": "View over the hexagonal rig towards the free-weight and cardio zone along the "
-   "south glazed façade, two treadmills against the window wall.",
+   "hexagonal ring, which fills the centre of the frame with its red corner pads and four rope rows. "
+   "The timber-topped reception counter is at the left edge; the cable-crossover trainer and a "
+   "dumbbell rack stand against the far wall behind the ring.",
+ "02_arenadan_soyunmaya": "View across the training floor, past the near corner posts and ropes of "
+   "the hexagonal ring, towards the two changing-room blocks on the east wall; their doors and the "
+   "white partition wall are visible, with the multi-station weight machine in front of them.",
+ "03_agirlik_alani": "Wide view over the hexagonal ring towards the cardio zone along the south "
+   "glazed façade, with the two treadmills lined up against the window wall and the exercise bike "
+   "and a dumbbell rack on the right.",
  "04_banko_karsilama": "View from the training floor back towards the reception counter and the "
-   "glazed entrance façade; the lounge floor finish changes at the threshold.",
+   "glazed entrance façade, with the ring's ropes and red corner pads in the right foreground; "
+   "the lounge floor finish changes from dark rubber to light timber at the threshold.",
 }
 
 def istek(prompt, png, deneme=3):

@@ -1,6 +1,6 @@
 {
  "proje": "MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU",
- "rev": "Rev A",
+ "rev": "Rev B",
  "tarih": "13 Eylül 2026",
  "kaynak": "TRIMODE Alan Dağılımı paftası — renk maskesiyle vektörleştirildi, m² etiketleriyle kalibre (±%3)",
  "tavan_h": 3.2,
@@ -452,7 +452,7 @@
  "ekipman": [
   {
    "kod": "A",
-   "ad": "TRIMODE ARENA — 4 katmanlı altıgen rig",
+   "ad": "TRIMODE ARENA — altıgen ring, 4 sıra halat",
    "poligon": [
     [
      5.3,
@@ -479,11 +479,12 @@
      5.36
     ]
    ],
-   "h": 1.45
+   "tip": "ring",
+   "h": 1.8
   },
   {
    "kod": "B",
-   "ad": "Çok fonksiyonlu istasyon",
+   "ad": "Çok fonksiyonlu kuvvet istasyonu (ağırlık takozlu)",
    "poligon": [
     [
      8.302,
@@ -502,7 +503,8 @@
      5.141
     ]
    ],
-   "h": 1.7
+   "tip": "istasyon",
+   "h": 2.1
   },
   {
    "kod": "C",
@@ -525,11 +527,12 @@
      6.933
     ]
    ],
-   "h": 1.7
+   "tip": "kablo",
+   "h": 2.15
   },
   {
    "kod": "D1",
-   "ad": "Sehpa / dambıl rafı",
+   "ad": "Dambıl rafı / sehpa",
    "poligon": [
     [
      6.991,
@@ -548,11 +551,12 @@
      8.304
     ]
    ],
-   "h": 0.55
+   "tip": "raf",
+   "h": 0.95
   },
   {
    "kod": "D2",
-   "ad": "Sehpa / dambıl rafı",
+   "ad": "Dambıl rafı / sehpa",
    "poligon": [
     [
      8.816,
@@ -571,11 +575,12 @@
      3.513
     ]
    ],
-   "h": 0.55
+   "tip": "raf",
+   "h": 0.95
   },
   {
    "kod": "E",
-   "ad": "Kardiyo — kompakt",
+   "ad": "Kardiyo — kondisyon bisikleti",
    "poligon": [
     [
      9.189,
@@ -594,11 +599,12 @@
      1.145
     ]
    ],
-   "h": 0.55
+   "tip": "bisiklet",
+   "h": 1.25
   },
   {
    "kod": "F1",
-   "ad": "Koşu bandı / kürek",
+   "ad": "Koşu bandı",
    "poligon": [
     [
      5.925,
@@ -617,11 +623,12 @@
      0.09
     ]
    ],
-   "h": 0.55
+   "tip": "kosu",
+   "h": 1.45
   },
   {
    "kod": "F2",
-   "ad": "Koşu bandı / kürek",
+   "ad": "Koşu bandı",
    "poligon": [
     [
      8.525,
@@ -640,7 +647,8 @@
      0.11
     ]
    ],
-   "h": 0.55
+   "tip": "kosu",
+   "h": 1.45
   }
  ],
  "mobilya": [
@@ -760,13 +768,26 @@
    "h": 0.45
   }
  ],
- "hex": {
+ "ring": {
+  "m2": 10.6,
+  "platform_h": 0.3,
+  "direk_h": 1.5,
+  "halat_sayisi": 4,
+  "halat_kotlari": [
+   0.35,
+   0.7,
+   1.05,
+   1.4
+  ],
+  "direk_adedi": 6,
+  "minder": "kanvas kaplı şok emici minder",
+  "direk": "siyah pedli çelik direk",
+  "halat": "siyah kılıflı ring halatı",
   "merkez": [
    5.3,
    4.35
   ],
-  "kenar": 2.02,
-  "m2": 10.6
+  "kenar": 2.02
  },
  "cephe": [
   [
@@ -893,7 +914,7 @@
  "kameralar": [
   {
    "ad": "01_giristen_arenaya",
-   "baslik": "Girişten arenaya",
+   "baslik": "Girişten ringe",
    "poz": [
     1.1,
     1.7,
@@ -908,7 +929,7 @@
   },
   {
    "ad": "02_arenadan_soyunmaya",
-   "baslik": "Arenadan soyunma bloğuna",
+   "baslik": "Ringden soyunma bloğuna",
    "poz": [
     3.2,
     1.7,
@@ -923,7 +944,7 @@
   },
   {
    "ad": "03_agirlik_alani",
-   "baslik": "Serbest ağırlık alanı",
+   "baslik": "Ring ve serbest ağırlık alanı",
    "poz": [
     5.9,
     1.68,

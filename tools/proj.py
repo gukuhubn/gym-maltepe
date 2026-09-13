@@ -9,7 +9,7 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev A"
+REV        = "Rev B"
 TARIH      = "13 Eylül 2026"
 FIYAT_TARIH= "Eylül 2026 piyasa mertebesi"
 PROJE      = "MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU"
@@ -75,14 +75,21 @@ if _d: ZON_M2["FONKSİYONEL · KARDİYO"] = round(ZON_M2["FONKSİYONEL · KARDİ
 ISLAK_M2 = A["islak_toplam"]
 
 # ───────────────────────── EKİPMAN (işverence temin — ölçüler brief'ten, cm) ────
-EKIPMAN = [  # kod, ad, en_cm, boy_cm, adet, merkez(x,y) m, aci derece
- ("A", "TRIMODE ARENA — 4 katmanlı altıgen rig", None, None, 1, (5.30, 4.35),  0),
- ("B", "Çok fonksiyonlu istasyon",               244,  62, 1, (8.18, 6.30), 98.7),
- ("C", "Kablo çapraz / functional trainer",      175, 232, 1, (3.90, 7.68), 96.1),
- ("D", "Sehpa / dambıl rafı",                    155,  39, 2, [(6.20,8.58),(8.74,4.25)], [6.1, 98.7]),
- ("E", "Kardiyo — kompakt",                       84, 150, 1, (8.66, 1.95), 8.7),
- ("F", "Koşu bandı / kürek",                     245,  74, 2, [(4.70,0.46),(7.30,0.48)], [0, 0]),
+EKIPMAN = [  # kod, ad, en_cm, boy_cm, adet, merkez(x,y) m, aci derece, tip(3B), yukseklik m
+ ("A", "TRIMODE ARENA — altıgen ring, 4 sıra halat", None, None, 1, (5.30, 4.35), 0, "ring", 1.80),
+ ("B", "Çok fonksiyonlu kuvvet istasyonu (ağırlık takozlu)", 244, 62, 1, (8.18, 6.30), 98.7, "istasyon", 2.10),
+ ("C", "Kablo çapraz / functional trainer",      175, 232, 1, (3.90, 7.68), 96.1, "kablo", 2.15),
+ ("D", "Dambıl rafı / sehpa",                    155,  39, 2, [(6.20,8.58),(8.74,4.25)], [6.1, 98.7], "raf", 0.95),
+ ("E", "Kardiyo — kondisyon bisikleti",           84, 150, 1, (8.66, 1.95), 8.7, "bisiklet", 1.25),
+ ("F", "Koşu bandı",                             245,  74, 2, [(4.70,0.46),(7.30,0.48)], [0, 0], "kosu", 1.45),
 ]
+EK_TIP = {e[0]: e[7] for e in EKIPMAN}
+EK_H   = {e[0]: e[8] for e in EKIPMAN}
+# altıgen ring teknik tanımı (3B modeli ve render prompt'ları bunu kullanır)
+RING = {"m2": 10.60, "platform_h": 0.30, "direk_h": 1.50, "halat_sayisi": 4,
+        "halat_kotlari": [0.35, 0.70, 1.05, 1.40], "direk_adedi": 6,
+        "minder": "kanvas kaplı şok emici minder", "direk": "siyah pedli çelik direk",
+        "halat": "siyah kılıflı ring halatı"}
 HEX_M2 = 10.60
 HEX_S  = math.sqrt(HEX_M2/(1.5*math.sqrt(3)))     # kenar  ≈ 2.02 m
 def hex_poly(cx, cy, s=HEX_S, rot=90):
@@ -91,7 +98,7 @@ def hex_poly(cx, cy, s=HEX_S, rot=90):
 
 def ekipman_poligonlari():
     out=[]
-    for kod, ad, w, h, n, c, a in EKIPMAN:
+    for kod, ad, w, h, n, c, a, tip, hh in EKIPMAN:
         if w is None:
             out.append((kod, ad, hex_poly(*c))); continue
         cs = c if isinstance(c, list) else [c]
@@ -322,10 +329,12 @@ MOBILYA = mobilyalar()
 UYGUNLUK = [
 ("Çalışma (salon) alanı — GSİM uygulamasında yaygın olarak ≥125 m²",
  "Salon 87,05 m² · net iç toplam 103,78 m²",
- "GSİM'den YAZILI ÖN GÖRÜŞ al. Sağlanamazsa: arka bahçenin kapatılması (+32,82 m²) veya tescil kapsamının daraltılması", "K"),
+ "GSİM'den YAZILI ÖN GÖRÜŞ al. Olumsuzsa tescil kapsamının daraltılması (randevulu stüdyo) "
+ "veya kira sözleşmesinin yeniden görüşülmesi. Bahçeler kapatılmayacaktır — işveren kararı", "K"),
 ("Toplam tesis alanı — uygulamada ≥170 m² (125+15+15+15)",
  "103,78 m² · açık 66,22 m² eksik",
- "Aynı karar ağacı. Bahçelerin ikisi de kapatılsa 161,0 m² — yine sınırın altında", "K"),
+ "Aynı karar ağacı. Kapalı alan artırımı GÜNDEMDE DEĞİL: ön ve arka bahçe açık kullanımda "
+ "kalır, hiçbir alan hesabına dâhil edilmez", "K"),
 ("İki ayrı soyunma odası (kadın + erkek)",
  "VAR — 8,24 m² (erkek) / 8,49 m² (kadın) blok", "Korunuyor; iç bölme yenilenecek", "Y"),
 ("Soyunma odası kullanım alanı ≥8 m²",
@@ -450,7 +459,7 @@ PROGRAM_HAFTA = max(b+s for _,_,b,s,_ in PROGRAM)
 # (risk, olasilik, etki, onlem, sahip)
 RISKLER = [
 ("GSİM'in 125 m² / 170 m² uygulamasını bu tesise de uygulaması → tescil reddi",
- "Yüksek","Çok yüksek","Adım 1'deki yazılı ön görüş; reddi hâlinde arka bahçe kapatma projesi veya tescil kapsamının daraltılması; kira sözleşmesinde fesih/indirim maddesinin avukatla değerlendirilmesi","İşveren"),
+ "Yüksek","Çok yüksek","Adım 1'deki yazılı ön görüş; reddi hâlinde tescil kapsamının randevulu kişisel antrenman stüdyosu olarak daraltılması; kira sözleşmesindeki fesih/indirim imkânının avukatla değerlendirilmesi. Bahçe kapatma seçeneği işveren kararıyla kapsam dışıdır","İşveren"),
 ("Kat malikleri muvafakatnamesi alınamaması → belediye ruhsatı çıkmaz",
  "Orta","Çok yüksek","Yönetim planının hemen incelenmesi; komşularla erken temas; gürültü önlemlerinin (titreşim matı) muvafakat görüşmesinde argüman olarak kullanılması","İşveren"),
 ("Pis su kotunun yerçekimiyle çözülememesi",
