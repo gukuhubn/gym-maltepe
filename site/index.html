@@ -1,0 +1,57 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8">
+<title>TRIMODE GYM — kütle modeli</title>
+<style>
+ html,body{margin:0;height:100%;background:#0E1620;font:13px/1.4 system-ui,sans-serif;color:#E7EDF3}
+ #c{position:fixed;inset:0}
+ #ui{position:fixed;left:14px;top:14px;background:rgba(14,22,32,.86);padding:12px 14px;
+     border:1px solid #24405F;border-radius:8px;max-width:290px}
+ #ui b{color:#D79A4E;letter-spacing:.04em;font-size:11px}
+ button{background:#1B2B40;color:#E7EDF3;border:1px solid #2E4D70;border-radius:5px;
+        padding:5px 9px;margin:3px 3px 0 0;cursor:pointer;font-size:11px}
+ button.on{background:#B87333;border-color:#B87333;color:#fff}
+ #nt{position:fixed;left:14px;bottom:12px;font-size:10px;color:#7B93AC}
+ .noui #ui,.noui #nt{display:none}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="ui"><b>TRIMODE GYM · KÜTLE MODELİ</b>
+ <div id="cams" style="margin-top:8px"></div>
+ <div id="sty" style="margin-top:6px"></div>
+ <div style="margin-top:8px;color:#8FA6BE;font-size:11px" id="info"></div></div>
+<div id="nt">Temsilî kütle modeli — imalat ölçüsü değildir. Ölçüler alan dağılımı paftasından ±%3.</div>
+<script src="vendor/three.min.js"></script>
+<script src="model.js"></script>
+<script>
+const q=new URLSearchParams(location.search);
+let D=null, stil=q.get("style")||"endustriyel", cam=+(q.get("cam")||0);
+if(q.get("ui")==="0"){document.documentElement.classList.add("noui")}
+const ren=new THREE.WebGLRenderer({canvas:document.getElementById("c"),antialias:true,preserveDrawingBuffer:true});
+ren.setPixelRatio(Math.min(devicePixelRatio,2)); ren.shadowMap.enabled=true;
+ren.shadowMap.type=THREE.PCFSoftShadowMap; ren.outputEncoding=THREE.sRGBEncoding;
+ren.toneMapping=THREE.ACESFilmicToneMapping; ren.toneMappingExposure=1.05;
+let scene,camera;
+function draw(){
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(stil==="minimal"?0x1A222B:0x0E1620);
+ scene.add(GymModel.build(D,stil));
+ const k=D.kameralar[cam];
+ camera=new THREE.PerspectiveCamera(k.fov,innerWidth/innerHeight,0.05,120);
+ camera.position.set(k.poz[0],k.poz[1],k.poz[2]);
+ camera.lookAt(k.hedef[0],k.hedef[1],k.hedef[2]);
+ ren.setSize(innerWidth,innerHeight); ren.render(scene,camera);
+ document.getElementById("info").textContent=k.baslik+" · "+D.stiller[stil].ad;
+ document.querySelectorAll("#cams button").forEach((b,i)=>b.className=i===cam?"on":"");
+ document.querySelectorAll("#sty button").forEach(b=>b.className=b.dataset.s===stil?"on":"");
+ window.__ready=true;
+}
+fetch("../data/dimensions.json").then(r=>r.json()).then(d=>{
+ D=d;
+ D.kameralar.forEach((k,i)=>{const b=document.createElement("button");
+   b.textContent=(i+1)+" · "+k.baslik; b.onclick=()=>{cam=i;draw()};
+   document.getElementById("cams").appendChild(b)});
+ Object.entries(D.stiller).forEach(([k,v])=>{const b=document.createElement("button");
+   b.textContent=v.ad; b.dataset.s=k; b.onclick=()=>{stil=k;draw()};
+   document.getElementById("sty").appendChild(b)});
+ draw();
+});
+addEventListener("resize",()=>{if(D)draw()});
+</script></body></html>

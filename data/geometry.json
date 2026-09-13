@@ -1,0 +1,124 @@
+{
+ "kaynak": "TRIMODE-Alan_Dagilimi.pdf (JPEG raster) - renk maskesi ile vektorlestirildi",
+ "yontem": "kontur izleme + pafta m2 etiketleriyle olcek kalibrasyonu; guney cephe yataya donduruldu",
+ "dogruluk": "+/- %3 - yerinde dogrulanacak (DXF R2010 export istenmeli)",
+ "olcek_m_per_px": 0.003653,
+ "rotasyon_derece": 0.551,
+ "poligonlar": {
+  "salon": [
+   [
+    9.885,
+    12.99
+   ],
+   [
+    5.84,
+    12.499
+   ],
+   [
+    6.392,
+    8.965
+   ],
+   [
+    0.853,
+    8.372
+   ],
+   [
+    1.136,
+    6.931
+   ],
+   [
+    0.0,
+    6.84
+   ],
+   [
+    0.579,
+    1.247
+   ],
+   [
+    1.732,
+    1.075
+   ],
+   [
+    1.957,
+    1.555
+   ],
+   [
+    3.241,
+    0.0
+   ],
+   [
+    8.924,
+    0.0
+   ],
+   [
+    9.531,
+    0.498
+   ],
+   [
+    8.314,
+    8.462
+   ],
+   [
+    10.491,
+    8.771
+   ]
+  ],
+  "erkek": [
+   [
+    10.473,
+    8.753
+   ],
+   [
+    8.329,
+    8.444
+   ],
+   [
+    8.849,
+    4.775
+   ],
+   [
+    10.996,
+    5.08
+   ]
+  ],
+  "kadin": [
+   [
+    11.012,
+    4.959
+   ],
+   [
+    8.868,
+    4.654
+   ],
+   [
+    9.466,
+    0.472
+   ],
+   [
+    10.15,
+    1.018
+   ],
+   [
+    10.116,
+    1.532
+   ],
+   [
+    10.4,
+    1.542
+   ],
+   [
+    10.456,
+    1.046
+   ],
+   [
+    11.563,
+    1.104
+   ]
+  ]
+ },
+ "alan_kontrol": {
+  "salon": 87.46,
+  "erkek": 8.04,
+  "kadin": 8.28
+ }
+}
