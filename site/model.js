@@ -1,7 +1,7 @@
 /* TRIMODE GYM — kütle modeli (three.js UMD, build adımı yok)
    Ölçüler data/dimensions.json'dan gelir; hiçbir geometri elle yazılmaz. */
 (function (global) {
-  const T = global.THREE;
+  let T = null;
 
   /* Plan koordinatı (x, y) → sahne (x, yükseklik, z=y).
      ExtrudeGeometry XY düzleminde üretilir; rotateX(-90°) sonrası
@@ -42,6 +42,7 @@
   }
 
   function build(D, stil, opts) {
+    T = global.THREE;
     opts = opts || {};
     const S = D.stiller[stil] || D.stiller.endustriyel;
     const H = D.tavan_h, root = new T.Group();

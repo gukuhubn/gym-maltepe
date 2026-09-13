@@ -217,3 +217,38 @@ kolları + barfiks · çok fonksiyonlu istasyon: takoz, oturma ve sırt pedi). R
 makineyi adıyla ve konumuyla sayıyor, “düz kutu bırakma, referansta olmayan makine uydurma”
 talimatını içeriyor. Ekipman **bütçe dışıdır** — işverence temin edilmiştir; BoQ'nun 3. sayfasında
 yalnızca bilgi olarak, artık yükseklik sütunuyla birlikte listelenir.
+
+---
+
+## 11 · Gym_Model.html — telefon / sohbet uygulaması davranışı
+
+**Tespit edilen sorun.** Dosya WhatsApp'tan iPhone'a gönderildiğinde, ekteki `.html`'e
+dokunulduğunda çoğu zaman **iOS Quick Look** önizleyicisinde açılır ve orada **JavaScript
+kapalıdır**. Önceki sürümde gezinme sekmeleri, galeri ve tüm bölümler JavaScript ile
+üretildiğinden bu durumda yalnızca ilk bölüm görünüyor, menüler ölü kalıyordu.
+Playwright ile `javaScriptEnabled:false` altında doğrulandı: nav'da 0 buton, galeride 0 görsel.
+
+**Uygulanan çözüm — ilerlemeli zenginleştirme.** Dosya yeniden kuruldu:
+
+- Bütün içerik (metin, tablolar, sekiz render) doğrudan HTML işaretlemesinde; hiçbiri
+  JavaScript ile üretilmiyor.
+- Sekme mantığı kaldırıldı; tüm bölümler varsayılan olarak görünür, gezinme gerçek
+  çapa bağlantısı (`<a href="#...">`) — JavaScript'siz de çalışır.
+- 3B görüntüleyici artık sayfa açılışında değil, **“3B modeli başlat” düğmesine basılınca**
+  yükleniyor. three.js ve model betiği `type="text/plain"` bloklarında bekliyor; böylece
+  telefonda 600 KB'lık kütüphane boşuna ayrıştırılmıyor.
+- 3B bölümünde, model çalışmazsa yerine geçen **sabit kütle modeli görseli** ve açıklayıcı
+  not var. WebGL hatası `try/catch` ile yakalanıp kullanıcıya Türkçe mesajla bildiriliyor.
+
+**Doğrulama (QA adım 6'ya eklendi).** `tools/qa_offline.js` artık iki senaryoyu birden
+ölçüyor ve `tools/qa.py` sonucu raporluyor:
+
+| Senaryo | Sonuç |
+|---|---|
+| JS açık, dosya dışı her istek reddedilmiş | 0 dış istek, 0 konsol hatası, 3B açılıyor (4 kamera düğmesi) |
+| JS kapalı, iPhone 13 ekranı | 6 bölümün 6'sı görünür · 6 çapa bağlantısı · 8 render görseli · 11 tablo satırı · yatay taşma yok |
+
+**Paylaşım önerisi.** Telefonda hızlı bakış için `Gym_Sunum_16x9.pdf` gönderilmelidir —
+PDF her cihazda ve her önizleyicide aynı görünür. `Gym_Model.html` artık telefonda da
+tamamen okunur; yalnızca döndürülebilir 3B model gerçek bir tarayıcı (Chrome/Safari'de
+“tarayıcıda aç”) gerektirir.

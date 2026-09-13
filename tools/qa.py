@@ -126,8 +126,20 @@ else:
     if j.get("render")!=8: hata(f"HTML galeri {j.get('render')} render gösteriyor")
     else: ok("HTML galeri 8 render gösteriyor")
     if not j.get("canvasBoyut"): hata("HTML 3B canvas boyutlanmadı")
-    else: ok("HTML 3B görüntüleyici çalışıyor")
+    else: ok(f"HTML 3B görüntüleyici istek üzerine açılıyor ({j.get('kamDugme')} kamera düğmesi)")
     if j.get("yatayTasma"): hata("HTML yatay taşma var")
+    # JS KAPALI senaryosu — telefon/sohbet önizlemesi
+    nj = j.get("nojs", {})
+    if nj.get("gorunurBolum") != nj.get("bolum"):
+        hata(f"JS kapalıyken {nj.get('bolum')} bölümün yalnızca {nj.get('gorunurBolum')}'i görünüyor")
+    else: ok(f"JS KAPALIYKEN {nj.get('bolum')} bölümün tamamı görünür")
+    if nj.get("nav",0) < 4: hata(f"JS kapalıyken gezinme bağlantısı {nj.get('nav')}")
+    else: ok(f"JS kapalıyken {nj.get('nav')} çapa bağlantısı çalışır durumda")
+    if nj.get("render") != 8: hata(f"JS kapalıyken galeri {nj.get('render')} görsel gösteriyor")
+    else: ok("JS kapalıyken 8 render görseli de görünüyor")
+    if nj.get("tabloSatir",0) < 8: hata("JS kapalıyken tablolar boş")
+    else: ok(f"JS kapalıyken tablolar dolu ({nj.get('tabloSatir')} satır)")
+    if nj.get("nojsTasma") or j.get("nojsTasma"): hata("JS kapalıyken yatay taşma var")
     ok(f"Gym_Model.html tek dosya, offline · {len(t.encode())/1e6:.2f} MB")
 
 print("\n7 · TESLİMAT LİSTESİ")
