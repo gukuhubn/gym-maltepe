@@ -490,7 +490,7 @@ def s08(c):
            ["Hava değişim sayısı", f"{P.ACH:.2f} h⁻¹".replace(".",",")],
            ["Islak hacim egzozu", f"{P.EGZOZ_ISLAK} m³/h (2 duş × 80 + 2 WC × 40)"],
            ["Soğutma yükü — hesaplanan", f"{h.tl(P.SOGUTMA_W)} W = {h.tl(P.SOGUTMA_BTU)} BTU/h"],
-           ["Klima çözümü", f"{P.ADET_KLIMA} × 24.000 BTU inverter split (VRF yerine — bütçe)"],
+           ["Klima çözümü", f"{P.ADET_KLIMA} bölge · {h.tl(P.KLIMA_BTU)} BTU kurulu (%{P.SOGUTMA_MARJ} marj)"],
            ["Salon ısısı — yönetmelik / tasarım", "≥18 °C / 20–22 °C"]]
     yy=h.tablo(c, x2, yy-13*mm, [("Parametre",0.48),("Değer",0.52)], rows2, w2,
                satir_h=5.6*mm, fs=6.2, hizala=["l","r"])
@@ -501,7 +501,13 @@ def s08(c):
     rows3.append(["ÖNERİLEN ABONELİK", "Trifaze 3×25 A · ≥16 kW"])
     yy=h.tablo(c, x2, yy-13*mm, [("Yük kalemi",0.70),("kW",0.30)], rows3, w2,
                satir_h=5.4*mm, fs=6.2, hizala=["l","r"])
-    h.notkutu(c, x2, yy-6*mm, w2, "Doğrulanacak — hesabın tek bilinmeyeni",
+    h.notkutu(c, x2, yy-6*mm, w2, "Ayrıntı: disiplin projeleri",
+      "Bu sayfa mekanik ve elektriğin özetidir. Kanal güzergâhları, menfez debileri, klima "
+      "yerleşimi, sıhhi tesisat kolon şeması, aydınlatma ve priz planları, zayıf akım planı ve "
+      "pano tek hat şeması ayrı dosyalardadır: Gym_Mekanik_Proje_A3.pdf (6 pafta) ve "
+      "Gym_Elektrik_Proje_A3.pdf (6 pafta). Bunların birim fiyat sütunu boş BoQ karşılıkları "
+      "Gym_Mekanik_BoQ.xlsx ve Gym_Elektrik_BoQ.xlsx dosyalarıdır.", fs=6.3, acc=h.COPPER)
+    h.notkutu(c, x2, yy-46*mm, w2, "Doğrulanacak — hesabın tek bilinmeyeni",
       "Mevcut pano gücü ve trifaze durumu BİLİNMİYOR. Hesaplanan 12,1 kW talep gücü mevcut abonelikle "
       "karşılanamazsa dağıtım şirketine güç artırım başvurusu yapılır; bu başvuru 3–8 hafta sürebilir ve "
       "takvime eklenmelidir. Tavan yüksekliği de varsayımdır (3,20 m): 2,80 m çıkarsa armatür adedi artar, "

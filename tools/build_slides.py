@@ -274,7 +274,7 @@ def s9(c):
     for i,(u,dv,a) in enumerate([
         ("TAZE HAVA", f"{h.tl(P.TAZE)} m³/h", f"{P.TAZE/P.KISI:.0f} m³/h·kişi · yasal asgari 30"),
         ("HAVA DEĞİŞİMİ", f"{P.ACH:.2f} h⁻¹".replace(".",","), f"iç hacim {h.tl(P.HACIM,1)} m³"),
-        ("SOĞUTMA", f"{h.tl(P.SOGUTMA_BTU)} BTU", f"{P.ADET_KLIMA} × 24.000 split — VRF yerine"),
+        ("SOĞUTMA", f"{h.tl(P.SOGUTMA_BTU)} BTU", f"{P.ADET_KLIMA} bölge · {h.tl(P.KLIMA_BTU)} BTU kurulu"),
         ("TALEP GÜCÜ", f"{P.TALEP_KW:.1f} kW".replace(".",","), "trifaze 3×25 A abonelik önerilir")]):
         x=L+i*(kw+6*mm); y=TOP-20*mm-kh
         kut(c, x, y, kw, kh, True, h.COPPER)

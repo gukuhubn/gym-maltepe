@@ -48,12 +48,13 @@ for poz,grup,tanim,birim,mik,lo,hi,sen in P.B:
     st(ws.cell(r,7,f"=E{r}*F{r}*K{r}"),True,9,"FF16273D",alt,"right",fmt=TL)
     st(ws.cell(r,8,f"={round(mik*lo)}*K{r}"),False,9,"FF8A8F98",alt,"right",fmt=TL)
     st(ws.cell(r,9,f"={round(mik*hi)}*K{r}"),False,9,"FF8A8F98",alt,"right",fmt=TL)
-    kod = "A" if poz=="03.08" else ("B" if poz=="03.09" else sen)
+    kod = "A" if poz=="03.08" else ("B" if poz=="03.09" else ("X" if sen=="—" else sen))
     st(ws.cell(r,10,kod),False,9,"FF6B7078",alt,"center")
     fml = {"M":"1",
            "O":"=IF('1 · Özet'!$B$4=\"ÖNERİLEN\",1,0)",
            "A":"=IF('1 · Özet'!$E$4=\"A\",1,0)",
-           "B":"=IF('1 · Özet'!$E$4=\"B\",1,0)"}[kod]
+           "B":"=IF('1 · Özet'!$E$4=\"B\",1,0)",
+           "X":"0"}[kod]
     st(ws.cell(r,11,1 if fml=="1" else fml),False,9,"FF6B7078",alt,"center")
     r+=1
 son=r-1
@@ -201,7 +202,7 @@ veri=[("Salon alanı",P.A["salon"],"m²","Alan Dağılımı paftası etiketi"),
       ("Islak hacim duvar fayansı",P.M2_SERAMIK_D,"m²","Blok çevresi × 2,20 m"),
       ("Yeni alçıpan bölme",P.M2_YENI_BOLME,"m²","Blok içi bölme payı × tavan"),
       ("Armatür adedi",P.ARMATUR_ADET,"adet","Lux hesabı — bakım 0,80 · verim 0,70 · 4400 lm"),
-      ("Klima adedi",P.ADET_KLIMA,"adet",f"{P.SOGUTMA_BTU} BTU / 24.000"),
+      ("Klima iç ünite adedi",P.ADET_KLIMA,"adet",f"bölge bazlı · kurulu {P.KLIMA_BTU} BTU"),
       ("Taze hava debisi",P.TAZE,"m³/h","max(kişi başı 55 m³/h; 3 hava değişimi/saat)"),
       ("Kurulu güç",P.KURULU_KW,"kW","Yük tablosu toplamı"),
       ("Şantiye genel gideri",P.V["santiye_gider"][0],"oran","%8–10 ortası"),

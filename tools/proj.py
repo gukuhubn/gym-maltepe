@@ -9,7 +9,7 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev B"
+REV        = "Rev C"
 TARIH      = "13 Eylül 2026"
 FIYAT_TARIH= "Eylül 2026 piyasa mertebesi"
 PROJE      = "MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU"
@@ -148,13 +148,6 @@ _AD2ZON = {"Arena / serbest ağırlık":"ARENA · SERBEST AĞIRLIK",
 ZON_ARMATUR  = {_AD2ZON[a[0]]: a[4] for a in AYDINLATMA if a[0] in _AD2ZON}
 ARMATUR_ADET = sum(a[4] for a in AYDINLATMA if a[5]=="lineer")
 DOWNLIGHT_ADET = sum(a[4] for a in AYDINLATMA if a[5]=="downlight")
-ELEKTRIK_YUK = [("Aydınlatma (LED)", round(ARMATUR_ADET*0.040 + DOWNLIGHT_ADET*0.018,2)),
-                ("Klima (split küme)", round(SOGUTMA_BTU/3412*0.33,2)),
-                ("Havalandırma + ıslak hacim egzozu", 0.55),
-                ("Elektrikli sıcak su (2 duş, ani ısıtıcı)", 6.00),
-                ("Priz + ekipman + AV/müzik", 3.50)]
-KURULU_KW = round(sum(x[1] for x in ELEKTRIK_YUK),1)
-TALEP_KW  = round(KURULU_KW*0.75,1)
 
 # ───────────────────────── METRAJ DAYANAKLARI ──────────────────────────────────
 def _cevre(p): return round(p.exterior.length,2)
@@ -169,7 +162,270 @@ M2_TAVAN       = A["ic_toplam"]
 M2_SERAMIK_D   = round(L_ISLAK*2.20, 1)         # ıslak hacim duvar fayansı h=2,20
 M2_YENI_BOLME  = round((L_ISLAK*0.55)*H, 1)     # yeni/yenilenecek alçıpan bölme payı
 ADET_ARMATUR   = ARMATUR_ADET
-ADET_KLIMA     = max(2, math.ceil(SOGUTMA_BTU/24000))
+
+
+# ═══════════════════════ MEKANİK PROJE — sistem yerleşimi ══════════════════════
+from shapely.geometry import LineString as _LS
+
+def _uzunluk(pts): return round(_LS(pts).length, 1)
+
+# ── havalandırma: tavan altı kanal güzergâhları (plan koordinatı, m) ───────────
+KANAL = {
+ "besleme": {"kesit":"500×150", "debi":1000, "hiz":3.7, "renk":"#2E7D5B",
+   "guzergah":[(0.35,6.30),(1.70,7.55),(4.10,7.90),(6.05,8.05),(7.30,7.85),(7.85,9.20),(7.95,10.55)]},
+ "egzoz":   {"kesit":"400×150", "debi":760,  "hiz":3.5, "renk":"#C8322B",
+   "guzergah":[(0.45,2.40),(1.55,1.70),(3.30,1.45),(5.60,1.25),(8.20,1.35),(8.85,2.30)]},
+ "islak":   {"kesit":"Ø160",    "debi":240,  "hiz":3.3, "renk":"#8E3BB0",
+   "guzergah":[(9.55,8.05),(9.35,6.20),(9.10,4.60),(9.70,2.60),(10.60,2.10),(11.35,2.35)]},
+}
+# menfez / valf: (kod, x, y, debi m³/h, tip)
+MENFEZ = [
+ ("M1", 1.55, 5.60, 250, "besleme"), ("M2", 4.10, 6.35, 250, "besleme"),
+ ("M3", 7.05, 7.20, 250, "besleme"), ("M4", 8.05,10.60, 250, "besleme"),
+ ("E1", 2.90, 1.60, 255, "egzoz"),   ("E2", 5.60, 1.20, 255, "egzoz"),
+ ("E3", 8.20, 1.40, 250, "egzoz"),
+ ("V1", 9.45, 8.05,  80, "valf"),    ("V2",10.35, 8.10,  40, "valf"),
+ ("V3",10.75, 1.85,  80, "valf"),    ("V4", 9.85, 1.35,  40, "valf"),
+]
+PANJUR = [("TH", 0.30, 6.25, "Dış hava panjuru 500×300 + kuş teli"),
+          ("EG", 0.42, 2.45, "Egzoz panjuru 400×300"),
+          ("EI",11.45, 2.40, "Islak hacim egzoz çıkışı Ø160")]
+FAN = [("F-TH", 1.20, 7.05, "Kanal tipi taze hava fanı — 1.000 m³/h / 250 Pa"),
+       ("F-EG", 1.25, 1.95, "Kanal tipi egzoz fanı — 760 m³/h / 200 Pa"),
+       ("F-IS", 9.45, 5.40, "Islak hacim egzoz fanı — 240 m³/h, sessiz tip")]
+
+# ── iklimlendirme: bölge bazlı split küme ─────────────────────────────────────
+def _btu(m2, w=180): return int(round(m2*w*3.412/1000)*1000)
+KLIMA = [
+ ("K1","ARENA · SERBEST AĞIRLIK", 24000, (5.95, 0.28)),
+ ("K2","FONKSİYONEL · KARDİYO",   18000, (7.95, 6.95)),
+ ("K3","GİRİŞ · BANKO · SİRKÜLASYON", 12000, (1.30, 7.35)),
+ ("K4","DİNLENME SALONU",         12000, (7.05,11.90)),
+]
+KLIMA_BTU  = sum(k[2] for k in KLIMA)
+ADET_KLIMA = len(KLIMA)
+DIS_UNITE = (11.90, 6.10)     # arka bahçe duvarı — kapalı alana dâhil değil
+BAKIR_HAT = [[(k[3][0], k[3][1]), (9.40, 5.60), DIS_UNITE] for k in KLIMA]
+L_BAKIR   = round(sum(_LS(h).length for h in BAKIR_HAT), 1)
+DRENAJ    = [[(k[3][0], k[3][1]), (9.30, 5.30), (11.30, 4.90)] for k in KLIMA]
+L_DRENAJ  = round(sum(_LS(h).length for h in DRENAJ), 1)
+
+# ── sıhhi tesisat ─────────────────────────────────────────────────────────────
+SU_GIRIS = (10.95, 1.35)                      # sayaç / ana kesme — kadın blok güneyi
+TEMIZ_SU = {"Ø25": [(10.95,1.35),(10.20,2.60),(9.90,4.80),(9.80,6.90),(9.90,8.00)],
+            "Ø20": [[(9.90,8.00),(9.45,8.10)],[(9.90,8.00),(10.35,8.05)],
+                    [(10.20,2.60),(10.75,1.85)],[(10.20,2.60),(9.85,1.40)]]}
+PIS_SU   = {"Ø100":[(9.40,8.15),(9.55,6.00),(9.85,3.40),(10.60,1.70),(11.20,1.20)],
+            "Ø70": [[(9.45,8.05),(9.40,8.15)],[(10.75,1.85),(10.60,1.70)]],
+            "Ø50": [[(10.35,8.10),(9.55,6.00)],[(9.85,1.35),(9.85,3.40)]]}
+L_TEMIZ25 = _uzunluk(TEMIZ_SU["Ø25"])
+L_TEMIZ20 = round(sum(_LS(h).length for h in TEMIZ_SU["Ø20"]), 1)
+L_SICAK   = round(L_TEMIZ20*1.35, 1)
+L_PIS100  = _uzunluk(PIS_SU["Ø100"])
+L_PIS70   = round(sum(_LS(h).length for h in PIS_SU["Ø70"]), 1)
+L_PIS50   = round(sum(_LS(h).length for h in PIS_SU["Ø50"]), 1)
+ISITICI = [("SI-1", 9.70, 7.60, "Elektrikli ani su ısıtıcı 6 kW — erkek bloğu"),
+           ("SI-2",10.55, 2.15, "Elektrikli ani su ısıtıcı 6 kW — kadın bloğu")]
+VITRIFIYE = [("WC-1",10.35,8.10,"Klozet + lavabo"),("DU-1", 9.45,8.05,"Duş teknesi + kabin"),
+             ("WC-2", 9.85,1.35,"Klozet + lavabo"),("DU-2",10.75,1.85,"Duş teknesi + kabin")]
+
+L_KANAL_B = _uzunluk(KANAL["besleme"]["guzergah"])
+L_KANAL_E = _uzunluk(KANAL["egzoz"]["guzergah"])
+L_KANAL_I = _uzunluk(KANAL["islak"]["guzergah"])
+def _brans(m):
+    hat = KANAL["besleme" if m[4]=="besleme" else ("egzoz" if m[4]=="egzoz" else "islak")]
+    return _LS(hat["guzergah"]).distance(_Pt(m[1], m[2])) + 0.60   # + düşüş payı
+from shapely.geometry import Point as _Pt
+L_BRANS   = round(sum(_brans(m) for m in MENFEZ if m[4] != "valf"), 1)
+L_BRANS_I = round(sum(_brans(m) for m in MENFEZ if m[4] == "valf"), 1)
+
+# ═══════════════════════ ELEKTRİK PROJE — cihaz yerleşimi ══════════════════════
+def _duvar_boyunca(poly, n, ofset=0.18, basla=0.0):
+    """Poligon çevresinde eşit aralıklı, içeri ofsetli noktalar."""
+    g = poly.buffer(-ofset); g = g if not g.is_empty else poly
+    r = g.exterior if hasattr(g, "exterior") else list(g.geoms)[0].exterior
+    L = r.length
+    return [(r.interpolate((basla + i/n) * L).x, r.interpolate((basla + i/n) * L).y)
+            for i in range(n)]
+
+PRIZ = [("P%d" % (i+1), x, y, "ikili topraklı priz")
+        for i, (x, y) in enumerate(_duvar_boyunca(SALON, 18, 0.20, 0.02))]
+PRIZ += [("PB1", 1.95, 6.35, "banko kuvvet + veri kutusu"),
+         ("PK1", 4.70, 1.05, "kardiyo prizi — koşu bandı 1"),
+         ("PK2", 7.30, 1.05, "kardiyo prizi — koşu bandı 2"),
+         ("PK3", 8.30, 2.55, "kardiyo prizi — bisiklet")]
+PRIZ_IP44 = [("PI1", 9.80, 7.45, "IP44 priz — erkek soyunma"),
+             ("PI2",10.45, 2.75, "IP44 priz — kadın soyunma")]
+ANAHTAR = [("A1", 0.62, 4.05, "vaviyen — ana giriş"), ("A2", 2.45, 6.95, "vaviyen — banko"),
+           ("A3", 6.85, 8.35, "komütatör — fonksiyonel"), ("A4", 7.40, 9.35, "dinlenme salonu"),
+           ("A5", 3.55, 0.55, "arena aydınlatma"), ("A6", 8.70, 7.85, "erkek soyunma"),
+           ("A7", 9.15, 3.15, "kadın soyunma")]
+SENSOR  = [("S1", 9.70, 8.10, "hareket sensörü — erkek ıslak"),
+           ("S2",10.55, 1.90, "hareket sensörü — kadın ıslak"),
+           ("S3", 7.60, 9.60, "hareket sensörü — dinlenme geçişi")]
+# zayıf akım — SOYUNMA VE WC İÇİNE KAMERA KONULMAZ
+KAMERA  = [("C1", 1.35, 6.60, "giriş ve banko"), ("C2", 3.05, 7.95, "salon kuzey"),
+           ("C3", 8.15, 6.40, "salon doğu — soyunma koridoru girişi"),
+           ("C4", 4.40, 0.75, "kardiyo ve güney cephe"),
+           ("C5", 7.35, 9.85, "dinlenme salonu")]
+HOPARLOR= [("H%d" % (i+1), x, y, "tavan hoparlörü 6 W / 100 V")
+           for i, (x, y) in enumerate([(2.20,5.20),(5.30,6.90),(7.55,5.40),
+                                       (4.10,2.10),(7.60,2.30),(8.05,10.90)])]
+VERI    = [("D1", 1.95, 6.20, "banko — router + NVR rack 9U"),
+           ("D2", 1.95, 6.05, "banko — POS / kayıt"),
+           ("AP1",4.60, 6.60, "kablosuz erişim noktası"),
+           ("AP2",7.90, 9.80, "kablosuz erişim noktası — dinlenme")]
+DEDEKTOR= [("Y%d" % (i+1), x, y, "optik duman dedektörü")
+           for i, (x, y) in enumerate([(2.55,6.05),(5.30,7.20),(7.70,4.40),(4.60,1.65),
+                                       (7.85,11.10),(9.60,6.70)])]
+YANGIN  = [("YB1", 0.85, 3.35, "yangın ihbar butonu — ana çıkış"),
+           ("YB2", 3.60, 0.60, "yangın ihbar butonu — ikinci çıkış"),
+           ("SR1", 2.25, 7.30, "siren + flaşör")]
+ACIL    = [("AA%d" % (i+1), x, y, t) for i, (x, y, t) in enumerate([
+           (0.90,4.40,"acil aydınlatma"),(3.40,0.95,"acil aydınlatma"),
+           (5.25,7.35,"acil aydınlatma"),(8.00,9.90,"acil aydınlatma"),
+           (9.55,7.10,"acil aydınlatma"),
+           (0.75,3.85,"çıkış yönlendirme"),(3.45,0.45,"çıkış yönlendirme"),
+           (6.30,8.55,"çıkış yönlendirme")])]
+PANO    = (2.35, 7.55)     # ana dağıtım panosu — banko arkası
+
+# ── linye (devre) tablosu ─────────────────────────────────────────────────────
+# (kod, tanım, koruma, kesit, bağlı güç kW, eşzamanlılık katsayısı)
+_LINYE = [
+ ("L1","Aydınlatma — arena / serbest ağırlık","1×10 A","3×1,5", 7*0.040, 1.00),
+ ("L2","Aydınlatma — fonksiyonel / kardiyo","1×10 A","3×1,5", 3*0.040, 1.00),
+ ("L3","Aydınlatma — dinlenme salonu","1×10 A","3×1,5", 3*0.040, 1.00),
+ ("L4","Aydınlatma — giriş / banko","1×10 A","3×1,5", 2*0.040, 1.00),
+ ("L5","Aydınlatma — ıslak hacim (IP44)","1×10 A","3×1,5", 6*0.018, 0.60),
+ ("L6","Acil aydınlatma ve yönlendirme","1×6 A","3×1,5", 8*0.008, 1.00),
+ ("P1","Priz — salon kuzey ve batı","1×16 A","3×2,5", 1.20, 0.50),
+ ("P2","Priz — salon güney ve doğu","1×16 A","3×2,5", 1.20, 0.50),
+ ("P3","Priz — banko, POS, veri","1×16 A","3×2,5", 1.00, 0.70),
+ ("P4","Priz — kardiyo ekipmanı (ayrı linye)","1×16 A","3×2,5", 2.40, 0.80),
+ ("P5","Priz — ıslak hacim IP44 (ayrı kaçak akım)","1×16 A","3×2,5", 0.50, 0.30),
+ ("K1","Klima — arena 24.000 BTU","1×16 A","3×2,5", 2.20, 0.85),
+ ("K2","Klima — fonksiyonel 18.000 BTU","1×16 A","3×2,5", 1.70, 0.85),
+ ("K3","Klima — giriş 12.000 BTU","1×16 A","3×2,5", 1.15, 0.85),
+ ("K4","Klima — dinlenme 12.000 BTU","1×16 A","3×2,5", 1.15, 0.70),
+ ("W1","Su ısıtıcı — erkek bloğu 6 kW","1×32 A","3×4", 6.00, 0.50),
+ ("W2","Su ısıtıcı — kadın bloğu 6 kW","1×32 A","3×4", 6.00, 0.50),
+ ("V1","Havalandırma — taze hava + egzoz fanı","1×10 A","3×1,5", 0.45, 1.00),
+ ("V2","Islak hacim egzoz fanı","1×6 A","3×1,5", 0.12, 0.80),
+ ("Z1","Zayıf akım — rack, CCTV, ses, geçiş kontrol","1×10 A","3×2,5", 0.60, 0.90),
+ ("Z2","Yangın algılama paneli (kesintisiz)","1×6 A","3×1,5", 0.15, 1.00),
+]
+# faz dağıtımı: talep gücü büyükten küçüğe, her linye o an EN AZ yüklü faza verilir
+def _fazlari_dagit(ls):
+    yuk = {"L1":0.0, "L2":0.0, "L3":0.0}; atama = {}
+    for l in sorted(ls, key=lambda x: -x[4]*x[5]):
+        f = min(yuk, key=yuk.get); atama[l[0]] = f; yuk[f] += l[4]*l[5]
+    return atama, {k: round(v,2) for k,v in yuk.items()}
+_ATAMA, FAZ_YUK = _fazlari_dagit(_LINYE)
+LINYE = [(k, t, kor, kes, _ATAMA[k], bg, es, round(bg*es,3))
+         for k, t, kor, kes, bg, es in _LINYE]
+BAGLI_KW  = round(sum(l[5] for l in LINYE), 2)          # toplam bağlı güç
+TALEP_KW_E= round(sum(l[7] for l in LINYE), 2)          # eşzamanlılık sonrası talep
+FAZ_DENGE = round(100*(max(FAZ_YUK.values())-min(FAZ_YUK.values()))/
+                  (sum(FAZ_YUK.values())/3), 1)
+AKIM_FAZ  = {f: round(FAZ_YUK[f]*1000/(230*0.92), 1) for f in FAZ_YUK}
+ANA_KESICI= 3*32 if max(AKIM_FAZ.values()) > 22 else 3*25
+ABONELIK  = f"Trifaze 3×{ANA_KESICI//3} A · {round(ANA_KESICI/3*230*3*0.92/1000)} kW"
+L_LINYE15 = round(sum(1 for l in LINYE if l[3]=="3×1,5")*14.5 + L_SALON*0.9, 0)
+L_LINYE25 = round(sum(1 for l in LINYE if l[3]=="3×2,5")*16.5 + L_SALON*0.6, 0)
+L_ZAYIF   = round(L_SALON*2.6 + 90, 0)
+SOGUTMA_MARJ = round(100*(KLIMA_BTU/SOGUTMA_BTU-1))
+# A3 sayfa 8'deki özet yük tablosu — linye tablosundan türetilir (tek kaynak)
+def _grup(pre): return round(sum(l[5] for l in LINYE if l[0].startswith(pre)), 2)
+ELEKTRIK_YUK = [("Aydınlatma (LED + acil)", _grup("L")),
+                ("Priz ve ekipman", _grup("P")),
+                ("Klima (4 iç ünite)", _grup("K")),
+                ("Elektrikli sıcak su (2 × 6 kW)", _grup("W")),
+                ("Havalandırma fanları", _grup("V")),
+                ("Zayıf akım ve yangın algılama", _grup("Z"))]
+KURULU_KW = BAGLI_KW
+TALEP_KW  = TALEP_KW_E
+
+
+# ── MEKANİK poz listesi (detay) ───────────────────────────────────────────────
+B_MEK = [
+("06.01","MEKANİK","Kanal tipi taze hava fanı — 1.000 m³/h / 250 Pa, hız kontrollü","adet",1, 18500, 31000,"M"),
+("06.02","MEKANİK","Kanal tipi egzoz fanı — 760 m³/h / 200 Pa","adet",1, 14500, 24000,"M"),
+("06.03","MEKANİK","Islak hacim egzoz fanı — 240 m³/h, sessiz tip, nem sensörlü","adet",1, 6500, 11500,"M"),
+("06.04","MEKANİK",f"Galvaniz dikdörtgen kanal {KANAL['besleme']['kesit']} — besleme ana hattı","m", L_KANAL_B, 1350, 2200,"M"),
+("06.05","MEKANİK",f"Galvaniz dikdörtgen kanal {KANAL['egzoz']['kesit']} — egzoz ana hattı","m", L_KANAL_E, 1150, 1900,"M"),
+("06.06","MEKANİK","Spiro kanal Ø200 — menfez branşmanları","m", L_BRANS, 620, 1050,"M"),
+("06.06b","MEKANİK","Spiro kanal Ø125 — ıslak hacim valf branşmanları","m", L_BRANS_I, 420, 720,"M"),
+("06.07","MEKANİK","Spiro kanal Ø160 — ıslak hacim egzoz hattı","m", L_KANAL_I, 540, 900,"M"),
+("06.08","MEKANİK","Çift sıra ayarlı besleme menfezi 300×150 + plenum","adet",4, 2400, 3900,"M"),
+("06.09","MEKANİK","Egzoz menfezi 300×150 + plenum","adet",3, 2100, 3400,"M"),
+("06.10","MEKANİK","Tavan egzoz valfi Ø160 (duş / WC)","adet",4, 950, 1600,"M"),
+("06.11","MEKANİK","Debi ayar damperi (branşman başı)","adet",7, 1150, 1900,"M"),
+("06.12","MEKANİK","Kanal susturucusu 1.000 mm — besleme ve egzoz","adet",2, 6800, 11500,"M"),
+("06.13","MEKANİK","Dış hava / egzoz panjuru + kuş teli","adet",3, 3200, 5400,"M"),
+("06.14","MEKANİK","Kanal izolasyonu — 19 mm elastomerik kauçuk","m²", round((L_KANAL_B+L_KANAL_E)*1.3,1), 780, 1300,"M"),
+("06.15","MEKANİK","Kanal askı, taşıyıcı ve titreşim takozu","m", round(L_KANAL_B+L_KANAL_E+L_KANAL_I,1), 320, 540,"M"),
+("06.16","MEKANİK","Hava debisi ölçümü, balanslama ve test raporu","götürü",1, 12000, 22000,"M"),
+("06.17","MEKANİK","SEÇENEK — ısı geri kazanımlı taze hava ünitesi 1.000 m³/h (%75 verim)","adet",1, 95000, 165000,"—"),
+("06.20","MEKANİK","Duvar tipi inverter split klima 24.000 BTU (iç + dış ünite)","adet",1, 34000, 55000,"M"),
+("06.21","MEKANİK","Duvar tipi inverter split klima 18.000 BTU (iç + dış ünite)","adet",1, 27000, 44000,"M"),
+("06.22","MEKANİK","Duvar tipi inverter split klima 12.000 BTU (iç + dış ünite)","adet",2, 19500, 32000,"M"),
+("06.23","MEKANİK","Bakır boru seti (1/4\"–5/8\") + izolasyon + bağlantı kablosu","m", L_BAKIR, 1100, 1850,"M"),
+("06.24","MEKANİK","Dış ünite galvaniz montaj konsolu ve titreşim takozu","adet",4, 3800, 6200,"M"),
+("06.25","MEKANİK","Drenaj hattı PPRC Ø25 + izolasyon","m", L_DRENAJ, 420, 720,"M"),
+("06.26","MEKANİK","Vakum, gaz şarjı, devreye alma ve test","adet",4, 3200, 5400,"M"),
+("06.30","MEKANİK","PPRC temiz su borusu Ø25 (ek parça ve montaj dahil)","m", L_TEMIZ25, 620, 1050,"M"),
+("06.31","MEKANİK","PPRC temiz su borusu Ø20 (ek parça ve montaj dahil)","m", L_TEMIZ20, 520, 880,"M"),
+("06.32","MEKANİK","PPRC sıcak su hattı Ø20 + boru izolasyonu","m", L_SICAK, 680, 1150,"M"),
+("06.33","MEKANİK","PVC pis su borusu Ø100 (%2 eğimli, askılı)","m", L_PIS100, 780, 1300,"M"),
+("06.34","MEKANİK","PVC pis su borusu Ø70","m", L_PIS70, 560, 950,"M"),
+("06.35","MEKANİK","PVC pis su borusu Ø50","m", L_PIS50, 430, 740,"M"),
+("06.36","MEKANİK","Pis su havalandırma bacası Ø70 — çatı kotuna kadar","m", 9.5, 620, 1050,"M"),
+("06.37","MEKANİK","Paslanmaz sifonlu yer süzgeci 15×15","adet",4, 1450, 2400,"M"),
+("06.38","MEKANİK","Küresel vana Ø25 / Ø20 (kolon ve branşman kesme)","adet",8, 780, 1300,"M"),
+("06.39","MEKANİK","Sayaç sonrası ana kesme vanası + pislik tutucu filtre","takım",1, 6500, 11000,"M"),
+("06.40","MEKANİK","Elektrikli ani su ısıtıcı 6 kW (blok başına)","adet",2, 9800, 17000,"M"),
+("06.41","MEKANİK","Tesisat basınç testi, dezenfeksiyon ve teslim raporu","götürü",1, 9500, 17000,"M"),
+]
+
+# ── ELEKTRİK poz listesi (detay) ──────────────────────────────────────────────
+B_ELK = [
+("05.01","ELEKTRİK","Ana dağıtım panosu — sıva üstü metal, 36 modül, montajlı","adet",1, 22000, 37000,"M"),
+("05.02","ELEKTRİK","Ana kesici 3×40 A, C eğrisi","adet",1, 3200, 5400,"M"),
+("05.03","ELEKTRİK","Kaçak akım rölesi 4×40 A / 30 mA (genel + ıslak hacim ayrı)","adet",2, 4200, 7000,"M"),
+("05.04","ELEKTRİK","Otomatik sigorta (1×6 / 1×10 / 1×16 / 1×32 A)","adet", len(LINYE), 620, 1050,"M"),
+("05.05","ELEKTRİK","Parafudr Tip 2 (aşırı gerilim koruma)","adet",1, 6800, 11500,"M"),
+("05.06","ELEKTRİK","NYY kolon hattı 5×10 mm² — sayaçtan panoya","m", 22, 780, 1300,"M"),
+("05.07","ELEKTRİK","Pano etiketleme, tek hat şeması çerçevesi ve fonksiyon testi","götürü",1, 6500, 11000,"M"),
+("05.10","ELEKTRİK","Lineer LED armatür 40 W / 4400 lm, 1.200 mm (montaj dahil)","adet", ARMATUR_ADET, 1400, 2600,"M"),
+("05.11","ELEKTRİK","IP44 downlight 18 W / 1800 lm — ıslak hacim ve soyunma","adet", DOWNLIGHT_ADET, 850, 1550,"M"),
+("05.12","ELEKTRİK","Acil aydınlatma armatürü — 3 saat bataryalı","adet",5, 1250, 2200,"M"),
+("05.13","ELEKTRİK","Acil çıkış yönlendirme armatürü","adet",3, 1150, 1950,"M"),
+("05.14","ELEKTRİK","Aydınlatma linyesi NHXMH 3×1,5 mm² — spiral boru ve işçilik dâhil","m", L_LINYE15, 110, 185,"M"),
+("05.15","ELEKTRİK","Anahtar / komütatör / vaviyen — sıva altı","adet", len(ANAHTAR), 480, 820,"M"),
+("05.16","ELEKTRİK","Hareket sensörü — ıslak hacim ve geçiş","adet", len(SENSOR), 1450, 2400,"M"),
+("05.20","ELEKTRİK","İkili topraklı priz — sıva altı, komple","adet", len(PRIZ), 620, 1050,"M"),
+("05.21","ELEKTRİK","IP44 priz — ıslak hacim","adet", len(PRIZ_IP44), 950, 1600,"M"),
+("05.22","ELEKTRİK","Priz linyesi NHXMH 3×2,5 mm² — spiral boru ve işçilik dâhil","m", L_LINYE25, 140, 230,"M"),
+("05.23","ELEKTRİK","Klima besleme hattı 3×2,5 mm² + hat sonu kesici","adet", len(KLIMA), 3400, 5700,"M"),
+("05.24","ELEKTRİK","Su ısıtıcı besleme hattı 3×4 mm² + 32 A kesici","adet",2, 5200, 8800,"M"),
+("05.25","ELEKTRİK","Havalandırma fanı besleme ve hız kontrol hattı","adet",3, 2400, 4000,"M"),
+("05.26","ELEKTRİK","Banko kuvvet + veri kutusu (gömme)","adet",1, 7500, 12500,"M"),
+("05.30","ELEKTRİK","Cat6 veri prizi + kablolama","adet",6, 1450, 2450,"M"),
+("05.31","ELEKTRİK","Kablosuz erişim noktası (AP) + PoE besleme","adet",2, 6800, 11500,"M"),
+("05.32","ELEKTRİK","IP güvenlik kamerası — iç mekân (soyunma ve WC HARİÇ)","adet", len(KAMERA), 5400, 9000,"M"),
+("05.33","ELEKTRİK","NVR + 4 TB disk + 9U rack kabinet","takım",1, 24000, 40000,"M"),
+("05.34","ELEKTRİK","Tavan hoparlörü 6 W / 100 V hat","adet", len(HOPARLOR), 1650, 2800,"M"),
+("05.35","ELEKTRİK","Anfi / ses matrisi 120 W + kaynak","takım",1, 14000, 24000,"M"),
+("05.36","ELEKTRİK","Geçiş kontrol — kapı okuyucu + elektrikli kilit + buton","takım",1, 16500, 28000,"M"),
+("05.37","ELEKTRİK","Yangın algılama paneli — 2 zon, aküleriyle","adet",1, 14500, 24500,"M"),
+("05.38","ELEKTRİK","Optik duman dedektörü","adet", len(DEDEKTOR), 1250, 2100,"M"),
+("05.39","ELEKTRİK","Yangın ihbar butonu / siren + flaşör","adet",3, 1850, 3100,"M"),
+("05.40","ELEKTRİK","Zayıf akım kablolaması (Cat6, koaksiyel, ses, algılama)","m", L_ZAYIF, 60, 105,"M"),
+("05.45","ELEKTRİK","Topraklama çubuğu, bağlantı ve ölçüm kutusu","takım",1, 8500, 14500,"M"),
+("05.46","ELEKTRİK","Ana potansiyel dengeleme barası ve iletkenleri","takım",1, 5200, 8800,"M"),
+("05.47","ELEKTRİK","Islak hacim ek potansiyel dengeleme","takım",2, 2800, 4700,"M"),
+("05.48","ELEKTRİK","Topraklama direnci ölçümü, izolasyon testi ve rapor","götürü",1, 7500, 13000,"M"),
+]
 
 # ───────────────────────── BoQ — poz listesi ───────────────────────────────────
 # (poz, grup, tanim, birim, miktar, bf_dusuk, bf_yuksek, senaryo)  senaryo: M=minimum, O=onerilen
@@ -182,13 +438,11 @@ B = [
 ("02.02","DUVAR · ALÇIPAN","Islak hacim bölmelerinde yeşil alçıpan / betopan yükseltmesi","m²", round(M2_YENI_BOLME*0.45,1), 260, 420,"M"),
 ("02.03","DUVAR · ALÇIPAN","Mevcut duvar tamiri, saten alçı ve yüzey hazırlığı","m²", M2_DUVAR_SALON,    220,   380,"M"),
 ("02.04","DUVAR · ALÇIPAN","Akustik asma tavan adası (arena üzeri) — 12 m²","m²",    12,                750,  1250,"O"),
-("03.01","ISLAK HACİM","Pis su + temiz su tesisatı yenileme (2 duş + 2 WC + lavabo)","götürü",1,  85000,150000,"M"),
 ("03.02","ISLAK HACİM","Su yalıtımı — çift bileşenli, dönüş 30 cm","m²",             round(ISLAK_M2+L_ISLAK*0.30,1), 480, 780,"M"),
 ("03.03","ISLAK HACİM","Zemin seramiği R11 kaymaz (malzeme + işçilik)","m²",         ISLAK_M2,         750,  1200,"M"),
 ("03.04","ISLAK HACİM","Duvar fayansı h=2,20 m (malzeme + işçilik)","m²",            M2_SERAMIK_D,     850,  1350,"M"),
 ("03.05","ISLAK HACİM","Vitrifiye seti — 2 klozet, 2 lavabo, armatürler","takım",    2,              12000, 22000,"M"),
 ("03.06","ISLAK HACİM","Duş teknesi + cam duşakabin (2 adet)","adet",                2,              16000, 30000,"M"),
-("03.07","ISLAK HACİM","Sıcak su — elektrikli ani ısıtıcı 2×6 kW + hat","takım",     1,              28000, 52000,"M"),
 ("03.08","ISLAK HACİM","SEÇENEK A — ıslak hacim zemini 15–20 cm yükseltme (hafif dolgu + şap + basamak/rampa)","m²", ISLAK_M2, 850, 1400,"O"),
 ("03.09","ISLAK HACİM","SEÇENEK B — öğütücülü gri su / atık su pompası (2 ünite + hat)","takım",  1, 72000, 128000,"—"),
 ("04.01","ZEMİN","Kauçuk karo 40 mm — arena / serbest ağırlık","m²",                ZON_M2["ARENA · SERBEST AĞIRLIK"], 1150, 1800,"M"),
@@ -196,16 +450,6 @@ B = [
 ("04.03","ZEMİN","Kauçuk karo 20 mm — fonksiyonel / kardiyo","m²",                  ZON_M2["FONKSİYONEL · KARDİYO"],    700, 1150,"M"),
 ("04.04","ZEMİN","LVT / laminat parke — dinlenme + giriş / banko","m²",             round(ZON_M2["DİNLENME SALONU"]+ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],2), 550, 950,"M"),
 ("04.05","ZEMİN","Süpürgelik, geçiş profilleri, eşikler","m",                       round(L_SALON+L_ISLAK,1),           160,  290,"M"),
-("05.01","ELEKTRİK","Ana pano yenileme + kaçak akım + kompanzasyonsuz dağıtım","adet",1,             55000, 105000,"M"),
-("05.02","ELEKTRİK","Priz / anahtar / kuvvet noktası (sıva altı, komple)","nokta",   64,               950,  1600,"M"),
-("05.03","ELEKTRİK","Lineer LED armatür 40 W / 4400 lm (montaj dahil)","adet",       ADET_ARMATUR,    1400,  2600,"M"),
-("05.06","ELEKTRİK","IP44 downlight 18 W / 1800 lm — ıslak hacim ve soyunma","adet", DOWNLIGHT_ADET, 850, 1550,"M"),
-("05.04","ELEKTRİK","Acil aydınlatma + yönlendirme armatürü","adet",                 8,               1150,  2100,"M"),
-("05.05","ELEKTRİK","Zayıf akım — ağ, ses sistemi, CCTV, geçiş kontrol altyapısı","götürü",1,        55000, 110000,"O"),
-("06.01","MEKANİK","Split klima 24.000 BTU inverter + montaj","adet",                ADET_KLIMA,     32000,  52000,"M"),
-("06.02","MEKANİK",f"Taze hava + egzoz seti {TAZE} m³/h (kanal, fan, menfez, susturucu)","takım",1,  65000, 120000,"M"),
-("06.03","MEKANİK",f"Islak hacim egzozu {EGZOZ_ISLAK} m³/h (2 duş + 2 WC)","takım",  1,              18000,  32000,"M"),
-("06.04","MEKANİK","Sıhhi tesisat gider hatları, süzgeçler, havalandırma bacası","götürü",1,         25000,  45000,"M"),
 ("07.01","BOYA · DEKOR","Silinebilir mat duvar boyası (astar + 2 kat)","m²",         M2_DUVAR_SALON,   150,   280,"M"),
 ("07.02","BOYA · DEKOR","Tavan boyası / açık tavan siyah boya (endüstriyel)","m²",   M2_TAVAN,         180,   310,"M"),
 ("07.03","BOYA · DEKOR","Ayna — arena ve fonksiyonel alan (6 mm, montaj dahil)","m²",14,              1150,  1950,"O"),
@@ -214,13 +458,12 @@ B = [
 ("08.02","MARANGOZ","Soyunma dolabı / askılık — 24 göz (2 blok)","göz",              24,              2400,   4200,"M"),
 ("08.03","MARANGOZ","Oturma bankı (soyunma) + dinlenme mobilyası","götürü",          1,              34000,  66000,"O"),
 ("09.01","YANGIN · GÜVENLİK","6 kg KKT yangın söndürücü + dolap + montaj","adet",     4,               3200,   5400,"M"),
-("09.02","YANGIN · GÜVENLİK","Yangın algılama (duman dedektörü + siren + panel)","götürü",1,          32000,  65000,"M"),
 ("09.03","YANGIN · GÜVENLİK","Keskin köşe / kolon darbe hafifletici kaplama","m",     18,               850,   1500,"M"),
 ("09.04","YANGIN · GÜVENLİK","Engelli erişimi — rampa, tutamak, kapı genişliği düzenlemesi","götürü",1,30000,  65000,"M"),
 ("09.05","YANGIN · GÜVENLİK","İlk yardım dolabı, AED, acil çıkış donanımı","takım",   1,              24000,  45000,"M"),
 ("10.01","TABELA · DIŞ","Işıklı kutu harf tabela + cephe folyo","götürü",            1,              48000,  95000,"O"),
 ("10.02","TABELA · DIŞ","Cephe doğrama temizlik / bakım, giriş kapısı revizyonu","götürü",1,          26000,  50000,"M"),
-]
+] + B_MEK + B_ELK
 GRUPLAR = ["YIKIM · SÖKÜM","DUVAR · ALÇIPAN","ISLAK HACİM","ZEMİN","ELEKTRİK",
            "MEKANİK","BOYA · DEKOR","MARANGOZ","YANGIN · GÜVENLİK","TABELA · DIŞ"]
 
@@ -345,22 +588,22 @@ UYGUNLUK = [
  "İmalat BoQ 03.05 / 03.06 ile karşılanıyor", "Y"),
 ("Çalışma boyunca sürekli sıcak su",
  "Kaynak bilinmiyor (doğalgaz / elektrik?)",
- "2×6 kW elektrikli ani ısıtıcı — poz 03.07. Doğalgaz varsa kombi daha ekonomik", "S"),
+ "2 × 6 kW elektrikli ani ısıtıcı — poz 06.40. Doğalgaz varsa kombi daha ekonomik", "S"),
 ("Dinlenme salonu ≥15 m², zemini halıfleks/parke vb.",
  "Kuzey kol → 17,33 m², LVT/laminat parke", "Sağlanıyor — plan sabitlenmeli", "Y"),
 ("Sporcu sayısı kadar soyunma dolabı / askılık",
  "Mevcut yok", "24 göz dolap + 2 bank — poz 08.02", "Y"),
 ("Salon ısısı ≥18 °C",
- "Mevcut ısıtma bilinmiyor", "3 × 24.000 BTU split küme (57.000 BTU hesaplandı) — poz 06.01", "Y"),
+ "Mevcut ısıtma bilinmiyor", "Bölge bazlı split küme — 4 iç ünite, 66.000 BTU kurulu (57.000 BTU hesaplandı) — poz 06.20–06.22", "Y"),
 ("Sporcu sayısına göre yeterli havalandırma",
  "Mekanik havalandırma yok",
- "1.000 m³/h taze hava = 3,0 hava değişimi/saat = 71 m³/h·kişi — poz 06.02", "Y"),
+ "1.000 m³/h taze hava = 3,0 hava değişimi/saat = 71 m³/h·kişi — poz 06.01–06.16", "Y"),
 ("Zeminin spor dalına uygun malzemeyle kaplanması",
  "Mağaza zemini — çıplak/mobilya kaplaması",
  "3 bölgeli kauçuk (40/20 mm) + LVT + ıslak hacim R11 seramik", "Y"),
 ("Yangın söndürme ekipmanı · itfaiye uygunluk raporu",
  "Mevcut değil",
- "4 adet 6 kg KKT + algılama paneli; İBB İtfaiye denetim başvurusu", "S"),
+ "4 adet 6 kg KKT (poz 09.01) + 2 zonlu algılama paneli ve 6 dedektör (poz 05.37–05.39); İBB İtfaiye denetim başvurusu", "S"),
 ("Keskin köşe ve kolonların darbe hafifletici kaplanması",
  "Kolonlar çıplak", "18 m köşe/kolon kaplaması — poz 09.03", "Y"),
 ("Engellilere ve can güvenliğine yönelik tedbirler",
@@ -377,7 +620,7 @@ UYGUNLUK = [
  "Bilinmiyor", "Islak hacim Seçenek A (zemin yükseltme) / B (pompa) kararını belirler", "K"),
 ("Elektrik pano gücü ve trifaze durumu",
  "Bilinmiyor",
- "Hesaplanan kurulu güç 16,2 kW / talep 12,1 kW — trifaze 3×25 A abonelik gerekir", "S"),
+ "Bağlı güç 26,59 kW / talep 17,03 kW — trifaze 3×32 A abonelik gerekir (elektrik projesi s.5)", "S"),
 ("Mimar onaylı 1/100 vaziyet ve yerleşim planı",
  "Yok", "GSİM ve belediye dosyasının zorunlu eki — proje müellifi tayini", "S"),
 ("Anlaşmalı doktor / sağlık memuru / klinik sözleşmesi",

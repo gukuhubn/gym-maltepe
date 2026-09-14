@@ -252,3 +252,76 @@ Playwright ile `javaScriptEnabled:false` altında doğrulandı: nav'da 0 buton, 
 PDF her cihazda ve her önizleyicide aynı görünür. `Gym_Model.html` artık telefonda da
 tamamen okunur; yalnızca döndürülebilir 3B model gerçek bir tarayıcı (Chrome/Safari'de
 “tarayıcıda aç”) gerektirir.
+
+---
+
+## 12 · Rev C — mekanik ve elektrik projeleri
+
+İşveren talebi üzerine mekanik ve elektrik, ayrı disiplin projeleri olarak çizildi ve her birine
+kendi BoQ'su verildi.
+
+### Yeni teslimatlar
+
+| Dosya | İçerik |
+|---|---|
+| `Gym_Mekanik_Proje_A3.pdf` | 6 pafta: sistem özeti · havalandırma planı · iklimlendirme planı · sıhhi tesisat planı · prensip ve kolon şemaları · metraj özeti ve lejant |
+| `Gym_Mekanik_BoQ.xlsx` | 4 sayfa · 37 poz · canlı formüllü · sistem verileri sayfası dâhil |
+| `Gym_Elektrik_Proje_A3.pdf` | 6 pafta: sistem özeti · aydınlatma planı · priz ve kuvvet planı · zayıf akım planı · pano tek hat şeması · topraklama, metraj ve lejant |
+| `Gym_Elektrik_BoQ.xlsx` | 4 sayfa · 36 poz · canlı formüllü · linye tablosu dâhil |
+
+### Tek kaynak korundu
+
+Disiplin pozları ayrı bir liste değildir: `tools/proj.py` içindeki `B_MEK` ve `B_ELK` listeleri
+ana BoQ'nun `MEKANİK` ve `ELEKTRİK` gruplarını **oluşturur**. Disiplin BoQ'ları bu grupları
+filtreleyerek üretilir, dolayısıyla üç dosya arasında sapma imkânsızdır. QA bunu her derlemede
+poz poz karşılaştırır.
+
+### Tasarım kararları
+
+**Mekanik.** Dengeli havalandırma: 1.000 m³/h besleme, aynı debide egzoz (salon 760 + ıslak hacim
+240). Besleme kuzey çeperden, egzoz güney çeperden — salon boyunca çapraz süpürme. Islak hacim
+egzozu ayrı fan ve ayrı çıkışla doğrudan dışarı. İklimlendirme, tek büyük ünite yerine **bölge
+bazlı dört split** olarak kuruldu (24.000 + 18.000 + 2 × 12.000 = 66.000 BTU, hesaplanan 57.000
+BTU'nun %16 üzerinde): her mekân bağımsız çalışır, bir arıza tesisi durdurmaz. Sıhhi tesisatta
+tek düşey şaft ve tek gider toplama hattı; sıcak su blok başına 6 kW ani ısıtıcı.
+
+**Elektrik.** 21 linye, bağlı güç 26,59 kW, eşzamanlılık katsayıları uygulanmış talep gücü
+17,03 kW. Faz dağıtımı elle değil algoritmayla yapıldı: linyeler talep gücüne göre büyükten
+küçüğe sıralanıp her biri o an en az yüklü faza atandı; iki 6 kW'lık su ısıtıcısı farklı fazlara
+düştü ve **dengesizlik %0,2**'ye indi (faz başına 26,8 A → 3×32 A abonelik). Islak hacim linyeleri
+ikinci bir 30 mA kaçak akım rölesinden beslenir. Kardiyo ekipmanı ayrı linyededir.
+**Soyunma odalarına ve WC'lere kamera konulmamıştır** — bu bir tasarım tercihi değil, kişisel
+verilerin korunması mevzuatının sınırıdır; QA her derlemede kamera koordinatlarının ıslak hacim
+poligonları içine düşmediğini kontrol eder.
+
+### Bütçeye etkisi — açıkça
+
+Detaylı tasarım, önceki götürü kalemlerin yerini aldı. Kaldırılan özet pozlar: 03.01 (pis su +
+temiz su götürü), 03.07 (sıcak su götürü), 05.01–05.06 (elektrik götürü), 06.01–06.04 (mekanik
+götürü), 09.02 (yangın algılama götürü — artık elektrikte). Sonuç:
+
+| | Rev B | Rev C |
+|---|---|---|
+| MEKANİK | 204.000 – 353.000 TL (4 götürü poz) | **414.127 – 692.746 TL** (37 poz) |
+| ELEKTRİK | ≈206.000 – 383.000 TL (6 götürü poz) | **401.420 – 680.700 TL** (36 poz) |
+| ISLAK HACİM | 254.777 – 443.647 TL | 141.777 – 241.647 TL (tesisat mekaniğe taşındı) |
+| YANGIN · GÜVENLİK | 114.100 – 223.600 TL | 82.100 – 158.600 TL (algılama elektriğe taşındı) |
+| **GENEL TOPLAM (önerilen)** | 1.618.962 – 2.912.329 TL | **1.948.315 – 3.382.449 TL** |
+
+Artış yaklaşık **330.000 – 470.000 TL**'dir ve gerçek bir maliyet artışı değil, **görünür hâle
+gelmiş maliyettir**: götürü bir satır 37 poza açıldığında kanal askısı, damper, susturucu, balanslama,
+potansiyel dengeleme, parafudr gibi kalemler ortaya çıkar. Bu kalemler önceki bütçede de yapılacaktı;
+sadece yazılı değildi. Müteahhit teklifleri artık bu kalemler üzerinden karşılaştırılabilir.
+
+Ayrıca **06.17 (ısı geri kazanımlı taze hava ünitesi, 95.000–165.000 TL)** alternatif kalem olarak
+işaretlenmiştir ve toplamlara **dâhil değildir**; işletme gideri üzerinden geri ödemesi teklif
+alındıktan sonra hesaplanmalıdır.
+
+### Yeni doğrulanacak girdiler
+
+- Mevcut abonelik gücü ve trifaze durumu — talep 17,03 kW, 3×32 A gerekiyor. Yetersizse dağıtım
+  şirketine güç artırımı 3–8 hafta sürer ve kritik yola girer.
+- Sıcak su çözümü boylere çevrilirse talep gücü ≈5 kW düşer ve 3×25 A yeterli olur (mekanik s.4).
+- Pis su havalandırma bacası yüksekliği (9,5 m varsayım) ve binada mevcut baca olup olmadığı.
+- Dış ünite montaj yüzeyinin taşıyıcılığı ve bina yönetimi onayı.
+- Temel topraklamasının varlığı — varsa poz 05.45 iptal edilir.

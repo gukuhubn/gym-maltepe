@@ -6,6 +6,7 @@ from pathlib import Path
 import pypdfium2 as pdfium
 import proj as P
 from openpyxl import load_workbook
+load_wb = load_workbook
 
 HATA=[]; UYARI=[]
 def ok(t): print("  ✓", t)
@@ -13,13 +14,14 @@ def hata(t): HATA.append(t); print("  ✗", t)
 def uyar(t): UYARI.append(t); print("  !", t)
 
 print("\n1 · PDF ÜRETİMİ VE SAYFA RENDER")
-for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.pdf",12)):
+for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.pdf",12),
+              ("output/Gym_Mekanik_Proje_A3.pdf",6),("output/Gym_Elektrik_Proje_A3.pdf",6)):
     d=pdfium.PdfDocument(f); n=len(d)
     w,h=d[0].get_size()
     print(f"  {Path(f).name}: {n} sayfa · {w:.0f}×{h:.0f} pt")
     if n!=bek: hata(f"{f}: {n} sayfa (beklenen {bek})")
     else: ok(f"{Path(f).name} sayfa sayısı")
-    if f.endswith("A3.pdf") and not (abs(w-1190)<3 and abs(h-842)<3):
+    if "A3" in f and not (abs(w-1190)<3 and abs(h-842)<3):
         hata("A3 yatay değil"); 
     for i in range(n):
         d[i].render(scale=72/72)   # render hatası varsa burada patlar
@@ -27,7 +29,8 @@ for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.p
 
 print("\n2 · TÜRKÇE GLİF TARAMASI (ş ğ ı İ ü ö ç Ş Ğ Ü Ö Ç)")
 TR="şğıİüöçŞĞÜÖÇ"
-for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf"):
+for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
+          "output/Gym_Mekanik_Proje_A3.pdf","output/Gym_Elektrik_Proje_A3.pdf"):
     d=pdfium.PdfDocument(f); eksik=[]
     for i in range(len(d)):
         t=d[i].get_textpage().get_text_range()
@@ -65,14 +68,14 @@ else: ok("dimensions.json ↔ proj.py bölge m²")
 print("\n4 · ÇAPRAZ TUTARLILIK — TL")
 wb=load_workbook("output/Gym_Maliyet_BoQ.xlsx")
 ws=wb["2 · Detay metraj"]
-poz_x=[r[0].value for r in ws.iter_rows(min_row=4,max_col=1) if r[0].value and re.match(r"^\d\d\.\d\d$",str(r[0].value))]
+poz_x=[r[0].value for r in ws.iter_rows(min_row=4,max_col=1) if r[0].value and re.match(r"^\d\d\.\d\d[a-z]?$",str(r[0].value))]
 if len(poz_x)!=len(P.B): hata(f"xlsx poz {len(poz_x)} ≠ model {len(P.B)}")
 else: ok(f"BoQ poz sayısı = {len(P.B)}")
 for sen in ("M","O"):
     for isl in ("A","B"):
         m=P.maliyet(sen,isl); lo=hi=0
         for poz,gr,tn,br,mik,l,h_,s in P.B:
-            kod="A" if poz=="03.08" else ("B" if poz=="03.09" else s)
+            kod="A" if poz=="03.08" else ("B" if poz=="03.09" else ("X" if s=="—" else s))
             dh=1 if kod=="M" else (1 if (kod=="O" and sen=="O") else
                (1 if (kod=="A" and isl=="A") else (1 if (kod=="B" and isl=="B") else 0)))
             lo+=round(mik*l)*dh; hi+=round(mik*h_)*dh
@@ -85,6 +88,40 @@ for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf"):
     d=pdfium.PdfDocument(f); metin="".join(d[i].get_textpage().get_text_range() for i in range(len(d)))
     if bek not in metin: uyar(f"{Path(f).name}: '{bek} M₺' bandı metinde bulunamadı")
     else: ok(f"{Path(f).name}: bütçe bandı {bek} M₺ tutarlı")
+
+print("\n4b · MEKANİK VE ELEKTRİK PROJE TUTARLILIĞI")
+# hava dengesi
+bes = sum(m[3] for m in P.MENFEZ if m[4]=="besleme")
+egz = sum(m[3] for m in P.MENFEZ if m[4] in ("egzoz","valf"))
+if bes != P.TAZE: hata(f"besleme menfez toplamı {bes} ≠ tasarım debisi {P.TAZE}")
+else: ok(f"besleme menfezleri = tasarım taze hava debisi = {bes} m³/h")
+if egz != P.TAZE: hata(f"egzoz toplamı {egz} ≠ besleme {P.TAZE} — hava dengesi bozuk")
+else: ok(f"egzoz toplamı = besleme = {egz} m³/h (nötr denge)")
+if P.KLIMA_BTU < P.SOGUTMA_BTU: hata("kurulu klima kapasitesi hesaplanan yükün altında")
+else: ok(f"kurulu klima {P.KLIMA_BTU} BTU ≥ hesaplanan {P.SOGUTMA_BTU} BTU (%{P.SOGUTMA_MARJ} marj)")
+if P.FAZ_DENGE > 15: hata(f"faz dengesizliği %{P.FAZ_DENGE} — hedef ≤ %15")
+else: ok(f"faz dengesizliği %{P.FAZ_DENGE} (hedef ≤ %15)")
+if abs(sum(P.FAZ_YUK.values()) - P.TALEP_KW) > 0.05: hata("faz yükleri toplamı ≠ talep gücü")
+else: ok(f"faz yükleri toplamı = talep gücü = {P.TALEP_KW} kW")
+if max(P.AKIM_FAZ.values()) > P.ANA_KESICI/3: hata("faz akımı ana kesici anma akımını aşıyor")
+else: ok(f"en yüksek faz akımı {max(P.AKIM_FAZ.values())} A ≤ ana kesici {P.ANA_KESICI//3} A")
+_kam_islak = [k for k in P.KAMERA if any(P.ISLAK[b]["tum"].contains(
+    __import__("shapely.geometry", fromlist=["Point"]).Point(k[1],k[2])) for b in P.ISLAK)]
+if _kam_islak: hata(f"soyunma/WC içinde kamera var: {[k[0] for k in _kam_islak]}")
+else: ok("soyunma ve WC içinde kamera YOK (mevzuat sınırı korunuyor)")
+# disiplin BoQ'ları ana BoQ ile aynı mı
+for dosya, grup in (("output/Gym_Mekanik_BoQ.xlsx","MEKANİK"),
+                    ("output/Gym_Elektrik_BoQ.xlsx","ELEKTRİK")):
+    w2=load_wb(dosya); d2=w2["2 · Detay metraj"]
+    pozlar=[r[0].value for r in d2.iter_rows(min_row=4,max_col=1)
+            if r[0].value and re.match(r"^\d\d\.\d\d[a-z]?$",str(r[0].value))]
+    ana=[r[0] for r in P.B if r[1]==grup]
+    if pozlar!=ana: hata(f"{Path(dosya).name}: poz listesi ana BoQ ile aynı değil")
+    else: ok(f"{Path(dosya).name}: {len(ana)} poz — ana BoQ'daki {grup} grubunun birebir aynısı")
+    if len(w2.sheetnames)!=4: hata(f"{Path(dosya).name} 4 sayfa değil")
+    bos=sum(1 for r in range(4,4+len(ana)) if d2.cell(r,6).value is None)
+    if bos!=len(ana): hata(f"{Path(dosya).name}: birim fiyat sütunu boş değil")
+    else: ok(f"{Path(dosya).name}: birim fiyat sütunu tamamen boş")
 
 print("\n5 · XLSX FORMÜL SAĞLIĞI")
 s1=wb["1 · Özet"]
@@ -144,7 +181,9 @@ else:
 
 print("\n7 · TESLİMAT LİSTESİ")
 for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
-          "output/Gym_Maliyet_BoQ.xlsx","output/Gym_Model.html",
+          "output/Gym_Mekanik_Proje_A3.pdf","output/Gym_Elektrik_Proje_A3.pdf",
+          "output/Gym_Maliyet_BoQ.xlsx","output/Gym_Mekanik_BoQ.xlsx",
+          "output/Gym_Elektrik_BoQ.xlsx","output/Gym_Model.html",
           "output/Render_Promptlari.md","BUILD_NOTES.md"):
     if Path(f).exists(): ok(f"{f}  ({Path(f).stat().st_size/1e6:.2f} MB)")
     else: hata(f"EKSİK: {f}")
