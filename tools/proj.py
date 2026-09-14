@@ -204,11 +204,24 @@ KLIMA = [
 ]
 KLIMA_BTU  = sum(k[2] for k in KLIMA)
 ADET_KLIMA = len(KLIMA)
-DIS_UNITE = (11.90, 6.10)     # arka bahçe duvarı — kapalı alana dâhil değil
-BAKIR_HAT = [[(k[3][0], k[3][1]), (9.40, 5.60), DIS_UNITE] for k in KLIMA]
-L_BAKIR   = round(sum(_LS(h).length for h in BAKIR_HAT), 1)
-DRENAJ    = [[(k[3][0], k[3][1]), (9.30, 5.30), (11.30, 4.90)] for k in KLIMA]
-L_DRENAJ  = round(sum(_LS(h).length for h in DRENAJ), 1)
+DIS_UNITE = (11.90, 6.10)     # arka cephe duvarı — kapalı alana dâhil değil
+# Bakır ve drenaj hatları tavan altında DUVAR BOYUNCA ortogonal yürür; salon ortasından
+# çapraz geçiş yoktur. Her iç ünitenin kendi güzergâhı aşağıda açıkça tanımlıdır.
+_CIKIS = [(11.20, 6.30), DIS_UNITE]                       # erkek blok tavanından dış duvara
+BAKIR_HAT = {
+ "K1": [(5.95,0.28),(9.05,0.62),(9.52,3.90),(10.05,5.55),(10.80,6.05)] + [DIS_UNITE],
+ "K2": [(7.95,6.95),(7.95,7.92),(9.45,7.62)] + _CIKIS,
+ "K3": [(1.30,7.35),(1.30,7.92),(5.95,7.92),(7.95,7.92),(9.45,7.62)] + _CIKIS,
+ "K4": [(7.05,11.90),(7.05,9.10),(8.05,8.58),(9.45,7.62)] + _CIKIS,
+}
+DRENAJ = {                                                # %1 eğimli, dış duvara
+ "K1": [(5.95,0.28),(9.05,0.62),(9.52,3.90),(10.60,5.30),(11.60,5.55)],
+ "K2": [(7.95,6.95),(7.95,7.86),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
+ "K3": [(1.30,7.35),(1.30,7.86),(5.95,7.86),(7.95,7.86),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
+ "K4": [(7.05,11.90),(7.05,9.10),(8.05,8.52),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
+}
+L_BAKIR   = round(sum(_LS(h).length for h in BAKIR_HAT.values()), 1)
+L_DRENAJ  = round(sum(_LS(h).length for h in DRENAJ.values()), 1)
 
 # ── sıhhi tesisat ─────────────────────────────────────────────────────────────
 SU_GIRIS = (10.95, 1.35)                      # sayaç / ana kesme — kadın blok güneyi

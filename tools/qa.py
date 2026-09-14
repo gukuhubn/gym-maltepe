@@ -179,12 +179,44 @@ else:
     if nj.get("nojsTasma") or j.get("nojsTasma"): hata("JS kapalıyken yatay taşma var")
     ok(f"Gym_Model.html tek dosya, offline · {len(t.encode())/1e6:.2f} MB")
 
+print("\n6b · CAD SETİ (DXF R2010)")
+import ezdxf as _ez
+_cad = sorted(Path("cad").glob("*.dxf"))
+if len(_cad)!=4: hata(f"CAD setinde {len(_cad)} dxf var (beklenen 4)")
+else: ok("4 DXF dosyası üretildi")
+for f in _cad:
+    d=_ez.readfile(f); a=d.audit()
+    if a.errors: hata(f"{f.name}: {len(a.errors)} DXF hatası")
+    if d.dxfversion!="AC1024": hata(f"{f.name}: sürüm {d.dxfversion} (R2010/AC1024 bekleniyor)")
+    if d.header.get("$INSUNITS")!=4: hata(f"{f.name}: birim milimetre değil")
+    if len(d.layers)<40: hata(f"{f.name}: katman sayısı {len(d.layers)}")
+    bl=[b.name for b in d.blocks if not b.name.startswith("*")]
+    if len(bl)<30: hata(f"{f.name}: blok sayısı {len(bl)}")
+    if "Layout1" in d.layouts.names(): hata(f"{f.name}: boş Layout1 silinmemiş")
+    ok(f"{f.name}: AC1024 · mm · {len(d.layers)} katman · {len(bl)} blok · "
+       f"{len(d.layouts.names())-1} pafta · 0 hata")
+_b=_ez.readfile("cad/GYM-MEP-Birlesik-R2010.dxf")
+_eksik=[n for n in ("A-01","M-01","M-02","M-03","M-04","E-01","E-02","E-03","E-04")
+        if not any(l.startswith(n) for l in _b.layouts.names())]
+if _eksik: hata(f"birleşik dosyada eksik pafta: {_eksik}")
+else: ok("birleşik dosyada 9 paftanın tamamı var")
+_donmus_ok=True
+for l in _b.layouts.names():
+    if l in ("Model",): continue
+    vps=[vp for vp in _b.layouts.get(l).query("VIEWPORT") if len(vp.frozen_layers)>0]
+    if not vps: _donmus_ok=False; hata(f"{l}: görüntü penceresinde donmuş katman yok")
+if _donmus_ok: ok("her paftada disiplin dışı katmanlar dondurulmuş (VP Freeze)")
+_ms=_b.modelspace()
+if len(_ms.query("DIMENSION"))<5: hata("model uzayında ölçülendirme eksik")
+else: ok(f"{len(_ms.query('DIMENSION'))} ölçülendirme · {len(_ms.query('INSERT'))} blok yerleşimi")
+
 print("\n7 · TESLİMAT LİSTESİ")
 for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
           "output/Gym_Mekanik_Proje_A3.pdf","output/Gym_Elektrik_Proje_A3.pdf",
           "output/Gym_Maliyet_BoQ.xlsx","output/Gym_Mekanik_BoQ.xlsx",
           "output/Gym_Elektrik_BoQ.xlsx","output/Gym_Model.html",
-          "output/Render_Promptlari.md","BUILD_NOTES.md"):
+          "output/Render_Promptlari.md","output/Gym_MEP_CAD_Seti_DXF.zip",
+          "output/Gym_MEP_CAD_Paftalar.pdf","cad/OKUBENI-CAD.txt","BUILD_NOTES.md"):
     if Path(f).exists(): ok(f"{f}  ({Path(f).stat().st_size/1e6:.2f} MB)")
     else: hata(f"EKSİK: {f}")
 

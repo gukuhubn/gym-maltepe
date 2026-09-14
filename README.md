@@ -13,6 +13,8 @@
 | `Gym_Mekanik_BoQ.xlsx` | Mekanik BoQ — 37 poz |
 | `Gym_Elektrik_Proje_A3.pdf` | Elektrik projesi — A3 yatay, 6 pafta |
 | `Gym_Elektrik_BoQ.xlsx` | Elektrik BoQ — 36 poz |
+| `Gym_MEP_CAD_Seti_DXF.zip` | **CAD seti** — 4 × DXF R2010, katman listesi, okuma notu |
+| `Gym_MEP_CAD_Paftalar.pdf` | CAD paftalarının önizlemesi (9 pafta) |
 | `Gym_Model.html` | Tek dosya offline 3B model + render galerisi |
 | `Render_Promptlari.md` | Render prompt seti |
 | `render/*.png` | 8 fotogerçekçi render (4 açı × 2 stil) |
@@ -22,7 +24,7 @@ Varsayımlar, doğrulanacaklar ve işverenden istenecekler: **`BUILD_NOTES.md`**
 ## Yeniden üretim
 
 ```bash
-pip install reportlab openpyxl pillow pypdfium2 opencv-python-headless shapely numpy
+pip install reportlab openpyxl pillow pypdfium2 opencv-python-headless shapely numpy ezdxf matplotlib
 python3 tools/build_geometry.py       # raster pafta → ölçekli geometri
 python3 tools/build_a3.py             # ana dosya
 python3 tools/build_slides.py         # sunum
@@ -30,6 +32,7 @@ python3 tools/build_boq.py            # ana BoQ
 python3 tools/build_mekanik.py        # mekanik proje
 python3 tools/build_elektrik.py       # elektrik projesi
 python3 tools/build_boq_mep.py        # disiplin BoQ'ları
+python3 tools/build_dxf.py            # DXF CAD seti + önizleme + zip
 python3 tools/export_dimensions.py    # 3B model verisi
 node     tools/shoot.js . work/model  # Three.js → PNG (Playwright)
 python3 tools/render_gemini.py        # image-to-image render

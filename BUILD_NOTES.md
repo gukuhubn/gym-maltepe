@@ -325,3 +325,66 @@ alındıktan sonra hesaplanmalıdır.
 - Pis su havalandırma bacası yüksekliği (9,5 m varsayım) ve binada mevcut baca olup olmadığı.
 - Dış ünite montaj yüzeyinin taşıyıcılığı ve bina yönetimi onayı.
 - Temel topraklamasının varlığı — varsa poz 05.45 iptal edilir.
+
+---
+
+## 13 · CAD seti (DXF R2010)
+
+### Neden DWG değil — ve neden fark etmiyor
+
+DWG kapalı (tescilli) bir formattır; açık kaynaklı hiçbir kütüphane onu güvenilir biçimde
+**yazamaz**. Bu ortamda ODA File Converter veya LibreDWG da yoktur. Bu nedenle set,
+AutoCAD'in kendi değişim formatı olan **DXF R2010 (AC1024)** ile üretilmiştir.
+
+Pratikte engel değildir: AutoCAD, BricsCAD, ZWCAD, GstarCAD ve DraftSight bu dosyaları
+doğrudan açar; **Farklı Kaydet → AutoCAD 2018 Çizim (*.dwg)** ile tek adımda DWG olur.
+Toplu dönüşüm için AutoCAD'in DWG Convert aracı veya ücretsiz ODA File Converter kullanılır.
+
+### Set
+
+| Dosya | İçerik |
+|---|---|
+| `GYM-MIM-Altlik-R2010.dxf` | Mimari altlık — diğerlerine XREF bağlanabilir · 1 pafta |
+| `GYM-MEK-Uygulama-R2010.dxf` | Mekanik · 4 pafta (M-01…M-04) |
+| `GYM-ELK-Uygulama-R2010.dxf` | Elektrik · 4 pafta (E-01…E-04) |
+| `GYM-MEP-Birlesik-R2010.dxf` | Tümü · 9 pafta |
+| `KATMAN-LISTESI.csv` | 42 katmanın standardı (Excel) |
+| `OKUBENI-CAD.txt` | Format, birim, ölçek, DWG dönüşümü, kapsam sınırı |
+
+### Teknik kurulum
+
+- **Birim:** milimetre (`$INSUNITS = 4`), model uzayı 1:1 gerçek boyut
+- **Pafta:** A3 (420 × 297), **ölçek 1/75**, ölçülendirme stili `GYM-75` (DIMSCALE 75)
+- **Katman:** 42 katman, `A-` mimari / `M-` mekanik / `E-` elektrik / `G-` genel öneki ile;
+  her katmanda ACI renk, çizgi tipi ve kalem kalınlığı tanımlı
+- **Blok:** 32 sembol bloğu, **öznitelikli** — menfezlerde `KOD`/`DEBI`, prizlerde
+  `KOD`/`LINYE`, klimalarda `KOD`/`KAPASITE`. `DATAEXTRACTION` ile doğrudan metraj çekilebilir
+- **Pafta düzeni:** tek model uzayı, paftalar aynı modeli farklı katman durumlarıyla gösterir;
+  her görüntü penceresinde disiplin dışı katmanlar **VP Freeze** ile dondurulmuştur
+- **Yazı:** Arial tabanlı `GYM` / `GYM-B` stilleri — Türkçe karakterler sorunsuz
+
+### Ölçek neden 1/75
+
+İlk denemede 1/50 seçilmişti; bina 11,96 × 13,39 m olduğundan A3'te lejant sütunuyla
+birlikte **sığmadı** — doğu kenarı ve ölçü çizgileri kırpıldı. 1/75'te tüm bina, ölçüler,
+kuzey oku, lejant ve antet aynı paftaya rahatça giriyor. A2'de 1/50 de mümkündür;
+istenirse `build_dxf.py` içinde tek satır değişir.
+
+### Üretim sırasında düzeltilen iki gerçek çizim hatası
+
+1. **Tarama adası.** Duvar bandı delikli (island) tarama ile kuruluyordu; hem ezdxf'in
+   görüntüleyicisi hem de bazı CAD'ler deliği doldurup tüm paftayı kapatıyordu. Duvar bandı
+   kenar bazlı deliksiz dörtgenlere ayrıldı — her CAD'de aynı görünür.
+2. **Bakır ve drenaj güzergâhı.** Hatlar salonun ortasından çapraz geçiyordu. Tavan altında
+   duvar boyunca ortogonal güzergâhlara çevrildi; her iç ünitenin kendi hattı `proj.py`
+   içinde açıkça tanımlı. Metraj 33,5 → 35,8 m (bakır) ve 31,6 → 34,2 m (drenaj) oldu,
+   bütçeye yansıdı.
+
+### Bu set ne değildir
+
+Ön tasarım seviyesindeki bir CAD setidir; uygulama projesi **formatında** düzenlenmiştir
+ama uygulama projesi **değildir**. Dönüşmesi için: ölçülmüş mimari altlık (DXF veya rölöve),
+tavan ve kiriş altı kotları, kolon konumları, mevcut pis su bağlantı kotu, mevcut abonelik
+gücü — ve **yetkili mühendis imzası**. Türkiye'de mekanik ve elektrik uygulama projeleri
+ilgili meslek odasına kayıtlı mühendis tarafından imzalanır; bu set o imzanın yerine geçmez,
+ona girdi oluşturur.

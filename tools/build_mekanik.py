@@ -182,8 +182,8 @@ def s3(c):
     M.altlik(v); M.ekipman_soluk(v)
     for z in P.ZONES:
         D.poly(v, z[1], fill=HexColor(z[4]), alpha=0.45)
-    for hat in P.DRENAJ: M.boru(v, hat, M.C_DRENAJ, 0.9, (1.5, 1.3))
-    for hat in P.BAKIR_HAT: M.boru(v, hat, M.C_KLIMA, 1.5)
+    for hat in P.DRENAJ.values(): M.boru(v, hat, M.C_DRENAJ, 0.9, (1.5, 1.3))
+    for hat in P.BAKIR_HAT.values(): M.boru(v, hat, M.C_KLIMA, 1.5)
     for kod, zon, btu, (x, y) in P.KLIMA:
         M.cihaz(v, x, y, kod, M.C_KLIMA, 8.5*mm, 4.6*mm)
         D.etiket(v, (x, y-0.55), f"{h.tl(btu)} BTU", 4.2, M.C_KLIMA, h.FB, "c")

@@ -1,0 +1,126 @@
+GYM DÖNÜŞÜMÜ — MEP CAD SETİ
+MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU
+Rev C · 13 Eylül 2026
+================================================================================
+
+1 · FORMAT VE ÖNEMLİ UYARI
+--------------------------------------------------------------------------------
+Bu set DXF R2010 (AC1024) formatındadır. .dwg DEĞİLDİR.
+
+DWG kapalı (tescilli) bir formattır ve açık kaynaklı hiçbir kütüphane onu güvenilir
+biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF ile
+üretilmiştir. Pratikte fark yoktur:
+
+  AutoCAD / BricsCAD / ZWCAD / GstarCAD / DraftSight bu dosyaları doğrudan açar.
+  DWG'ye çevirmek için:  dosyayı açın  →  Farklı Kaydet  →  AutoCAD 2018 Çizim (*.dwg)
+  Toplu çevirme için:    AutoCAD "DWG Convert" veya ODA File Converter (ücretsiz)
+
+2 · BİRİM VE ÖLÇEK
+--------------------------------------------------------------------------------
+  Model uzayı birimi : MİLİMETRE  ($INSUNITS = 4)
+  Çizim ölçeği       : 1 / 1 (model uzayında gerçek boyut)
+  Pafta ölçeği       : 1 / 75  (A3 · 420 × 297 mm)
+  Ölçülendirme stili : GYM-75  (DIMSCALE = 75)
+  Yazı stili         : GYM / GYM-B  (Arial — Türkçe karakter destekli)
+
+  Not: cm ile çalışan bir ofise verilecekse model uzayını 0,1 ile ölçekleyin
+  (SCALE komutu, referans nokta 0,0) ve DIMSCALE'i 7,5 yapın.
+
+3 · DOSYALAR
+--------------------------------------------------------------------------------
+  GYM-MIM-Altlik-R2010.dxf      Mimari altlık — diğerlerine XREF olarak bağlanabilir
+  GYM-MEK-Uygulama-R2010.dxf    Mekanik — 4 pafta
+  GYM-ELK-Uygulama-R2010.dxf    Elektrik — 4 pafta
+  GYM-MEP-Birlesik-R2010.dxf    Tümü — 9 pafta (tek dosyada çalışmak isteyenler için)
+  KATMAN-LISTESI.csv            Katman standardı (Excel ile açılır)
+
+4 · PAFTALAR (kâğıt alanı sekmeleri)
+--------------------------------------------------------------------------------
+  A-01   MİMARİ ALTLIK                    (MİMARİ)
+  M-01   HAVALANDIRMA PLANI               (MEKANİK TESİSAT)
+  M-02   İKLİMLENDİRME PLANI              (MEKANİK TESİSAT)
+  M-03   SIHHİ TESİSAT PLANI              (MEKANİK TESİSAT)
+  M-04   MEKANİK GENEL YERLEŞİM           (MEKANİK TESİSAT)
+  E-01   AYDINLATMA PLANI                 (ELEKTRİK)
+  E-02   PRİZ VE KUVVET PLANI             (ELEKTRİK)
+  E-03   ZAYIF AKIM PLANI                 (ELEKTRİK)
+  E-04   ELEKTRİK GENEL YERLEŞİM          (ELEKTRİK)
+
+  Her paftanın görüntü penceresinde o disipline ait olmayan katmanlar DONDURULMUŞTUR
+  (VP Freeze). Model uzayı tek ve ortaktır; paftalar aynı modeli farklı katman
+  durumlarıyla gösterir. Bir katmanı bir paftada görmek isterseniz o paftanın
+  görüntü penceresini seçip katmanı çözün — diğer paftalar etkilenmez.
+
+5 · KATMAN STANDARDI (40 katman)
+--------------------------------------------------------------------------------
+  Önek:  A- mimari · M- mekanik · E- elektrik · G- genel (ölçü, antet, yazı)
+
+  A-DUVAR-MEVCUT     renk   8  Continuous   35  Mimari — mevcut duvar (korunuyor)
+  A-DUVAR-YENI       renk   1  Continuous   35  Mimari — yeni alçıpan bölme
+  A-CEPHE            renk   5  Continuous   25  Mimari — cephe doğraması
+  A-KAPI             renk   8  Continuous   18  Mimari — kapı ve açılım
+  A-EKIPMAN          renk   9  Continuous   18  Mimari — spor ekipmanı (işverence temin)
+  A-MOBILYA          renk   9  Continuous   18  Mimari — sabit mobilya
+  A-BOLGE            renk 254  Continuous    9  Mimari — zemin bölge taraması
+  A-YAZI             renk   8  Continuous   13  Mimari — mahal adı ve alan
+  M-HAVA-BESLEME     renk   3  Continuous   35  Mekanik — taze hava kanalı
+  M-HAVA-EGZOZ       renk   1  Continuous   35  Mekanik — egzoz kanalı
+  M-HAVA-ISLAK       renk   6  Continuous   25  Mekanik — ıslak hacim egzoz kanalı
+  M-HAVA-MENFEZ      renk   3  Continuous   25  Mekanik — menfez ve valf
+  M-HAVA-BRANSMAN    renk   3  DASHED       18  Mekanik — menfez branşmanı
+  M-HAVA-CIHAZ       renk   2  Continuous   35  Mekanik — fan ve panjur
+  M-KLIMA-IC         renk   4  Continuous   35  Mekanik — klima iç ünite
+  M-KLIMA-DIS        renk   4  Continuous   35  Mekanik — klima dış ünite platformu
+  M-KLIMA-BAKIR      renk   4  Continuous   25  Mekanik — soğutucu akışkan bakır hattı
+  M-KLIMA-DRENAJ     renk   4  DASHED       18  Mekanik — klima drenaj hattı
+  M-SIHHI-TEMIZ      renk   5  Continuous   25  Mekanik — temiz su PPRC
+  M-SIHHI-SICAK      renk  30  DASHED       25  Mekanik — sıcak su PPRC izoleli
+  M-SIHHI-PIS        renk   8  Continuous   35  Mekanik — pis su PVC
+  M-SIHHI-CIHAZ      renk   8  Continuous   25  Mekanik — vitrifiye ve su ısıtıcı
+  M-YAZI             renk   7  Continuous   13  Mekanik — etiket ve not
+  E-AYD-ARMATUR      renk   2  Continuous   25  Elektrik — lineer LED armatür
+  E-AYD-DOWNLIGHT    renk   2  Continuous   25  Elektrik — IP44 downlight
+  E-AYD-ACIL         renk   3  Continuous   25  Elektrik — acil aydınlatma / yönlendirme
+  E-AYD-ANAHTAR      renk   2  Continuous   18  Elektrik — anahtar ve sensör
+  E-KUVVET-PRIZ      renk   5  Continuous   25  Elektrik — priz
+  E-KUVVET-CIHAZ     renk   5  Continuous   25  Elektrik — klima/ısıtıcı/fan beslemesi
+  E-ZAYIF-KAMERA     renk   6  Continuous   25  Elektrik — IP kamera
+  E-ZAYIF-SES        renk   6  Continuous   25  Elektrik — tavan hoparlörü
+  E-ZAYIF-VERI       renk   6  Continuous   25  Elektrik — veri prizi ve rack
+  E-ZAYIF-YANGIN     renk   1  Continuous   25  Elektrik — dedektör, buton, siren
+  E-ZAYIF-LINYE      renk   6  DASHED       13  Elektrik — yangın algılama çevrimi
+  E-PANO             renk   7  Continuous   50  Elektrik — ana dağıtım panosu
+  E-YAZI             renk   7  Continuous   13  Elektrik — etiket ve not
+  G-OLCU             renk   7  Continuous   13  Genel — ölçülendirme
+  G-YAZI             renk   7  Continuous   18  Genel — başlık ve açıklama
+  G-ANTET            renk   7  Continuous   25  Genel — antet ve pafta çerçevesi
+  G-KUZEY            renk   7  Continuous   25  Genel — kuzey oku ve ölçek
+
+6 · BLOK KÜTÜPHANESİ (32 blok)
+--------------------------------------------------------------------------------
+  ANTET_A3, E_ACIL, E_ANAHTAR, E_ARMATUR_LINEER, E_DEDEKTOR, E_DOWNLIGHT, E_HOPARLOR, E_KAMERA, E_PANO, E_PRIZ, E_PRIZ_IP44, E_SENSOR, E_VERI, E_YANGIN_BUTON, E_YONLENDIRME, G_KUZEY, M_DUS, M_FAN, M_ISITICI, M_KLIMA_DIS, M_KLIMA_IC, M_KLOZET, M_LAVABO, M_MENFEZ_BESLEME, M_MENFEZ_EGZOZ, M_PANJUR, M_SAYAC, M_SUZGEC, M_VALF, _ARCHTICK, _CLOSEDBLANK, _CLOSEDFILLED
+
+  Sembol blokları ÖZNİTELİKLİDİR. Örneğin menfez bloklarında KOD ve DEBI,
+  priz bloklarında KOD ve LINYE öznitelikleri vardır. ATTEXT veya DATAEXTRACTION
+  komutuyla bu öznitelikler doğrudan metraj tablosuna aktarılabilir.
+
+7 · BU SET NE DEĞİLDİR — DÜRÜST SINIR
+--------------------------------------------------------------------------------
+  Bu bir ÖN TASARIM (avan) seviyesindeki CAD setidir; uygulama projesi formatında
+  düzenlenmiştir ama henüz uygulama projesi DEĞİLDİR. Uygulama projesine
+  dönüşmesi için gerekenler:
+
+  a) Ölçülmüş mimari altlık. Mevcut geometri, raster pafta izlenerek üretilmiştir
+     (±%3). İşverenden DXF (R2010) export veya yerinde rölöve alınmalıdır.
+  b) Tavan yüksekliği, kiriş altı kotları ve kolon konumları. Kanal güzergâhları
+     bu veriler olmadan kesinleşemez.
+  c) Mevcut pis su bağlantısının kotu. Sıhhi tesisatın tamamı buna bağlıdır.
+  d) Mevcut elektrik abonelik gücü ve pano kapasitesi.
+  e) Yetkili mühendis onayı. Türkiye'de mekanik ve elektrik uygulama projeleri
+     ilgili meslek odasına kayıtlı mühendis tarafından imzalanır ve onaylanır;
+     bu set o imzanın yerine geçmez, ona girdi oluşturur.
+
+8 · SORUMLULUK
+--------------------------------------------------------------------------------
+  Ön tasarım — yerinde doğrulanmadan ve ruhsat alınmadan uygulama yapılamaz.
+  Tüm ölçüler kontrol edilmelidir. Yerel uygulama farklılık gösterebilir.
