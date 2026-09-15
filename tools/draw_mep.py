@@ -84,13 +84,28 @@ def menfez(v, x, y, tip, kod, debi=None):
     h.txt(c, px, py+a/2+0.9*mm, kod, h.FB, 4.4, renk, "c")
     if debi: h.txt(c, px, py-a/2-3.0*mm, f"{debi} m³/h", h.F, 3.8, renk, "c")
 
-def cihaz(v, x, y, kod, renk, w_mm=7.0, hh_mm=4.4):
+def cihaz(v, x, y, kod, renk, w_mm=7.0, hh_mm=4.4, aci=0.0):
     c = v.c; px, py = v.p((x, y))
+    if aci: c.saveState(); c.translate(px, py); c.rotate(aci); c.translate(-px, -py)
     c.setFillColor(renk); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.7)
     c.roundRect(px-w_mm/2, py-hh_mm/2, w_mm, hh_mm, 0.8*mm, 1, 1)
+    if aci: c.restoreState()
     h.txt(c, px, py-1.3*mm, kod, h.FB, 4.6, HexColor("#FFFFFF"), "c")
 
-def sembol(v, x, y, tip, kod=None):
+def sembol(v, x, y, tip, kod=None, aci=0.0):
+    """aci: duvara göre dönme (derece). Sembolün 'yukarı'sı hacmin içine bakar."""
+    c = v.c
+    if aci:
+        px0, py0 = v.p((x, y))
+        c.saveState(); c.translate(px0, py0); c.rotate(aci); c.translate(-px0, -py0)
+    _sembol_ciz(v, x, y, tip, None)          # sembol döner
+    if aci: c.restoreState()
+    if kod and tip in ("priz", "priz_ip44", "kamera", "hoparlor", "veri",
+                       "dedektor", "yangin", "anahtar"):
+        px, py = v.p((x, y))                  # etiket YATAY kalır
+        h.txt(c, px, py + 2.6*mm, kod, h.F, 3.6, h.GREY, "c")
+
+def _sembol_ciz(v, x, y, tip, kod=None):
     c = v.c
     if tip == "priz":
         px, py = _daire(v, x, y, 1.7*mm, HexColor("#FFFFFF"), C_PRIZ, 0.7)
@@ -141,9 +156,7 @@ def sembol(v, x, y, tip, kod=None):
         c.setFillColor(HexColor("#16273D")); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.7)
         c.rect(px-4.2*mm, py-2.8*mm, 8.4*mm, 5.6*mm, 1, 1)
         h.txt(c, px, py-1.4*mm, "PANO", h.FB, 4.2, HexColor("#FFFFFF"), "c")
-    if kod and tip in ("priz", "priz_ip44", "kamera", "hoparlor", "veri", "dedektor", "yangin", "anahtar"):
-        px, py = v.p((x, y))
-        h.txt(c, px, py+2.6*mm, kod, h.F, 3.6, h.GREY, "c")
+
 
 def lejant_dikey(v_c, x, y, satirlar, w, s=6.0, adim=5.6*mm):
     """satirlar: [(cizim_fn(c,x,y), metin)]"""

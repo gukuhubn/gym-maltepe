@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""AUTOCAD UYGULAMA PROJESİ SETİ — DXF R2010 (MEP)
+"""AUTOCAD UYGULAMA PROJESİ SETİ — DXF R2010 (mimari + mekanik + elektrik)
 
 Üretilen dosyalar (cad/):
-  GYM-MIM-Altlik-R2010.dxf      mimari altlık (xref olarak kullanılabilir)
+  GYM-MIM-Uygulama-R2010.dxf    mimari — 5 pafta (altlık · uygulama · zemin · tavan · yangın)
   GYM-MEK-Uygulama-R2010.dxf    mekanik — 4 pafta
   GYM-ELK-Uygulama-R2010.dxf    elektrik — 4 pafta
-  GYM-MEP-Birlesik-R2010.dxf    tümü — 8 pafta
+  GYM-BIRLESIK-R2010.dxf        tümü — 13 pafta
 
 Birim: milimetre ($INSUNITS=4) · Paftalar: A3 (420×297) · Ölçek: 1/75
 """
@@ -93,15 +93,17 @@ def mekanik(msp):
         cizgi(msp, (q.x, q.y), (x, y), "M-HAVA-BRANSMAN")
         b = {"besleme": "M_MENFEZ_BESLEME", "egzoz": "M_MENFEZ_EGZOZ", "valf": "M_VALF"}[tip]
         blok(msp, b, (x, y), "M-HAVA-MENFEZ", {"KOD": kod, "DEBI": f"{debi} m³/h"})
-    for kod, x, y, ad in P.FAN:
-        blok(msp, "M_FAN", (x, y), "M-HAVA-CIHAZ", {"KOD": kod, "TANIM": ad.split("—")[-1].strip()})
+    for kod, x, y, ad, a in P.FAN:
+        blok(msp, "M_FAN", (x, y), "M-HAVA-CIHAZ",
+             {"KOD": kod, "TANIM": ad.split("—")[-1].strip()}, aci=a)
     for kod, x, y, ad in P.PANJUR:
         blok(msp, "M_PANJUR", (x, y), "M-HAVA-CIHAZ", {"KOD": kod})
     # iklimlendirme
     for hat in P.BAKIR_HAT.values(): poli(msp, hat, "M-KLIMA-BAKIR", False)
     for hat in P.DRENAJ.values(): poli(msp, hat, "M-KLIMA-DRENAJ", False)
-    for kod, zon, btu, (x, y) in P.KLIMA:
-        blok(msp, "M_KLIMA_IC", (x, y), "M-KLIMA-IC", {"KOD": kod, "KAPASITE": f"{btu} BTU"})
+    for kod, zon, btu, (x, y), a in P.KLIMA:
+        blok(msp, "M_KLIMA_IC", (x, y), "M-KLIMA-IC",
+             {"KOD": kod, "KAPASITE": f"{btu} BTU"}, aci=a)
     blok(msp, "M_KLIMA_DIS", P.DIS_UNITE, "M-KLIMA-DIS",
          {"KOD": "DIŞ ÜNİTE PLATFORMU", "ADET": f"{P.ADET_KLIMA} adet"})
     # sıhhi tesisat
@@ -118,8 +120,8 @@ def mekanik(msp):
         else:
             blok(msp, "M_DUS", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod})
             blok(msp, "M_SUZGEC", (x, y), "M-SIHHI-CIHAZ")
-    for kod, x, y, ad in P.ISITICI:
-        blok(msp, "M_ISITICI", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod, "GUC": "6 kW"})
+    for kod, x, y, ad, a in P.ISITICI:
+        blok(msp, "M_ISITICI", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod, "GUC": "6 kW"}, aci=a)
     blok(msp, "M_SAYAC", P.SU_GIRIS, "M-SIHHI-TEMIZ", {"KOD": "SAYAÇ + ANA KESME"})
 
 # ══════════════════════ ELEKTRİK ═══════════════════════════════════════════════
@@ -139,36 +141,130 @@ def elektrik(msp):
         for n in ("soyunma", "dus", "wc"):
             q = d[n].representative_point()
             blok(msp, "E_DOWNLIGHT", (q.x, q.y), "E-AYD-DOWNLIGHT", {"LINYE": "L5"})
-    for kod, x, y, t in P.ACIL:
+    for kod, x, y, t, a in P.ACIL:
         b = "E_ACIL" if "acil" in t else "E_YONLENDIRME"
-        blok(msp, b, (x, y), "E-AYD-ACIL", {"KOD": kod})
-    for kod, x, y, t in P.ANAHTAR: blok(msp, "E_ANAHTAR", (x, y), "E-AYD-ANAHTAR", {"KOD": kod})
-    for kod, x, y, t in P.SENSOR:  blok(msp, "E_SENSOR",  (x, y), "E-AYD-ANAHTAR", {"KOD": kod})
+        blok(msp, b, (x, y), "E-AYD-ACIL", {"KOD": kod}, aci=a)
+    for kod, x, y, t, a in P.ANAHTAR: blok(msp, "E_ANAHTAR", (x, y), "E-AYD-ANAHTAR", {"KOD": kod}, aci=a)
+    for kod, x, y, t, a in P.SENSOR:  blok(msp, "E_SENSOR",  (x, y), "E-AYD-ANAHTAR", {"KOD": kod})
     linye_priz = {}
-    for j, (kod, x, y, t) in enumerate(P.PRIZ):
+    for j, (kod, x, y, t, a) in enumerate(P.PRIZ):
         ln = "P4" if kod.startswith("PK") else ("P3" if kod.startswith("PB") else
              ("P1" if j % 2 == 0 else "P2"))
-        blok(msp, "E_PRIZ", (x, y), "E-KUVVET-PRIZ", {"KOD": kod, "LINYE": ln})
-    for kod, x, y, t in P.PRIZ_IP44:
-        blok(msp, "E_PRIZ_IP44", (x, y), "E-KUVVET-PRIZ", {"KOD": kod})
-    for kod, zon, btu, (x, y) in P.KLIMA:
-        blok(msp, "M_KLIMA_IC", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "KAPASITE": "1×16 A"})
-    for kod, x, y, ad in P.ISITICI:
-        blok(msp, "M_ISITICI", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "GUC": "1×32 A"})
-    for kod, x, y, ad in P.FAN:
-        blok(msp, "M_FAN", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "TANIM": "1×10 A"})
-    for kod, x, y, t in P.KAMERA:   blok(msp, "E_KAMERA",  (x, y), "E-ZAYIF-KAMERA", {"KOD": kod})
+        blok(msp, "E_PRIZ", (x, y), "E-KUVVET-PRIZ", {"KOD": kod, "LINYE": ln}, aci=a)
+    for kod, x, y, t, a in P.PRIZ_IP44:
+        blok(msp, "E_PRIZ_IP44", (x, y), "E-KUVVET-PRIZ", {"KOD": kod}, aci=a)
+    for kod, zon, btu, (x, y), a in P.KLIMA:
+        blok(msp, "M_KLIMA_IC", (x, y), "E-KUVVET-CIHAZ",
+             {"KOD": kod, "KAPASITE": "1×16 A"}, aci=a)
+    for kod, x, y, ad, a in P.ISITICI:
+        blok(msp, "M_ISITICI", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "GUC": "1×32 A"}, aci=a)
+    for kod, x, y, ad, a in P.FAN:
+        blok(msp, "M_FAN", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "TANIM": "1×10 A"}, aci=a)
+    for kod, x, y, t, a in P.KAMERA: blok(msp, "E_KAMERA",  (x, y), "E-ZAYIF-KAMERA", {"KOD": kod}, aci=a)
     for kod, x, y, t in P.HOPARLOR: blok(msp, "E_HOPARLOR",(x, y), "E-ZAYIF-SES",    {"KOD": kod})
     for kod, x, y, t in P.VERI:     blok(msp, "E_VERI",    (x, y), "E-ZAYIF-VERI",   {"KOD": kod})
     for kod, x, y, t in P.DEDEKTOR: blok(msp, "E_DEDEKTOR",(x, y), "E-ZAYIF-YANGIN", {"KOD": kod})
-    for kod, x, y, t in P.YANGIN:   blok(msp, "E_YANGIN_BUTON", (x, y), "E-ZAYIF-YANGIN", {"KOD": kod})
+    for kod, x, y, t, a in P.YANGIN:   blok(msp, "E_YANGIN_BUTON", (x, y), "E-ZAYIF-YANGIN", {"KOD": kod}, aci=a)
     cevrim = [P.PANO] + [(d[1], d[2]) for d in P.DEDEKTOR] + [(P.YANGIN[2][1], P.YANGIN[2][2])]
     poli(msp, cevrim, "E-ZAYIF-LINYE", False)
     blok(msp, "E_PANO", P.PANO, "E-PANO",
-         {"KOD": "AP", "TANIM": f"3×{P.ANA_KESICI//3} A · {len(P.LINYE)} linye"})
+         {"KOD": "AP", "TANIM": f"3×{P.ANA_KESICI//3} A · {len(P.LINYE)} linye"}, aci=P.PANO_ACI)
     for ad, d in P.ISLAK.items():
         q = d["tum"].representative_point()
         yazi(msp, (q.x*K, q.y*K-780), "KAMERA YOK", 190, "E-YAZI", stil="GYM-B", renk=1)
+
+# ══════════════════════ MİMARİ UYGULAMA PAFTALARI ══════════════════════════════
+def _balon(msp, p, metin, r_mm=340, katman="A-MAHAL"):
+    msp.add_circle(M(p), r_mm, dxfattribs={"layer": katman})
+    yazi(msp, M(p), metin, r_mm*0.80, katman, stil="GYM-B")
+
+def mimari_mahal(msp):
+    """Mahal numaraları, kapı kodları, duvar tipi etiketleri, kesit hatları."""
+    for no, pt in P.MAHAL_NOKTA.items():
+        _balon(msp, (pt[0], pt[1]+0.95), no)
+    KP = {0: "K01", 1: "K03", 2: "K04", 3: "K02"}
+    for i, ((x, y), gen, aci, lbl) in enumerate(P.KAPILAR):
+        _balon(msp, (x-0.45, y+0.45), KP[i], 300)
+    for kod, pt in (("K05",(10.05,8.35)), ("K06",(9.62,0.92)), ("K07",(8.62,7.45)),
+                    ("K08",(11.05,1.78)), ("K09",(2.55,7.05))):
+        _balon(msp, pt, kod, 300)
+    for tip, pt in (("D2",(8.35,6.30)), ("D3",(9.72,6.30)), ("D4",(7.35,0.42)),
+                    ("D1",(5.90,11.30)), ("D6",(5.05,0.42)), ("D5",(10.30,2.30))):
+        yazi(msp, M(pt), tip, 210, "A-MAHAL", stil="GYM-B")
+    for ad, (a, b, _ack) in P.KESIT_HATLARI.items():
+        cizgi(msp, a, b, "A-KESIT-HAT")
+        for uc in (a, b):
+            _balon(msp, uc, ad.split("-")[0], 380, "A-KESIT-HAT")
+
+def mimari_zemin(msp):
+    """Zemin kaplama planı: tip sınırı, kod, kot, kauçuk karo derzi, eğim."""
+    Z = {m[0]: m[3] for m in P.MAHAL_LISTESI}
+    for ad, mno, g in P._MAHAL_GEOM:
+        sekil(msp, g, "A-ZEMIN-SINIR")
+        pt = P.MAHAL_NOKTA[mno]
+        kot = "−0,02" if P._MAHAL_BILGI[mno][9] else "±0,00"
+        yazi(msp, (pt[0]*K, pt[1]*K-420), f"{Z[mno]}  {kot}", 220, "A-ZEMIN-YAZI", stil="GYM-B")
+    sekil(msp, P.hex_poly(*P.EKIPMAN[0][5]), "A-ZEMIN-SINIR")
+    yazi(msp, M(P.EKIPMAN[0][5]), "Z6  +0,30", 220, "A-ZEMIN-YAZI", stil="GYM-B")
+    for zn in ("ARENA · SERBEST AĞIRLIK", "FONKSİYONEL · KARDİYO"):
+        g = [z[1] for z in P.ZONES if z[0] == zn][0]; b = g.bounds
+        for gx in range(int(b[0]), int(b[2])+2):
+            seg = LineString([(gx, b[1]-1), (gx, b[3]+1)]).intersection(g)
+            for s_ in (seg.geoms if seg.geom_type.startswith("Multi") else [seg]):
+                if s_.geom_type == "LineString" and not s_.is_empty:
+                    cizgi(msp, s_.coords[0], s_.coords[-1], "A-ZEMIN-DERZ")
+        for gy in range(int(b[1]), int(b[3])+2):
+            seg = LineString([(b[0]-1, gy), (b[2]+1, gy)]).intersection(g)
+            for s_ in (seg.geoms if seg.geom_type.startswith("Multi") else [seg]):
+                if s_.geom_type == "LineString" and not s_.is_empty:
+                    cizgi(msp, s_.coords[0], s_.coords[-1], "A-ZEMIN-DERZ")
+    for ad, d in P.ISLAK.items():
+        for n in ("dus", "wc"):
+            q = d[n].representative_point(); bb = d[n].bounds
+            cizgi(msp, (bb[0]+0.12, bb[1]+0.12), (q.x, q.y), "A-ZEMIN-SINIR")
+            yazi(msp, (q.x*K, q.y*K+260), "%1,5", 150, "A-ZEMIN-YAZI")
+
+def mimari_tavan(msp):
+    """Tavan planı: tip sınırı, kot, revizyon kapağı."""
+    T = {m[0]: m[6] for m in P.MAHAL_LISTESI}
+    for ad, mno, g in P._MAHAL_GEOM:
+        sekil(msp, g, "A-TAVAN-SINIR")
+        pt = P.MAHAL_NOKTA[mno]; tt = T[mno]
+        yazi(msp, (pt[0]*K, pt[1]*K-420), f"{tt}  +{('%.2f' % P.TAVAN_KOT[tt]).replace('.', ',')}",
+             220, "A-TAVAN-YAZI", stil="GYM-B")
+    for ad, d in P.ISLAK.items():
+        for n in ("dus", "wc"):
+            bb = d[n].bounds; rx, ry = bb[0]+0.28, bb[3]-0.28
+            poli(msp, [(rx-0.15, ry-0.15), (rx+0.15, ry-0.15),
+                       (rx+0.15, ry+0.15), (rx-0.15, ry+0.15)], "A-TAVAN-KAPAK")
+            cizgi(msp, (rx-0.15, ry-0.15), (rx+0.15, ry+0.15), "A-TAVAN-KAPAK")
+
+def mimari_yangin(msp):
+    """Yangın ve tahliye planı: kaçış yolu, çıkış, söndürücü."""
+    for mno, yol, cik in P.TAHLIYE_YOL:
+        poli(msp, yol, "A-YANGIN-KACIS", kapali=False)
+        for i in range(1, len(yol)):
+            ax, ay = yol[i-1]; bx, by = yol[i]
+            ang = math.atan2(by-ay, bx-ax)
+            mx, my = (ax+bx)/2, (ay+by)/2
+            uc = (mx+math.cos(ang)*0.18, my+math.sin(ang)*0.18)
+            for yn in (+1, -1):
+                q = (mx+math.cos(ang+yn*2.5)*0.16, my+math.sin(ang+yn*2.5)*0.16)
+                cizgi(msp, uc, q, "A-YANGIN-KACIS")
+        yazi(msp, (yol[0][0]*K, yol[0][1]*K+420),
+             f"{('%.1f' % P.tahliye_uzunluk(yol)).replace('.', ',')} m → {cik}",
+             170, "A-YANGIN-KACIS", stil="GYM-B")
+    for kod, pt, gen, ad in P.CIKISLAR:
+        _balon(msp, pt, kod, 420, "A-YANGIN-KACIS")
+        yazi(msp, (pt[0]*K, pt[1]*K+620), f"{ad} · {('%.2f' % gen).replace('.', ',')} m",
+             160, "A-YANGIN-KACIS")
+    for kod, pt, ad in P.YANGIN_EKIPMAN:
+        if kod.startswith("YD"):
+            poli(msp, [(pt[0]-0.22, pt[1]-0.22), (pt[0]+0.22, pt[1]-0.22),
+                       (pt[0]+0.22, pt[1]+0.22), (pt[0]-0.22, pt[1]+0.22)], "A-YANGIN-EKIP")
+        else:
+            msp.add_circle(M(pt), 220, dxfattribs={"layer": "A-YANGIN-EKIP"})
+        yazi(msp, M(pt), kod, 150, "A-YANGIN-EKIP", stil="GYM-B")
 
 # ══════════════════════ ANTET VE PAFTALAR ══════════════════════════════════════
 def antet_blogu(doc):
@@ -220,7 +316,19 @@ PAFTALAR = {
  "E-03": ("ZAYIF AKIM PLANI", "ELEKTRİK",
           ["M-", "E-AYD-", "E-KUVVET-"]),
  "E-04": ("ELEKTRİK GENEL YERLEŞİM", "ELEKTRİK", ["M-"]),
- "A-01": ("MİMARİ ALTLIK", "MİMARİ", ["M-", "E-"]),
+ "A-01": ("MİMARİ ALTLIK", "MİMARİ",
+          ["M-", "E-", "A-ZEMIN-", "A-TAVAN-", "A-YANGIN-"]),
+ "A-02": ("MİMARİ UYGULAMA PLANI", "MİMARİ",
+          ["M-", "E-", "A-ZEMIN-", "A-TAVAN-", "A-YANGIN-"]),
+ "A-03": ("ZEMİN KAPLAMA PLANI", "MİMARİ",
+          ["M-", "E-", "A-TAVAN-", "A-YANGIN-", "A-YAZI", "A-KESIT-HAT", "A-EKIPMAN", "A-MOBILYA"]),
+ "A-04": ("TAVAN PLANI (RCP)", "MİMARİ",
+          ["M-SIHHI-", "M-KLIMA-", "E-KUVVET-", "E-ZAYIF-", "A-ZEMIN-", "A-YANGIN-",
+           "A-YAZI", "A-KESIT-HAT", "A-EKIPMAN"]),
+ "A-05": ("YANGIN VE TAHLİYE PLANI", "MİMARİ",
+          ["M-", "E-KUVVET-", "E-ZAYIF-KAMERA", "E-ZAYIF-SES", "E-ZAYIF-VERI",
+           "E-ZAYIF-LINYE", "E-AYD-ARMATUR", "E-AYD-DOWNLIGHT", "E-AYD-ANAHTAR",
+           "E-PANO", "E-YAZI", "A-ZEMIN-", "A-TAVAN-", "A-KESIT-HAT", "A-EKIPMAN"]),
 }
 
 def pafta_ekle(doc, no, notlar=""):
@@ -284,12 +392,25 @@ NOTLAR = {
  "E-04": "Elektrik disiplin genel yerlesimi.\nAyrinti icin E-01, E-02, E-03 paftalari.",
  "A-01": "Mimari altlik — mevcut duvar korunur.\nKirmizi: yeni alcipan bolme.\n"
          "Olculer raster paftadan (+/-%3).",
+ "A-02": "Mahal no, kapi kodu, duvar tipi ve\nkesit hatti gosterilmistir.\n"
+         "Tum alcipan bolmeler yapisal doseme\naltina (+3,20) kadar yukselir.",
+ "A-03": "Bitmis zemin kotu tum kuru hacimde\n+/-0,00; dus ve WC -0,02.\n"
+         "Tesviye sapi kalinliklari farklidir\n(Z1:3 Z2:30 Z3:42 Z5:38 mm).\n"
+         "Kaucuk karo derzi 1000x1000 mm.",
+ "A-04": "T1 acik tavan +3,20 · T2 +2,75\nT4 +2,60 · T3 +2,40.\n"
+         "Tesisat askisi alcipan karkasina\nasilmaz; ayri askilanir.\n"
+         "Her islak hacimde 300x300 revizyon.",
+ "A-05": "Iki bagimsiz cikis: C1 1,60 m, C2 1,00 m.\n"
+         "En uzun kacis yolu 13,4 m.\n"
+         "Kacis kapilari kacis yonunde acilir,\npanik donanimli, kilitsiz.",
 }
 
-def belge_uret(ad, mek=True, elk=True, paftalar=()):
+def belge_uret(ad, mek=True, elk=True, paftalar=(), mim_detay=True):
     doc = X.yeni_belge(ad); X.bloklari_kur(doc); antet_blogu(doc)
     msp = doc.modelspace()
     mimari(msp); olculer(msp)
+    if mim_detay:
+        mimari_mahal(msp); mimari_zemin(msp); mimari_tavan(msp); mimari_yangin(msp)
     if mek: mekanik(msp)
     if elk: elektrik(msp)
     for no in paftalar: pafta_ekle(doc, no, NOTLAR.get(no, ""))
@@ -299,11 +420,12 @@ def belge_uret(ad, mek=True, elk=True, paftalar=()):
 
 def uret():
     setler = [
-      ("GYM-MIM-Altlik-R2010.dxf",   False, False, ("A-01",)),
+      ("GYM-MIM-Uygulama-R2010.dxf", False, False, ("A-01","A-02","A-03","A-04","A-05")),
       ("GYM-MEK-Uygulama-R2010.dxf", True,  False, ("M-01","M-02","M-03","M-04")),
       ("GYM-ELK-Uygulama-R2010.dxf", False, True,  ("E-01","E-02","E-03","E-04")),
-      ("GYM-MEP-Birlesik-R2010.dxf", True,  True,
-       ("A-01","M-01","M-02","M-03","M-04","E-01","E-02","E-03","E-04")),
+      ("GYM-BIRLESIK-R2010.dxf",     True,  True,
+       ("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
+        "E-01","E-02","E-03","E-04")),
     ]
     uretilen = []
     for dosya, mek, elk, pf in setler:
@@ -317,15 +439,16 @@ def uret():
 
 
 # ══════════════════════ PAFTA ÖNİZLEME PDF'İ ═══════════════════════════════════
-def onizleme_pdf(cikti="output/Gym_MEP_CAD_Paftalar.pdf"):
+def onizleme_pdf(cikti="output/Gym_CAD_Paftalar.pdf"):
     """Tüm paftaları tek PDF'e basar — CAD olmadan kontrol için."""
     import matplotlib; matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_pdf import PdfPages
     from ezdxf.addons.drawing import RenderContext, Frontend
     from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
-    doc = ezdxf.readfile(CAD/"GYM-MEP-Birlesik-R2010.dxf")
-    sira = ["A-01", "M-01", "M-02", "M-03", "M-04", "E-01", "E-02", "E-03", "E-04"]
+    doc = ezdxf.readfile(CAD/"GYM-BIRLESIK-R2010.dxf")
+    sira = ["A-01", "A-02", "A-03", "A-04", "A-05",
+            "M-01", "M-02", "M-03", "M-04", "E-01", "E-02", "E-03", "E-04"]
     adlar = {n: f"{n} {PAFTALAR[n][0]}" for n in sira}
     with PdfPages(cikti) as pdf:
         for no in sira:
@@ -345,10 +468,10 @@ def onizleme_pdf(cikti="output/Gym_MEP_CAD_Paftalar.pdf"):
                 if k in doc.layers: doc.layers.get(k).on()
     print(f"  → {cikti}  ·  {len(sira)} pafta")
 
-def paketle(cikti="output/Gym_MEP_CAD_Seti_DXF.zip"):
+def paketle(cikti="output/Gym_CAD_Seti_DXF.zip"):
     with zipfile.ZipFile(cikti, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(CAD.iterdir()):
-            if f.is_file(): z.write(f, f"Gym_MEP_CAD_Seti/{f.name}")
+            if f.is_file(): z.write(f, f"Gym_CAD_Seti/{f.name}")
     print(f"  → {cikti}  ·  {sum(1 for f in CAD.iterdir() if f.is_file())} dosya · "
           f"{Path(cikti).stat().st_size/1e6:.2f} MB")
 
@@ -361,11 +484,12 @@ def belgeler():
         for r in X.KATMANLAR: w.writerow(r)
     bloklar = sorted(b.name for b in X.yeni_belge("x").blocks if not b.name.startswith("*")) \
               if False else None
-    doc = ezdxf.readfile(CAD/"GYM-MEP-Birlesik-R2010.dxf")
+    doc = ezdxf.readfile(CAD/"GYM-BIRLESIK-R2010.dxf")
     bl = sorted(b.name for b in doc.blocks if not b.name.startswith("*"))
     pafta_sat = "\n".join(
         f"  {no:6s} {PAFTALAR[no][0]:32s} ({PAFTALAR[no][1]})"
-        for no in ["A-01","M-01","M-02","M-03","M-04","E-01","E-02","E-03","E-04"])
+        for no in ["A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
+                   "E-01","E-02","E-03","E-04"])
     kat_sat = "\n".join(f"  {a:18s} renk {r:3d}  {lt:11s} {lw:3d}  {ack}"
                         for a, r, lt, lw, ack in X.KATMANLAR)
     metin = f"""GYM DÖNÜŞÜMÜ — MEP CAD SETİ
@@ -398,10 +522,11 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
 
 3 · DOSYALAR
 --------------------------------------------------------------------------------
-  GYM-MIM-Altlik-R2010.dxf      Mimari altlık — diğerlerine XREF olarak bağlanabilir
+  GYM-MIM-Uygulama-R2010.dxf    Mimari — 5 pafta (altlık, uygulama, zemin kaplama,
+                                tavan planı, yangın ve tahliye). Diğerlerine XREF bağlanabilir.
   GYM-MEK-Uygulama-R2010.dxf    Mekanik — 4 pafta
   GYM-ELK-Uygulama-R2010.dxf    Elektrik — 4 pafta
-  GYM-MEP-Birlesik-R2010.dxf    Tümü — 9 pafta (tek dosyada çalışmak isteyenler için)
+  GYM-BIRLESIK-R2010.dxf        Tümü — 13 pafta (tek dosyada çalışmak isteyenler için)
   KATMAN-LISTESI.csv            Katman standardı (Excel ile açılır)
 
 4 · PAFTALAR (kâğıt alanı sekmeleri)

@@ -246,4 +246,26 @@ def aydinlatma_izgara(v=None):
         c0=z[1].centroid
         aday.sort(key=lambda p: math.dist(p,(c0.x,c0.y)))
         out += aday[:n]
+    return _ekipman_ustunden_kaydir(out)
+
+# 2,00 m'den yüksek ekipmanın tam üstüne denk gelen armatür, gölgelemeyi önlemek için
+# bölge içinde kalacak şekilde yana kaydırılır (kontrol.py bunu denetler).
+def _ekipman_ustunden_kaydir(noktalar, adim=0.35, tur=10):
+    from shapely.geometry import Point as _Pt
+    yuksek = [g.buffer(0.10) for kod,_ad,g in P.ekipman_poligonlari()
+              if P.EK_H.get(kod[0], 0) >= 2.0]
+    if not yuksek: return noktalar
+    ic = unary_union([P.SALON]).buffer(-0.45)
+    out=[]
+    for px,py in noktalar:
+        for t in range(tur+1):
+            if not any(g.contains(_Pt(px,py)) for g in yuksek): break
+            for dx,dy in ((0,1),(0,-1),(1,0),(-1,0)):
+                q=(px+dx*adim*(t+1), py+dy*adim*(t+1))
+                if ic.contains(_Pt(*q)) and not any(g.contains(_Pt(*q)) for g in yuksek):
+                    px,py=q; break
+            else:
+                continue
+            break
+        out.append((round(px,3), round(py,3)))
     return out

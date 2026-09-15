@@ -344,18 +344,18 @@ Toplu dönüşüm için AutoCAD'in DWG Convert aracı veya ücretsiz ODA File Co
 
 | Dosya | İçerik |
 |---|---|
-| `GYM-MIM-Altlik-R2010.dxf` | Mimari altlık — diğerlerine XREF bağlanabilir · 1 pafta |
+| `GYM-MIM-Uygulama-R2010.dxf` | Mimari · 5 pafta (A-01 altlık, A-02 uygulama, A-03 zemin kaplama, A-04 tavan planı, A-05 yangın ve tahliye) — diğerlerine XREF bağlanabilir |
 | `GYM-MEK-Uygulama-R2010.dxf` | Mekanik · 4 pafta (M-01…M-04) |
 | `GYM-ELK-Uygulama-R2010.dxf` | Elektrik · 4 pafta (E-01…E-04) |
-| `GYM-MEP-Birlesik-R2010.dxf` | Tümü · 9 pafta |
-| `KATMAN-LISTESI.csv` | 42 katmanın standardı (Excel) |
+| `GYM-BIRLESIK-R2010.dxf` | Tümü · 13 pafta |
+| `KATMAN-LISTESI.csv` | 52 katmanın standardı (Excel) |
 | `OKUBENI-CAD.txt` | Format, birim, ölçek, DWG dönüşümü, kapsam sınırı |
 
 ### Teknik kurulum
 
 - **Birim:** milimetre (`$INSUNITS = 4`), model uzayı 1:1 gerçek boyut
 - **Pafta:** A3 (420 × 297), **ölçek 1/75**, ölçülendirme stili `GYM-75` (DIMSCALE 75)
-- **Katman:** 42 katman, `A-` mimari / `M-` mekanik / `E-` elektrik / `G-` genel öneki ile;
+- **Katman:** 52 katman, `A-` mimari / `M-` mekanik / `E-` elektrik / `G-` genel öneki ile;
   her katmanda ACI renk, çizgi tipi ve kalem kalınlığı tanımlı
 - **Blok:** 32 sembol bloğu, **öznitelikli** — menfezlerde `KOD`/`DEBI`, prizlerde
   `KOD`/`LINYE`, klimalarda `KOD`/`KAPASITE`. `DATAEXTRACTION` ile doğrudan metraj çekilebilir
@@ -388,3 +388,104 @@ tavan ve kiriş altı kotları, kolon konumları, mevcut pis su bağlantı kotu,
 gücü — ve **yetkili mühendis imzası**. Türkiye'de mekanik ve elektrik uygulama projeleri
 ilgili meslek odasına kayıtlı mühendis tarafından imzalanır; bu set o imzanın yerine geçmez,
 ona girdi oluşturur.
+
+
+---
+
+## 14 · Rev D — mimari uygulama seti, inşaat seti ve çizim denetimi
+
+İşveren geri bildirimi: *"plan, kesit görünüş, detay vs, pano hesabı vs, yani kısacası tüm
+inşaat setini ver, belediye teslimi gibi düşün ya da müteahhit, oradan her şey anlaşılmalı…
+ayrıca çizimleri kontrol et… mimari proje yok misal alçıpan, seramik, yer kauçuk karo vs."*
+
+### 14.1 · Yeni teslimatlar
+
+| Dosya | İçerik |
+|---|---|
+| `Gym_Mimari_Proje_A3.pdf` | **Mimari uygulama projesi — 13 pafta** |
+| `Gym_Insaat_Seti_A3.pdf` | **Birleşik inşaat seti — 29 pafta**, kapak + indeks + mimari 13 + mekanik 7 + elektrik 7, PDF yer imli |
+| `Gym_CAD_Seti_DXF.zip` | CAD seti **13 paftaya** çıktı (mimari 5 pafta eklendi) |
+| `Gym_CAD_Paftalar.pdf` | 13 pafta önizleme |
+
+Mimari set paftaları: A-01 kapak/genel notlar/indeks · A-02 yıkım-söküm · A-03 uygulama planı ·
+A-04 zemin kaplama planı · A-05 tavan planı (RCP) · A-06 kesit A-A · A-07 kesit B-B ·
+A-08 iç görünüşler (G-01…G-04) · A-09 mahal listesi · A-10 kapı-pencere listesi ve duvar tipleri ·
+A-11/A-12 imalat detayları (D-01…D-08) · A-13 yangın ve tahliye planı.
+
+Mekanik sete **M-07 tavan içi tesisat koordinasyon kesiti**, elektrik sete
+**E-07 pano yük ve gerilim düşümü hesabı** eklendi.
+
+### 14.2 · Malzeme kararları (mahal listesi — A-09)
+
+| Kod | Mahal | Kaplama |
+|---|---|---|
+| Z1 | Arena · serbest ağırlık | 10 mm SBR titreşim matı + **40 mm granül kauçuk karo** 1000×1000, Shore A 55, EN 14041 Bfl-s1 |
+| Z2 | Fonksiyonel · kardiyo | tesviye şapı 30 mm + **20 mm kauçuk karo**, Shore A 60 |
+| Z3 | Giriş · banko · dinlenme | tesviye şapı 42 mm + IXPE şilte + **5 mm SPC klik LVT**, AC5 / sınıf 33 |
+| Z4 | Duş · WC | eğim şapı %1,5 + EN 14891 su yalıtımı 2 kat + **8 mm porselen 300×300, R11 / B** |
+| Z5 | Soyunma | tesviye şapı 38 mm + **9 mm porselen 600×600, R10** |
+| Z6 | Ring platformu | ahşap kadron + 2×18 mm su kontraplağı + EVA + kanvas, **+0,30** |
+
+| Kod | Duvar / tavan |
+|---|---|
+| D1 | Mevcut duvar — saten alçı + su bazlı silikonlu mat boya (sınıf 1 yıkanabilir) |
+| D2 | **Alçıpan bölme 100 mm** — 50 mm C profil @400 + 40 mm taşyünü + her yüz 2×12,5 mm A tipi, Rw ≈ 51 dB |
+| D3 | Islak bölme 100 mm — ıslak yüz 2×12,5 mm **H2 (yeşil) alçıpan** |
+| D4 | Akustik giydirme 95 mm — bağımsız karkas + 50 mm taşyünü, ΔRw ≈ +10 dB |
+| D5 | Islak duvar — su yalıtımı + **9 mm seramik 300×600** (duşta tavana, WC'de h=1,60) |
+| D6 | Ayna duvarı — 18 mm kontraplak + 6 mm güvenlik filmli ayna (+0,30 / +2,30) |
+| T1 | Açık endüstriyel tavan **+3,20** — siyah boya + 12 adet akustik baffle |
+| T2 | Alçıpan asma tavan **+2,75** (giriş · dinlenme) |
+| T4 | Alçıpan asma tavan **+2,60** (soyunma) |
+| T3 | H2 alçıpan asma tavan **+2,40** (duş · WC) + revizyon kapağı |
+
+**Kot sürekliliği:** bitmiş zemin kotu tüm kuru hacimlerde ±0,00. Farklı kaplama kalınlıkları
+tesviye şapı ile eşitlenir (Z1: 3 · Z2: 30 · Z3: 42 · Z5: 38 mm) — mahaller arasında eşik veya
+tökezleme oluşmaz. Yalnızca duş ve WC −0,02'dir; fark kapı altında eğimli eşik profili ile karşılanır.
+
+### 14.3 · Denetlenen ve düzeltilen gerçek hatalar
+
+`tools/kontrol.py` 10 kategoride denetler. Bu turda bulunup düzeltilenler:
+
+1. **Priz ve anahtar yönleri duvara göre değildi** — tüm duvar cihazları en yakın duvar
+   segmentine dik izdüşürülüp içe bakan normale döndürüldü; sembol döner, etiket yatay kalır.
+2. **Klima K2 komşu hacme kaydı** — `duvara_yapistir()` tüm hacimlerin çeperinde arama
+   yapıyordu ve iç ünite erkek duşun (106) içine düşmüştü. Fonksiyona hacim filtresi eklendi;
+   iç üniteler artık yalnızca salon çeperine yapışır.
+3. **Su ısıtıcı devresi yanlış korumadaydı** — 6 kW / 26,1 A yük için `1×40 A + 3×6 mm²`
+   yazılmıştı; 6 mm²'nin B2 akım kapasitesi 40 A olduğundan In ≤ Iz koşulu sınırda kalıyordu.
+   **`1×32 A + 3×6 mm²`** olarak düzeltildi (BoQ poz 05.24 ile birlikte).
+4. **Asma tavan boşluğu tesisata yetmiyordu** — T2 kotu +2,80 iken 400 mm boşluğa kanal,
+   bakır hat, kablo tavası ve taşıyıcı profil sığmıyordu (10 mm açık). **T2 kotu +2,75'e
+   indirildi** (boşluk 450 mm, serbestlik 30 mm) ve tavan içi kot dizilimi bölge bazında
+   (T2 / T4 / T3) ayrı tanımlandı. Pis su hattı tavana değil zemine alındı.
+5. **Menfez–armatür tavan çakışması** — M1 ve M2 lineer armatüre 59 ve 47 cm mesafedeydi;
+   armatür sıraları arasına kaydırıldı (≥ 70 cm).
+6. **Sensör–valf çakışması** — S1 ile V1 arası 22 cm; sensör erkek WC içinde yeniden konumlandı.
+7. **Armatür yüksek ekipmanın üstünde** — 2,00 m'den yüksek ekipmanın tam üstüne denk gelen
+   armatür, bölge içinde kalacak şekilde otomatik kaydırılıyor (`_ekipman_ustunden_kaydir`).
+8. **Kesitte olmayan duvar çiziliyordu** — 101–104 salon bölgeleri arasında fiziksel bölme
+   yoktur; kesit motoru bunları artık duvar değil **zemin kaplama sınırı** olarak çiziyor.
+9. **Kaçış yolları duvardan geçiyordu** — soyunma mahallerinin tahliye güzergâhları kapılardan
+   geçecek ve ring çevresinden dolaşacak şekilde yeniden çizildi.
+
+Son durum: **0 hata, 0 uyarı, 6 bilgi.**
+
+### 14.4 · Pano hesabı (E-07)
+
+21 linyenin tamamı için hesap akımı, kesici anma akımı, kablo kesiti, akım taşıma kapasitesi
+(TS HD 60364-5-52, B2, 30 °C), hat uzunluğu ve gerilim düşümü tablolandı. Sonuç:
+**Ib ≤ In ≤ Iz ve ΔU ≤ sınır koşulları 21 linyede de sağlanıyor.**
+En yüksek son devre gerilim düşümü %1,64 (W2 — kadın bloğu su ısıtıcısı);
+ana besleme (NYY 5×10 mm², 25 m) %0,60 ile birlikte en uzak tüketicide **toplam %2,24** —
+%5 sınırının altında. Kaçak akım koruması 5 grup hâlinde 30 mA A tipi, ana girişte 300 mA
+S tipi seçici; yangın algılama paneli kaçak akım rölesi arkasına alınmaz.
+
+### 14.5 · Setin sınırı
+
+Bu set **mimari + mekanik + elektrik uygulama setidir**. Ruhsat başvurusu için proje müellifi
+mimar ve tesisat mühendislerince imzalanmış 1/50 onaylı takım ayrıca düzenlenecektir.
+Statik proje kapsam dışıdır; taşıyıcı sistemde hiçbir müdahale öngörülmemektedir.
+Yapısal döşeme altı kotu (+3,20), mevcut duvar kalınlığı (200 mm), mevcut şap üst kotu (−0,053)
+ve mevcut asma tavan varlığı **VARSAYIMDIR** — söküm sonrası rölöve ile doğrulanıp tüm set
+tek yerden (`tools/proj.py`) güncellenecektir.

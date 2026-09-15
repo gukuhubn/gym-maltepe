@@ -5,12 +5,12 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
 from reportlab.lib.colors import HexColor
-import proj as P, helpers as h, draw as D, draw_mep as M
+import proj as P, helpers as h, draw as D, draw_mep as M, draw_mim as MM
 
 W, HH = 420*mm, 297*mm
 TOP, BOT, L, R = HH-24.6*mm, 14*mm, 12*mm, W-12*mm
 CW = R-L
-N = 6
+N = 7
 DISIPLIN = "MEKANİK TESİSAT PROJESİ"
 
 def sayfa(c, no, baslik, ust=None):
@@ -125,9 +125,9 @@ def s2(c):
         q = LS(hat["guzergah"]).interpolate(LS(hat["guzergah"]).project(Pt(x, y)))
         D.line(v, (q.x, q.y), (x, y), hat["renk"], 0.7, (1.4, 1.2))
         M.menfez(v, x, y, tip, kod, debi)
-    for kod, x, y, ad in P.FAN:
+    for kod, x, y, ad, a in P.FAN:
         M.cihaz(v, x, y, kod, M.C_BESLEME if "TH" in kod else
-                (M.C_ISLAK if "IS" in kod else M.C_EGZOZ), 9.5*mm, 5*mm)
+                (M.C_ISLAK if "IS" in kod else M.C_EGZOZ), 9.5*mm, 5*mm, a)
     for kod, x, y, ad in P.PANJUR:
         D.poly(v, __import__("shapely.geometry", fromlist=["Point"]).Point(x, y).buffer(0.22),
                fill=HexColor("#FFFFFF"), stroke=h.NAVY, lw=0.8)
@@ -184,8 +184,8 @@ def s3(c):
         D.poly(v, z[1], fill=HexColor(z[4]), alpha=0.45)
     for hat in P.DRENAJ.values(): M.boru(v, hat, M.C_DRENAJ, 0.9, (1.5, 1.3))
     for hat in P.BAKIR_HAT.values(): M.boru(v, hat, M.C_KLIMA, 1.5)
-    for kod, zon, btu, (x, y) in P.KLIMA:
-        M.cihaz(v, x, y, kod, M.C_KLIMA, 8.5*mm, 4.6*mm)
+    for kod, zon, btu, (x, y), a in P.KLIMA:
+        M.cihaz(v, x, y, kod, M.C_KLIMA, 8.5*mm, 4.6*mm, a)
         D.etiket(v, (x, y-0.55), f"{h.tl(btu)} BTU", 4.2, M.C_KLIMA, h.FB, "c")
     dx, dy = P.DIS_UNITE
     c.setFillColor(M.C_KLIMA); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.8)
@@ -199,7 +199,7 @@ def s3(c):
     x2 = L+pw+7*mm; w2 = CW-pw-7*mm; yy = TOP
     h.txt(c, x2, yy-4*mm, "BÖLGE BAZLI SOĞUTMA YÜKÜ", h.FB, 8, h.NAVY)
     rows = []
-    for kod, zon, btu, _ in P.KLIMA:
+    for kod, zon, btu, _, _a in P.KLIMA:
         m2 = P.ZON_M2[zon]
         rows.append([kod, zon.split(" · ")[0].title(), f"{m2:.2f}".replace(".", ","),
                      h.tl(int(round(m2*180))), h.tl(int(round(m2*180*3.412/1000)*1000)), h.tl(btu)])
@@ -259,8 +259,8 @@ def s4(c):
     for br in P.PIS_SU["Ø50"]: M.boru(v, br, M.C_PIS, 1.0, (2.0, 1.5))
     for kod, x, y, ad in P.VITRIFIYE:
         M.cihaz(v, x, y, kod, HexColor("#5A6470"), 7.5*mm, 4.2*mm)
-    for kod, x, y, ad in P.ISITICI:
-        M.cihaz(v, x, y, kod, M.C_SICAK, 8*mm, 4.4*mm)
+    for kod, x, y, ad, a in P.ISITICI:
+        M.cihaz(v, x, y, kod, M.C_SICAK, 8*mm, 4.4*mm, a)
     sx, sy = P.SU_GIRIS
     D.poly(v, __import__("shapely.geometry", fromlist=["Point"]).Point(sx, sy).buffer(0.26),
            fill=HexColor("#FFFFFF"), stroke=M.C_SOGUK, lw=1.2)
@@ -373,7 +373,7 @@ def s5(c):
     h.kutu(c, kx, BOT+2*mm, kw, sh_, HexColor("#F7F9FA"), h.GREY_L)
     dy0 = BOT+2*mm+sh_-14*mm
     blok(kx+kw/2-24*mm, dy0, 48*mm, 11*mm, "DIŞ ÜNİTE PLATFORMU", "arka cephe · 4 adet", M.C_KLIMA)
-    for i, (kod, zon, btu, _) in enumerate(P.KLIMA):
+    for i, (kod, zon, btu, _, _a) in enumerate(P.KLIMA):
         yk = dy0-16*mm-i*10.5*mm
         blok(kx+10*mm, yk, 34*mm, 8*mm, f"{kod} · {h.tl(btu)} BTU", None, HexColor("#2E4057"))
         h.txt(c, kx+48*mm, yk+2.6*mm, zon.split(" · ")[0].title(), h.F, 5.8, h.INK)
@@ -448,10 +448,89 @@ def s6(c):
       "kurulmuştur; uygulama öncesi DXF (R2010) ile yeniden kontrol edilmelidir.",
       fs=6.3, acc=h.NAVY2)
 
+# ══ 7 · TAVAN İÇİ TESİSAT KOORDİNASYON KESİTİ ═════════════════════════════════
+KAT_RENK = {"yapi":"#C9CCD1", "kanal":"#2E7D5B", "boru":"#1F8AA8", "kablo":"#1F6FB2",
+            "zayif":"#7B3FA0", "su":"#2F6FB3", "tavan":"#B87333"}
+def s7(c):
+    sayfa(c, 7, "Tavan içi tesisat koordinasyon kesiti",
+          "Kanal · boru · kablo tavası kot dizilimi · çakışma kuralları")
+    y = TOP
+    y = h.para(c, L, y-1*mm,
+      "Bu pafta, asma tavan ile yapısal döşeme arasındaki boşlukta her disiplinin hangi kotta geçeceğini "
+      "belirler. Mekanik, elektrik ve mimari paftalar aynı geometrik kaynaktan üretildiği için plan "
+      "üzerindeki çakışmalar otomatik denetlenmiştir (tools/kontrol.py); bu kesit ise düşey çakışmayı, "
+      "yani aynı noktada üst üste geçen elemanların kot sırasını tanımlar. Yapısal döşeme altı kotu "
+      "VARSAYIMDIR (+3,20); söküm sonrası yerinde ölçülecek ve tüm kotlar tek yerden güncellenecektir.",
+      CW, h.F, 7.8, h.INK, 10.8)
+
+    # ── kesit çizimi: tam genişlik, alçak kutu ────────────────────────────────
+    ch = 88*mm; cy0 = y-4*mm-ch
+    h.kutu(c, L, cy0, CW, ch, HexColor("#FFFFFF"), h.GREY_L, 0.6)
+    h.txt(c, L+4*mm, cy0+ch-5.4*mm, "TAVAN İÇİ KOT DİZİLİMİ  ·  şematik kesit (ölçeksiz, düşey ölçek büyütülmüş)",
+          h.FB, 6.8, h.NAVY)
+    v = MM.KV(c, L, cy0, CW, ch-7*mm, 0.0, 6.0, 2.26, 3.46, pad=10*mm)
+    MM.kutu(v, 0.15, 3.20, 5.85, 3.40, "beton")
+    MM.kutu(v, 0.15, 2.32, 0.35, 3.20, "beton")
+    MM.kutu(v, 5.65, 2.32, 5.85, 3.20, "beton")
+    MM.kutu(v, 0.35, 2.80, 3.60, 2.8145, "alcipan")
+    MM.kutu(v, 3.72, 2.40, 5.65, 2.4145, "alcipan")
+    MM.cizgi(v, (3.66, 2.40), (3.66, 2.8145), h.INK, 1.0)
+    MM.kot(v, 0.95, 2.80, "+2,80  T2 asma tavan", 1)
+    MM.kot(v, 4.35, 2.40, "+2,40  T3 asma tavan", 1)
+    MM.kot(v, 5.55, 3.20, "+3,20  yapısal döşeme altı", -1)
+    ogeler = [
+      (1, 0.70, 2.94, 1.30, 3.14, "kanal", "Dikdörtgen hava kanalı 400×200 mm — taze hava beslemesi"),
+      (2, 1.70, 2.94, 2.30, 3.14, "kanal", "Dikdörtgen hava kanalı 400×200 mm — egzoz"),
+      (3, 2.58, 2.86, 2.70, 2.92, "boru",  "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)"),
+      (4, 2.92, 2.80, 3.32, 2.85, "kablo", "Kablo tavası 200×60 mm — kuvvet ve aydınlatma"),
+      (5, 3.40, 2.74, 3.58, 2.79, "zayif", "Zayıf akım kanalı 100×50 mm — kuvvetten ≥ 200 mm ayrık"),
+      (6, 4.05, 2.94, 4.45, 3.14, "kanal", "Islak hacim egzoz kanalı Ø160 mm"),
+      (7, 4.70, 2.68, 4.82, 2.74, "su",    "Temiz su PPRC Ø25 + pis su Ø50–70 (%2 eğim)"),
+      (8, 5.05, 2.80, 5.35, 2.85, "kablo", "Kablo tavası — ıslak blok kolu"),
+    ]
+    for no, s0, z0, s1, z1, tip, ad in ogeler:
+        col = HexColor(KAT_RENK[tip])
+        MM.gorunus_kutu(v, s0, z0, s1, z1, fill=h.tint(col, 0.50), kontur=col, lw=1.0)
+        px, py = v.p((s0+s1)/2, z1)
+        MM.balon(c, px, py+4.6*mm, str(no), r=2.4*mm, dolgu="#FFFFFF", kontur="#16273D", fs=5.0)
+        c.saveState(); c.setStrokeColor(HexColor("#6B7078")); c.setLineWidth(0.4)
+        c.line(px, py, px, py+2.2*mm); c.restoreState()
+    for sx in (1.50, 3.05, 4.55):
+        MM.cizgi(v, (sx, 3.20), (sx, 2.8145 if sx < 3.66 else 2.4145), HexColor("#6B7078"), 0.8)
+    h.lejant(c, L+5*mm, cy0+3.5*mm, [(HexColor(KAT_RENK["kanal"]), "Hava kanalı"),
+        (HexColor(KAT_RENK["boru"]), "Soğutucu + drenaj"), (HexColor(KAT_RENK["su"]), "Temiz / pis su"),
+        (HexColor(KAT_RENK["kablo"]), "Kuvvet tavası"), (HexColor(KAT_RENK["zayif"]), "Zayıf akım"),
+        (HexColor("#6B7078"), "Bağımsız askı çubuğu")], 6.0)
+
+    # ── alt: kot tablosu + kurallar (iki sütun) ───────────────────────────────
+    ay = cy0-6*mm; w1 = CW*0.455; x2 = L+w1+8*mm; w2 = CW-w1-8*mm
+    h.txt(c, L, ay, h.TR_UP("Tavan içi kot dizilimi"), h.FB, 8.2, h.NAVY)
+    _no = {ad: no for no, s0, z0, s1, z1, tip, ad in ogeler}
+    rows = []
+    for no, s0, z0, s1, z1, tip, ad in ogeler:
+        rows.append([str(no), ("%.2f" % z1).replace(".", ","), ("%.2f" % z0).replace(".", ","), ad])
+    rows += [["—", "3,20", "3,20", "Mevcut yapısal döşeme altı (VARSAYIM — yerinde ölçülecek)"],
+             ["—", "2,68", "2,62", "Asma tavan askı ve taşıyıcı profil bölgesi"],
+             ["—", "2,80", "2,80", "T2 asma tavan bitmiş yüzeyi (giriş · dinlenme)"],
+             ["—", "2,60", "2,60", "T4 asma tavan bitmiş yüzeyi (soyunma)"],
+             ["—", "2,40", "2,40", "T3 asma tavan bitmiş yüzeyi (duş · WC)"]]
+    h.tablo(c, L, ay-5*mm, [("No",0.08),("Üst kot",0.14),("Alt kot",0.14),("Eleman",0.64)], rows, w1,
+            satir_h=5.4*mm, bas_h=6.4*mm, fs=6.1, hfs=6.0, hizala=["c","r","r","l"])
+    h.txt(c, x2, ay, h.TR_UP("Koordinasyon kuralları"), h.FB, 8.2, h.NAVY)
+    yy2 = h.tablo(c, x2, ay-5*mm, [("Kural",0.24),("Açıklama",0.76)],
+                  [[k[0], k[1]] for k in P.TAVAN_KOORD], w2,
+                  satir_h=5.6*mm, bas_h=6.4*mm, fs=6.1, hfs=6.0, hizala=["l","l"])
+    h.notkutu(c, x2, yy2-5*mm, w2, "Uygulama sırası",
+      "1) Yapısal döşeme altı kotu ölçülür ve tüm kotlar revize edilir.  2) Hava kanalı askılanır.  "
+      "3) Eğimli hatlar (pis su, klima drenajı) çekilir ve eğimi tutanakla ölçülür.  4) Kablo tavası "
+      "ve zayıf akım kanalı çekilir.  5) Temiz su ve bakır hatlar döşenir, basınç testi yapılır.  "
+      "6) Asma tavan karkası kurulur.  7) Alçıpan kapatılmadan ÖNCE tüm tesisat fotoğraflanır ve "
+      "işverene teslim edilir — sonradan açmanın maliyeti yüksektir.", fs=6.3, acc=h.COPPER)
+
 def build(path="output/Gym_Mekanik_Proje_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
     c.setTitle(f"Maltepe / İdealtepe — Mekanik Tesisat Projesi ({P.REV})")
-    for fn in (s1, s2, s3, s4, s5, s6):
+    for fn in (s1, s2, s3, s4, s5, s6, s7):
         fn(c); c.showPage()
     c.save(); print("→", path)
 

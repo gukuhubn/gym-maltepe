@@ -15,7 +15,9 @@ def uyar(t): UYARI.append(t); print("  !", t)
 
 print("\n1 · PDF ÜRETİMİ VE SAYFA RENDER")
 for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.pdf",12),
-              ("output/Gym_Mekanik_Proje_A3.pdf",6),("output/Gym_Elektrik_Proje_A3.pdf",6)):
+              ("output/Gym_Mimari_Proje_A3.pdf",13),
+              ("output/Gym_Mekanik_Proje_A3.pdf",7),("output/Gym_Elektrik_Proje_A3.pdf",7),
+              ("output/Gym_Insaat_Seti_A3.pdf",29)):
     d=pdfium.PdfDocument(f); n=len(d)
     w,h=d[0].get_size()
     print(f"  {Path(f).name}: {n} sayfa · {w:.0f}×{h:.0f} pt")
@@ -30,7 +32,8 @@ for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.p
 print("\n2 · TÜRKÇE GLİF TARAMASI (ş ğ ı İ ü ö ç Ş Ğ Ü Ö Ç)")
 TR="şğıİüöçŞĞÜÖÇ"
 for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
-          "output/Gym_Mekanik_Proje_A3.pdf","output/Gym_Elektrik_Proje_A3.pdf"):
+          "output/Gym_Mimari_Proje_A3.pdf","output/Gym_Mekanik_Proje_A3.pdf",
+          "output/Gym_Elektrik_Proje_A3.pdf","output/Gym_Insaat_Seti_A3.pdf"):
     d=pdfium.PdfDocument(f); eksik=[]
     for i in range(len(d)):
         t=d[i].get_textpage().get_text_range()
@@ -195,11 +198,12 @@ for f in _cad:
     if "Layout1" in d.layouts.names(): hata(f"{f.name}: boş Layout1 silinmemiş")
     ok(f"{f.name}: AC1024 · mm · {len(d.layers)} katman · {len(bl)} blok · "
        f"{len(d.layouts.names())-1} pafta · 0 hata")
-_b=_ez.readfile("cad/GYM-MEP-Birlesik-R2010.dxf")
-_eksik=[n for n in ("A-01","M-01","M-02","M-03","M-04","E-01","E-02","E-03","E-04")
-        if not any(l.startswith(n) for l in _b.layouts.names())]
+_b=_ez.readfile("cad/GYM-BIRLESIK-R2010.dxf")
+_PF=("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
+     "E-01","E-02","E-03","E-04")
+_eksik=[n for n in _PF if not any(l.startswith(n) for l in _b.layouts.names())]
 if _eksik: hata(f"birleşik dosyada eksik pafta: {_eksik}")
-else: ok("birleşik dosyada 9 paftanın tamamı var")
+else: ok(f"birleşik dosyada {len(_PF)} paftanın tamamı var")
 _donmus_ok=True
 for l in _b.layouts.names():
     if l in ("Model",): continue
@@ -210,13 +214,38 @@ _ms=_b.modelspace()
 if len(_ms.query("DIMENSION"))<5: hata("model uzayında ölçülendirme eksik")
 else: ok(f"{len(_ms.query('DIMENSION'))} ölçülendirme · {len(_ms.query('INSERT'))} blok yerleşimi")
 
+print("\n6c · MİMARİ SET VE ÇİZİM KONTROLÜ")
+import kontrol as _K
+_bul=_K.calistir()
+_h=[b for b in _bul if b[0]=="HATA"]; _u=[b for b in _bul if b[0]=="UYARI"]
+if _h:
+    for b in _h: hata(f"çizim kontrolü: {b[2]}")
+else: ok(f"çizim kontrolü: 0 hata, {len(_u)} uyarı, {len(_bul)-len(_u)} bilgi")
+for b in _u: uyar(f"çizim kontrolü: {b[2]}")
+_mim=pdfium.PdfDocument("output/Gym_Mimari_Proje_A3.pdf")
+if len(_mim)!=13: hata(f"mimari set {len(_mim)} pafta (13 bekleniyor)")
+else: ok("mimari set 13 pafta")
+_seti=pdfium.PdfDocument("output/Gym_Insaat_Seti_A3.pdf")
+if len(_seti)!=2+13+7+7: hata(f"inşaat seti {len(_seti)} pafta (29 bekleniyor)")
+else: ok(f"inşaat seti {len(_seti)} pafta (kapak + indeks + 13 + 7 + 7)")
+if abs(P.MAHAL_TOPLAM+P.MAHAL_DUVAR_PAYI-P.A["ic_toplam"])>0.01:
+    hata("mahal listesi alanı net iç alanla kapanmıyor")
+else: ok(f"mahal listesi {P.MAHAL_TOPLAM} m² + duvar payı {P.MAHAL_DUVAR_PAYI} m² = {P.A['ic_toplam']} m²")
+_zk={z[0]: z[3] for z in P.ZEMIN_TIPLERI}
+if any(abs(_zk[m[3]])>0.005 for m in P.MAHAL_LISTESI if not m[9]):
+    hata("kuru hacimlerde bitmiş zemin kotu ±0,00 değil")
+else: ok("tüm kuru hacimlerde bitmiş zemin kotu ±0,00 (eşiksiz geçiş)")
+if P.PANO_UYGUNSUZ: hata(f"pano hesabında {len(P.PANO_UYGUNSUZ)} uygunsuz linye")
+else: ok(f"pano hesabı: 21 linye uygun · maks ΔU %{P.DU_MAX} · toplam %{P.TOPLAM_DU_MAX}")
+
 print("\n7 · TESLİMAT LİSTESİ")
 for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
+          "output/Gym_Insaat_Seti_A3.pdf","output/Gym_Mimari_Proje_A3.pdf",
           "output/Gym_Mekanik_Proje_A3.pdf","output/Gym_Elektrik_Proje_A3.pdf",
           "output/Gym_Maliyet_BoQ.xlsx","output/Gym_Mekanik_BoQ.xlsx",
           "output/Gym_Elektrik_BoQ.xlsx","output/Gym_Model.html",
-          "output/Render_Promptlari.md","output/Gym_MEP_CAD_Seti_DXF.zip",
-          "output/Gym_MEP_CAD_Paftalar.pdf","cad/OKUBENI-CAD.txt","BUILD_NOTES.md"):
+          "output/Render_Promptlari.md","output/Gym_CAD_Seti_DXF.zip",
+          "output/Gym_CAD_Paftalar.pdf","cad/OKUBENI-CAD.txt","BUILD_NOTES.md"):
     if Path(f).exists(): ok(f"{f}  ({Path(f).stat().st_size/1e6:.2f} MB)")
     else: hata(f"EKSİK: {f}")
 

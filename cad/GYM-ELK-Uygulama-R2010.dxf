@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461298.597037037
+2461299.2575694444
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461298.597048611
+2461299.2575810184
   9
 $TDUUPDATE
  40
@@ -549,7 +549,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-41E
+4F2
   9
 $SURFTAB1
  70
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{3D58284C-4896-4563-87A5-E23DC719F970}
+{20A79480-4177-49DE-9A54-0CB95C1073AF}
   9
 $VERSIONGUID
   2
-{1CA86E2C-569E-478E-862F-44FB2BEB7787}
+{26A59097-4AC8-4C3C-B7C1-D8B188705A53}
   9
 $EXTNAMES
 290
@@ -1373,7 +1373,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-41A
+4EE
 330
 8
 100
@@ -2253,7 +2253,7 @@ LAYER
 100
 AcDbSymbolTable
  70
-42
+52
   0
 LAYER
   5
@@ -2555,6 +2555,306 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
+A-MAHAL
+ 70
+0
+ 62
+6
+  6
+Continuous
+370
+18
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — mahal numarası ve kapı kodu balonu
+  0
+LAYER
+  5
+94
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-KESIT-HAT
+ 70
+0
+ 62
+1
+  6
+DASHDOT
+370
+35
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — kesit ve görünüş hattı
+  0
+LAYER
+  5
+95
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-ZEMIN-SINIR
+ 70
+0
+ 62
+30
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — zemin kaplama tipi sınırı
+  0
+LAYER
+  5
+96
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-ZEMIN-YAZI
+ 70
+0
+ 62
+30
+  6
+Continuous
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — zemin kaplama tipi ve kotu
+  0
+LAYER
+  5
+97
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-ZEMIN-DERZ
+ 70
+0
+ 62
+253
+  6
+Continuous
+370
+9
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — kauçuk karo derz ızgarası
+  0
+LAYER
+  5
+98
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-TAVAN-SINIR
+ 70
+0
+ 62
+150
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — asma tavan tipi sınırı
+  0
+LAYER
+  5
+99
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-TAVAN-YAZI
+ 70
+0
+ 62
+150
+  6
+Continuous
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — asma tavan tipi ve kotu
+  0
+LAYER
+  5
+9A
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-TAVAN-KAPAK
+ 70
+0
+ 62
+150
+  6
+Continuous
+370
+18
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — revizyon kapağı 300×300
+  0
+LAYER
+  5
+9B
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-YANGIN-KACIS
+ 70
+0
+ 62
+3
+  6
+Continuous
+370
+50
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — kaçış yolu ve çıkış
+  0
+LAYER
+  5
+9C
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+A-YANGIN-EKIP
+ 70
+0
+ 62
+1
+  6
+Continuous
+370
+35
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Mimari — söndürücü, dolap, ihbar
+  0
+LAYER
+  5
+9D
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
 M-HAVA-BESLEME
  70
 0
@@ -2577,7 +2877,7 @@ Mekanik — taze hava kanalı
   0
 LAYER
   5
-94
+9E
 330
 1
 100
@@ -2607,7 +2907,7 @@ Mekanik — egzoz kanalı
   0
 LAYER
   5
-95
+9F
 330
 1
 100
@@ -2637,7 +2937,7 @@ Mekanik — ıslak hacim egzoz kanalı
   0
 LAYER
   5
-96
+A0
 330
 1
 100
@@ -2667,7 +2967,7 @@ Mekanik — menfez ve valf
   0
 LAYER
   5
-97
+A1
 330
 1
 100
@@ -2697,7 +2997,7 @@ Mekanik — menfez branşmanı
   0
 LAYER
   5
-98
+A2
 330
 1
 100
@@ -2727,7 +3027,7 @@ Mekanik — fan ve panjur
   0
 LAYER
   5
-99
+A3
 330
 1
 100
@@ -2757,7 +3057,7 @@ Mekanik — klima iç ünite
   0
 LAYER
   5
-9A
+A4
 330
 1
 100
@@ -2787,7 +3087,7 @@ Mekanik — klima dış ünite platformu
   0
 LAYER
   5
-9B
+A5
 330
 1
 100
@@ -2817,7 +3117,7 @@ Mekanik — soğutucu akışkan bakır hattı
   0
 LAYER
   5
-9C
+A6
 330
 1
 100
@@ -2847,7 +3147,7 @@ Mekanik — klima drenaj hattı
   0
 LAYER
   5
-9D
+A7
 330
 1
 100
@@ -2877,7 +3177,7 @@ Mekanik — temiz su PPRC
   0
 LAYER
   5
-9E
+A8
 330
 1
 100
@@ -2907,7 +3207,7 @@ Mekanik — sıcak su PPRC izoleli
   0
 LAYER
   5
-9F
+A9
 330
 1
 100
@@ -2937,7 +3237,7 @@ Mekanik — pis su PVC
   0
 LAYER
   5
-A0
+AA
 330
 1
 100
@@ -2967,7 +3267,7 @@ Mekanik — vitrifiye ve su ısıtıcı
   0
 LAYER
   5
-A1
+AB
 330
 1
 100
@@ -2997,7 +3297,7 @@ Mekanik — etiket ve not
   0
 LAYER
   5
-A2
+AC
 330
 1
 100
@@ -3027,7 +3327,7 @@ Elektrik — lineer LED armatür
   0
 LAYER
   5
-A3
+AD
 330
 1
 100
@@ -3057,7 +3357,7 @@ Elektrik — IP44 downlight
   0
 LAYER
   5
-A4
+AE
 330
 1
 100
@@ -3087,7 +3387,7 @@ Elektrik — acil aydınlatma / yönlendirme
   0
 LAYER
   5
-A5
+AF
 330
 1
 100
@@ -3117,7 +3417,7 @@ Elektrik — anahtar ve sensör
   0
 LAYER
   5
-A6
+B0
 330
 1
 100
@@ -3147,7 +3447,7 @@ Elektrik — priz
   0
 LAYER
   5
-A7
+B1
 330
 1
 100
@@ -3177,7 +3477,7 @@ Elektrik — klima/ısıtıcı/fan beslemesi
   0
 LAYER
   5
-A8
+B2
 330
 1
 100
@@ -3207,7 +3507,7 @@ Elektrik — IP kamera
   0
 LAYER
   5
-A9
+B3
 330
 1
 100
@@ -3237,7 +3537,7 @@ Elektrik — tavan hoparlörü
   0
 LAYER
   5
-AA
+B4
 330
 1
 100
@@ -3267,7 +3567,7 @@ Elektrik — veri prizi ve rack
   0
 LAYER
   5
-AB
+B5
 330
 1
 100
@@ -3297,7 +3597,7 @@ Elektrik — dedektör, buton, siren
   0
 LAYER
   5
-AC
+B6
 330
 1
 100
@@ -3327,7 +3627,7 @@ Elektrik — yangın algılama çevrimi
   0
 LAYER
   5
-AD
+B7
 330
 1
 100
@@ -3357,7 +3657,7 @@ Elektrik — ana dağıtım panosu
   0
 LAYER
   5
-AE
+B8
 330
 1
 100
@@ -3387,7 +3687,7 @@ Elektrik — etiket ve not
   0
 LAYER
   5
-AF
+B9
 330
 1
 100
@@ -3417,7 +3717,7 @@ Genel — ölçülendirme
   0
 LAYER
   5
-B0
+BA
 330
 1
 100
@@ -3447,7 +3747,7 @@ Genel — başlık ve açıklama
   0
 LAYER
   5
-B1
+BB
 330
 1
 100
@@ -3477,7 +3777,7 @@ Genel — antet ve pafta çerçevesi
   0
 LAYER
   5
-B2
+BC
 330
 1
 100
@@ -4249,7 +4549,7 @@ LiberationMono-Italic.ttf
   0
 STYLE
   5
-B3
+BD
 330
 5
 100
@@ -4277,7 +4577,7 @@ arial.ttf
   0
 STYLE
   5
-B4
+BE
 330
 5
 100
@@ -4375,7 +4675,7 @@ AcAecLayerStandard
   0
 APPID
   5
-41B
+4EF
 330
 3
 100
@@ -4389,7 +4689,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-41C
+4F0
 330
 3
 100
@@ -6081,7 +6381,7 @@ EZ_CURVED
   0
 DIMSTYLE
 105
-B5
+BF
 330
 4
 100
@@ -6211,7 +6511,7 @@ GYM-75
 290
 0
 340
-B3
+BD
 342
 74
 371
@@ -6315,7 +6615,7 @@ _CLOSEDBLANK
   0
 BLOCK_RECORD
   5
-B6
+C0
 330
 9
 100
@@ -6335,7 +6635,7 @@ M_MENFEZ_BESLEME
   0
 BLOCK_RECORD
   5
-BF
+C9
 330
 9
 100
@@ -6355,7 +6655,7 @@ M_MENFEZ_EGZOZ
   0
 BLOCK_RECORD
   5
-C7
+D1
 330
 9
 100
@@ -6375,7 +6675,7 @@ M_VALF
   0
 BLOCK_RECORD
   5
-CF
+D9
 330
 9
 100
@@ -6395,7 +6695,7 @@ M_FAN
   0
 BLOCK_RECORD
   5
-DA
+E4
 330
 9
 100
@@ -6415,7 +6715,7 @@ M_PANJUR
   0
 BLOCK_RECORD
   5
-E4
+EE
 330
 9
 100
@@ -6435,7 +6735,7 @@ M_KLIMA_IC
   0
 BLOCK_RECORD
   5
-EB
+F5
 330
 9
 100
@@ -6455,7 +6755,7 @@ M_KLIMA_DIS
   0
 BLOCK_RECORD
   5
-F2
+FC
 330
 9
 100
@@ -6475,7 +6775,7 @@ M_ISITICI
   0
 BLOCK_RECORD
   5
-FB
+105
 330
 9
 100
@@ -6495,7 +6795,7 @@ M_KLOZET
   0
 BLOCK_RECORD
   5
-101
+10B
 330
 9
 100
@@ -6515,7 +6815,7 @@ M_LAVABO
   0
 BLOCK_RECORD
   5
-107
+111
 330
 9
 100
@@ -6535,7 +6835,7 @@ M_DUS
   0
 BLOCK_RECORD
   5
-10E
+118
 330
 9
 100
@@ -6555,7 +6855,7 @@ M_SUZGEC
   0
 BLOCK_RECORD
   5
-113
+11D
 330
 9
 100
@@ -6575,7 +6875,7 @@ M_SAYAC
   0
 BLOCK_RECORD
   5
-119
+123
 330
 9
 100
@@ -6595,7 +6895,7 @@ E_ARMATUR_LINEER
   0
 BLOCK_RECORD
   5
-11F
+129
 330
 9
 100
@@ -6615,7 +6915,7 @@ E_DOWNLIGHT
   0
 BLOCK_RECORD
   5
-126
+130
 330
 9
 100
@@ -6635,7 +6935,7 @@ E_ACIL
   0
 BLOCK_RECORD
   5
-12C
+136
 330
 9
 100
@@ -6655,7 +6955,7 @@ E_YONLENDIRME
   0
 BLOCK_RECORD
   5
-133
+13D
 330
 9
 100
@@ -6675,7 +6975,7 @@ E_PRIZ
   0
 BLOCK_RECORD
   5
-13C
+146
 330
 9
 100
@@ -6695,7 +6995,7 @@ E_PRIZ_IP44
   0
 BLOCK_RECORD
   5
-145
+14F
 330
 9
 100
@@ -6715,7 +7015,7 @@ E_ANAHTAR
   0
 BLOCK_RECORD
   5
-14B
+155
 330
 9
 100
@@ -6735,7 +7035,7 @@ E_SENSOR
   0
 BLOCK_RECORD
   5
-151
+15B
 330
 9
 100
@@ -6755,7 +7055,7 @@ E_KAMERA
   0
 BLOCK_RECORD
   5
-156
+160
 330
 9
 100
@@ -6775,7 +7075,7 @@ E_HOPARLOR
   0
 BLOCK_RECORD
   5
-15D
+167
 330
 9
 100
@@ -6795,7 +7095,7 @@ E_VERI
   0
 BLOCK_RECORD
   5
-163
+16D
 330
 9
 100
@@ -6815,7 +7115,7 @@ E_DEDEKTOR
   0
 BLOCK_RECORD
   5
-169
+173
 330
 9
 100
@@ -6835,7 +7135,7 @@ E_YANGIN_BUTON
   0
 BLOCK_RECORD
   5
-16F
+179
 330
 9
 100
@@ -6855,7 +7155,7 @@ E_PANO
   0
 BLOCK_RECORD
   5
-17C
+186
 330
 9
 100
@@ -6875,7 +7175,7 @@ G_KUZEY
   0
 BLOCK_RECORD
   5
-182
+18C
 330
 9
 100
@@ -6895,7 +7195,7 @@ ANTET_A3
   0
 BLOCK_RECORD
   5
-1DF
+1E9
 330
 9
 100
@@ -6915,7 +7215,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-1EE
+1F8
 330
 9
 100
@@ -6935,7 +7235,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-1FD
+207
 330
 9
 100
@@ -6955,7 +7255,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-20C
+216
 330
 9
 100
@@ -6975,7 +7275,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-21B
+225
 330
 9
 100
@@ -6995,7 +7295,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-397
+46B
 330
 9
 100
@@ -7005,7 +7305,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space1
 340
-39A
+46E
  70
 0
 280
@@ -7015,7 +7315,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-3BB
+48F
 330
 9
 100
@@ -7025,7 +7325,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space2
 340
-3BE
+492
  70
 0
 280
@@ -7035,7 +7335,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-3E5
+4B9
 330
 9
 100
@@ -7045,7 +7345,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space3
 340
-3E8
+4BC
  70
 0
 280
@@ -7055,7 +7355,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-36F
+443
 330
 9
 100
@@ -7065,7 +7365,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space
 340
-372
+446
  70
 0
 280
@@ -7337,215 +7637,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-B7
+C1
 330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockBegin
-  2
-M_MENFEZ_BESLEME
- 70
-2
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  3
-M_MENFEZ_BESLEME
-  1
-
-  0
-LWPOLYLINE
-  5
-B9
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbPolyline
- 90
-4
- 70
-1
- 10
--150.0
- 20
--75.0
- 10
-150.0
- 20
--75.0
- 10
-150.0
- 20
-75.0
- 10
--150.0
- 20
-75.0
-  0
-LINE
-  5
-BA
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--150.0
- 20
--40.0
- 30
-0.0
- 11
-150.0
- 21
--40.0
- 31
-0.0
-  0
-LINE
-  5
-BB
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--150.0
- 20
-0.0
- 30
-0.0
- 11
-150.0
- 21
-0.0
- 31
-0.0
-  0
-LINE
-  5
-BC
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--150.0
- 20
-40.0
- 30
-0.0
- 11
-150.0
- 21
-40.0
- 31
-0.0
-  0
-ATTDEF
-  5
-BD
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-0.0
- 20
-140.0
- 30
-0.0
- 40
-120.0
-  1
-
-  7
-GYM
-100
-AcDbAttributeDefinition
-  3
-Menfez kodu
-  2
-KOD
- 70
-0
-  0
-ATTDEF
-  5
-BE
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-0.0
- 20
--200.0
- 30
-0.0
- 40
-105.0
-  1
-
-  7
-GYM
-100
-AcDbAttributeDefinition
-  3
-Debi (m3/h)
-  2
-DEBI
- 70
-0
-  0
-ENDBLK
-  5
-B8
-330
-B6
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-  0
-BLOCK
-  5
 C0
-330
-BF
 100
 AcDbEntity
   8
@@ -7553,7 +7647,7 @@ AcDbEntity
 100
 AcDbBlockBegin
   2
-M_MENFEZ_EGZOZ
+M_MENFEZ_BESLEME
  70
 2
  10
@@ -7563,71 +7657,47 @@ M_MENFEZ_EGZOZ
  30
 0.0
   3
-M_MENFEZ_EGZOZ
+M_MENFEZ_BESLEME
   1
 
   0
 LWPOLYLINE
-  5
-C2
-330
-BF
-100
-AcDbEntity
-  8
-0
-100
-AcDbPolyline
- 90
-4
- 70
-1
- 10
--150.0
- 20
--75.0
- 10
-150.0
- 20
--75.0
- 10
-150.0
- 20
-75.0
- 10
--150.0
- 20
-75.0
-  0
-LINE
   5
 C3
 330
-BF
+C0
 100
 AcDbEntity
   8
 0
 100
-AcDbLine
+AcDbPolyline
+ 90
+4
+ 70
+1
  10
 -150.0
  20
 -75.0
- 30
-0.0
- 11
+ 10
 150.0
- 21
+ 20
+-75.0
+ 10
+150.0
+ 20
 75.0
- 31
-0.0
+ 10
+-150.0
+ 20
+75.0
   0
 LINE
   5
 C4
 330
-BF
+C0
 100
 AcDbEntity
   8
@@ -7637,21 +7707,69 @@ AcDbLine
  10
 -150.0
  20
-75.0
+-40.0
  30
 0.0
  11
 150.0
  21
--75.0
+-40.0
+ 31
+0.0
+  0
+LINE
+  5
+C5
+330
+C0
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-150.0
+ 20
+0.0
+ 30
+0.0
+ 11
+150.0
+ 21
+0.0
+ 31
+0.0
+  0
+LINE
+  5
+C6
+330
+C0
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-150.0
+ 20
+40.0
+ 30
+0.0
+ 11
+150.0
+ 21
+40.0
  31
 0.0
   0
 ATTDEF
   5
-C5
+C7
 330
-BF
+C0
 100
 AcDbEntity
   8
@@ -7681,9 +7799,9 @@ KOD
   0
 ATTDEF
   5
-C6
+C8
 330
-BF
+C0
 100
 AcDbEntity
   8
@@ -7713,9 +7831,9 @@ DEBI
   0
 ENDBLK
   5
-C1
+C2
 330
-BF
+C0
 100
 AcDbEntity
   8
@@ -7725,9 +7843,191 @@ AcDbBlockEnd
   0
 BLOCK
   5
-C8
+CA
 330
-C7
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+M_MENFEZ_EGZOZ
+ 70
+2
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+M_MENFEZ_EGZOZ
+  1
+
+  0
+LWPOLYLINE
+  5
+CC
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+-150.0
+ 20
+-75.0
+ 10
+150.0
+ 20
+-75.0
+ 10
+150.0
+ 20
+75.0
+ 10
+-150.0
+ 20
+75.0
+  0
+LINE
+  5
+CD
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-150.0
+ 20
+-75.0
+ 30
+0.0
+ 11
+150.0
+ 21
+75.0
+ 31
+0.0
+  0
+LINE
+  5
+CE
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-150.0
+ 20
+75.0
+ 30
+0.0
+ 11
+150.0
+ 21
+-75.0
+ 31
+0.0
+  0
+ATTDEF
+  5
+CF
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+0.0
+ 20
+140.0
+ 30
+0.0
+ 40
+120.0
+  1
+
+  7
+GYM
+100
+AcDbAttributeDefinition
+  3
+Menfez kodu
+  2
+KOD
+ 70
+0
+  0
+ATTDEF
+  5
+D0
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+0.0
+ 20
+-200.0
+ 30
+0.0
+ 40
+105.0
+  1
+
+  7
+GYM
+100
+AcDbAttributeDefinition
+  3
+Debi (m3/h)
+  2
+DEBI
+ 70
+0
+  0
+ENDBLK
+  5
+CB
+330
+C9
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+D2
+330
+D1
 100
 AcDbEntity
   8
@@ -7751,9 +8051,9 @@ M_VALF
   0
 CIRCLE
   5
-CA
+D4
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7771,9 +8071,9 @@ AcDbCircle
   0
 LINE
   5
-CB
+D5
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7795,9 +8095,9 @@ AcDbLine
   0
 LINE
   5
-CC
+D6
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7819,9 +8119,9 @@ AcDbLine
   0
 ATTDEF
   5
-CD
+D7
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7851,9 +8151,9 @@ KOD
   0
 ATTDEF
   5
-CE
+D8
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7883,9 +8183,9 @@ DEBI
   0
 ENDBLK
   5
-C9
+D3
 330
-C7
+D1
 100
 AcDbEntity
   8
@@ -7895,9 +8195,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-D0
+DA
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -7921,9 +8221,9 @@ M_FAN
   0
 LWPOLYLINE
   5
-D2
+DC
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -7953,9 +8253,9 @@ AcDbPolyline
   0
 CIRCLE
   5
-D3
+DD
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -7973,9 +8273,9 @@ AcDbCircle
   0
 LINE
   5
-D4
+DE
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -7997,9 +8297,9 @@ AcDbLine
   0
 LINE
   5
-D5
+DF
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8021,9 +8321,9 @@ AcDbLine
   0
 LINE
   5
-D6
+E0
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8045,9 +8345,9 @@ AcDbLine
   0
 LINE
   5
-D7
+E1
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8069,9 +8369,9 @@ AcDbLine
   0
 ATTDEF
   5
-D8
+E2
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8101,9 +8401,9 @@ KOD
   0
 ATTDEF
   5
-D9
+E3
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8133,9 +8433,9 @@ TANIM
   0
 ENDBLK
   5
-D1
+DB
 330
-CF
+D9
 100
 AcDbEntity
   8
@@ -8145,9 +8445,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-DB
+E5
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8171,9 +8471,9 @@ M_PANJUR
   0
 LWPOLYLINE
   5
-DD
+E7
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8203,9 +8503,9 @@ AcDbPolyline
   0
 LINE
   5
-DE
+E8
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8227,9 +8527,9 @@ AcDbLine
   0
 LINE
   5
-DF
+E9
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8251,9 +8551,9 @@ AcDbLine
   0
 LINE
   5
-E0
+EA
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8275,9 +8575,9 @@ AcDbLine
   0
 LINE
   5
-E1
+EB
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8299,9 +8599,9 @@ AcDbLine
   0
 LINE
   5
-E2
+EC
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8323,9 +8623,9 @@ AcDbLine
   0
 ATTDEF
   5
-E3
+ED
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8355,9 +8655,9 @@ KOD
   0
 ENDBLK
   5
-DC
+E6
 330
-DA
+E4
 100
 AcDbEntity
   8
@@ -8367,9 +8667,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-E5
+EF
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8393,9 +8693,9 @@ M_KLIMA_IC
   0
 LWPOLYLINE
   5
-E7
+F1
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8425,9 +8725,9 @@ AcDbPolyline
   0
 LINE
   5
-E8
+F2
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8449,9 +8749,9 @@ AcDbLine
   0
 ATTDEF
   5
-E9
+F3
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8481,9 +8781,9 @@ KOD
   0
 ATTDEF
   5
-EA
+F4
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8513,9 +8813,9 @@ KAPASITE
   0
 ENDBLK
   5
-E6
+F0
 330
-E4
+EE
 100
 AcDbEntity
   8
@@ -8525,9 +8825,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-EC
+F6
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8551,9 +8851,9 @@ M_KLIMA_DIS
   0
 LWPOLYLINE
   5
-EE
+F8
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8583,9 +8883,9 @@ AcDbPolyline
   0
 CIRCLE
   5
-EF
+F9
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8603,9 +8903,9 @@ AcDbCircle
   0
 ATTDEF
   5
-F0
+FA
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8635,9 +8935,9 @@ KOD
   0
 ATTDEF
   5
-F1
+FB
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8667,9 +8967,9 @@ ADET
   0
 ENDBLK
   5
-ED
+F7
 330
-EB
+F5
 100
 AcDbEntity
   8
@@ -8679,9 +8979,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-F3
+FD
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8705,9 +9005,9 @@ M_ISITICI
   0
 LWPOLYLINE
   5
-F5
+FF
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8737,9 +9037,9 @@ AcDbPolyline
   0
 LINE
   5
-F6
+100
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8761,9 +9061,9 @@ AcDbLine
   0
 LINE
   5
-F7
+101
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8785,9 +9085,9 @@ AcDbLine
   0
 LINE
   5
-F8
+102
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8809,9 +9109,9 @@ AcDbLine
   0
 ATTDEF
   5
-F9
+103
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8841,9 +9141,9 @@ KOD
   0
 ATTDEF
   5
-FA
+104
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8873,9 +9173,9 @@ GUC
   0
 ENDBLK
   5
-F4
+FE
 330
-F2
+FC
 100
 AcDbEntity
   8
@@ -8885,9 +9185,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-FC
+106
 330
-FB
+105
 100
 AcDbEntity
   8
@@ -8911,9 +9211,9 @@ M_KLOZET
   0
 ELLIPSE
   5
-FE
+108
 330
-FB
+105
 100
 AcDbEntity
   8
@@ -8941,9 +9241,9 @@ AcDbEllipse
   0
 LWPOLYLINE
   5
-FF
+109
 330
-FB
+105
 100
 AcDbEntity
   8
@@ -8973,9 +9273,9 @@ AcDbPolyline
   0
 ATTDEF
   5
-100
+10A
 330
-FB
+105
 100
 AcDbEntity
   8
@@ -9005,9 +9305,9 @@ KOD
   0
 ENDBLK
   5
-FD
+107
 330
-FB
+105
 100
 AcDbEntity
   8
@@ -9017,9 +9317,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-102
+10C
 330
-101
+10B
 100
 AcDbEntity
   8
@@ -9043,9 +9343,9 @@ M_LAVABO
   0
 LWPOLYLINE
   5
-104
+10E
 330
-101
+10B
 100
 AcDbEntity
   8
@@ -9075,9 +9375,9 @@ AcDbPolyline
   0
 ELLIPSE
   5
-105
+10F
 330
-101
+10B
 100
 AcDbEntity
   8
@@ -9105,9 +9405,9 @@ AcDbEllipse
   0
 ATTDEF
   5
-106
+110
 330
-101
+10B
 100
 AcDbEntity
   8
@@ -9137,9 +9437,9 @@ KOD
   0
 ENDBLK
   5
-103
+10D
 330
-101
+10B
 100
 AcDbEntity
   8
@@ -9149,9 +9449,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-108
+112
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9175,9 +9475,9 @@ M_DUS
   0
 LWPOLYLINE
   5
-10A
+114
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9207,9 +9507,9 @@ AcDbPolyline
   0
 CIRCLE
   5
-10B
+115
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9227,9 +9527,9 @@ AcDbCircle
   0
 LINE
   5
-10C
+116
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9251,9 +9551,9 @@ AcDbLine
   0
 ATTDEF
   5
-10D
+117
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9283,9 +9583,9 @@ KOD
   0
 ENDBLK
   5
-109
+113
 330
-107
+111
 100
 AcDbEntity
   8
@@ -9295,9 +9595,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-10F
+119
 330
-10E
+118
 100
 AcDbEntity
   8
@@ -9321,9 +9621,9 @@ M_SUZGEC
   0
 LWPOLYLINE
   5
-111
+11B
 330
-10E
+118
 100
 AcDbEntity
   8
@@ -9353,9 +9653,9 @@ AcDbPolyline
   0
 CIRCLE
   5
-112
+11C
 330
-10E
+118
 100
 AcDbEntity
   8
@@ -9373,9 +9673,9 @@ AcDbCircle
   0
 ENDBLK
   5
-110
+11A
 330
-10E
+118
 100
 AcDbEntity
   8
@@ -9385,9 +9685,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-114
+11E
 330
-113
+11D
 100
 AcDbEntity
   8
@@ -9411,9 +9711,9 @@ M_SAYAC
   0
 CIRCLE
   5
-116
+120
 330
-113
+11D
 100
 AcDbEntity
   8
@@ -9431,9 +9731,9 @@ AcDbCircle
   0
 LINE
   5
-117
+121
 330
-113
+11D
 100
 AcDbEntity
   8
@@ -9455,9 +9755,9 @@ AcDbLine
   0
 ATTDEF
   5
-118
+122
 330
-113
+11D
 100
 AcDbEntity
   8
@@ -9487,9 +9787,9 @@ KOD
   0
 ENDBLK
   5
-115
+11F
 330
-113
+11D
 100
 AcDbEntity
   8
@@ -9499,9 +9799,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-11A
+124
 330
-119
+123
 100
 AcDbEntity
   8
@@ -9525,9 +9825,9 @@ E_ARMATUR_LINEER
   0
 LWPOLYLINE
   5
-11C
+126
 330
-119
+123
 100
 AcDbEntity
   8
@@ -9557,9 +9857,9 @@ AcDbPolyline
   0
 LINE
   5
-11D
+127
 330
-119
+123
 100
 AcDbEntity
   8
@@ -9581,9 +9881,9 @@ AcDbLine
   0
 ATTDEF
   5
-11E
+128
 330
-119
+123
 100
 AcDbEntity
   8
@@ -9613,9 +9913,9 @@ LINYE
   0
 ENDBLK
   5
-11B
+125
 330
-119
+123
 100
 AcDbEntity
   8
@@ -9625,9 +9925,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-120
+12A
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9651,9 +9951,9 @@ E_DOWNLIGHT
   0
 CIRCLE
   5
-122
+12C
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9671,9 +9971,9 @@ AcDbCircle
   0
 LINE
   5
-123
+12D
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9695,9 +9995,9 @@ AcDbLine
   0
 LINE
   5
-124
+12E
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9719,9 +10019,9 @@ AcDbLine
   0
 ATTDEF
   5
-125
+12F
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9751,9 +10051,9 @@ LINYE
   0
 ENDBLK
   5
-121
+12B
 330
-11F
+129
 100
 AcDbEntity
   8
@@ -9763,9 +10063,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-127
+131
 330
-126
+130
 100
 AcDbEntity
   8
@@ -9789,9 +10089,9 @@ E_ACIL
   0
 LWPOLYLINE
   5
-129
+133
 330
-126
+130
 100
 AcDbEntity
   8
@@ -9821,9 +10121,9 @@ AcDbPolyline
   0
 TEXT
   5
-12A
+134
 330
-126
+130
 100
 AcDbEntity
   8
@@ -9857,9 +10157,9 @@ AcDbText
   0
 ATTDEF
   5
-12B
+135
 330
-126
+130
 100
 AcDbEntity
   8
@@ -9889,9 +10189,9 @@ KOD
   0
 ENDBLK
   5
-128
+132
 330
-126
+130
 100
 AcDbEntity
   8
@@ -9901,9 +10201,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-12D
+137
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -9927,9 +10227,9 @@ E_YONLENDIRME
   0
 LWPOLYLINE
   5
-12F
+139
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -9959,9 +10259,9 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-130
+13A
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -9983,9 +10283,9 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-131
+13B
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -10011,9 +10311,9 @@ AcDbPolyline
   0
 ATTDEF
   5
-132
+13C
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -10043,9 +10343,9 @@ KOD
   0
 ENDBLK
   5
-12E
+138
 330
-12C
+136
 100
 AcDbEntity
   8
@@ -10055,9 +10355,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-134
+13E
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10081,9 +10381,9 @@ E_PRIZ
   0
 ARC
   5
-136
+140
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10107,9 +10407,9 @@ AcDbArc
   0
 LINE
   5
-137
+141
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10131,9 +10431,9 @@ AcDbLine
   0
 LINE
   5
-138
+142
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10155,9 +10455,9 @@ AcDbLine
   0
 LINE
   5
-139
+143
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10179,9 +10479,9 @@ AcDbLine
   0
 ATTDEF
   5
-13A
+144
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10211,9 +10511,9 @@ KOD
   0
 ATTDEF
   5
-13B
+145
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10243,9 +10543,9 @@ LINYE
   0
 ENDBLK
   5
-135
+13F
 330
-133
+13D
 100
 AcDbEntity
   8
@@ -10255,9 +10555,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-13D
+147
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10281,9 +10581,9 @@ E_PRIZ_IP44
   0
 ARC
   5
-13F
+149
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10307,9 +10607,9 @@ AcDbArc
   0
 LINE
   5
-140
+14A
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10331,9 +10631,9 @@ AcDbLine
   0
 LINE
   5
-141
+14B
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10355,9 +10655,9 @@ AcDbLine
   0
 LINE
   5
-142
+14C
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10379,9 +10679,9 @@ AcDbLine
   0
 TEXT
   5
-143
+14D
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10415,9 +10715,9 @@ AcDbText
   0
 ATTDEF
   5
-144
+14E
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10447,9 +10747,9 @@ KOD
   0
 ENDBLK
   5
-13E
+148
 330
-13C
+146
 100
 AcDbEntity
   8
@@ -10459,9 +10759,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-146
+150
 330
-145
+14F
 100
 AcDbEntity
   8
@@ -10485,9 +10785,9 @@ E_ANAHTAR
   0
 CIRCLE
   5
-148
+152
 330
-145
+14F
 100
 AcDbEntity
   8
@@ -10505,9 +10805,9 @@ AcDbCircle
   0
 LINE
   5
-149
+153
 330
-145
+14F
 100
 AcDbEntity
   8
@@ -10529,9 +10829,9 @@ AcDbLine
   0
 ATTDEF
   5
-14A
+154
 330
-145
+14F
 100
 AcDbEntity
   8
@@ -10561,9 +10861,9 @@ KOD
   0
 ENDBLK
   5
-147
+151
 330
-145
+14F
 100
 AcDbEntity
   8
@@ -10573,9 +10873,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-14C
+156
 330
-14B
+155
 100
 AcDbEntity
   8
@@ -10599,9 +10899,9 @@ E_SENSOR
   0
 CIRCLE
   5
-14E
+158
 330
-14B
+155
 100
 AcDbEntity
   8
@@ -10619,9 +10919,9 @@ AcDbCircle
   0
 TEXT
   5
-14F
+159
 330
-14B
+155
 100
 AcDbEntity
   8
@@ -10655,9 +10955,9 @@ AcDbText
   0
 ATTDEF
   5
-150
+15A
 330
-14B
+155
 100
 AcDbEntity
   8
@@ -10687,9 +10987,9 @@ KOD
   0
 ENDBLK
   5
-14D
+157
 330
-14B
+155
 100
 AcDbEntity
   8
@@ -10699,9 +10999,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-152
+15C
 330
-151
+15B
 100
 AcDbEntity
   8
@@ -10725,9 +11025,9 @@ E_KAMERA
   0
 LWPOLYLINE
   5
-154
+15E
 330
-151
+15B
 100
 AcDbEntity
   8
@@ -10753,9 +11053,9 @@ AcDbPolyline
   0
 ATTDEF
   5
-155
+15F
 330
-151
+15B
 100
 AcDbEntity
   8
@@ -10785,9 +11085,9 @@ KOD
   0
 ENDBLK
   5
-153
+15D
 330
-151
+15B
 100
 AcDbEntity
   8
@@ -10797,9 +11097,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-157
+161
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10823,9 +11123,9 @@ E_HOPARLOR
   0
 CIRCLE
   5
-159
+163
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10843,9 +11143,9 @@ AcDbCircle
   0
 ARC
   5
-15A
+164
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10869,9 +11169,9 @@ AcDbArc
   0
 ARC
   5
-15B
+165
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10895,9 +11195,9 @@ AcDbArc
   0
 ATTDEF
   5
-15C
+166
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10927,9 +11227,9 @@ KOD
   0
 ENDBLK
   5
-158
+162
 330
-156
+160
 100
 AcDbEntity
   8
@@ -10939,9 +11239,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-15E
+168
 330
-15D
+167
 100
 AcDbEntity
   8
@@ -10965,9 +11265,9 @@ E_VERI
   0
 LWPOLYLINE
   5
-160
+16A
 330
-15D
+167
 100
 AcDbEntity
   8
@@ -10997,9 +11297,9 @@ AcDbPolyline
   0
 TEXT
   5
-161
+16B
 330
-15D
+167
 100
 AcDbEntity
   8
@@ -11033,9 +11333,9 @@ AcDbText
   0
 ATTDEF
   5
-162
+16C
 330
-15D
+167
 100
 AcDbEntity
   8
@@ -11065,9 +11365,9 @@ KOD
   0
 ENDBLK
   5
-15F
+169
 330
-15D
+167
 100
 AcDbEntity
   8
@@ -11077,9 +11377,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-164
+16E
 330
-163
+16D
 100
 AcDbEntity
   8
@@ -11103,9 +11403,9 @@ E_DEDEKTOR
   0
 CIRCLE
   5
-166
+170
 330
-163
+16D
 100
 AcDbEntity
   8
@@ -11123,9 +11423,9 @@ AcDbCircle
   0
 CIRCLE
   5
-167
+171
 330
-163
+16D
 100
 AcDbEntity
   8
@@ -11143,9 +11443,9 @@ AcDbCircle
   0
 ATTDEF
   5
-168
+172
 330
-163
+16D
 100
 AcDbEntity
   8
@@ -11175,9 +11475,9 @@ KOD
   0
 ENDBLK
   5
-165
+16F
 330
-163
+16D
 100
 AcDbEntity
   8
@@ -11187,9 +11487,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-16A
+174
 330
-169
+173
 100
 AcDbEntity
   8
@@ -11213,9 +11513,9 @@ E_YANGIN_BUTON
   0
 LWPOLYLINE
   5
-16C
+176
 330
-169
+173
 100
 AcDbEntity
   8
@@ -11245,9 +11545,9 @@ AcDbPolyline
   0
 TEXT
   5
-16D
+177
 330
-169
+173
 100
 AcDbEntity
   8
@@ -11281,9 +11581,9 @@ AcDbText
   0
 ATTDEF
   5
-16E
+178
 330
-169
+173
 100
 AcDbEntity
   8
@@ -11313,9 +11613,9 @@ KOD
   0
 ENDBLK
   5
-16B
+175
 330
-169
+173
 100
 AcDbEntity
   8
@@ -11325,9 +11625,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-170
+17A
 330
-16F
+179
 100
 AcDbEntity
   8
@@ -11351,9 +11651,9 @@ E_PANO
   0
 LWPOLYLINE
   5
-172
+17C
 330
-16F
+179
 100
 AcDbEntity
   8
@@ -11383,153 +11683,153 @@ AcDbPolyline
   0
 LINE
   5
-173
+17D
 330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--330.0
- 20
--280.0
- 30
-0.0
- 11
--330.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
-174
-330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--220.0
- 20
--280.0
- 30
-0.0
- 11
--220.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
-175
-330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--110.0
- 20
--280.0
- 30
-0.0
- 11
--110.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
-176
-330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
--280.0
- 30
-0.0
- 11
-0.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
-177
-330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-110.0
- 20
--280.0
- 30
-0.0
- 11
-110.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
-178
-330
-16F
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-220.0
- 20
--280.0
- 30
-0.0
- 11
-220.0
- 21
-280.0
- 31
-0.0
-  0
-LINE
-  5
 179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-330.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+-330.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+17E
 330
-16F
+179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-220.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+-220.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+17F
+330
+179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-110.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+-110.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+180
+330
+179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+0.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+181
+330
+179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+110.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+110.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+182
+330
+179
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+220.0
+ 20
+-280.0
+ 30
+0.0
+ 11
+220.0
+ 21
+280.0
+ 31
+0.0
+  0
+LINE
+  5
+183
+330
+179
 100
 AcDbEntity
   8
@@ -11551,9 +11851,9 @@ AcDbLine
   0
 ATTDEF
   5
-17A
+184
 330
-16F
+179
 100
 AcDbEntity
   8
@@ -11583,9 +11883,9 @@ KOD
   0
 ATTDEF
   5
-17B
+185
 330
-16F
+179
 100
 AcDbEntity
   8
@@ -11615,9 +11915,9 @@ TANIM
   0
 ENDBLK
   5
-171
+17B
 330
-16F
+179
 100
 AcDbEntity
   8
@@ -11627,9 +11927,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-17D
+187
 330
-17C
+186
 100
 AcDbEntity
   8
@@ -11653,9 +11953,9 @@ G_KUZEY
   0
 CIRCLE
   5
-17F
+189
 330
-17C
+186
 100
 AcDbEntity
   8
@@ -11673,9 +11973,9 @@ AcDbCircle
   0
 LWPOLYLINE
   5
-180
+18A
 330
-17C
+186
 100
 AcDbEntity
   8
@@ -11705,9 +12005,9 @@ AcDbPolyline
   0
 TEXT
   5
-181
+18B
 330
-17C
+186
 100
 AcDbEntity
   8
@@ -11741,9 +12041,9 @@ AcDbText
   0
 ENDBLK
   5
-17E
+188
 330
-17C
+186
 100
 AcDbEntity
   8
@@ -11753,9 +12053,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-183
+18D
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -11779,9 +12079,9 @@ ANTET_A3
   0
 LWPOLYLINE
   5
-185
+18F
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -11811,153 +12111,153 @@ AcDbPolyline
   0
 LINE
   5
-186
+190
 330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-12.0
- 30
-0.0
- 11
-170.0
- 21
-12.0
- 31
-0.0
-  0
-LINE
-  5
-187
-330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-24.0
- 30
-0.0
- 11
-170.0
- 21
-24.0
- 31
-0.0
-  0
-LINE
-  5
-188
-330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-36.0
- 30
-0.0
- 11
-170.0
- 21
-36.0
- 31
-0.0
-  0
-LINE
-  5
-189
-330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-48.0
- 30
-0.0
- 11
-170.0
- 21
-48.0
- 31
-0.0
-  0
-LINE
-  5
-18A
-330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-62.0
- 30
-0.0
- 11
-170.0
- 21
-62.0
- 31
-0.0
-  0
-LINE
-  5
-18B
-330
-182
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-74.0
- 30
-0.0
- 11
-170.0
- 21
-74.0
- 31
-0.0
-  0
-LINE
-  5
 18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+12.0
+ 30
+0.0
+ 11
+170.0
+ 21
+12.0
+ 31
+0.0
+  0
+LINE
+  5
+191
 330
-182
+18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+24.0
+ 30
+0.0
+ 11
+170.0
+ 21
+24.0
+ 31
+0.0
+  0
+LINE
+  5
+192
+330
+18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+36.0
+ 30
+0.0
+ 11
+170.0
+ 21
+36.0
+ 31
+0.0
+  0
+LINE
+  5
+193
+330
+18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+48.0
+ 30
+0.0
+ 11
+170.0
+ 21
+48.0
+ 31
+0.0
+  0
+LINE
+  5
+194
+330
+18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+62.0
+ 30
+0.0
+ 11
+170.0
+ 21
+62.0
+ 31
+0.0
+  0
+LINE
+  5
+195
+330
+18C
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+74.0
+ 30
+0.0
+ 11
+170.0
+ 21
+74.0
+ 31
+0.0
+  0
+LINE
+  5
+196
+330
+18C
 100
 AcDbEntity
   8
@@ -11979,9 +12279,9 @@ AcDbLine
   0
 TEXT
   5
-18D
+197
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12013,9 +12313,9 @@ AcDbText
   0
 TEXT
   5
-18E
+198
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12047,9 +12347,9 @@ AcDbText
   0
 TEXT
   5
-18F
+199
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12081,9 +12381,9 @@ AcDbText
   0
 TEXT
   5
-190
+19A
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12115,9 +12415,9 @@ AcDbText
   0
 TEXT
   5
-191
+19B
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12149,9 +12449,9 @@ AcDbText
   0
 TEXT
   5
-192
+19C
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12183,9 +12483,9 @@ AcDbText
   0
 TEXT
   5
-193
+19D
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12217,9 +12517,9 @@ AcDbText
   0
 TEXT
   5
-194
+19E
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12251,9 +12551,9 @@ AcDbText
   0
 TEXT
   5
-195
+19F
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12285,9 +12585,9 @@ AcDbText
   0
 ATTDEF
   5
-196
+1A0
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12317,9 +12617,9 @@ PROJE
   0
 ATTDEF
   5
-197
+1A1
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12349,9 +12649,9 @@ DISIPLIN
   0
 ATTDEF
   5
-198
+1A2
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12381,9 +12681,9 @@ PAFTA_ADI
   0
 ATTDEF
   5
-199
+1A3
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12413,9 +12713,9 @@ PAFTA_NO
   0
 ATTDEF
   5
-19A
+1A4
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12445,9 +12745,9 @@ OLCEK
   0
 ATTDEF
   5
-19B
+1A5
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12477,9 +12777,9 @@ TARIH
   0
 ATTDEF
   5
-19C
+1A6
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12509,9 +12809,9 @@ REV
   0
 ATTDEF
   5
-19D
+1A7
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12541,9 +12841,9 @@ BIRIM
   0
 ATTDEF
   5
-19E
+1A8
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12573,9 +12873,9 @@ DURUM
   0
 ATTDEF
   5
-19F
+1A9
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12605,9 +12905,9 @@ NOT
   0
 ENDBLK
   5
-184
+18E
 330
-182
+18C
 100
 AcDbEntity
   8
@@ -12617,9 +12917,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-1E0
+1EA
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12643,9 +12943,9 @@ AcDbBlockBegin
   0
 LINE
   5
-1E2
+1EC
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12667,9 +12967,9 @@ AcDbLine
   0
 LINE
   5
-1E3
+1ED
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12691,9 +12991,9 @@ AcDbLine
   0
 INSERT
   5
-1E4
+1EE
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12717,9 +13017,9 @@ _ARCHTICK
   0
 INSERT
   5
-1E6
+1F0
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12741,9 +13041,9 @@ _ARCHTICK
   0
 LINE
   5
-1E8
+1F2
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12765,9 +13065,9 @@ AcDbLine
   0
 MTEXT
   5
-1E9
+1F3
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12793,9 +13093,9 @@ GYM
   0
 POINT
   5
-1EA
+1F4
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12811,9 +13111,9 @@ AcDbPoint
   0
 POINT
   5
-1EB
+1F5
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12829,9 +13129,9 @@ AcDbPoint
   0
 POINT
   5
-1EC
+1F6
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12847,9 +13147,9 @@ AcDbPoint
   0
 ENDBLK
   5
-1E1
+1EB
 330
-1DF
+1E9
 100
 AcDbEntity
   8
@@ -12859,9 +13159,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-1EF
+1F9
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -12885,9 +13185,9 @@ AcDbBlockBegin
   0
 LINE
   5
-1F1
+1FB
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -12909,9 +13209,9 @@ AcDbLine
   0
 LINE
   5
-1F2
+1FC
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -12933,9 +13233,9 @@ AcDbLine
   0
 INSERT
   5
-1F3
+1FD
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -12959,9 +13259,9 @@ _ARCHTICK
   0
 INSERT
   5
-1F5
+1FF
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -12985,9 +13285,9 @@ _ARCHTICK
   0
 LINE
   5
-1F7
+201
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13009,9 +13309,9 @@ AcDbLine
   0
 MTEXT
   5
-1F8
+202
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13039,9 +13339,9 @@ GYM
   0
 POINT
   5
-1F9
+203
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13057,9 +13357,9 @@ AcDbPoint
   0
 POINT
   5
-1FA
+204
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13075,9 +13375,9 @@ AcDbPoint
   0
 POINT
   5
-1FB
+205
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13093,9 +13393,9 @@ AcDbPoint
   0
 ENDBLK
   5
-1F0
+1FA
 330
-1EE
+1F8
 100
 AcDbEntity
   8
@@ -13105,9 +13405,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-1FE
+208
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13131,9 +13431,9 @@ AcDbBlockBegin
   0
 LINE
   5
-200
+20A
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13155,9 +13455,9 @@ AcDbLine
   0
 LINE
   5
-201
+20B
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13179,9 +13479,9 @@ AcDbLine
   0
 INSERT
   5
-202
+20C
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13205,9 +13505,9 @@ _ARCHTICK
   0
 INSERT
   5
-204
+20E
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13231,9 +13531,9 @@ _ARCHTICK
   0
 LINE
   5
-206
+210
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13255,9 +13555,9 @@ AcDbLine
   0
 MTEXT
   5
-207
+211
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13285,9 +13585,9 @@ GYM
   0
 POINT
   5
-208
+212
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13303,9 +13603,9 @@ AcDbPoint
   0
 POINT
   5
-209
+213
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13321,9 +13621,9 @@ AcDbPoint
   0
 POINT
   5
-20A
+214
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13339,9 +13639,9 @@ AcDbPoint
   0
 ENDBLK
   5
-1FF
+209
 330
-1FD
+207
 100
 AcDbEntity
   8
@@ -13351,9 +13651,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-20D
+217
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13377,9 +13677,9 @@ AcDbBlockBegin
   0
 LINE
   5
-20F
+219
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13401,9 +13701,9 @@ AcDbLine
   0
 LINE
   5
-210
+21A
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13425,9 +13725,9 @@ AcDbLine
   0
 INSERT
   5
-211
+21B
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13451,9 +13751,9 @@ _ARCHTICK
   0
 INSERT
   5
-213
+21D
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13477,9 +13777,9 @@ _ARCHTICK
   0
 LINE
   5
-215
+21F
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13501,9 +13801,9 @@ AcDbLine
   0
 MTEXT
   5
-216
+220
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13531,9 +13831,9 @@ GYM
   0
 POINT
   5
-217
+221
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13549,9 +13849,9 @@ AcDbPoint
   0
 POINT
   5
-218
+222
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13567,9 +13867,9 @@ AcDbPoint
   0
 POINT
   5
-219
+223
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13585,9 +13885,9 @@ AcDbPoint
   0
 ENDBLK
   5
-20E
+218
 330
-20C
+216
 100
 AcDbEntity
   8
@@ -13597,9 +13897,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-21C
+226
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13623,9 +13923,9 @@ AcDbBlockBegin
   0
 LINE
   5
-21E
+228
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13647,9 +13947,9 @@ AcDbLine
   0
 LINE
   5
-21F
+229
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13671,9 +13971,9 @@ AcDbLine
   0
 INSERT
   5
-220
+22A
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13697,9 +13997,9 @@ _ARCHTICK
   0
 INSERT
   5
-222
+22C
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13721,9 +14021,9 @@ _ARCHTICK
   0
 LINE
   5
-224
+22E
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13745,9 +14045,9 @@ AcDbLine
   0
 MTEXT
   5
-225
+22F
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13773,9 +14073,9 @@ GYM
   0
 POINT
   5
-226
+230
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13791,9 +14091,9 @@ AcDbPoint
   0
 POINT
   5
-227
+231
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13809,9 +14109,9 @@ AcDbPoint
   0
 POINT
   5
-228
+232
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13827,9 +14127,9 @@ AcDbPoint
   0
 ENDBLK
   5
-21D
+227
 330
-21B
+225
 100
 AcDbEntity
   8
@@ -13839,9 +14139,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-398
+46C
 330
-397
+46B
 100
 AcDbEntity
   8
@@ -13865,9 +14165,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-39B
+46F
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -13969,9 +14269,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-39C
+470
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14003,9 +14303,9 @@ AcDbPolyline
   0
 INSERT
   5
-39D
+471
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14027,9 +14327,9 @@ ANTET_A3
   0
 ATTRIB
   5
-39F
+473
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14065,9 +14365,9 @@ PROJE
   0
 ATTRIB
   5
-3A0
+474
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14103,9 +14403,9 @@ DISIPLIN
   0
 ATTRIB
   5
-3A1
+475
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14141,9 +14441,9 @@ PAFTA_ADI
   0
 ATTRIB
   5
-3A2
+476
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14179,9 +14479,9 @@ PAFTA_NO
   0
 ATTRIB
   5
-3A3
+477
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14217,9 +14517,9 @@ OLCEK
   0
 ATTRIB
   5
-3A4
+478
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14255,9 +14555,9 @@ TARIH
   0
 ATTRIB
   5
-3A5
+479
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14293,9 +14593,9 @@ REV
   0
 ATTRIB
   5
-3A6
+47A
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14331,9 +14631,9 @@ BIRIM
   0
 ATTRIB
   5
-3A7
+47B
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14369,9 +14669,9 @@ DURUM
   0
 ATTRIB
   5
-3A8
+47C
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14407,9 +14707,9 @@ NOT
   0
 SEQEND
   5
-39E
+472
 330
-39D
+471
 100
 AcDbEntity
  67
@@ -14419,9 +14719,9 @@ G-ANTET
   0
 VIEWPORT
   5
-3A9
+47D
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14487,26 +14787,6 @@ AcDbViewport
  72
 100
 331
-93
-331
-94
-331
-95
-331
-96
-331
-97
-331
-98
-331
-99
-331
-9A
-331
-9B
-331
-9C
-331
 9D
 331
 9E
@@ -14525,6 +14805,10 @@ A4
 331
 A5
 331
+A6
+331
+A7
+331
 A8
 331
 A9
@@ -14534,6 +14818,22 @@ AA
 AB
 331
 AC
+331
+AD
+331
+AE
+331
+AF
+331
+B2
+331
+B3
+331
+B4
+331
+B5
+331
+B6
  90
 0
   1
@@ -14571,9 +14871,9 @@ AC
   0
 TEXT
   5
-3AA
+47E
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14607,9 +14907,9 @@ AcDbText
   0
 LINE
   5
-3AB
+47F
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14637,9 +14937,9 @@ AcDbLine
   0
 TEXT
   5
-3AC
+480
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14673,9 +14973,9 @@ AcDbText
   0
 LINE
   5
-3AD
+481
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14703,9 +15003,9 @@ AcDbLine
   0
 TEXT
   5
-3AE
+482
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14739,9 +15039,9 @@ AcDbText
   0
 LINE
   5
-3AF
+483
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14769,9 +15069,9 @@ AcDbLine
   0
 TEXT
   5
-3B0
+484
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14805,9 +15105,9 @@ AcDbText
   0
 LINE
   5
-3B1
+485
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14835,9 +15135,9 @@ AcDbLine
   0
 TEXT
   5
-3B2
+486
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14871,9 +15171,9 @@ AcDbText
   0
 LINE
   5
-3B3
+487
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14901,9 +15201,9 @@ AcDbLine
   0
 TEXT
   5
-3B4
+488
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14937,9 +15237,9 @@ AcDbText
   0
 LINE
   5
-3B5
+489
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -14967,9 +15267,9 @@ AcDbLine
   0
 TEXT
   5
-3B6
+48A
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -15003,9 +15303,9 @@ AcDbText
   0
 TEXT
   5
-3B7
+48B
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -15039,9 +15339,9 @@ AcDbText
   0
 TEXT
   5
-3B8
+48C
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -15075,9 +15375,9 @@ AcDbText
   0
 TEXT
   5
-3B9
+48D
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -15111,9 +15411,9 @@ AcDbText
   0
 TEXT
   5
-3BA
+48E
 330
-397
+46B
 100
 AcDbEntity
  67
@@ -15147,9 +15447,9 @@ AcDbText
   0
 ENDBLK
   5
-399
+46D
 330
-397
+46B
 100
 AcDbEntity
   8
@@ -15159,9 +15459,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-3BC
+490
 330
-3BB
+48F
 100
 AcDbEntity
   8
@@ -15185,9 +15485,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-3BF
+493
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15289,9 +15589,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-3C0
+494
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15323,9 +15623,9 @@ AcDbPolyline
   0
 INSERT
   5
-3C1
+495
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15347,9 +15647,9 @@ ANTET_A3
   0
 ATTRIB
   5
-3C3
+497
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15385,9 +15685,9 @@ PROJE
   0
 ATTRIB
   5
-3C4
+498
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15423,9 +15723,9 @@ DISIPLIN
   0
 ATTRIB
   5
-3C5
+499
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15461,9 +15761,9 @@ PAFTA_ADI
   0
 ATTRIB
   5
-3C6
+49A
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15499,9 +15799,9 @@ PAFTA_NO
   0
 ATTRIB
   5
-3C7
+49B
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15537,9 +15837,9 @@ OLCEK
   0
 ATTRIB
   5
-3C8
+49C
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15575,9 +15875,9 @@ TARIH
   0
 ATTRIB
   5
-3C9
+49D
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15613,9 +15913,9 @@ REV
   0
 ATTRIB
   5
-3CA
+49E
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15651,9 +15951,9 @@ BIRIM
   0
 ATTRIB
   5
-3CB
+49F
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15689,9 +15989,9 @@ DURUM
   0
 ATTRIB
   5
-3CC
+4A0
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15727,9 +16027,9 @@ NOT
   0
 SEQEND
   5
-3C2
+496
 330
-3C1
+495
 100
 AcDbEntity
  67
@@ -15739,9 +16039,9 @@ G-ANTET
   0
 VIEWPORT
   5
-3CD
+4A1
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15807,26 +16107,6 @@ AcDbViewport
  72
 100
 331
-93
-331
-94
-331
-95
-331
-96
-331
-97
-331
-98
-331
-99
-331
-9A
-331
-9B
-331
-9C
-331
 9D
 331
 9E
@@ -15848,6 +16128,26 @@ A5
 A6
 331
 A7
+331
+A8
+331
+A9
+331
+AA
+331
+AB
+331
+AC
+331
+AD
+331
+AE
+331
+AF
+331
+B0
+331
+B1
  90
 0
   1
@@ -15885,9 +16185,9 @@ A7
   0
 TEXT
   5
-3CE
+4A2
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15921,9 +16221,9 @@ AcDbText
   0
 LINE
   5
-3CF
+4A3
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15951,9 +16251,9 @@ AcDbLine
   0
 TEXT
   5
-3D0
+4A4
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -15987,9 +16287,9 @@ AcDbText
   0
 LINE
   5
-3D1
+4A5
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16017,9 +16317,9 @@ AcDbLine
   0
 TEXT
   5
-3D2
+4A6
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16053,9 +16353,9 @@ AcDbText
   0
 LINE
   5
-3D3
+4A7
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16083,9 +16383,9 @@ AcDbLine
   0
 TEXT
   5
-3D4
+4A8
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16119,9 +16419,9 @@ AcDbText
   0
 LINE
   5
-3D5
+4A9
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16149,9 +16449,9 @@ AcDbLine
   0
 TEXT
   5
-3D6
+4AA
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16185,9 +16485,9 @@ AcDbText
   0
 LINE
   5
-3D7
+4AB
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16215,9 +16515,9 @@ AcDbLine
   0
 TEXT
   5
-3D8
+4AC
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16251,9 +16551,9 @@ AcDbText
   0
 LINE
   5
-3D9
+4AD
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16281,9 +16581,9 @@ AcDbLine
   0
 TEXT
   5
-3DA
+4AE
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16317,9 +16617,9 @@ AcDbText
   0
 LINE
   5
-3DB
+4AF
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16347,9 +16647,9 @@ AcDbLine
   0
 TEXT
   5
-3DC
+4B0
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16383,9 +16683,9 @@ AcDbText
   0
 LINE
   5
-3DD
+4B1
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16413,9 +16713,9 @@ AcDbLine
   0
 TEXT
   5
-3DE
+4B2
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16449,9 +16749,9 @@ AcDbText
   0
 LINE
   5
-3DF
+4B3
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16479,9 +16779,9 @@ AcDbLine
   0
 TEXT
   5
-3E0
+4B4
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16515,9 +16815,9 @@ AcDbText
   0
 TEXT
   5
-3E1
+4B5
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16551,9 +16851,9 @@ AcDbText
   0
 TEXT
   5
-3E2
+4B6
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16587,9 +16887,9 @@ AcDbText
   0
 TEXT
   5
-3E3
+4B7
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16623,9 +16923,9 @@ AcDbText
   0
 TEXT
   5
-3E4
+4B8
 330
-3BB
+48F
 100
 AcDbEntity
  67
@@ -16659,9 +16959,9 @@ AcDbText
   0
 ENDBLK
   5
-3BD
+491
 330
-3BB
+48F
 100
 AcDbEntity
   8
@@ -16671,9 +16971,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-3E6
+4BA
 330
-3E5
+4B9
 100
 AcDbEntity
   8
@@ -16697,9 +16997,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-3E9
+4BD
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16801,9 +17101,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-3EA
+4BE
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16835,9 +17135,9 @@ AcDbPolyline
   0
 INSERT
   5
-3EB
+4BF
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16859,9 +17159,9 @@ ANTET_A3
   0
 ATTRIB
   5
-3ED
+4C1
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16897,9 +17197,9 @@ PROJE
   0
 ATTRIB
   5
-3EE
+4C2
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16935,9 +17235,9 @@ DISIPLIN
   0
 ATTRIB
   5
-3EF
+4C3
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -16973,9 +17273,9 @@ PAFTA_ADI
   0
 ATTRIB
   5
-3F0
+4C4
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17011,9 +17311,9 @@ PAFTA_NO
   0
 ATTRIB
   5
-3F1
+4C5
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17049,9 +17349,9 @@ OLCEK
   0
 ATTRIB
   5
-3F2
+4C6
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17087,9 +17387,9 @@ TARIH
   0
 ATTRIB
   5
-3F3
+4C7
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17125,9 +17425,9 @@ REV
   0
 ATTRIB
   5
-3F4
+4C8
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17163,9 +17463,9 @@ BIRIM
   0
 ATTRIB
   5
-3F5
+4C9
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17201,9 +17501,9 @@ DURUM
   0
 ATTRIB
   5
-3F6
+4CA
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17239,9 +17539,9 @@ NOT
   0
 SEQEND
   5
-3EC
+4C0
 330
-3EB
+4BF
 100
 AcDbEntity
  67
@@ -17251,9 +17551,9 @@ G-ANTET
   0
 VIEWPORT
   5
-3F7
+4CB
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17319,26 +17619,6 @@ AcDbViewport
  72
 100
 331
-93
-331
-94
-331
-95
-331
-96
-331
-97
-331
-98
-331
-99
-331
-9A
-331
-9B
-331
-9C
-331
 9D
 331
 9E
@@ -17348,6 +17628,26 @@ AcDbViewport
 A0
 331
 A1
+331
+A2
+331
+A3
+331
+A4
+331
+A5
+331
+A6
+331
+A7
+331
+A8
+331
+A9
+331
+AA
+331
+AB
  90
 0
   1
@@ -17385,9 +17685,9 @@ A1
   0
 TEXT
   5
-3F8
+4CC
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17421,9 +17721,9 @@ AcDbText
   0
 LINE
   5
-3F9
+4CD
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17451,9 +17751,9 @@ AcDbLine
   0
 TEXT
   5
-3FA
+4CE
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17487,9 +17787,9 @@ AcDbText
   0
 LINE
   5
-3FB
+4CF
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17517,9 +17817,9 @@ AcDbLine
   0
 TEXT
   5
-3FC
+4D0
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17553,9 +17853,9 @@ AcDbText
   0
 LINE
   5
-3FD
+4D1
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17583,9 +17883,9 @@ AcDbLine
   0
 TEXT
   5
-3FE
+4D2
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17619,9 +17919,9 @@ AcDbText
   0
 LINE
   5
-3FF
+4D3
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17649,9 +17949,9 @@ AcDbLine
   0
 TEXT
   5
-400
+4D4
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17685,9 +17985,9 @@ AcDbText
   0
 LINE
   5
-401
+4D5
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17715,9 +18015,9 @@ AcDbLine
   0
 TEXT
   5
-402
+4D6
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17751,9 +18051,9 @@ AcDbText
   0
 LINE
   5
-403
+4D7
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17781,9 +18081,9 @@ AcDbLine
   0
 TEXT
   5
-404
+4D8
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17817,9 +18117,9 @@ AcDbText
   0
 LINE
   5
-405
+4D9
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17847,9 +18147,9 @@ AcDbLine
   0
 TEXT
   5
-406
+4DA
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17883,9 +18183,9 @@ AcDbText
   0
 LINE
   5
-407
+4DB
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17913,9 +18213,9 @@ AcDbLine
   0
 TEXT
   5
-408
+4DC
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17949,9 +18249,9 @@ AcDbText
   0
 LINE
   5
-409
+4DD
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -17979,9 +18279,9 @@ AcDbLine
   0
 TEXT
   5
-40A
+4DE
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18015,9 +18315,9 @@ AcDbText
   0
 LINE
   5
-40B
+4DF
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18045,9 +18345,9 @@ AcDbLine
   0
 TEXT
   5
-40C
+4E0
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18081,9 +18381,9 @@ AcDbText
   0
 LINE
   5
-40D
+4E1
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18111,9 +18411,9 @@ AcDbLine
   0
 TEXT
   5
-40E
+4E2
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18147,9 +18447,9 @@ AcDbText
   0
 LINE
   5
-40F
+4E3
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18177,9 +18477,9 @@ AcDbLine
   0
 TEXT
   5
-410
+4E4
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18213,9 +18513,9 @@ AcDbText
   0
 LINE
   5
-411
+4E5
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18243,9 +18543,9 @@ AcDbLine
   0
 TEXT
   5
-412
+4E6
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18279,9 +18579,9 @@ AcDbText
   0
 LINE
   5
-413
+4E7
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18309,9 +18609,9 @@ AcDbLine
   0
 TEXT
   5
-414
+4E8
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18345,9 +18645,9 @@ AcDbText
   0
 LINE
   5
-415
+4E9
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18375,9 +18675,9 @@ AcDbLine
   0
 TEXT
   5
-416
+4EA
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18411,9 +18711,9 @@ AcDbText
   0
 TEXT
   5
-417
+4EB
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18447,9 +18747,9 @@ AcDbText
   0
 TEXT
   5
-418
+4EC
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18483,9 +18783,9 @@ AcDbText
   0
 TEXT
   5
-419
+4ED
 330
-3E5
+4B9
 100
 AcDbEntity
  67
@@ -18519,9 +18819,9 @@ AcDbText
   0
 ENDBLK
   5
-3E7
+4BB
 330
-3E5
+4B9
 100
 AcDbEntity
   8
@@ -18531,9 +18831,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-370
+444
 330
-36F
+443
 100
 AcDbEntity
   8
@@ -18557,9 +18857,9 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-371
+445
 330
-36F
+443
 100
 AcDbEntity
   8
@@ -18575,7 +18875,7 @@ ENTITIES
   0
 HATCH
   5
-1A0
+1AA
 330
 17
 100
@@ -20343,7 +20643,7 @@ ANSI31
   0
 LWPOLYLINE
   5
-1A1
+1AB
 330
 17
 100
@@ -20439,7 +20739,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A2
+1AC
 330
 17
 100
@@ -20563,7 +20863,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A3
+1AD
 330
 17
 100
@@ -20595,7 +20895,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A4
+1AE
 330
 17
 100
@@ -20627,7 +20927,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A5
+1AF
 330
 17
 100
@@ -20667,7 +20967,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A6
+1B0
 330
 17
 100
@@ -20711,7 +21011,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A7
+1B1
 330
 17
 100
@@ -20743,7 +21043,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A8
+1B2
 330
 17
 100
@@ -20791,7 +21091,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1A9
+1B3
 330
 17
 100
@@ -20823,7 +21123,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1AA
+1B4
 330
 17
 100
@@ -20855,7 +21155,7 @@ AcDbPolyline
   0
 LINE
   5
-1AB
+1B5
 330
 17
 100
@@ -20879,7 +21179,7 @@ AcDbLine
   0
 ARC
   5
-1AC
+1B6
 330
 17
 100
@@ -20905,7 +21205,7 @@ AcDbArc
   0
 LINE
   5
-1AD
+1B7
 330
 17
 100
@@ -20929,7 +21229,7 @@ AcDbLine
   0
 ARC
   5
-1AE
+1B8
 330
 17
 100
@@ -20955,7 +21255,7 @@ AcDbArc
   0
 LINE
   5
-1AF
+1B9
 330
 17
 100
@@ -20979,7 +21279,7 @@ AcDbLine
   0
 ARC
   5
-1B0
+1BA
 330
 17
 100
@@ -21005,7 +21305,7 @@ AcDbArc
   0
 LINE
   5
-1B1
+1BB
 330
 17
 100
@@ -21029,7 +21329,7 @@ AcDbLine
   0
 ARC
   5
-1B2
+1BC
 330
 17
 100
@@ -21055,7 +21355,7 @@ AcDbArc
   0
 TEXT
   5
-1B3
+1BD
 330
 17
 100
@@ -21091,7 +21391,7 @@ AcDbText
   0
 TEXT
   5
-1B4
+1BE
 330
 17
 100
@@ -21127,7 +21427,7 @@ AcDbText
   0
 TEXT
   5
-1B5
+1BF
 330
 17
 100
@@ -21163,7 +21463,7 @@ AcDbText
   0
 TEXT
   5
-1B6
+1C0
 330
 17
 100
@@ -21199,7 +21499,7 @@ AcDbText
   0
 TEXT
   5
-1B7
+1C1
 330
 17
 100
@@ -21235,7 +21535,7 @@ AcDbText
   0
 TEXT
   5
-1B8
+1C2
 330
 17
 100
@@ -21271,7 +21571,7 @@ AcDbText
   0
 TEXT
   5
-1B9
+1C3
 330
 17
 100
@@ -21307,7 +21607,7 @@ AcDbText
   0
 TEXT
   5
-1BA
+1C4
 330
 17
 100
@@ -21343,7 +21643,7 @@ AcDbText
   0
 TEXT
   5
-1BB
+1C5
 330
 17
 100
@@ -21379,7 +21679,7 @@ AcDbText
   0
 TEXT
   5
-1BC
+1C6
 330
 17
 100
@@ -21415,7 +21715,7 @@ AcDbText
   0
 TEXT
   5
-1BD
+1C7
 330
 17
 100
@@ -21451,7 +21751,7 @@ AcDbText
   0
 TEXT
   5
-1BE
+1C8
 330
 17
 100
@@ -21487,7 +21787,7 @@ AcDbText
   0
 TEXT
   5
-1BF
+1C9
 330
 17
 100
@@ -21523,7 +21823,7 @@ AcDbText
   0
 TEXT
   5
-1C0
+1CA
 330
 17
 100
@@ -21559,7 +21859,7 @@ AcDbText
   0
 TEXT
   5
-1C1
+1CB
 330
 17
 100
@@ -21595,7 +21895,7 @@ AcDbText
   0
 TEXT
   5
-1C2
+1CC
 330
 17
 100
@@ -21631,7 +21931,7 @@ AcDbText
   0
 TEXT
   5
-1C3
+1CD
 330
 17
 100
@@ -21667,7 +21967,7 @@ AcDbText
   0
 TEXT
   5
-1C4
+1CE
 330
 17
 100
@@ -21703,7 +22003,7 @@ AcDbText
   0
 TEXT
   5
-1C5
+1CF
 330
 17
 100
@@ -21739,7 +22039,7 @@ AcDbText
   0
 TEXT
   5
-1C6
+1D0
 330
 17
 100
@@ -21775,7 +22075,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1C7
+1D1
 330
 17
 100
@@ -21815,7 +22115,7 @@ AcDbPolyline
   0
 TEXT
   5
-1C8
+1D2
 330
 17
 100
@@ -21851,7 +22151,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1C9
+1D3
 330
 17
 100
@@ -21883,7 +22183,7 @@ AcDbPolyline
   0
 TEXT
   5
-1CA
+1D4
 330
 17
 100
@@ -21919,7 +22219,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1CB
+1D5
 330
 17
 100
@@ -21951,7 +22251,7 @@ AcDbPolyline
   0
 TEXT
   5
-1CC
+1D6
 330
 17
 100
@@ -21987,7 +22287,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1CD
+1D7
 330
 17
 100
@@ -22019,7 +22319,7 @@ AcDbPolyline
   0
 TEXT
   5
-1CE
+1D8
 330
 17
 100
@@ -22055,7 +22355,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1CF
+1D9
 330
 17
 100
@@ -22087,7 +22387,7 @@ AcDbPolyline
   0
 TEXT
   5
-1D0
+1DA
 330
 17
 100
@@ -22123,7 +22423,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1D1
+1DB
 330
 17
 100
@@ -22155,7 +22455,7 @@ AcDbPolyline
   0
 TEXT
   5
-1D2
+1DC
 330
 17
 100
@@ -22191,7 +22491,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1D3
+1DD
 330
 17
 100
@@ -22223,7 +22523,7 @@ AcDbPolyline
   0
 TEXT
   5
-1D4
+1DE
 330
 17
 100
@@ -22259,7 +22559,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1D5
+1DF
 330
 17
 100
@@ -22291,7 +22591,7 @@ AcDbPolyline
   0
 TEXT
   5
-1D6
+1E0
 330
 17
 100
@@ -22327,7 +22627,7 @@ AcDbText
   0
 LWPOLYLINE
   5
-1D7
+1E1
 330
 17
 100
@@ -22359,7 +22659,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1D8
+1E2
 330
 17
 100
@@ -22391,7 +22691,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1D9
+1E3
 330
 17
 100
@@ -22423,7 +22723,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1DA
+1E4
 330
 17
 100
@@ -22455,7 +22755,7 @@ AcDbPolyline
   0
 LWPOLYLINE
   5
-1DB
+1E5
 330
 17
 100
@@ -22487,7 +22787,7 @@ AcDbPolyline
   0
 INSERT
   5
-1DC
+1E6
 330
 17
 100
@@ -22507,7 +22807,7 @@ G_KUZEY
   0
 DIMENSION
   5
-1DE
+1E8
 330
 17
 100
@@ -22561,7 +22861,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-1ED
+1F7
 330
 17
 100
@@ -22615,7 +22915,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-1FC
+206
 330
 17
 100
@@ -22669,7 +22969,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-20B
+215
 330
 17
 100
@@ -22723,7 +23023,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-21A
+224
 330
 17
 100
@@ -22775,233 +23075,27 @@ AcDbAlignedDimension
 100
 AcDbRotatedDimension
   0
-INSERT
+CIRCLE
   5
-229
+233
 330
 17
 100
 AcDbEntity
   8
-E-AYD-ARMATUR
+A-MAHAL
 100
-AcDbBlockReference
- 66
-1
-  2
-E_ARMATUR_LINEER
+AcDbCircle
  10
-9255.749999999998
+8050.000000000001
  20
-9637.5
- 30
-0.0
-  0
-ATTRIB
-  5
-22B
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9255.749999999998
- 20
-9822.5
+12049.999999999998
  30
 0.0
  40
-105.0
-  1
-L3
-  7
-GYM
- 11
-9255.749999999998
- 21
-9822.5
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
+340.0
   0
-SEQEND
-  5
-22A
-330
-229
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-  0
-INSERT
-  5
-22C
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ARMATUR_LINEER
- 10
-9255.749999999998
- 20
-11872.5
- 30
-0.0
-  0
-ATTRIB
-  5
-22E
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9255.749999999998
- 20
-12057.5
- 30
-0.0
- 40
-105.0
-  1
-L3
-  7
-GYM
- 11
-9255.749999999998
- 21
-12057.5
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-22D
-330
-22C
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-  0
-INSERT
-  5
-22F
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ARMATUR_LINEER
- 10
-6785.25
- 20
-11872.5
- 30
-0.0
-  0
-ATTRIB
-  5
-231
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6785.25
- 20
-12057.5
- 30
-0.0
- 40
-105.0
-  1
-L3
-  7
-GYM
- 11
-6785.25
- 21
-12057.5
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-230
-330
-22F
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-  0
-INSERT
-  5
-232
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ARMATUR_LINEER
- 10
-1950.0000000000002
- 20
-5640.5034376566
- 30
-0.0
-  0
-ATTRIB
+TEXT
   5
 234
 330
@@ -23009,45 +23103,35 @@ ATTRIB
 100
 AcDbEntity
   8
-0
+A-MAHAL
 100
 AcDbText
  10
-1950.0000000000002
+8050.000000000001
  20
-5825.5034376566
+12049.999999999998
  30
 0.0
  40
-105.0
+272.0
   1
-L4
+104
   7
-GYM
+GYM-B
+ 72
+1
  11
-1950.0000000000002
+8050.000000000001
  21
-5825.5034376566
+12049.999999999998
  31
 0.0
 100
-AcDbAttribute
-  2
-LINYE
- 70
-0
+AcDbText
+ 73
+2
   0
-SEQEND
-  5
-233
-330
-232
-100
-AcDbEntity
-  8
-E-AYD-ARMATUR
-  0
-INSERT
+CIRCLE
   5
 235
 330
@@ -23055,21 +23139,55 @@ INSERT
 100
 AcDbEntity
   8
-E-AYD-ARMATUR
+A-MAHAL
 100
-AcDbBlockReference
- 66
-1
-  2
-E_ARMATUR_LINEER
+AcDbCircle
  10
-1950.0000000000002
+1550.0
  20
-3694.8176389179475
+3300.0
  30
 0.0
+ 40
+340.0
   0
-ATTRIB
+TEXT
+  5
+236
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+1550.0
+ 20
+3300.0
+ 30
+0.0
+ 40
+272.0
+  1
+101
+  7
+GYM-B
+ 72
+1
+ 11
+1550.0
+ 21
+3300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
   5
 237
 330
@@ -23077,13 +23195,6315 @@ ATTRIB
 100
 AcDbEntity
   8
+A-MAHAL
+100
+AcDbCircle
+ 10
+5300.0
+ 20
+2570.0000000000005
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+238
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+5300.0
+ 20
+2570.0000000000005
+ 30
+0.0
+ 40
+272.0
+  1
+102
+  7
+GYM-B
+ 72
+1
+ 11
+5300.0
+ 21
+2570.0000000000005
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+239
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+6400.0
+ 20
+8400.0
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+23A
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+6400.0
+ 20
+8400.0
+ 30
+0.0
+ 40
+272.0
+  1
+103
+  7
+GYM-B
+ 72
+1
+ 11
+6400.0
+ 21
+8400.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+23B
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+9777.090537939453
+ 20
+6901.439090029158
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+23C
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+9777.090537939453
+ 20
+6901.439090029158
+ 30
+0.0
+ 40
+272.0
+  1
+105
+  7
+GYM-B
+ 72
+1
+ 11
+9777.090537939453
+ 21
+6901.439090029158
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+23D
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+8981.236644451756
+ 20
+8652.249498833222
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+23E
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+8981.236644451756
+ 20
+8652.249498833222
+ 30
+0.0
+ 40
+272.0
+  1
+106
+  7
+GYM-B
+ 72
+1
+ 11
+8981.236644451756
+ 21
+8652.249498833222
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+23F
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+10054.236452775847
+ 20
+8805.000168592447
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+240
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+10054.236452775847
+ 20
+8805.000168592447
+ 30
+0.0
+ 40
+272.0
+  1
+107
+  7
+GYM-B
+ 72
+1
+ 11
+10054.236452775847
+ 21
+8805.000168592447
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+241
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+10122.70128582356
+ 20
+4478.5003347183065
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+242
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+10122.70128582356
+ 20
+4478.5003347183065
+ 30
+0.0
+ 40
+272.0
+  1
+108
+  7
+GYM-B
+ 72
+1
+ 11
+10122.70128582356
+ 21
+4478.5003347183065
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+243
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+10890.775743481887
+ 20
+2843.6204431990886
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+244
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+10890.775743481887
+ 20
+2843.6204431990886
+ 30
+0.0
+ 40
+272.0
+  1
+109
+  7
+GYM-B
+ 72
+1
+ 11
+10890.775743481887
+ 21
+2843.6204431990886
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+245
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+9742.08799617408
+ 20
+2224.9999999999995
+ 30
+0.0
+ 40
+340.0
+  0
+TEXT
+  5
+246
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+9742.08799617408
+ 20
+2224.9999999999995
+ 30
+0.0
+ 40
+272.0
+  1
+110
+  7
+GYM-B
+ 72
+1
+ 11
+9742.08799617408
+ 21
+2224.9999999999995
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+247
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+-210.00000000000003
+ 20
+4750.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+248
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+-210.00000000000003
+ 20
+4750.0
+ 30
+0.0
+ 40
+240.0
+  1
+K01
+  7
+GYM-B
+ 72
+1
+ 11
+-210.00000000000003
+ 21
+4750.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+249
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+8400.0
+ 20
+7550.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+24A
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+8400.0
+ 20
+7550.0
+ 30
+0.0
+ 40
+240.0
+  1
+K03
+  7
+GYM-B
+ 72
+1
+ 11
+8400.0
+ 21
+7550.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+24B
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+8650.0
+ 20
+3850.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+24C
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+8650.0
+ 20
+3850.0
+ 30
+0.0
+ 40
+240.0
+  1
+K04
+  7
+GYM-B
+ 72
+1
+ 11
+8650.0
+ 21
+3850.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+24D
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+2900.0
+ 20
+550.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+24E
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+2900.0
+ 20
+550.0
+ 30
+0.0
+ 40
+240.0
+  1
+K02
+  7
+GYM-B
+ 72
+1
+ 11
+2900.0
+ 21
+550.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+24F
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+10050.0
+ 20
+8350.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+250
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+10050.0
+ 20
+8350.0
+ 30
+0.0
+ 40
+240.0
+  1
+K05
+  7
+GYM-B
+ 72
+1
+ 11
+10050.0
+ 21
+8350.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+251
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+9620.0
+ 20
+920.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+252
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+9620.0
+ 20
+920.0
+ 30
+0.0
+ 40
+240.0
+  1
+K06
+  7
+GYM-B
+ 72
+1
+ 11
+9620.0
+ 21
+920.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+253
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+8620.0
+ 20
+7450.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+254
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+8620.0
+ 20
+7450.0
+ 30
+0.0
+ 40
+240.0
+  1
+K07
+  7
+GYM-B
+ 72
+1
+ 11
+8620.0
+ 21
+7450.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+255
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+11050.0
+ 20
+1780.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+256
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+11050.0
+ 20
+1780.0
+ 30
+0.0
+ 40
+240.0
+  1
+K08
+  7
+GYM-B
+ 72
+1
+ 11
+11050.0
+ 21
+1780.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+257
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbCircle
+ 10
+2550.0
+ 20
+7050.0
+ 30
+0.0
+ 40
+300.0
+  0
+TEXT
+  5
+258
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+2550.0
+ 20
+7050.0
+ 30
+0.0
+ 40
+240.0
+  1
+K09
+  7
+GYM-B
+ 72
+1
+ 11
+2550.0
+ 21
+7050.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+259
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+8350.0
+ 20
+6300.0
+ 30
+0.0
+ 40
+210.0
+  1
+D2
+  7
+GYM-B
+ 72
+1
+ 11
+8350.0
+ 21
+6300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+25A
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+9720.0
+ 20
+6300.0
+ 30
+0.0
+ 40
+210.0
+  1
+D3
+  7
+GYM-B
+ 72
+1
+ 11
+9720.0
+ 21
+6300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+25B
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+7350.0
+ 20
+420.0
+ 30
+0.0
+ 40
+210.0
+  1
+D4
+  7
+GYM-B
+ 72
+1
+ 11
+7350.0
+ 21
+420.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+25C
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+5900.0
+ 20
+11300.0
+ 30
+0.0
+ 40
+210.0
+  1
+D1
+  7
+GYM-B
+ 72
+1
+ 11
+5900.0
+ 21
+11300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+25D
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+5050.0
+ 20
+420.0
+ 30
+0.0
+ 40
+210.0
+  1
+D6
+  7
+GYM-B
+ 72
+1
+ 11
+5050.0
+ 21
+420.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+25E
+330
+17
+100
+AcDbEntity
+  8
+A-MAHAL
+100
+AcDbText
+ 10
+10300.0
+ 20
+2300.0
+ 30
+0.0
+ 40
+210.0
+  1
+D5
+  7
+GYM-B
+ 72
+1
+ 11
+10300.0
+ 21
+2300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+25F
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbLine
+ 10
+-700.0
+ 20
+7300.0
+ 30
+0.0
+ 11
+12300.0
+ 21
+7300.0
+ 31
+0.0
+  0
+CIRCLE
+  5
+260
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbCircle
+ 10
+-700.0
+ 20
+7300.0
+ 30
+0.0
+ 40
+380.0
+  0
+TEXT
+  5
+261
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbText
+ 10
+-700.0
+ 20
+7300.0
+ 30
+0.0
+ 40
+304.0
+  1
+A
+  7
+GYM-B
+ 72
+1
+ 11
+-700.0
+ 21
+7300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+262
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbCircle
+ 10
+12300.0
+ 20
+7300.0
+ 30
+0.0
+ 40
+380.0
+  0
+TEXT
+  5
+263
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbText
+ 10
+12300.0
+ 20
+7300.0
+ 30
+0.0
+ 40
+304.0
+  1
+A
+  7
+GYM-B
+ 72
+1
+ 11
+12300.0
+ 21
+7300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+264
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbLine
+ 10
+6600.0
+ 20
+-700.0
+ 30
+0.0
+ 11
+6600.0
+ 21
+13700.0
+ 31
+0.0
+  0
+CIRCLE
+  5
+265
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbCircle
+ 10
+6600.0
+ 20
+-700.0
+ 30
+0.0
+ 40
+380.0
+  0
+TEXT
+  5
+266
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbText
+ 10
+6600.0
+ 20
+-700.0
+ 30
+0.0
+ 40
+304.0
+  1
+B
+  7
+GYM-B
+ 72
+1
+ 11
+6600.0
+ 21
+-700.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+267
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbCircle
+ 10
+6600.0
+ 20
+13700.0
+ 30
+0.0
+ 40
+380.0
+  0
+TEXT
+  5
+268
+330
+17
+100
+AcDbEntity
+  8
+A-KESIT-HAT
+100
+AcDbText
+ 10
+6600.0
+ 20
+13700.0
+ 30
+0.0
+ 40
+304.0
+  1
+B
+  7
+GYM-B
+ 72
+1
+ 11
+6600.0
+ 21
+13700.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+269
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+7
+ 70
+1
+ 10
+5550.0
+ 20
+8520.0
+ 10
+5550.0
+ 20
+8874.856291749413
+ 10
+6392.0
+ 20
+8965.0
+ 10
+5840.0
+ 20
+12499.0
+ 10
+9885.0
+ 20
+12990.0
+ 10
+10491.0
+ 20
+8771.0
+ 10
+8722.627831715208
+ 20
+8520.0
+  0
+TEXT
+  5
+26A
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+8050.000000000001
+ 20
+10680.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z3  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+8050.000000000001
+ 21
+10680.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+26B
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+8
+ 70
+1
+ 10
+1957.0
+ 20
+1555.0
+ 10
+1732.0
+ 20
+1075.0
+ 10
+579.0
+ 20
+1247.0
+ 10
+0.0
+ 20
+6840.0
+ 10
+1136.0
+ 20
+6931.0
+ 10
+853.0
+ 20
+8372.0
+ 10
+2600.0
+ 20
+8559.032135764579
+ 10
+2600.0
+ 20
+776.2889408099688
+  0
+TEXT
+  5
+26C
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+1550.0
+ 20
+1930.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z3  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+1550.0
+ 21
+1930.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+26D
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+7400.0
+ 20
+6700.0
+ 10
+7400.0
+ 20
+0.0
+ 10
+3241.0
+ 20
+0.0
+ 10
+2600.0
+ 20
+776.2889408099688
+ 10
+2600.0
+ 20
+6700.0
+  0
+TEXT
+  5
+26E
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+5300.0
+ 20
+1200.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z1  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+5300.0
+ 21
+1200.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+26F
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+10
+ 70
+1
+ 10
+8924.0
+ 20
+0.0
+ 10
+7400.0
+ 20
+0.0
+ 10
+7400.0
+ 20
+6700.0
+ 10
+2600.0
+ 20
+6700.0
+ 10
+2600.0
+ 20
+8559.032135764579
+ 10
+5550.0
+ 20
+8874.856291749413
+ 10
+5550.0
+ 20
+8520.0
+ 10
+8722.627831715208
+ 20
+8520.0
+ 10
+8314.0
+ 20
+8462.0
+ 10
+9531.0
+ 20
+498.0
+  0
+TEXT
+  5
+270
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+6400.0
+ 20
+7030.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z2  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+6400.0
+ 21
+7030.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+271
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+10996.0
+ 20
+5080.0
+ 10
+8849.0
+ 20
+4775.0
+ 10
+8558.758339157721
+ 20
+6822.878180058316
+ 10
+8558.758986473133
+ 20
+6822.8782399966385
+ 10
+10704.329336630655
+ 20
+7128.38689589982
+  0
+TEXT
+  5
+272
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+9777.090537939453
+ 20
+5531.439090029158
+ 30
+0.0
+ 40
+220.0
+  1
+Z5  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+9777.090537939453
+ 21
+5531.439090029158
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+273
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+9403.2945233589
+ 20
+8580.48245868865
+ 10
+9631.663521129563
+ 20
+6976.659650253371
+ 10
+8558.618017955989
+ 20
+6823.868254075919
+ 10
+8331.290416828891
+ 20
+8427.839347413073
+  0
+TEXT
+  5
+274
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+8981.236644451756
+ 20
+7282.249498833222
+ 30
+0.0
+ 40
+220.0
+  1
+Z4  −0,02
+  7
+GYM-B
+ 72
+1
+ 11
+8981.236644451756
+ 21
+7282.249498833222
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+275
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+10475.81937034285
+ 20
+8733.19971841438
+ 10
+10704.188368113513
+ 20
+7129.376909979101
+ 10
+9632.653535208845
+ 20
+6976.800618770513
+ 10
+9404.284537438181
+ 20
+8580.623427205792
+  0
+TEXT
+  5
+276
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+10054.236452775847
+ 20
+7435.000168592446
+ 30
+0.0
+ 40
+220.0
+  1
+Z4  −0,02
+  7
+GYM-B
+ 72
+1
+ 11
+10054.236452775847
+ 21
+7435.000168592446
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+277
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+8868.0
+ 20
+4654.0
+ 10
+11012.0
+ 20
+4959.0
+ 10
+11377.332200036428
+ 20
+2403.000669436613
+ 10
+11377.332138955011
+ 20
+2403.0006637432016
+ 10
+9233.71002742385
+ 20
+2096.4760289522806
+  0
+TEXT
+  5
+278
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+10122.70128582356
+ 20
+3108.5003347183065
+ 30
+0.0
+ 40
+220.0
+  1
+Z5  ±0,00
+  7
+GYM-B
+ 72
+1
+ 11
+10122.70128582356
+ 21
+3108.5003347183065
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+279
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+6
+ 70
+1
+ 10
+11377.47369286883
+ 20
+2402.010733195394
+ 10
+11563.0
+ 20
+1104.0
+ 10
+10456.0
+ 20
+1046.0
+ 10
+10400.0
+ 20
+1542.0
+ 10
+10381.784184140935
+ 20
+1541.3585980331316
+ 10
+10281.133393026086
+ 20
+2245.2408863981773
+  0
+TEXT
+  5
+27A
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+10890.775743481887
+ 20
+1473.6204431990889
+ 30
+0.0
+ 40
+220.0
+  1
+Z4  −0,02
+  7
+GYM-B
+ 72
+1
+ 11
+10890.775743481887
+ 21
+1473.6204431990889
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+27B
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+7
+ 70
+1
+ 10
+10280.14346247828
+ 20
+2245.099332484359
+ 10
+10380.77907299047
+ 20
+1541.323206795439
+ 10
+10116.0
+ 20
+1532.0
+ 10
+10150.0
+ 20
+1018.0
+ 10
+9496.833088269086
+ 20
+496.61237747795593
+ 10
+9463.168921723629
+ 20
+491.7986109561521
+ 10
+9233.851581337667
+ 20
+2095.4860984044726
+  0
+TEXT
+  5
+27C
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+9742.08799617408
+ 20
+855.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z4  −0,02
+  7
+GYM-B
+ 72
+1
+ 11
+9742.08799617408
+ 21
+855.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+27D
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbPolyline
+ 90
+6
+ 70
+1
+ 10
+5300.0
+ 20
+6369.8866062908955
+ 10
+3550.7268861881466
+ 20
+5359.943303145447
+ 10
+3550.726886188147
+ 20
+3340.056696854551
+ 10
+5300.0
+ 20
+2330.113393709103
+ 10
+7049.273113811852
+ 20
+3340.056696854551
+ 10
+7049.273113811852
+ 20
+5359.943303145447
+  0
+TEXT
+  5
+27E
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+5300.0
+ 20
+4350.0
+ 30
+0.0
+ 40
+220.0
+  1
+Z6  +0,30
+  7
+GYM-B
+ 72
+1
+ 11
+5300.0
+ 21
+4350.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+27F
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+3000.0
+ 20
+291.8652647975079
+ 30
+0.0
+ 11
+3000.0
+ 21
+6700.0
+ 31
+0.0
+  0
+LINE
+  5
+280
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+4000.0
+ 20
+0.0
+ 30
+0.0
+ 11
+4000.0
+ 21
+6700.0
+ 31
+0.0
+  0
+LINE
+  5
+281
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+5000.0
+ 20
+0.0
+ 30
+0.0
+ 11
+5000.0
+ 21
+6700.0
+ 31
+0.0
+  0
+LINE
+  5
+282
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+6000.0
+ 20
+0.0
+ 30
+0.0
+ 11
+6000.0
+ 21
+6700.0
+ 31
+0.0
+  0
+LINE
+  5
+283
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7000.0
+ 20
+0.0
+ 30
+0.0
+ 11
+7000.0
+ 21
+6700.0
+ 31
+0.0
+  0
+LINE
+  5
+284
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+3241.0
+ 20
+0.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+0.0
+ 31
+0.0
+  0
+LINE
+  5
+285
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+1000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+1000.0
+ 31
+0.0
+  0
+LINE
+  5
+286
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+2000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+2000.0
+ 31
+0.0
+  0
+LINE
+  5
+287
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+3000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+3000.0
+ 31
+0.0
+  0
+LINE
+  5
+288
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+4000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+4000.0
+ 31
+0.0
+  0
+LINE
+  5
+289
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+5000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+5000.0
+ 31
+0.0
+  0
+LINE
+  5
+28A
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+6000.0
+ 30
+0.0
+ 11
+7400.0
+ 21
+6000.0
+ 31
+0.0
+  0
+LINE
+  5
+28B
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+3000.0
+ 20
+6700.0
+ 30
+0.0
+ 11
+3000.0
+ 21
+8601.855750135403
+ 31
+0.0
+  0
+LINE
+  5
+28C
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+4000.0
+ 20
+6700.0
+ 30
+0.0
+ 11
+4000.0
+ 21
+8708.914786062467
+ 31
+0.0
+  0
+LINE
+  5
+28D
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+5000.0
+ 20
+6700.0
+ 30
+0.0
+ 11
+5000.0
+ 21
+8815.973821989528
+ 31
+0.0
+  0
+LINE
+  5
+28E
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+6000.0
+ 20
+6700.0
+ 30
+0.0
+ 11
+6000.0
+ 21
+8520.0
+ 31
+0.0
+  0
+LINE
+  5
+28F
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7000.0
+ 20
+6700.0
+ 30
+0.0
+ 11
+7000.0
+ 21
+8520.0
+ 31
+0.0
+  0
+LINE
+  5
+290
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+8000.0
+ 20
+0.0
+ 30
+0.0
+ 11
+8000.0
+ 21
+8520.0
+ 31
+0.0
+  0
+LINE
+  5
+291
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+9000.0
+ 20
+62.35255354201019
+ 30
+0.0
+ 11
+9000.0
+ 21
+3972.8430566967977
+ 31
+0.0
+  0
+LINE
+  5
+292
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+0.0
+ 30
+0.0
+ 11
+8924.0
+ 21
+0.0
+ 31
+0.0
+  0
+LINE
+  5
+293
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+1000.0
+ 30
+0.0
+ 11
+9454.288046207937
+ 21
+1000.0
+ 31
+0.0
+  0
+LINE
+  5
+294
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+2000.0
+ 30
+0.0
+ 11
+9301.475389251633
+ 21
+2000.0
+ 31
+0.0
+  0
+LINE
+  5
+295
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+3000.0
+ 30
+0.0
+ 11
+9148.66273229533
+ 21
+3000.0
+ 31
+0.0
+  0
+LINE
+  5
+296
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+4000.0
+ 30
+0.0
+ 11
+8995.850075339027
+ 21
+4000.0
+ 31
+0.0
+  0
+LINE
+  5
+297
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+5000.0
+ 30
+0.0
+ 11
+8843.037418382723
+ 21
+5000.0
+ 31
+0.0
+  0
+LINE
+  5
+298
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+7400.0
+ 20
+6000.0
+ 30
+0.0
+ 11
+8690.22476142642
+ 21
+6000.0
+ 31
+0.0
+  0
+LINE
+  5
+299
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+7000.0
+ 30
+0.0
+ 11
+8537.412104470115
+ 21
+7000.0
+ 31
+0.0
+  0
+LINE
+  5
+29A
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-DERZ
+100
+AcDbLine
+ 10
+2600.0
+ 20
+8000.0
+ 30
+0.0
+ 11
+8384.599447513812
+ 21
+8000.0
+ 31
+0.0
+  0
+LINE
+  5
+29B
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbLine
+ 10
+8451.290416828891
+ 20
+6943.868254075919
+ 30
+0.0
+ 11
+8981.236644451756
+ 21
+7702.249498833222
+ 31
+0.0
+  0
+TEXT
+  5
+29C
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+8981.236644451756
+ 20
+7962.249498833222
+ 30
+0.0
+ 40
+150.0
+  1
+%1,5
+  7
+GYM
+ 72
+1
+ 11
+8981.236644451756
+ 21
+7962.249498833222
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+29D
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbLine
+ 10
+9524.284537438181
+ 20
+7096.800618770513
+ 30
+0.0
+ 11
+10054.236452775847
+ 21
+7855.000168592446
+ 31
+0.0
+  0
+TEXT
+  5
+29E
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+10054.236452775847
+ 20
+8115.000168592446
+ 30
+0.0
+ 40
+150.0
+  1
+%1,5
+  7
+GYM
+ 72
+1
+ 11
+10054.236452775847
+ 21
+8115.000168592446
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+29F
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbLine
+ 10
+10401.133393026086
+ 20
+1166.0
+ 30
+0.0
+ 11
+10890.775743481887
+ 21
+1893.6204431990889
+ 31
+0.0
+  0
+TEXT
+  5
+2A0
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+10890.775743481887
+ 20
+2153.620443199089
+ 30
+0.0
+ 40
+150.0
+  1
+%1,5
+  7
+GYM
+ 72
+1
+ 11
+10890.775743481887
+ 21
+2153.620443199089
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LINE
+  5
+2A1
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-SINIR
+100
+AcDbLine
+ 10
+9353.851581337667
+ 20
+611.7986109561522
+ 30
+0.0
+ 11
+9742.08799617408
+ 21
+1275.0
+ 31
+0.0
+  0
+TEXT
+  5
+2A2
+330
+17
+100
+AcDbEntity
+  8
+A-ZEMIN-YAZI
+100
+AcDbText
+ 10
+9742.08799617408
+ 20
+1535.0
+ 30
+0.0
+ 40
+150.0
+  1
+%1,5
+  7
+GYM
+ 72
+1
+ 11
+9742.08799617408
+ 21
+1535.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2A3
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+7
+ 70
+1
+ 10
+5550.0
+ 20
+8520.0
+ 10
+5550.0
+ 20
+8874.856291749413
+ 10
+6392.0
+ 20
+8965.0
+ 10
+5840.0
+ 20
+12499.0
+ 10
+9885.0
+ 20
+12990.0
+ 10
+10491.0
+ 20
+8771.0
+ 10
+8722.627831715208
+ 20
+8520.0
+  0
+TEXT
+  5
+2A4
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+8050.000000000001
+ 20
+10680.0
+ 30
+0.0
+ 40
+220.0
+  1
+T2  +2,75
+  7
+GYM-B
+ 72
+1
+ 11
+8050.000000000001
+ 21
+10680.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2A5
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+8
+ 70
+1
+ 10
+1957.0
+ 20
+1555.0
+ 10
+1732.0
+ 20
+1075.0
+ 10
+579.0
+ 20
+1247.0
+ 10
+0.0
+ 20
+6840.0
+ 10
+1136.0
+ 20
+6931.0
+ 10
+853.0
+ 20
+8372.0
+ 10
+2600.0
+ 20
+8559.032135764579
+ 10
+2600.0
+ 20
+776.2889408099688
+  0
+TEXT
+  5
+2A6
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+1550.0
+ 20
+1930.0
+ 30
+0.0
+ 40
+220.0
+  1
+T2  +2,75
+  7
+GYM-B
+ 72
+1
+ 11
+1550.0
+ 21
+1930.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2A7
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+7400.0
+ 20
+6700.0
+ 10
+7400.0
+ 20
+0.0
+ 10
+3241.0
+ 20
+0.0
+ 10
+2600.0
+ 20
+776.2889408099688
+ 10
+2600.0
+ 20
+6700.0
+  0
+TEXT
+  5
+2A8
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+5300.0
+ 20
+1200.0
+ 30
+0.0
+ 40
+220.0
+  1
+T1  +3,20
+  7
+GYM-B
+ 72
+1
+ 11
+5300.0
+ 21
+1200.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2A9
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+10
+ 70
+1
+ 10
+8924.0
+ 20
+0.0
+ 10
+7400.0
+ 20
+0.0
+ 10
+7400.0
+ 20
+6700.0
+ 10
+2600.0
+ 20
+6700.0
+ 10
+2600.0
+ 20
+8559.032135764579
+ 10
+5550.0
+ 20
+8874.856291749413
+ 10
+5550.0
+ 20
+8520.0
+ 10
+8722.627831715208
+ 20
+8520.0
+ 10
+8314.0
+ 20
+8462.0
+ 10
+9531.0
+ 20
+498.0
+  0
+TEXT
+  5
+2AA
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+6400.0
+ 20
+7030.0
+ 30
+0.0
+ 40
+220.0
+  1
+T1  +3,20
+  7
+GYM-B
+ 72
+1
+ 11
+6400.0
+ 21
+7030.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2AB
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+10996.0
+ 20
+5080.0
+ 10
+8849.0
+ 20
+4775.0
+ 10
+8558.758339157721
+ 20
+6822.878180058316
+ 10
+8558.758986473133
+ 20
+6822.8782399966385
+ 10
+10704.329336630655
+ 20
+7128.38689589982
+  0
+TEXT
+  5
+2AC
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+9777.090537939453
+ 20
+5531.439090029158
+ 30
+0.0
+ 40
+220.0
+  1
+T4  +2,60
+  7
+GYM-B
+ 72
+1
+ 11
+9777.090537939453
+ 21
+5531.439090029158
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2AD
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+9403.2945233589
+ 20
+8580.48245868865
+ 10
+9631.663521129563
+ 20
+6976.659650253371
+ 10
+8558.618017955989
+ 20
+6823.868254075919
+ 10
+8331.290416828891
+ 20
+8427.839347413073
+  0
+TEXT
+  5
+2AE
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+8981.236644451756
+ 20
+7282.249498833222
+ 30
+0.0
+ 40
+220.0
+  1
+T3  +2,40
+  7
+GYM-B
+ 72
+1
+ 11
+8981.236644451756
+ 21
+7282.249498833222
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2AF
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+10475.81937034285
+ 20
+8733.19971841438
+ 10
+10704.188368113513
+ 20
+7129.376909979101
+ 10
+9632.653535208845
+ 20
+6976.800618770513
+ 10
+9404.284537438181
+ 20
+8580.623427205792
+  0
+TEXT
+  5
+2B0
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+10054.236452775847
+ 20
+7435.000168592446
+ 30
+0.0
+ 40
+220.0
+  1
+T3  +2,40
+  7
+GYM-B
+ 72
+1
+ 11
+10054.236452775847
+ 21
+7435.000168592446
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2B1
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+5
+ 70
+1
+ 10
+8868.0
+ 20
+4654.0
+ 10
+11012.0
+ 20
+4959.0
+ 10
+11377.332200036428
+ 20
+2403.000669436613
+ 10
+11377.332138955011
+ 20
+2403.0006637432016
+ 10
+9233.71002742385
+ 20
+2096.4760289522806
+  0
+TEXT
+  5
+2B2
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+10122.70128582356
+ 20
+3108.5003347183065
+ 30
+0.0
+ 40
+220.0
+  1
+T4  +2,60
+  7
+GYM-B
+ 72
+1
+ 11
+10122.70128582356
+ 21
+3108.5003347183065
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2B3
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+6
+ 70
+1
+ 10
+11377.47369286883
+ 20
+2402.010733195394
+ 10
+11563.0
+ 20
+1104.0
+ 10
+10456.0
+ 20
+1046.0
+ 10
+10400.0
+ 20
+1542.0
+ 10
+10381.784184140935
+ 20
+1541.3585980331316
+ 10
+10281.133393026086
+ 20
+2245.2408863981773
+  0
+TEXT
+  5
+2B4
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+10890.775743481887
+ 20
+1473.6204431990889
+ 30
+0.0
+ 40
+220.0
+  1
+T3  +2,40
+  7
+GYM-B
+ 72
+1
+ 11
+10890.775743481887
+ 21
+1473.6204431990889
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2B5
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-SINIR
+100
+AcDbPolyline
+ 90
+7
+ 70
+1
+ 10
+10280.14346247828
+ 20
+2245.099332484359
+ 10
+10380.77907299047
+ 20
+1541.323206795439
+ 10
+10116.0
+ 20
+1532.0
+ 10
+10150.0
+ 20
+1018.0
+ 10
+9496.833088269086
+ 20
+496.61237747795593
+ 10
+9463.168921723629
+ 20
+491.7986109561521
+ 10
+9233.851581337667
+ 20
+2095.4860984044726
+  0
+TEXT
+  5
+2B6
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-YAZI
+100
+AcDbText
+ 10
+9742.08799617408
+ 20
+855.0
+ 30
+0.0
+ 40
+220.0
+  1
+T3  +2,40
+  7
+GYM-B
+ 72
+1
+ 11
+9742.08799617408
+ 21
+855.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2B7
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+8461.290416828891
+ 20
+8150.48245868865
+ 10
+8761.290416828891
+ 20
+8150.48245868865
+ 10
+8761.290416828891
+ 20
+8450.48245868865
+ 10
+8461.290416828891
+ 20
+8450.48245868865
+  0
+LINE
+  5
+2B8
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbLine
+ 10
+8461.290416828891
+ 20
+8150.48245868865
+ 30
+0.0
+ 11
+8761.290416828891
+ 21
+8450.48245868865
+ 31
+0.0
+  0
+LWPOLYLINE
+  5
+2B9
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+9534.284537438181
+ 20
+8303.19971841438
+ 10
+9834.284537438181
+ 20
+8303.19971841438
+ 10
+9834.284537438181
+ 20
+8603.19971841438
+ 10
+9534.284537438181
+ 20
+8603.19971841438
+  0
+LINE
+  5
+2BA
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbLine
+ 10
+9534.284537438181
+ 20
+8303.19971841438
+ 30
+0.0
+ 11
+9834.284537438181
+ 21
+8603.19971841438
+ 31
+0.0
+  0
+LWPOLYLINE
+  5
+2BB
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+10411.133393026086
+ 20
+1972.0107331953939
+ 10
+10711.133393026086
+ 20
+1972.0107331953939
+ 10
+10711.133393026086
+ 20
+2272.0107331953936
+ 10
+10411.133393026086
+ 20
+2272.0107331953936
+  0
+LINE
+  5
+2BC
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbLine
+ 10
+10411.133393026086
+ 20
+1972.0107331953939
+ 30
+0.0
+ 11
+10711.133393026086
+ 21
+2272.0107331953936
+ 31
+0.0
+  0
+LWPOLYLINE
+  5
+2BD
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+9363.851581337667
+ 20
+1815.099332484359
+ 10
+9663.851581337667
+ 20
+1815.099332484359
+ 10
+9663.851581337667
+ 20
+2115.099332484359
+ 10
+9363.851581337667
+ 20
+2115.099332484359
+  0
+LINE
+  5
+2BE
+330
+17
+100
+AcDbEntity
+  8
+A-TAVAN-KAPAK
+100
+AcDbLine
+ 10
+9363.851581337667
+ 20
+1815.099332484359
+ 30
+0.0
+ 11
+9663.851581337667
+ 21
+2115.099332484359
+ 31
+0.0
+  0
+LWPOLYLINE
+  5
+2BF
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbPolyline
+ 90
+6
+ 70
+0
+ 10
+8050.000000000001
+ 20
+11100.0
+ 10
+7050.0
+ 20
+9700.0
+ 10
+6550.0
+ 20
+8880.0
+ 10
+5000.0
+ 20
+8100.0
+ 10
+2600.0
+ 20
+6500.0
+ 10
+450.0
+ 20
+4350.0
+  0
+LINE
+  5
+2C0
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7445.377125130563
+ 20
+10253.527975182786
+ 30
+0.0
+ 11
+7702.424333320375
+ 21
+10448.65000114943
+ 31
+0.0
+  0
+LINE
+  5
+2C1
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7445.377125130563
+ 20
+10253.527975182786
+ 30
+0.0
+ 11
+7546.585352442855
+ 21
+10559.963558919088
+ 31
+0.0
+  0
+LINE
+  5
+2C2
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+6706.290663632361
+ 20
+9136.316688357074
+ 30
+0.0
+ 11
+6948.488726737788
+ 21
+9349.591090204747
+ 31
+0.0
+  0
+LINE
+  5
+2C3
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+6706.290663632361
+ 20
+9136.316688357074
+ 30
+0.0
+ 11
+6784.97729379212
+ 21
+9449.2931834643
+ 31
+0.0
+  0
+LINE
+  5
+2C4
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5614.211109870078
+ 20
+8409.08688109591
+ 30
+0.0
+ 11
+5932.545991586787
+ 21
+8462.084761599868
+ 31
+0.0
+  0
+LINE
+  5
+2C5
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5614.211109870078
+ 20
+8409.08688109591
+ 30
+0.0
+ 11
+5846.458440019375
+ 21
+8633.156178176137
+ 31
+0.0
+  0
+LINE
+  5
+2C6
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3650.230947019188
+ 20
+7200.153964679458
+ 30
+0.0
+ 11
+3959.770303502801
+ 21
+7291.429695535004
+ 31
+0.0
+  0
+LINE
+  5
+2C7
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3650.230947019188
+ 20
+7200.153964679458
+ 30
+0.0
+ 11
+3853.5390664564657
+ 21
+7450.776551104507
+ 31
+0.0
+  0
+LINE
+  5
+2C8
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1397.7207793864218
+ 20
+5297.720779386421
+ 30
+0.0
+ 11
+1683.3484471527531
+ 21
+5447.929659489661
+ 31
+0.0
+  0
+LINE
+  5
+2C9
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1397.7207793864218
+ 20
+5297.720779386421
+ 30
+0.0
+ 11
+1547.9296594896616
+ 21
+5583.348447152753
+ 31
+0.0
+  0
+TEXT
+  5
+2CA
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+8050.000000000001
+ 20
+11520.0
+ 30
+0.0
+ 40
+170.0
+  1
+10,3 m → Ç1
+  7
+GYM-B
+ 72
+1
+ 11
+8050.000000000001
+ 21
+11520.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2CB
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbPolyline
+ 90
+4
+ 70
+0
+ 10
+6400.0
+ 20
+7450.0
+ 10
+4600.0
+ 20
+7300.0
+ 10
+2400.0
+ 20
+6300.0
+ 10
+450.0
+ 20
+4350.0
+  0
+LINE
+  5
+2CC
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5320.621763515922
+ 20
+7360.051813626326
+ 30
+0.0
+ 11
+5635.692268512716
+ 21
+7290.220236696055
+ 31
+0.0
+  0
+LINE
+  5
+2CD
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5320.621763515922
+ 20
+7360.051813626326
+ 30
+0.0
+ 11
+5619.788138469128
+ 21
+7481.069797219099
+ 31
+0.0
+  0
+LINE
+  5
+2CE
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3336.1340340567313
+ 20
+6725.515470025787
+ 30
+0.0
+ 11
+3656.3174122463324
+ 21
+6765.869857477441
+ 31
+0.0
+  0
+LINE
+  5
+2CF
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3336.1340340567313
+ 20
+6725.515470025787
+ 30
+0.0
+ 11
+3577.069560946345
+ 21
+6940.215130337412
+ 31
+0.0
+  0
+LINE
+  5
+2D0
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1297.7207793864216
+ 20
+5197.720779386421
+ 30
+0.0
+ 11
+1583.3484471527531
+ 21
+5347.9296594896605
+ 31
+0.0
+  0
+LINE
+  5
+2D1
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1297.7207793864216
+ 20
+5197.720779386421
+ 30
+0.0
+ 11
+1447.9296594896616
+ 21
+5483.348447152753
+ 31
+0.0
+  0
+TEXT
+  5
+2D2
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+6400.0
+ 20
+7870.0
+ 30
+0.0
+ 40
+170.0
+  1
+7,0 m → Ç1
+  7
+GYM-B
+ 72
+1
+ 11
+6400.0
+ 21
+7870.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2D3
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbPolyline
+ 90
+3
+ 70
+0
+ 10
+5300.0
+ 20
+1620.0
+ 10
+4300.0
+ 20
+950.0
+ 10
+3400.0
+ 20
+400.0
+  0
+LINE
+  5
+2D4
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+4650.461403965226
+ 20
+1184.8091406567016
+ 30
+0.0
+ 11
+4959.789626579478
+ 21
+1276.7978516478381
+ 31
+0.0
+  0
+LINE
+  5
+2D5
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+4650.461403965226
+ 20
+1184.8091406567016
+ 30
+0.0
+ 11
+4853.191513849164
+ 21
+1435.8995124393523
+ 31
+0.0
+  0
+LINE
+  5
+2D6
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3696.409269942647
+ 20
+581.1389982982845
+ 30
+0.0
+ 11
+4009.307935758943
+ 21
+660.1345499824475
+ 31
+0.0
+  0
+LINE
+  5
+2D7
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3696.409269942647
+ 20
+581.1389982982845
+ 30
+0.0
+ 11
+3909.4444780946396
+ 21
+823.5474807058533
+ 31
+0.0
+  0
+TEXT
+  5
+2D8
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+5300.0
+ 20
+2040.0
+ 30
+0.0
+ 40
+170.0
+  1
+2,3 m → Ç2
+  7
+GYM-B
+ 72
+1
+ 11
+5300.0
+ 21
+2040.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2D9
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbPolyline
+ 90
+7
+ 70
+0
+ 10
+9800.0
+ 20
+6300.0
+ 10
+8950.0
+ 20
+7050.0
+ 10
+8400.0
+ 20
+7280.0
+ 10
+6800.0
+ 20
+7550.0
+ 10
+4200.0
+ 20
+6700.0
+ 10
+2000.0
+ 20
+5700.0
+ 10
+450.0
+ 20
+4350.0
+  0
+LINE
+  5
+2DA
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+9240.029186034282
+ 20
+6794.091894675632
+ 30
+0.0
+ 11
+9407.762510526114
+ 21
+6518.390236881521
+ 31
+0.0
+  0
+LINE
+  5
+2DB
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+9240.029186034282
+ 20
+6794.091894675632
+ 30
+0.0
+ 11
+9534.470388840653
+ 21
+6661.992498971332
+ 31
+0.0
+  0
+LINE
+  5
+2DC
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8508.93562211389
+ 20
+7234.4451034796475
+ 30
+0.0
+ 11
+8756.315961009997
+ 21
+7027.204083931995
+ 31
+0.0
+  0
+LINE
+  5
+2DD
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8508.93562211389
+ 20
+7234.4451034796475
+ 30
+0.0
+ 11
+8830.202112080195
+ 21
+7203.888358230289
+ 31
+0.0
+  0
+LINE
+  5
+2DE
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7422.509421260118
+ 20
+7444.951535162355
+ 30
+0.0
+ 11
+7710.462475119437
+ 21
+7299.2500903219025
+ 31
+0.0
+  0
+LINE
+  5
+2DF
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7422.509421260118
+ 20
+7444.951535162355
+ 30
+0.0
+ 11
+7742.32942528445
+ 21
+7488.091276484942
+ 31
+0.0
+  0
+LINE
+  5
+2E0
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5328.910841468383
+ 20
+7069.067005864664
+ 30
+0.0
+ 11
+5651.592289753982
+ 21
+7073.816236098302
+ 31
+0.0
+  0
+LINE
+  5
+2E1
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+5328.910841468383
+ 20
+7069.067005864664
+ 30
+0.0
+ 11
+5592.082353884954
+ 21
+7255.846628168272
+ 31
+0.0
+  0
+LINE
+  5
+2E2
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+2936.1340340567313
+ 20
+6125.515470025787
+ 30
+0.0
+ 11
+3256.3174122463324
+ 21
+6165.869857477441
+ 31
+0.0
+  0
+LINE
+  5
+2E3
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+2936.1340340567313
+ 20
+6125.515470025787
+ 30
+0.0
+ 11
+3177.0695609463455
+ 21
+6340.215130337412
+ 31
+0.0
+  0
+LINE
+  5
+2E4
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1089.265312740465
+ 20
+4906.779465935244
+ 30
+0.0
+ 11
+1384.5508218711875
+ 21
+5036.980619359142
+ 31
+0.0
+  0
+LINE
+  5
+2E5
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1089.265312740465
+ 20
+4906.779465935244
+ 30
+0.0
+ 11
+1258.7700280954548
+ 21
+5181.395604805353
+ 31
+0.0
+  0
+TEXT
+  5
+2E6
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+9800.0
+ 20
+6720.0
+ 30
+0.0
+ 40
+170.0
+  1
+10,6 m → Ç1
+  7
+GYM-B
+ 72
+1
+ 11
+9800.0
+ 21
+6720.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2E7
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbPolyline
+ 90
+8
+ 70
+0
+ 10
+10100.0
+ 20
+3300.0
+ 10
+9350.0
+ 20
+3380.0
+ 10
+8600.0
+ 20
+3500.0
+ 10
+7850.0
+ 20
+5300.0
+ 10
+7550.0
+ 20
+7000.0
+ 10
+5000.0
+ 20
+7500.0
+ 10
+2200.0
+ 20
+6100.0
+ 10
+450.0
+ 20
+4350.0
+  0
+LINE
+  5
+2E8
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+9546.015343900652
+ 20
+3359.091696650597
+ 30
+0.0
+ 11
+9842.303614120701
+ 21
+3231.1888695297152
+ 31
+0.0
+  0
+LINE
+  5
+2E9
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+9546.015343900652
+ 20
+3359.091696650597
+ 30
+0.0
+ 11
+9862.616233905706
+ 21
+3421.6196800141342
+ 31
+0.0
+  0
+LINE
+  5
+2EA
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8797.260686254993
+ 20
+3468.438290199201
+ 30
+0.0
+ 11
+9086.444615047412
+ 21
+3325.1953930500435
+ 31
+0.0
+  0
+LINE
+  5
+2EB
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8797.260686254993
+ 20
+3468.438290199201
+ 30
+0.0
+ 11
+9116.70154750993
+ 21
+3514.301220940781
+ 31
+0.0
+  0
+LINE
+  5
+2EC
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8155.7692307692305
+ 20
+4566.153846153847
+ 30
+0.0
+ 11
+8185.9114135198415
+ 21
+4244.848195605133
+ 31
+0.0
+  0
+LINE
+  5
+2ED
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+8155.7692307692305
+ 20
+4566.153846153847
+ 30
+0.0
+ 11
+8362.690877624394
+ 21
+4318.506305648697
+ 31
+0.0
+  0
+LINE
+  5
+2EE
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7668.71863989637
+ 20
+6327.261040587228
+ 30
+0.0
+ 11
+7627.977837250052
+ 21
+6007.126601241449
+ 31
+0.0
+  0
+LINE
+  5
+2EF
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+7668.71863989637
+ 20
+6327.261040587228
+ 30
+0.0
+ 11
+7816.574806185763
+ 21
+6040.408419288928
+ 31
+0.0
+  0
+LINE
+  5
+2F0
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+6098.363525058112
+ 20
+7284.634602929782
+ 30
+0.0
+ 11
+6382.362968086075
+ 21
+7131.369510311436
+ 31
+0.0
+  0
+LINE
+  5
+2F1
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+6098.363525058112
+ 20
+7284.634602929782
+ 30
+0.0
+ 11
+6419.212470442654
+ 21
+7319.30197232999
+ 31
+0.0
+  0
+LINE
+  5
+2F2
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3439.0031056200155
+ 20
+6719.5015528100075
+ 30
+0.0
+ 11
+3757.473522081994
+ 21
+6771.678809292477
+ 31
+0.0
+  0
+LINE
+  5
+2F3
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+3439.0031056200155
+ 20
+6719.5015528100075
+ 30
+0.0
+ 11
+3671.8271606831777
+ 21
+6942.971532090109
+ 31
+0.0
+  0
+LINE
+  5
+2F4
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1197.7207793864216
+ 20
+5097.720779386421
+ 30
+0.0
+ 11
+1483.3484471527531
+ 21
+5247.929659489661
+ 31
+0.0
+  0
+LINE
+  5
+2F5
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbLine
+ 10
+1197.7207793864216
+ 20
+5097.720779386421
+ 30
+0.0
+ 11
+1347.9296594896616
+ 21
+5383.348447152753
+ 31
+0.0
+  0
+TEXT
+  5
+2F6
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+10100.0
+ 20
+3720.0
+ 30
+0.0
+ 40
+170.0
+  1
+13,4 m → Ç1
+  7
+GYM-B
+ 72
+1
+ 11
+10100.0
+ 21
+3720.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+2F7
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbCircle
+ 10
+240.0
+ 20
+4300.0
+ 30
+0.0
+ 40
+420.0
+  0
+TEXT
+  5
+2F8
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+240.0
+ 20
+4300.0
+ 30
+0.0
+ 40
+336.0
+  1
+Ç1
+  7
+GYM-B
+ 72
+1
+ 11
+240.0
+ 21
+4300.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+2F9
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+240.0
+ 20
+4920.0
+ 30
+0.0
+ 40
+160.0
+  1
+ANA ÇIKIŞ — batı cephe · 1,60 m
+  7
+GYM
+ 72
+1
+ 11
+240.0
+ 21
+4920.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+2FA
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbCircle
+ 10
+3350.0
+ 20
+100.0
+ 30
+0.0
+ 40
+420.0
+  0
+TEXT
+  5
+2FB
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+3350.0
+ 20
+100.0
+ 30
+0.0
+ 40
+336.0
+  1
+Ç2
+  7
+GYM-B
+ 72
+1
+ 11
+3350.0
+ 21
+100.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+TEXT
+  5
+2FC
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-KACIS
+100
+AcDbText
+ 10
+3350.0
+ 20
+720.0
+ 30
+0.0
+ 40
+160.0
+  1
+ACİL ÇIKIŞ — güneybatı cephe · 1,00 m
+  7
+GYM
+ 72
+1
+ 11
+3350.0
+ 21
+720.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+LWPOLYLINE
+  5
+2FD
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+730.0
+ 20
+7330.0
+ 10
+1170.0
+ 20
+7330.0
+ 10
+1170.0
+ 20
+7770.0
+ 10
+730.0
+ 20
+7770.0
+  0
+TEXT
+  5
+2FE
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbText
+ 10
+950.0
+ 20
+7550.0
+ 30
+0.0
+ 40
+150.0
+  1
+YD1
+  7
+GYM-B
+ 72
+1
+ 11
+950.0
+ 21
+7550.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+2FF
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbCircle
+ 10
+700.0
+ 20
+3900.0
+ 30
+0.0
+ 40
+220.0
+  0
+TEXT
+  5
+300
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbText
+ 10
+700.0
+ 20
+3900.0
+ 30
+0.0
+ 40
+150.0
+  1
+YT1
+  7
+GYM-B
+ 72
+1
+ 11
+700.0
+ 21
+3900.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+301
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbCircle
+ 10
+8000.0
+ 20
+9200.0
+ 30
+0.0
+ 40
+220.0
+  0
+TEXT
+  5
+302
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbText
+ 10
+8000.0
+ 20
+9200.0
+ 30
+0.0
+ 40
+150.0
+  1
+YT2
+  7
+GYM-B
+ 72
+1
+ 11
+8000.0
+ 21
+9200.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+CIRCLE
+  5
+303
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbCircle
+ 10
+6600.0
+ 20
+550.0
+ 30
+0.0
+ 40
+220.0
+  0
+TEXT
+  5
+304
+330
+17
+100
+AcDbEntity
+  8
+A-YANGIN-EKIP
+100
+AcDbText
+ 10
+6600.0
+ 20
+550.0
+ 30
+0.0
+ 40
+150.0
+  1
+YT3
+  7
+GYM-B
+ 72
+1
+ 11
+6600.0
+ 21
+550.0
+ 31
+0.0
+100
+AcDbText
+ 73
+2
+  0
+INSERT
+  5
+305
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ARMATUR_LINEER
+ 10
+9256.0
+ 20
+9637.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+307
+330
+17
+100
+AcDbEntity
+  8
 0
 100
 AcDbText
  10
-1950.0000000000002
+9256.0
  20
-3879.8176389179475
+9822.0
+ 30
+0.0
+ 40
+105.0
+  1
+L3
+  7
+GYM
+ 11
+9256.0
+ 21
+9822.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+306
+330
+305
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+  0
+INSERT
+  5
+308
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ARMATUR_LINEER
+ 10
+9256.0
+ 20
+11873.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+30A
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9256.0
+ 20
+12058.0
+ 30
+0.0
+ 40
+105.0
+  1
+L3
+  7
+GYM
+ 11
+9256.0
+ 21
+12058.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+309
+330
+308
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+  0
+INSERT
+  5
+30B
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ARMATUR_LINEER
+ 10
+6785.0
+ 20
+11873.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+30D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6785.0
+ 20
+12058.0
+ 30
+0.0
+ 40
+105.0
+  1
+L3
+  7
+GYM
+ 11
+6785.0
+ 21
+12058.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+30C
+330
+30B
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+  0
+INSERT
+  5
+30E
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ARMATUR_LINEER
+ 10
+1950.0
+ 20
+5641.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+310
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1950.0
+ 20
+5826.0
  30
 0.0
  40
@@ -23093,9 +29513,9 @@ L4
   7
 GYM
  11
-1950.0000000000002
+1950.0
  21
-3879.8176389179475
+5826.0
  31
 0.0
 100
@@ -23107,9 +29527,9 @@ LINYE
   0
 SEQEND
   5
-236
+30F
 330
-235
+30E
 100
 AcDbEntity
   8
@@ -23117,7 +29537,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-238
+311
 330
 17
 100
@@ -23131,15 +29551,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-6200.000000000001
+1950.0
  20
-4187.5
+3695.0
  30
 0.0
   0
 ATTRIB
   5
-23A
+313
 330
 17
 100
@@ -23149,9 +29569,77 @@ AcDbEntity
 100
 AcDbText
  10
-6200.000000000001
+1950.0
  20
-4372.5
+3880.0
+ 30
+0.0
+ 40
+105.0
+  1
+L4
+  7
+GYM
+ 11
+1950.0
+ 21
+3880.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+312
+330
+311
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+  0
+INSERT
+  5
+314
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ARMATUR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ARMATUR_LINEER
+ 10
+6200.0
+ 20
+4188.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+316
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6200.0
+ 20
+4373.0
  30
 0.0
  40
@@ -23161,9 +29649,9 @@ L1
   7
 GYM
  11
-6200.000000000001
+6200.0
  21
-4372.5
+4373.0
  31
 0.0
 100
@@ -23175,9 +29663,9 @@ LINYE
   0
 SEQEND
   5
-239
+315
 330
-238
+314
 100
 AcDbEntity
   8
@@ -23185,7 +29673,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-23B
+317
 330
 17
 100
@@ -23199,15 +29687,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-6200.000000000001
+6200.0
  20
-2512.5
+2513.0
  30
 0.0
   0
 ATTRIB
   5
-23D
+319
 330
 17
 100
@@ -23217,9 +29705,9 @@ AcDbEntity
 100
 AcDbText
  10
-6200.000000000001
+6200.0
  20
-2697.5
+2698.0
  30
 0.0
  40
@@ -23229,9 +29717,9 @@ L1
   7
 GYM
  11
-6200.000000000001
+6200.0
  21
-2697.5
+2698.0
  31
 0.0
 100
@@ -23243,9 +29731,9 @@ LINYE
   0
 SEQEND
   5
-23C
+318
 330
-23B
+317
 100
 AcDbEntity
   8
@@ -23253,7 +29741,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-23E
+31A
 330
 17
 100
@@ -23267,15 +29755,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-3800.0000000000005
+3800.0
  20
-4187.5
+4188.0
  30
 0.0
   0
 ATTRIB
   5
-240
+31C
 330
 17
 100
@@ -23285,9 +29773,9 @@ AcDbEntity
 100
 AcDbText
  10
-3800.0000000000005
+3800.0
  20
-4372.5
+4373.0
  30
 0.0
  40
@@ -23297,9 +29785,9 @@ L1
   7
 GYM
  11
-3800.0000000000005
+3800.0
  21
-4372.5
+4373.0
  31
 0.0
 100
@@ -23311,9 +29799,9 @@ LINYE
   0
 SEQEND
   5
-23F
+31B
 330
-23E
+31A
 100
 AcDbEntity
   8
@@ -23321,7 +29809,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-241
+31D
 330
 17
 100
@@ -23335,15 +29823,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-3800.0000000000005
+3800.0
  20
-2512.5
+2513.0
  30
 0.0
   0
 ATTRIB
   5
-243
+31F
 330
 17
 100
@@ -23353,9 +29841,9 @@ AcDbEntity
 100
 AcDbText
  10
-3800.0000000000005
+3800.0
  20
-2697.5
+2698.0
  30
 0.0
  40
@@ -23365,9 +29853,9 @@ L1
   7
 GYM
  11
-3800.0000000000005
+3800.0
  21
-2697.5
+2698.0
  31
 0.0
 100
@@ -23379,9 +29867,9 @@ LINYE
   0
 SEQEND
   5
-242
+31E
 330
-241
+31D
 100
 AcDbEntity
   8
@@ -23389,7 +29877,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-244
+320
 330
 17
 100
@@ -23403,15 +29891,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-6200.000000000001
+6200.0
  20
-5862.5
+5862.0
  30
 0.0
   0
 ATTRIB
   5
-246
+322
 330
 17
 100
@@ -23421,9 +29909,9 @@ AcDbEntity
 100
 AcDbText
  10
-6200.000000000001
+6200.0
  20
-6047.5
+6047.0
  30
 0.0
  40
@@ -23433,9 +29921,9 @@ L1
   7
 GYM
  11
-6200.000000000001
+6200.0
  21
-6047.5
+6047.0
  31
 0.0
 100
@@ -23447,9 +29935,9 @@ LINYE
   0
 SEQEND
   5
-245
+321
 330
-244
+320
 100
 AcDbEntity
   8
@@ -23457,7 +29945,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-247
+323
 330
 17
 100
@@ -23471,15 +29959,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-3800.0000000000005
+3800.0
  20
-5862.5
+5862.0
  30
 0.0
   0
 ATTRIB
   5
-249
+325
 330
 17
 100
@@ -23489,9 +29977,9 @@ AcDbEntity
 100
 AcDbText
  10
-3800.0000000000005
+3800.0
  20
-6047.5
+6047.0
  30
 0.0
  40
@@ -23501,9 +29989,9 @@ L1
   7
 GYM
  11
-3800.0000000000005
+3800.0
  21
-6047.5
+6047.0
  31
 0.0
 100
@@ -23515,9 +30003,9 @@ LINYE
   0
 SEQEND
   5
-248
+324
 330
-247
+323
 100
 AcDbEntity
   8
@@ -23525,7 +30013,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-24A
+326
 330
 17
 100
@@ -23539,15 +30027,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-6200.000000000001
+6200.0
  20
-837.5
+838.0
  30
 0.0
   0
 ATTRIB
   5
-24C
+328
 330
 17
 100
@@ -23557,9 +30045,9 @@ AcDbEntity
 100
 AcDbText
  10
-6200.000000000001
+6200.0
  20
-1022.5
+1023.0
  30
 0.0
  40
@@ -23569,9 +30057,9 @@ L1
   7
 GYM
  11
-6200.000000000001
+6200.0
  21
-1022.5
+1023.0
  31
 0.0
 100
@@ -23583,9 +30071,9 @@ LINYE
   0
 SEQEND
   5
-24B
+327
 330
-24A
+326
 100
 AcDbEntity
   8
@@ -23593,7 +30081,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-24D
+329
 330
 17
 100
@@ -23607,15 +30095,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-6931.875
+6932.0
  20
-7765.499255280737
+7765.0
  30
 0.0
   0
 ATTRIB
   5
-24F
+32B
 330
 17
 100
@@ -23625,9 +30113,9 @@ AcDbEntity
 100
 AcDbText
  10
-6931.875
+6932.0
  20
-7950.499255280737
+7950.0
  30
 0.0
  40
@@ -23637,9 +30125,9 @@ L2
   7
 GYM
  11
-6931.875
+6932.0
  21
-7950.499255280737
+7950.0
  31
 0.0
 100
@@ -23651,9 +30139,9 @@ LINYE
   0
 SEQEND
   5
-24E
+32A
 330
-24D
+329
 100
 AcDbEntity
   8
@@ -23661,7 +30149,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-250
+32C
 330
 17
 100
@@ -23675,15 +30163,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-5199.125
+5199.0
  20
-7765.499255280737
+7765.0
  30
 0.0
   0
 ATTRIB
   5
-252
+32E
 330
 17
 100
@@ -23693,9 +30181,9 @@ AcDbEntity
 100
 AcDbText
  10
-5199.125
+5199.0
  20
-7950.499255280737
+7950.0
  30
 0.0
  40
@@ -23705,9 +30193,9 @@ L2
   7
 GYM
  11
-5199.125
+5199.0
  21
-7950.499255280737
+7950.0
  31
 0.0
 100
@@ -23719,9 +30207,9 @@ LINYE
   0
 SEQEND
   5
-251
+32D
 330
-250
+32C
 100
 AcDbEntity
   8
@@ -23729,7 +30217,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-253
+32F
 330
 17
 100
@@ -23743,15 +30231,15 @@ AcDbBlockReference
   2
 E_ARMATUR_LINEER
  10
-3466.375
+2416.0
  20
-7765.499255280737
+7765.0
  30
 0.0
   0
 ATTRIB
   5
-255
+331
 330
 17
 100
@@ -23761,9 +30249,9 @@ AcDbEntity
 100
 AcDbText
  10
-3466.375
+2416.0
  20
-7950.499255280737
+7950.0
  30
 0.0
  40
@@ -23773,9 +30261,9 @@ L2
   7
 GYM
  11
-3466.375
+2416.0
  21
-7950.499255280737
+7950.0
  31
 0.0
 100
@@ -23787,9 +30275,9 @@ LINYE
   0
 SEQEND
   5
-254
 330
-253
+330
+32F
 100
 AcDbEntity
   8
@@ -23797,7 +30285,7 @@ E-AYD-ARMATUR
   0
 INSERT
   5
-256
+332
 330
 17
 100
@@ -23819,7 +30307,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-258
+334
 330
 17
 100
@@ -23855,9 +30343,9 @@ LINYE
   0
 SEQEND
   5
-257
+333
 330
-256
+332
 100
 AcDbEntity
   8
@@ -23865,7 +30353,7 @@ E-AYD-DOWNLIGHT
   0
 INSERT
   5
-259
+335
 330
 17
 100
@@ -23887,7 +30375,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-25B
+337
 330
 17
 100
@@ -23923,9 +30411,9 @@ LINYE
   0
 SEQEND
   5
-25A
+336
 330
-259
+335
 100
 AcDbEntity
   8
@@ -23933,7 +30421,7 @@ E-AYD-DOWNLIGHT
   0
 INSERT
   5
-25C
+338
 330
 17
 100
@@ -23955,7 +30443,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-25E
+33A
 330
 17
 100
@@ -23991,9 +30479,9 @@ LINYE
   0
 SEQEND
   5
-25D
+339
 330
-25C
+338
 100
 AcDbEntity
   8
@@ -24001,7 +30489,7 @@ E-AYD-DOWNLIGHT
   0
 INSERT
   5
-25F
+33B
 330
 17
 100
@@ -24023,7 +30511,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-261
+33D
 330
 17
 100
@@ -24059,9 +30547,9 @@ LINYE
   0
 SEQEND
   5
-260
+33C
 330
-25F
+33B
 100
 AcDbEntity
   8
@@ -24069,7 +30557,7 @@ E-AYD-DOWNLIGHT
   0
 INSERT
   5
-262
+33E
 330
 17
 100
@@ -24091,7 +30579,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-264
+340
 330
 17
 100
@@ -24127,9 +30615,9 @@ LINYE
   0
 SEQEND
   5
-263
+33F
 330
-262
+33E
 100
 AcDbEntity
   8
@@ -24137,7 +30625,7 @@ E-AYD-DOWNLIGHT
   0
 INSERT
   5
-265
+341
 330
 17
 100
@@ -24159,7 +30647,7 @@ E_DOWNLIGHT
   0
 ATTRIB
   5
-267
+343
 330
 17
 100
@@ -24195,5413 +30683,13 @@ LINYE
   0
 SEQEND
   5
-266
-330
-265
-100
-AcDbEntity
-  8
-E-AYD-DOWNLIGHT
-  0
-INSERT
-  5
-268
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ACIL
- 10
-900.0
- 20
-4400.0
- 30
-0.0
-  0
-ATTRIB
-  5
-26A
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-900.0
- 20
-4630.0
- 30
-0.0
- 40
-105.0
-  1
-AA1
-  7
-GYM
- 11
-900.0
- 21
-4630.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-269
-330
-268
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-26B
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ACIL
- 10
-3400.0
- 20
-950.0
- 30
-0.0
-  0
-ATTRIB
-  5
-26D
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3400.0
- 20
-1180.0
- 30
-0.0
- 40
-105.0
-  1
-AA2
-  7
-GYM
- 11
-3400.0
- 21
-1180.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-26C
-330
-26B
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-26E
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ACIL
- 10
-5250.0
- 20
-7350.0
- 30
-0.0
-  0
-ATTRIB
-  5
-270
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5250.0
- 20
-7580.0
- 30
-0.0
- 40
-105.0
-  1
-AA3
-  7
-GYM
- 11
-5250.0
- 21
-7580.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-26F
-330
-26E
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-271
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ACIL
- 10
-8000.0
- 20
-9900.0
- 30
-0.0
-  0
-ATTRIB
-  5
-273
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8000.0
- 20
-10130.0
- 30
-0.0
- 40
-105.0
-  1
-AA4
-  7
-GYM
- 11
-8000.0
- 21
-10130.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-272
-330
-271
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-274
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ACIL
- 10
-9550.0
- 20
-7100.0
- 30
-0.0
-  0
-ATTRIB
-  5
-276
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9550.0
- 20
-7330.0
- 30
-0.0
- 40
-105.0
-  1
-AA5
-  7
-GYM
- 11
-9550.0
- 21
-7330.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-275
-330
-274
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-277
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_YONLENDIRME
- 10
-750.0
- 20
-3850.0
- 30
-0.0
-  0
-ATTRIB
-  5
-279
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-750.0
- 20
-4055.0
- 30
-0.0
- 40
-105.0
-  1
-AA6
-  7
-GYM
- 11
-750.0
- 21
-4055.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-278
-330
-277
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-27A
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_YONLENDIRME
- 10
-3450.0
- 20
-450.0
- 30
-0.0
-  0
-ATTRIB
-  5
-27C
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3450.0
- 20
-655.0
- 30
-0.0
- 40
-105.0
-  1
-AA7
-  7
-GYM
- 11
-3450.0
- 21
-655.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-27B
-330
-27A
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-27D
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-100
-AcDbBlockReference
- 66
-1
-  2
-E_YONLENDIRME
- 10
-6300.0
- 20
-8550.0
- 30
-0.0
-  0
-ATTRIB
-  5
-27F
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6300.0
- 20
-8755.0
- 30
-0.0
- 40
-105.0
-  1
-AA8
-  7
-GYM
- 11
-6300.0
- 21
-8755.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-27E
-330
-27D
-100
-AcDbEntity
-  8
-E-AYD-ACIL
-  0
-INSERT
-  5
-280
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-620.0
- 20
-4050.0
- 30
-0.0
-  0
-ATTRIB
-  5
-282
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-620.0
- 20
-4290.0
- 30
-0.0
- 40
-105.0
-  1
-A1
-  7
-GYM
- 11
-620.0
- 21
-4290.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-281
-330
-280
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-283
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-2450.0
- 20
-6950.0
- 30
-0.0
-  0
-ATTRIB
-  5
-285
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2450.0
- 20
-7190.0
- 30
-0.0
- 40
-105.0
-  1
-A2
-  7
-GYM
- 11
-2450.0
- 21
-7190.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-284
-330
-283
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-286
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-6850.0
- 20
-8350.0
- 30
-0.0
-  0
-ATTRIB
-  5
-288
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6850.0
- 20
-8590.0
- 30
-0.0
- 40
-105.0
-  1
-A3
-  7
-GYM
- 11
-6850.0
- 21
-8590.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-287
-330
-286
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-289
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-7400.0
- 20
-9350.0
- 30
-0.0
-  0
-ATTRIB
-  5
-28B
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7400.0
- 20
-9590.0
- 30
-0.0
- 40
-105.0
-  1
-A4
-  7
-GYM
- 11
-7400.0
- 21
-9590.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-28A
-330
-289
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-28C
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-3550.0
- 20
-550.0
- 30
-0.0
-  0
-ATTRIB
-  5
-28E
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3550.0
- 20
-790.0
- 30
-0.0
- 40
-105.0
-  1
-A5
-  7
-GYM
- 11
-3550.0
- 21
-790.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-28D
-330
-28C
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-28F
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-8700.0
- 20
-7850.0
- 30
-0.0
-  0
-ATTRIB
-  5
-291
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8700.0
- 20
-8090.0
- 30
-0.0
- 40
-105.0
-  1
-A6
-  7
-GYM
- 11
-8700.0
- 21
-8090.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-290
-330
-28F
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-292
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_ANAHTAR
- 10
-9150.0
- 20
-3150.0
- 30
-0.0
-  0
-ATTRIB
-  5
-294
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9150.0
- 20
-3390.0
- 30
-0.0
- 40
-105.0
-  1
-A7
-  7
-GYM
- 11
-9150.0
- 21
-3390.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-293
-330
-292
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-295
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_SENSOR
- 10
-9700.0
- 20
-8100.0
- 30
-0.0
-  0
-ATTRIB
-  5
-297
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9700.0
- 20
-8330.0
- 30
-0.0
- 40
-105.0
-  1
-S1
-  7
-GYM
- 11
-9700.0
- 21
-8330.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-296
-330
-295
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-298
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_SENSOR
- 10
-10550.0
- 20
-1900.0
- 30
-0.0
-  0
-ATTRIB
-  5
-29A
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10550.0
- 20
-2130.0
- 30
-0.0
- 40
-105.0
-  1
-S2
-  7
-GYM
- 11
-10550.0
- 21
-2130.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-299
-330
-298
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-29B
-330
-17
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-100
-AcDbBlockReference
- 66
-1
-  2
-E_SENSOR
- 10
-7600.0
- 20
-9600.0
- 30
-0.0
-  0
-ATTRIB
-  5
-29D
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7600.0
- 20
-9830.0
- 30
-0.0
- 40
-105.0
-  1
-S3
-  7
-GYM
- 11
-7600.0
- 21
-9830.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-29C
-330
-29B
-100
-AcDbEntity
-  8
-E-AYD-ANAHTAR
-  0
-INSERT
-  5
-29E
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-9840.852182698492
- 20
-11890.659640008165
- 30
-0.0
-  0
-ATTRIB
-  5
-2A0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10035.852182698492
- 20
-11970.659640008165
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-10035.852182698492
- 21
-11970.659640008165
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2A1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10035.852182698492
- 20
-11810.659640008165
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-10035.852182698492
- 21
-11810.659640008165
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-29F
-330
-29E
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2A2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-10190.85265842413
- 20
-9453.940156367136
- 30
-0.0
-  0
-ATTRIB
-  5
-2A4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10385.85265842413
- 20
-9533.940156367136
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-10385.85265842413
- 21
-9533.940156367136
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2A5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10385.85265842413
- 20
-9373.940156367136
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-10385.85265842413
- 21
-9373.940156367136
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2A3
-330
-2A2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2A6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-8340.450219792305
- 20
-8667.758909301252
- 30
-0.0
-  0
-ATTRIB
-  5
-2A8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8535.450219792305
- 20
-8747.758909301252
- 30
-0.0
- 40
-105.0
-  1
-P3
-  7
-GYM
- 11
-8535.450219792305
- 21
-8747.758909301252
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2A9
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8535.450219792305
- 20
-8587.758909301252
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-8535.450219792305
- 21
-8587.758909301252
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2A7
-330
-2A6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2AA
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-8432.078846265757
- 20
-6365.311494026633
- 30
-0.0
-  0
-ATTRIB
-  5
-2AC
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8627.078846265757
- 20
-6445.311494026633
- 30
-0.0
- 40
-105.0
-  1
-P4
-  7
-GYM
- 11
-8627.078846265757
- 21
-6445.311494026633
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2AD
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8627.078846265757
- 20
-6285.311494026633
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-8627.078846265757
- 21
-6285.311494026633
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2AB
-330
-2AA
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2AE
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-8803.945161760605
- 20
-3931.8329923002943
- 30
-0.0
-  0
-ATTRIB
-  5
-2B0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8998.945161760605
- 20
-4011.8329923002943
- 30
-0.0
- 40
-105.0
-  1
-P5
-  7
-GYM
- 11
-8998.945161760605
- 21
-4011.8329923002943
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2B1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8998.945161760605
- 20
-3851.8329923002943
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-8998.945161760605
- 21
-3851.8329923002943
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2AF
-330
-2AE
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2B2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-9175.811477255449
- 20
-1498.354490573953
- 30
-0.0
-  0
-ATTRIB
-  5
-2B4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9370.811477255449
- 20
-1578.354490573953
- 30
-0.0
- 40
-105.0
-  1
-P6
-  7
-GYM
- 11
-9370.811477255449
- 21
-1578.354490573953
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2B5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9370.811477255449
- 20
-1418.354490573953
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-9370.811477255449
- 21
-1418.354490573953
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2B3
-330
-2B2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2B6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-7919.064104044617
- 20
-200.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2B8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8114.064104044617
- 20
-280.0
- 30
-0.0
- 40
-105.0
-  1
-P7
-  7
-GYM
- 11
-8114.064104044617
- 21
-280.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2B9
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8114.064104044617
- 20
-120.0
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-8114.064104044617
- 21
-120.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2B7
-330
-2B6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2BA
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-5457.3366262429045
- 20
-200.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2BC
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5652.3366262429045
- 20
-280.0
- 30
-0.0
- 40
-105.0
-  1
-P8
-  7
-GYM
- 11
-5652.3366262429045
- 21
-280.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2BD
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5652.3366262429045
- 20
-120.0
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-5652.3366262429045
- 21
-120.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2BB
-330
-2BA
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2BE
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-3118.9866405057937
- 20
-461.87775994889716
- 30
-0.0
-  0
-ATTRIB
-  5
-2C0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3313.9866405057937
- 20
-541.8777599488972
- 30
-0.0
- 40
-105.0
-  1
-P9
-  7
-GYM
- 11
-3313.9866405057937
- 21
-541.8777599488972
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2C1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3313.9866405057937
- 20
-381.87775994889716
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-3313.9866405057937
- 21
-381.87775994889716
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2BF
-330
-2BE
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2C2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-1519.7981614401474
- 20
-1308.8685398945172
- 30
-0.0
-  0
-ATTRIB
-  5
-2C4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1714.7981614401474
- 20
-1388.8685398945172
- 30
-0.0
- 40
-105.0
-  1
-P10
-  7
-GYM
- 11
-1714.7981614401474
- 21
-1388.8685398945172
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2C5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1714.7981614401474
- 20
-1228.8685398945172
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-1714.7981614401474
- 21
-1228.8685398945172
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2C3
-330
-2C2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2C6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-587.3713491065243
- 20
-3108.4110703457445
- 30
-0.0
-  0
-ATTRIB
-  5
-2C8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-782.3713491065243
- 20
-3188.4110703457445
- 30
-0.0
- 40
-105.0
-  1
-P11
-  7
-GYM
- 11
-782.3713491065243
- 21
-3188.4110703457445
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2C9
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-782.3713491065243
- 20
-3028.4110703457445
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-782.3713491065243
- 21
-3028.4110703457445
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2C7
-330
-2C6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2CA
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-333.8824397291235
- 20
-5557.05264227632
- 30
-0.0
-  0
-ATTRIB
-  5
-2CC
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-528.8824397291235
- 20
-5637.05264227632
- 30
-0.0
- 40
-105.0
-  1
-P12
-  7
-GYM
- 11
-528.8824397291235
- 21
-5637.05264227632
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2CD
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-528.8824397291235
- 20
-5477.05264227632
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-528.8824397291235
- 21
-5477.05264227632
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2CB
-330
-2CA
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2CE
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-1316.0328801361752
- 20
-7052.123371711188
- 30
-0.0
-  0
-ATTRIB
-  5
-2D0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1511.0328801361752
- 20
-7132.123371711188
- 30
-0.0
- 40
-105.0
-  1
-P13
-  7
-GYM
- 11
-1511.0328801361752
- 21
-7132.123371711188
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2D1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1511.0328801361752
- 20
-6972.123371711188
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-1511.0328801361752
- 21
-6972.123371711188
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2CF
-330
-2CE
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2D2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-2379.5732476341373
- 20
-8334.290561986998
- 30
-0.0
-  0
-ATTRIB
-  5
-2D4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2574.5732476341373
- 20
-8414.290561986998
- 30
-0.0
- 40
-105.0
-  1
-P14
-  7
-GYM
- 11
-2574.5732476341373
- 21
-8414.290561986998
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2D5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2574.5732476341373
- 20
-8254.290561986998
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-2574.5732476341373
- 21
-8254.290561986998
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2D3
-330
-2D2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2D6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-4827.313138145647
- 20
-8596.343234865375
- 30
-0.0
-  0
-ATTRIB
-  5
-2D8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5022.313138145647
- 20
-8676.343234865375
- 30
-0.0
- 40
-105.0
-  1
-P15
-  7
-GYM
- 11
-5022.313138145647
- 21
-8676.343234865375
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2D9
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5022.313138145647
- 20
-8516.343234865375
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-5022.313138145647
- 21
-8516.343234865375
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2D7
-330
-2D6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2DA
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-6505.803931092009
- 20
-9532.367792604684
- 30
-0.0
-  0
-ATTRIB
-  5
-2DC
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6700.803931092009
- 20
-9612.367792604684
- 30
-0.0
- 40
-105.0
-  1
-P16
-  7
-GYM
- 11
-6700.803931092009
- 21
-9612.367792604684
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2DD
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6700.803931092009
- 20
-9452.367792604684
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-6700.803931092009
- 21
-9452.367792604684
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2DB
-330
-2DA
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2DE
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-6125.896092853088
- 20
-11964.603843938638
- 30
-0.0
-  0
-ATTRIB
-  5
-2E0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6320.896092853088
- 20
-12044.603843938638
- 30
-0.0
- 40
-105.0
-  1
-P17
-  7
-GYM
- 11
-6320.896092853088
- 21
-12044.603843938638
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2E1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-6320.896092853088
- 20
-11884.603843938638
- 30
-0.0
- 40
-105.0
-  1
-P1
-  7
-GYM
- 11
-6320.896092853088
- 21
-11884.603843938638
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2DF
-330
-2DE
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2E2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-8150.826607399161
- 20
-12578.030329426054
- 30
-0.0
-  0
-ATTRIB
-  5
-2E4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8345.826607399162
- 20
-12658.030329426054
- 30
-0.0
- 40
-105.0
-  1
-P18
-  7
-GYM
- 11
-8345.826607399162
- 21
-12658.030329426054
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2E5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8345.826607399162
- 20
-12498.030329426054
- 30
-0.0
- 40
-105.0
-  1
-P2
-  7
-GYM
- 11
-8345.826607399162
- 21
-12498.030329426054
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2E3
-330
-2E2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2E6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-1950.0
- 20
-6350.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2E8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2145.0
- 20
-6430.0
- 30
-0.0
- 40
-105.0
-  1
-PB1
-  7
-GYM
- 11
-2145.0
- 21
-6430.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2E9
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2145.0
- 20
-6270.0
- 30
-0.0
- 40
-105.0
-  1
-P3
-  7
-GYM
- 11
-2145.0
- 21
-6270.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2E7
-330
-2E6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2EA
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-4700.0
- 20
-1050.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2EC
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-4895.0
- 20
-1130.0
- 30
-0.0
- 40
-105.0
-  1
-PK1
-  7
-GYM
- 11
-4895.0
- 21
-1130.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2ED
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-4895.0
- 20
-970.0
- 30
-0.0
- 40
-105.0
-  1
-P4
-  7
-GYM
- 11
-4895.0
- 21
-970.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2EB
-330
-2EA
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2EE
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-7300.0
- 20
-1050.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2F0
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7495.0
- 20
-1130.0
- 30
-0.0
- 40
-105.0
-  1
-PK2
-  7
-GYM
- 11
-7495.0
- 21
-1130.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2F1
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7495.0
- 20
-970.0
- 30
-0.0
- 40
-105.0
-  1
-P4
-  7
-GYM
- 11
-7495.0
- 21
-970.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2EF
-330
-2EE
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2F2
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ
- 10
-8300.0
- 20
-2550.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2F4
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8495.0
- 20
-2630.0
- 30
-0.0
- 40
-105.0
-  1
-PK3
-  7
-GYM
- 11
-8495.0
- 21
-2630.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2F5
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8495.0
- 20
-2470.0
- 30
-0.0
- 40
-105.0
-  1
-P4
-  7
-GYM
- 11
-8495.0
- 21
-2470.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-LINYE
- 70
-0
-  0
-SEQEND
-  5
-2F3
-330
-2F2
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2F6
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ_IP44
- 10
-9800.0
- 20
-7450.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2F8
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10005.0
- 20
-7530.0
- 30
-0.0
- 40
-105.0
-  1
-PI1
-  7
-GYM
- 11
-10005.0
- 21
-7530.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-2F7
-330
-2F6
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2F9
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-100
-AcDbBlockReference
- 66
-1
-  2
-E_PRIZ_IP44
- 10
-10450.0
- 20
-2750.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2FB
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10655.0
- 20
-2830.0
- 30
-0.0
- 40
-105.0
-  1
-PI2
-  7
-GYM
- 11
-10655.0
- 21
-2830.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-2FA
-330
-2F9
-100
-AcDbEntity
-  8
-E-KUVVET-PRIZ
-  0
-INSERT
-  5
-2FC
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_KLIMA_IC
- 10
-5950.0
- 20
-280.0
- 30
-0.0
-  0
-ATTRIB
-  5
-2FE
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5950.0
- 20
-495.0
- 30
-0.0
- 40
-120.0
-  1
-K1
-  7
-GYM
- 11
-5950.0
- 21
-495.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-2FF
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5950.0
- 20
-10.0
- 30
-0.0
- 40
-105.0
-  1
-1×16 A
-  7
-GYM
- 11
-5950.0
- 21
-10.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KAPASITE
- 70
-0
-  0
-SEQEND
-  5
-2FD
-330
-2FC
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-300
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_KLIMA_IC
- 10
-7950.0
- 20
-6950.0
- 30
-0.0
-  0
-ATTRIB
-  5
-302
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7950.0
- 20
-7165.0
- 30
-0.0
- 40
-120.0
-  1
-K2
-  7
-GYM
- 11
-7950.0
- 21
-7165.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-303
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7950.0
- 20
-6680.0
- 30
-0.0
- 40
-105.0
-  1
-1×16 A
-  7
-GYM
- 11
-7950.0
- 21
-6680.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KAPASITE
- 70
-0
-  0
-SEQEND
-  5
-301
-330
-300
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-304
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_KLIMA_IC
- 10
-1300.0
- 20
-7350.0
- 30
-0.0
-  0
-ATTRIB
-  5
-306
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1300.0
- 20
-7565.0
- 30
-0.0
- 40
-120.0
-  1
-K3
-  7
-GYM
- 11
-1300.0
- 21
-7565.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-307
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1300.0
- 20
-7080.0
- 30
-0.0
- 40
-105.0
-  1
-1×16 A
-  7
-GYM
- 11
-1300.0
- 21
-7080.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KAPASITE
- 70
-0
-  0
-SEQEND
-  5
-305
-330
-304
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-308
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_KLIMA_IC
- 10
-7050.0
- 20
-11900.0
- 30
-0.0
-  0
-ATTRIB
-  5
-30A
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7050.0
- 20
-12115.0
- 30
-0.0
- 40
-120.0
-  1
-K4
-  7
-GYM
- 11
-7050.0
- 21
-12115.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-30B
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7050.0
- 20
-11630.0
- 30
-0.0
- 40
-105.0
-  1
-1×16 A
-  7
-GYM
- 11
-7050.0
- 21
-11630.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KAPASITE
- 70
-0
-  0
-SEQEND
-  5
-309
-330
-308
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-30C
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_ISITICI
- 10
-9700.0
- 20
-7600.0
- 30
-0.0
-  0
-ATTRIB
-  5
-30E
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9700.0
- 20
-7825.0
- 30
-0.0
- 40
-120.0
-  1
-SI-1
-  7
-GYM
- 11
-9700.0
- 21
-7825.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-30F
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9700.0
- 20
-7315.0
- 30
-0.0
- 40
-105.0
-  1
-1×32 A
-  7
-GYM
- 11
-9700.0
- 21
-7315.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-GUC
- 70
-0
-  0
-SEQEND
-  5
-30D
-330
-30C
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-310
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_ISITICI
- 10
-10550.0
- 20
-2150.0
- 30
-0.0
-  0
-ATTRIB
-  5
-312
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10550.0
- 20
-2375.0
- 30
-0.0
- 40
-120.0
-  1
-SI-2
-  7
-GYM
- 11
-10550.0
- 21
-2375.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-313
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-10550.0
- 20
-1865.0
- 30
-0.0
- 40
-105.0
-  1
-1×32 A
-  7
-GYM
- 11
-10550.0
- 21
-1865.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-GUC
- 70
-0
-  0
-SEQEND
-  5
-311
-330
-310
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-314
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_FAN
- 10
-1200.0
- 20
-7050.0
- 30
-0.0
-  0
-ATTRIB
-  5
-316
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1200.0
- 20
-7260.0
- 30
-0.0
- 40
-120.0
-  1
-F-TH
-  7
-GYM
- 11
-1200.0
- 21
-7260.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-317
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1200.0
- 20
-6780.0
- 30
-0.0
- 40
-105.0
-  1
-1×10 A
-  7
-GYM
- 11
-1200.0
- 21
-6780.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-TANIM
- 70
-0
-  0
-SEQEND
-  5
-315
-330
-314
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-318
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_FAN
- 10
-1250.0
- 20
-1950.0
- 30
-0.0
-  0
-ATTRIB
-  5
-31A
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1250.0
- 20
-2160.0
- 30
-0.0
- 40
-120.0
-  1
-F-EG
-  7
-GYM
- 11
-1250.0
- 21
-2160.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-31B
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1250.0
- 20
-1680.0
- 30
-0.0
- 40
-105.0
-  1
-1×10 A
-  7
-GYM
- 11
-1250.0
- 21
-1680.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-TANIM
- 70
-0
-  0
-SEQEND
-  5
-319
-330
-318
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-31C
-330
-17
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-100
-AcDbBlockReference
- 66
-1
-  2
-M_FAN
- 10
-9450.0
- 20
-5400.0
- 30
-0.0
-  0
-ATTRIB
-  5
-31E
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9450.0
- 20
-5610.0
- 30
-0.0
- 40
-120.0
-  1
-F-IS
-  7
-GYM
- 11
-9450.0
- 21
-5610.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-ATTRIB
-  5
-31F
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-9450.0
- 20
-5130.0
- 30
-0.0
- 40
-105.0
-  1
-1×10 A
-  7
-GYM
- 11
-9450.0
- 21
-5130.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-TANIM
- 70
-0
-  0
-SEQEND
-  5
-31D
-330
-31C
-100
-AcDbEntity
-  8
-E-KUVVET-CIHAZ
-  0
-INSERT
-  5
-320
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-100
-AcDbBlockReference
- 66
-1
-  2
-E_KAMERA
- 10
-1350.0
- 20
-6600.0
- 30
-0.0
-  0
-ATTRIB
-  5
-322
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1350.0
- 20
-6810.0
- 30
-0.0
- 40
-105.0
-  1
-C1
-  7
-GYM
- 11
-1350.0
- 21
-6810.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-321
-330
-320
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-  0
-INSERT
-  5
-323
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-100
-AcDbBlockReference
- 66
-1
-  2
-E_KAMERA
- 10
-3050.0
- 20
-7950.0
- 30
-0.0
-  0
-ATTRIB
-  5
-325
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-3050.0
- 20
-8160.0
- 30
-0.0
- 40
-105.0
-  1
-C2
-  7
-GYM
- 11
-3050.0
- 21
-8160.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-324
-330
-323
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-  0
-INSERT
-  5
-326
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-100
-AcDbBlockReference
- 66
-1
-  2
-E_KAMERA
- 10
-8150.0
- 20
-6400.0
- 30
-0.0
-  0
-ATTRIB
-  5
-328
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8150.0
- 20
-6610.0
- 30
-0.0
- 40
-105.0
-  1
-C3
-  7
-GYM
- 11
-8150.0
- 21
-6610.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-327
-330
-326
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-  0
-INSERT
-  5
-329
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-100
-AcDbBlockReference
- 66
-1
-  2
-E_KAMERA
- 10
-4400.0
- 20
-750.0
- 30
-0.0
-  0
-ATTRIB
-  5
-32B
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-4400.0
- 20
-960.0
- 30
-0.0
- 40
-105.0
-  1
-C4
-  7
-GYM
- 11
-4400.0
- 21
-960.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-32A
-330
-329
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-  0
-INSERT
-  5
-32C
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-100
-AcDbBlockReference
- 66
-1
-  2
-E_KAMERA
- 10
-7350.0
- 20
-9850.0
- 30
-0.0
-  0
-ATTRIB
-  5
-32E
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7350.0
- 20
-10060.0
- 30
-0.0
- 40
-105.0
-  1
-C5
-  7
-GYM
- 11
-7350.0
- 21
-10060.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-32D
-330
-32C
-100
-AcDbEntity
-  8
-E-ZAYIF-KAMERA
-  0
-INSERT
-  5
-32F
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-2200.0
- 20
-5200.0
- 30
-0.0
-  0
-ATTRIB
-  5
-331
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-2200.0
- 20
-5530.0
- 30
-0.0
- 40
-105.0
-  1
-H1
-  7
-GYM
- 11
-2200.0
- 21
-5530.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-330
-330
-32F
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-332
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-5300.0
- 20
-6900.0
- 30
-0.0
-  0
-ATTRIB
-  5
-334
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-5300.0
- 20
-7230.0
- 30
-0.0
- 40
-105.0
-  1
-H2
-  7
-GYM
- 11
-5300.0
- 21
-7230.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-333
-330
-332
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-335
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-7550.0
- 20
-5400.0
- 30
-0.0
-  0
-ATTRIB
-  5
-337
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7550.0
- 20
-5730.0
- 30
-0.0
- 40
-105.0
-  1
-H3
-  7
-GYM
- 11
-7550.0
- 21
-5730.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-336
-330
-335
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-338
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-4100.0
- 20
-2100.0
- 30
-0.0
-  0
-ATTRIB
-  5
-33A
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-4100.0
- 20
-2430.0
- 30
-0.0
- 40
-105.0
-  1
-H4
-  7
-GYM
- 11
-4100.0
- 21
-2430.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-339
-330
-338
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-33B
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-7600.0
- 20
-2300.0
- 30
-0.0
-  0
-ATTRIB
-  5
-33D
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-7600.0
- 20
-2630.0
- 30
-0.0
- 40
-105.0
-  1
-H5
-  7
-GYM
- 11
-7600.0
- 21
-2630.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-33C
-330
-33B
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-33E
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-100
-AcDbBlockReference
- 66
-1
-  2
-E_HOPARLOR
- 10
-8050.000000000001
- 20
-10900.0
- 30
-0.0
-  0
-ATTRIB
-  5
-340
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-8050.000000000001
- 20
-11230.0
- 30
-0.0
- 40
-105.0
-  1
-H6
-  7
-GYM
- 11
-8050.000000000001
- 21
-11230.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
-33F
-330
-33E
-100
-AcDbEntity
-  8
-E-ZAYIF-SES
-  0
-INSERT
-  5
-341
-330
-17
-100
-AcDbEntity
-  8
-E-ZAYIF-VERI
-100
-AcDbBlockReference
- 66
-1
-  2
-E_VERI
- 10
-1950.0
- 20
-6200.0
- 30
-0.0
-  0
-ATTRIB
-  5
-343
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-1950.0
- 20
-6430.0
- 30
-0.0
- 40
-105.0
-  1
-D1
-  7
-GYM
- 11
-1950.0
- 21
-6430.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-KOD
- 70
-0
-  0
-SEQEND
-  5
 342
 330
 341
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-DOWNLIGHT
   0
 INSERT
   5
@@ -29611,17 +30699,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_VERI
+E_ACIL
  10
-1950.0
+1500.0
  20
-6050.0
+4050.0
  30
 0.0
   0
@@ -29637,21 +30725,21 @@ AcDbEntity
 100
 AcDbText
  10
-1950.0
+1500.0
  20
-6280.0
+4280.0
  30
 0.0
  40
 105.0
   1
-D2
+AA1
   7
 GYM
  11
-1950.0
+1500.0
  21
-6280.0
+4280.0
  31
 0.0
 100
@@ -29669,7 +30757,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
   0
 INSERT
   5
@@ -29679,17 +30767,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_VERI
+E_ACIL
  10
-4600.0
+4050.0
  20
-6600.0
+1400.0
  30
 0.0
   0
@@ -29705,21 +30793,21 @@ AcDbEntity
 100
 AcDbText
  10
-4600.0
+4050.0
  20
-6830.0
+1630.0
  30
 0.0
  40
 105.0
   1
-AP1
+AA2
   7
 GYM
  11
-4600.0
+4050.0
  21
-6830.0
+1630.0
  31
 0.0
 100
@@ -29737,7 +30825,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
   0
 INSERT
   5
@@ -29747,17 +30835,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_VERI
+E_ACIL
  10
-7900.0
+5650.0
  20
-9800.0
+7550.0
  30
 0.0
   0
@@ -29773,21 +30861,21 @@ AcDbEntity
 100
 AcDbText
  10
-7900.0
+5650.0
  20
-10030.0
+7780.0
  30
 0.0
  40
 105.0
   1
-AP2
+AA3
   7
 GYM
  11
-7900.0
+5650.0
  21
-10030.0
+7780.0
  31
 0.0
 100
@@ -29805,7 +30893,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-VERI
+E-AYD-ACIL
   0
 INSERT
   5
@@ -29815,17 +30903,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_ACIL
  10
-2550.0
+8600.0
  20
-6050.0
+10300.0
  30
 0.0
   0
@@ -29841,21 +30929,21 @@ AcDbEntity
 100
 AcDbText
  10
-2550.0
+8600.0
  20
-6290.0
+10530.0
  30
 0.0
  40
 105.0
   1
-Y1
+AA4
   7
 GYM
  11
-2550.0
+8600.0
  21
-6290.0
+10530.0
  31
 0.0
 100
@@ -29873,7 +30961,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
   0
 INSERT
   5
@@ -29883,17 +30971,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_ACIL
  10
-5300.0
+9200.0
  20
-7200.0
+5950.0
  30
 0.0
   0
@@ -29909,21 +30997,21 @@ AcDbEntity
 100
 AcDbText
  10
-5300.0
+9200.0
  20
-7440.0
+6180.0
  30
 0.0
  40
 105.0
   1
-Y2
+AA5
   7
 GYM
  11
-5300.0
+9200.0
  21
-7440.0
+6180.0
  31
 0.0
 100
@@ -29941,7 +31029,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
   0
 INSERT
   5
@@ -29951,19 +31039,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_YONLENDIRME
  10
-7700.0
+359.0
  20
-4400.0
+4930.0
  30
 0.0
+ 50
+275.9
   0
 ATTRIB
   5
@@ -29977,21 +31067,21 @@ AcDbEntity
 100
 AcDbText
  10
-7700.0
+562.9140775090207
  20
-4640.0
+4951.072470041386
  30
 0.0
  40
 105.0
   1
-Y3
+AY1
   7
 GYM
  11
-7700.0
+562.9140775090207
  21
-4640.0
+4951.072470041386
  31
 0.0
 100
@@ -30009,7 +31099,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
   0
 INSERT
   5
@@ -30019,17 +31109,17 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_YONLENDIRME
  10
-4600.0
+3600.0
  20
-1650.0
+160.0
  30
 0.0
   0
@@ -30045,21 +31135,21 @@ AcDbEntity
 100
 AcDbText
  10
-4600.0
+3600.0
  20
-1890.0
+365.0
  30
 0.0
  40
 105.0
   1
-Y4
+AY2
   7
 GYM
  11
-4600.0
+3600.0
  21
-1890.0
+365.0
  31
 0.0
 100
@@ -30077,7 +31167,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
   0
 INSERT
   5
@@ -30087,19 +31177,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_YONLENDIRME
  10
-7850.0
+6024.0
  20
-11100.0
+8765.0
  30
 0.0
+ 50
+186.1
   0
 ATTRIB
   5
@@ -30113,21 +31205,21 @@ AcDbEntity
 100
 AcDbText
  10
-7850.0
+6045.7841346239275
  20
-11340.0
+8561.160721452694
  30
 0.0
  40
 105.0
   1
-Y5
+AY3
   7
 GYM
  11
-7850.0
+6045.7841346239275
  21
-11340.0
+8561.160721452694
  31
 0.0
 100
@@ -30145,7 +31237,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ACIL
   0
 INSERT
   5
@@ -30155,19 +31247,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
 100
 AcDbBlockReference
  66
 1
   2
-E_DEDEKTOR
+E_ANAHTAR
  10
-9600.0
+412.0
  20
-6700.0
+4412.0
  30
 0.0
+ 50
+275.9
   0
 ATTRIB
   5
@@ -30181,21 +31275,21 @@ AcDbEntity
 100
 AcDbText
  10
-9600.0
+650.7286761081218
  20
-6940.0
+4436.670208828939
  30
 0.0
  40
 105.0
   1
-Y6
+A1
   7
 GYM
  11
-9600.0
+650.7286761081218
  21
-6940.0
+4436.670208828939
  31
 0.0
 100
@@ -30213,7 +31307,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
   0
 INSERT
   5
@@ -30223,19 +31317,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
 100
 AcDbBlockReference
  66
 1
   2
-E_YANGIN_BUTON
+E_ANAHTAR
  10
-850.0
+1097.0
  20
-3350.0
+7959.0
  30
 0.0
+ 50
+281.1
   0
 ATTRIB
   5
@@ -30249,21 +31345,21 @@ AcDbEntity
 100
 AcDbText
  10
-850.0
+1332.5102393581387
  20
-3580.0
+8005.205271966218
  30
 0.0
  40
 105.0
   1
-YB1
+A2
   7
 GYM
  11
-850.0
+1332.5102393581387
  21
-3580.0
+8005.205271966218
  31
 0.0
 100
@@ -30281,7 +31377,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
   0
 INSERT
   5
@@ -30291,19 +31387,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
 100
 AcDbBlockReference
  66
 1
   2
-E_YANGIN_BUTON
+E_ANAHTAR
  10
-3600.0
+5577.0
  20
-600.0
+8717.0
  30
 0.0
+ 50
+186.1
   0
 ATTRIB
   5
@@ -30317,21 +31415,21 @@ AcDbEntity
 100
 AcDbText
  10
-3600.0
+5602.503377120696
  20
-830.0
+8478.35889340803
  30
 0.0
  40
 105.0
   1
-YB2
+A3
   7
 GYM
  11
-3600.0
+5602.503377120696
  21
-830.0
+8478.35889340803
  31
 0.0
 100
@@ -30349,7 +31447,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
   0
 INSERT
   5
@@ -30359,19 +31457,21 @@ INSERT
 100
 AcDbEntity
   8
-E-ZAYIF-YANGIN
+E-AYD-ANAHTAR
 100
 AcDbBlockReference
  66
 1
   2
-E_YANGIN_BUTON
+E_ANAHTAR
  10
-2250.0
+6401.0
  20
-7300.0
+9942.0
  30
 0.0
+ 50
+278.9
   0
 ATTRIB
   5
@@ -30385,21 +31485,21 @@ AcDbEntity
 100
 AcDbText
  10
-2250.0
+6638.110367784653
  20
-7530.0
+9979.130492711873
  30
 0.0
  40
-105.0
+104.99999999999999
   1
-SR1
+A4
   7
 GYM
  11
-2250.0
+6638.110367784653
  21
-7530.0
+9979.130492711873
  31
 0.0
 100
@@ -30417,11 +31517,5271 @@ SEQEND
 100
 AcDbEntity
   8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+368
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ANAHTAR
+ 10
+4050.0
+ 20
+160.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+36A
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+4050.0
+ 20
+400.0
+ 30
+0.0
+ 40
+105.0
+  1
+A5
+  7
+GYM
+ 11
+4050.0
+ 21
+400.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+369
+330
+368
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+36B
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ANAHTAR
+ 10
+8842.0
+ 20
+8356.0
+ 30
+0.0
+ 50
+188.2
+  0
+ATTRIB
+  5
+36D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8876.230944089322
+ 20
+8118.453704582131
+ 30
+0.0
+ 40
+105.0
+  1
+A6
+  7
+GYM
+ 11
+8876.230944089322
+ 21
+8118.453704582131
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+36C
+330
+36B
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+36E
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_ANAHTAR
+ 10
+8779.0
+ 20
+4359.0
+ 30
+0.0
+ 50
+278.1
+  0
+ATTRIB
+  5
+370
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9016.605677851974
+ 20
+4392.816295665019
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+A7
+  7
+GYM
+ 11
+9016.605677851974
+ 21
+4392.816295665019
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+36F
+330
+36E
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+371
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_SENSOR
+ 10
+9980.0
+ 20
+7340.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+373
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9980.0
+ 20
+7570.0
+ 30
+0.0
+ 40
+105.0
+  1
+S1
+  7
+GYM
+ 11
+9980.0
+ 21
+7570.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+372
+330
+371
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+374
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_SENSOR
+ 10
+10250.0
+ 20
+2050.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+376
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10250.0
+ 20
+2280.0
+ 30
+0.0
+ 40
+105.0
+  1
+S2
+  7
+GYM
+ 11
+10250.0
+ 21
+2280.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+375
+330
+374
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+377
+330
+17
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_SENSOR
+ 10
+7100.0
+ 20
+9550.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+379
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7100.0
+ 20
+9780.0
+ 30
+0.0
+ 40
+105.0
+  1
+S3
+  7
+GYM
+ 11
+7100.0
+ 21
+9780.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+378
+330
+377
+100
+AcDbEntity
+  8
+E-AYD-ANAHTAR
+  0
+INSERT
+  5
+37A
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+9909.0
+ 20
+11699.0
+ 30
+0.0
+ 50
+98.2
+  0
+ATTRIB
+  5
+37C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9802.005259454801
+ 20
+11880.596050330578
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+9802.005259454801
+ 21
+11880.596050330578
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+37D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9960.369456400049
+ 20
+11903.41667972346
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+9960.369456400049
+ 21
+11903.41667972346
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+37B
+330
+37A
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+37E
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+10040.0
+ 20
+8869.0
+ 30
+0.0
+ 50
+8.1
+  0
+ATTRIB
+  5
+380
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10221.782514699722
+ 20
+8975.677632845152
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P2
+  7
+GYM
+ 11
+10221.782514699722
+ 21
+8975.677632845152
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+381
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10244.326711809736
+ 20
+8817.273847610504
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P2
+  7
+GYM
+ 11
+10244.326711809736
+ 21
+8817.273847610504
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+37F
+330
+37E
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+382
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+8260.0
+ 20
+7758.0
+ 30
+0.0
+ 50
+98.7
+  0
+ATTRIB
+  5
+384
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8151.424629107098
+ 20
+7938.655442307916
+ 30
+0.0
+ 40
+105.0
+  1
+P3
+  7
+GYM
+ 11
+8151.424629107098
+ 21
+7938.655442307916
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+385
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8309.583650996487
+ 20
+7962.857173547471
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+8309.583650996487
+ 21
+7962.857173547471
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+383
+330
+382
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+386
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+8970.0
+ 20
+5062.0
+ 30
+0.0
+ 50
+98.7
+  0
+ATTRIB
+  5
+388
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8861.424629107098
+ 20
+5242.655442307916
+ 30
+0.0
+ 40
+105.0
+  1
+P4
+  7
+GYM
+ 11
+8861.424629107098
+ 21
+5242.655442307916
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+389
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9019.583650996487
+ 20
+5266.857173547471
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+9019.583650996487
+ 21
+5266.857173547471
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+387
+330
+386
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+38A
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+9363.0
+ 20
+2321.0
+ 30
+0.0
+ 50
+98.7
+  0
+ATTRIB
+  5
+38C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9254.424629107098
+ 20
+2501.6554423079156
+ 30
+0.0
+ 40
+105.0
+  1
+P5
+  7
+GYM
+ 11
+9254.424629107098
+ 21
+2501.6554423079156
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+38D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9412.583650996487
+ 20
+2525.8571735474707
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+9412.583650996487
+ 21
+2525.8571735474707
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+38B
+330
+38A
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+38E
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+8399.0
+ 20
+160.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+390
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8594.0
+ 20
+240.0
+ 30
+0.0
+ 40
+105.0
+  1
+P6
+  7
+GYM
+ 11
+8594.0
+ 21
+240.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+391
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8594.0
+ 20
+80.0
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+8594.0
+ 21
+80.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+38F
+330
+38E
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+392
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+6050.0
+ 20
+160.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+394
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6245.0
+ 20
+240.0
+ 30
+0.0
+ 40
+105.0
+  1
+P7
+  7
+GYM
+ 11
+6245.0
+ 21
+240.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+395
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6245.0
+ 20
+80.0
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+6245.0
+ 21
+80.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+393
+330
+392
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+396
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+3002.0
+ 20
+541.0
+ 30
+0.0
+ 50
+309.5
+  0
+ATTRIB
+  5
+398
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3187.7652196251815
+ 20
+441.41946386161567
+ 30
+0.0
+ 40
+105.0
+  1
+P8
+  7
+GYM
+ 11
+3187.7652196251815
+ 21
+441.41946386161567
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+399
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3064.3052862831464
+ 20
+339.6469486171735
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+3064.3052862831464
+ 21
+339.6469486171735
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+397
+330
+396
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+39A
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+1076.0
+ 20
+1335.0
+ 30
+0.0
+ 50
+351.5
+  0
+ATTRIB
+  5
+39C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1280.6828462459425
+ 20
+1385.2984338986794
+ 30
+0.0
+ 40
+105.0
+  1
+P9
+  7
+GYM
+ 11
+1280.6828462459425
+ 21
+1385.2984338986794
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+39D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1257.033340465205
+ 20
+1227.0558957607725
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+1257.033340465205
+ 21
+1227.0558957607725
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+39B
+330
+39A
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+39E
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+470.0
+ 20
+3851.0
+ 30
+0.0
+ 50
+275.9
+  0
+ATTRIB
+  5
+3A0
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+569.620770042887
+ 20
+3665.2563536051307
+ 30
+0.0
+ 40
+105.0
+  1
+P10
+  7
+GYM
+ 11
+569.620770042887
+ 21
+3665.2563536051307
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3A1
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+410.46831930413913
+ 20
+3648.8095477191714
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+410.46831930413913
+ 21
+3648.8095477191714
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+39F
+330
+39E
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3A2
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+185.0
+ 20
+6606.0
+ 30
+0.0
+ 50
+275.9
+  0
+ATTRIB
+  5
+3A4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+284.620770042887
+ 20
+6420.256353605131
+ 30
+0.0
+ 40
+105.0
+  1
+P11
+  7
+GYM
+ 11
+284.620770042887
+ 21
+6420.256353605131
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3A5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+125.46831930413911
+ 20
+6403.809547719171
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+125.46831930413911
+ 21
+6403.809547719171
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3A3
+330
+3A2
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3A6
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+1104.0
+ 20
+8238.0
+ 30
+0.0
+ 50
+186.1
+  0
+ATTRIB
+  5
+3A8
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+918.6052266009237
+ 20
+8137.731470558778
+ 30
+0.0
+ 40
+105.0
+  1
+P12
+  7
+GYM
+ 11
+918.6052266009237
+ 21
+8137.731470558778
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3A9
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+901.6029751871265
+ 20
+8296.825541620092
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+901.6029751871265
+ 21
+8296.825541620092
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3A7
+330
+3A6
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3AA
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+4040.0
+ 20
+8552.0
+ 30
+0.0
+ 50
+186.1
+  0
+ATTRIB
+  5
+3AC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3854.6052266009237
+ 20
+8451.731470558778
+ 30
+0.0
+ 40
+105.0
+  1
+P13
+  7
+GYM
+ 11
+3854.6052266009237
+ 21
+8451.731470558778
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3AD
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3837.6029751871265
+ 20
+8610.825541620092
+ 30
+0.0
+ 40
+105.0
+  1
+P1
+  7
+GYM
+ 11
+3837.6029751871265
+ 21
+8610.825541620092
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3AB
+330
+3AA
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3AE
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+6540.0
+ 20
+9052.0
+ 30
+0.0
+ 50
+278.9
+  0
+ATTRIB
+  5
+3B0
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6649.205314589947
+ 20
+8871.724657078927
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P14
+  7
+GYM
+ 11
+6649.205314589947
+ 21
+8871.724657078927
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3B1
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6491.131736066845
+ 20
+8846.97099527101
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P2
+  7
+GYM
+ 11
+6491.131736066845
+ 21
+8846.97099527101
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3AF
+330
+3AE
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3B2
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+6113.0
+ 20
+11788.0
+ 30
+0.0
+ 50
+278.9
+  0
+ATTRIB
+  5
+3B4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6222.205314589947
+ 20
+11607.724657078927
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P15
+  7
+GYM
+ 11
+6222.205314589947
+ 21
+11607.724657078927
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3B5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6064.131736066845
+ 20
+11582.97099527101
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+P1
+  7
+GYM
+ 11
+6064.131736066845
+ 21
+11582.97099527101
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3B3
+330
+3B2
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3B6
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+8280.0
+ 20
+12634.0
+ 30
+0.0
+ 50
+186.9
+  0
+ATTRIB
+  5
+3B8
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8096.02326543053
+ 20
+12531.152729072888
+ 30
+0.0
+ 40
+105.0
+  1
+P16
+  7
+GYM
+ 11
+8096.02326543053
+ 21
+12531.152729072888
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3B9
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8076.801371216987
+ 20
+12689.9939037816
+ 30
+0.0
+ 40
+105.0
+  1
+P2
+  7
+GYM
+ 11
+8076.801371216987
+ 21
+12689.9939037816
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3B7
+330
+3B6
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3BA
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+1920.0
+ 20
+6200.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+3BC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+2115.0
+ 20
+6280.0
+ 30
+0.0
+ 40
+105.0
+  1
+PB1
+  7
+GYM
+ 11
+2115.0
+ 21
+6280.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3BD
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+2115.0
+ 20
+6120.0
+ 30
+0.0
+ 40
+105.0
+  1
+P3
+  7
+GYM
+ 11
+2115.0
+ 21
+6120.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3BB
+330
+3BA
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3BE
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+4700.0
+ 20
+1020.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+3C0
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+4895.0
+ 20
+1100.0
+ 30
+0.0
+ 40
+105.0
+  1
+PK1
+  7
+GYM
+ 11
+4895.0
+ 21
+1100.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3C1
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+4895.0
+ 20
+940.0
+ 30
+0.0
+ 40
+105.0
+  1
+P4
+  7
+GYM
+ 11
+4895.0
+ 21
+940.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3BF
+330
+3BE
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3C2
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+7300.0
+ 20
+1020.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+3C4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7495.0
+ 20
+1100.0
+ 30
+0.0
+ 40
+105.0
+  1
+PK2
+  7
+GYM
+ 11
+7495.0
+ 21
+1100.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3C5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7495.0
+ 20
+940.0
+ 30
+0.0
+ 40
+105.0
+  1
+P4
+  7
+GYM
+ 11
+7495.0
+ 21
+940.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3C3
+330
+3C2
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3C6
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ
+ 10
+8620.0
+ 20
+2620.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+3C8
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8815.0
+ 20
+2700.0
+ 30
+0.0
+ 40
+105.0
+  1
+PK3
+  7
+GYM
+ 11
+8815.0
+ 21
+2700.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3C9
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8815.0
+ 20
+2540.0
+ 30
+0.0
+ 40
+105.0
+  1
+P4
+  7
+GYM
+ 11
+8815.0
+ 21
+2540.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+LINYE
+ 70
+0
+  0
+SEQEND
+  5
+3C7
+330
+3C6
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3CA
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ_IP44
+ 10
+10483.0
+ 20
+7547.0
+ 30
+0.0
+ 50
+98.1
+  0
+ATTRIB
+  5
+3CC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10374.913354835471
+ 20
+7738.682751276888
+ 30
+0.0
+ 40
+105.0
+  1
+PI1
+  7
+GYM
+ 11
+10374.913354835471
+ 21
+7738.682751276888
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3CB
+330
+3CA
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3CD
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_PRIZ_IP44
+ 10
+11152.0
+ 20
+2850.0
+ 30
+0.0
+ 50
+98.1
+  0
+ATTRIB
+  5
+3CF
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+11043.913354835471
+ 20
+3041.6827512768878
+ 30
+0.0
+ 40
+105.0
+  1
+PI2
+  7
+GYM
+ 11
+11043.913354835471
+ 21
+3041.6827512768878
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3CE
+330
+3CD
+100
+AcDbEntity
+  8
+E-KUVVET-PRIZ
+  0
+INSERT
+  5
+3D0
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_KLIMA_IC
+ 10
+6850.0
+ 20
+180.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+3D2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6850.0
+ 20
+395.0
+ 30
+0.0
+ 40
+120.0
+  1
+K1
+  7
+GYM
+ 11
+6850.0
+ 21
+395.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3D3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6850.0
+ 20
+-90.0
+ 30
+0.0
+ 40
+105.0
+  1
+1×16 A
+  7
+GYM
+ 11
+6850.0
+ 21
+-90.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KAPASITE
+ 70
+0
+  0
+SEQEND
+  5
+3D1
+330
+3D0
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3D4
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_KLIMA_IC
+ 10
+8354.0
+ 20
+7012.0
+ 30
+0.0
+ 50
+98.7
+  0
+ATTRIB
+  5
+3D6
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8141.473814336133
+ 20
+6979.478923646848
+ 30
+0.0
+ 40
+120.0
+  1
+K2
+  7
+GYM
+ 11
+8141.473814336133
+ 21
+6979.478923646848
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3D7
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8620.893349438345
+ 20
+7052.840421466749
+ 30
+0.0
+ 40
+105.0
+  1
+1×16 A
+  7
+GYM
+ 11
+8620.893349438345
+ 21
+7052.840421466749
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KAPASITE
+ 70
+0
+  0
+SEQEND
+  5
+3D5
+330
+3D4
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3D8
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_KLIMA_IC
+ 10
+1239.0
+ 20
+7338.0
+ 30
+0.0
+ 50
+281.1
+  0
+ATTRIB
+  5
+3DA
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1449.9779227583326
+ 20
+7379.392222803071
+ 30
+0.0
+ 40
+120.0
+  1
+K3
+  7
+GYM
+ 11
+1449.9779227583326
+ 21
+7379.392222803071
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3DB
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+974.0509807220938
+ 20
+7286.019069038005
+ 30
+0.0
+ 40
+105.0
+  1
+1×16 A
+  7
+GYM
+ 11
+974.0509807220938
+ 21
+7286.019069038005
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KAPASITE
+ 70
+0
+  0
+SEQEND
+  5
+3D9
+330
+3D8
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3DC
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_KLIMA_IC
+ 10
+6982.0
+ 20
+12456.0
+ 30
+0.0
+ 50
+186.9
+  0
+ATTRIB
+  5
+3DE
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7007.829420349449
+ 20
+12242.557171485169
+ 30
+0.0
+ 40
+120.0
+  1
+K4
+  7
+GYM
+ 11
+7007.829420349449
+ 21
+12242.557171485169
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3DF
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+6949.563053514646
+ 20
+12724.044482320951
+ 30
+0.0
+ 40
+105.0
+  1
+1×16 A
+  7
+GYM
+ 11
+6949.563053514646
+ 21
+12724.044482320951
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KAPASITE
+ 70
+0
+  0
+SEQEND
+  5
+3DD
+330
+3DC
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3E0
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_ISITICI
+ 10
+10470.0
+ 20
+7710.0
+ 30
+0.0
+ 50
+98.1
+  0
+ATTRIB
+  5
+3E2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10247.244677013774
+ 20
+7678.297222814044
+ 30
+0.0
+ 40
+120.0
+  1
+SI-1
+  7
+GYM
+ 11
+10247.244677013774
+ 21
+7678.297222814044
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3E3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10752.156742449219
+ 20
+7750.156851102211
+ 30
+0.0
+ 40
+105.0
+  1
+1×32 A
+  7
+GYM
+ 11
+10752.156742449219
+ 21
+7750.156851102211
+ 31
+0.0
+100
+AcDbAttribute
+  2
+GUC
+ 70
+0
+  0
+SEQEND
+  5
+3E1
+330
+3E0
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3E4
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_ISITICI
+ 10
+10395.0
+ 20
+1692.0
+ 30
+0.0
+ 50
+2.0
+  0
+ATTRIB
+  5
+3E6
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10387.147613241938
+ 20
+1916.8629360792966
+ 30
+0.0
+ 40
+120.0
+  1
+SI-2
+  7
+GYM
+ 11
+10387.147613241938
+ 21
+1916.8629360792966
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3E7
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10404.946356560213
+ 20
+1407.1736142995578
+ 30
+0.0
+ 40
+105.0
+  1
+1×32 A
+  7
+GYM
+ 11
+10404.946356560213
+ 21
+1407.1736142995578
+ 31
+0.0
+100
+AcDbAttribute
+  2
+GUC
+ 70
+0
+  0
+SEQEND
+  5
+3E5
+330
+3E4
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3E8
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_FAN
+ 10
+1200.0
+ 20
+7050.0
+ 30
+0.0
+ 50
+101.1
+  0
+ATTRIB
+  5
+3EA
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+993.9285405616286
+ 20
+7009.570387029559
+ 30
+0.0
+ 40
+120.0
+  1
+F-TH
+  7
+GYM
+ 11
+993.9285405616286
+ 21
+7009.570387029559
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3EB
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1464.9490192779062
+ 20
+7101.980930961995
+ 30
+0.0
+ 40
+105.0
+  1
+1×10 A
+  7
+GYM
+ 11
+1464.9490192779062
+ 21
+7101.980930961995
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TANIM
+ 70
+0
+  0
+SEQEND
+  5
+3E9
+330
+3E8
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3EC
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_FAN
+ 10
+1250.0
+ 20
+1950.0
+ 30
+0.0
+ 50
+95.9
+  0
+ATTRIB
+  5
+3EE
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1041.1124084053934
+ 20
+1928.4135672746781
+ 30
+0.0
+ 40
+120.0
+  1
+F-EG
+  7
+GYM
+ 11
+1041.1124084053934
+ 21
+1928.4135672746781
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3EF
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1518.569760621637
+ 20
+1977.7539849325567
+ 30
+0.0
+ 40
+105.0
+  1
+1×10 A
+  7
+GYM
+ 11
+1518.569760621637
+ 21
+1977.7539849325567
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TANIM
+ 70
+0
+  0
+SEQEND
+  5
+3ED
+330
+3EC
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3F0
+330
+17
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+100
+AcDbBlockReference
+ 66
+1
+  2
+M_FAN
+ 10
+9450.0
+ 20
+5400.0
+ 30
+0.0
+ 50
+8.1
+  0
+ATTRIB
+  5
+3F2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9420.410741293108
+ 20
+5607.904968120477
+ 30
+0.0
+ 40
+119.99999999999999
+  1
+F-IS
+  7
+GYM
+ 11
+9420.410741293108
+ 21
+5607.904968120477
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+ATTRIB
+  5
+3F3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9488.043332623147
+ 20
+5132.6936124165295
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+1×10 A
+  7
+GYM
+ 11
+9488.043332623147
+ 21
+5132.6936124165295
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TANIM
+ 70
+0
+  0
+SEQEND
+  5
+3F1
+330
+3F0
+100
+AcDbEntity
+  8
+E-KUVVET-CIHAZ
+  0
+INSERT
+  5
+3F4
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_KAMERA
+ 10
+540.0
+ 20
+6723.0
+ 30
+0.0
+ 50
+274.6
+  0
+ATTRIB
+  5
+3F6
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+749.323564475812
+ 20
+6739.841774109061
+ 30
+0.0
+ 40
+105.0
+  1
+C1
+  7
+GYM
+ 11
+749.323564475812
+ 21
+6739.841774109061
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3F5
+330
+3F4
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+  0
+INSERT
+  5
+3F7
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_KAMERA
+ 10
+3061.0
+ 20
+8447.0
+ 30
+0.0
+ 50
+276.1
+  0
+ATTRIB
+  5
+3F9
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3269.810968267973
+ 20
+8469.31545498061
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+C2
+  7
+GYM
+ 11
+3269.810968267973
+ 21
+8469.31545498061
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3F8
+330
+3F7
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+  0
+INSERT
+  5
+3FA
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_KAMERA
+ 10
+8526.0
+ 20
+6016.0
+ 30
+0.0
+ 50
+8.1
+  0
+ATTRIB
+  5
+3FC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8496.410741293108
+ 20
+6223.904968120477
+ 30
+0.0
+ 40
+104.99999999999999
+  1
+C3
+  7
+GYM
+ 11
+8496.410741293108
+ 21
+6223.904968120477
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3FB
+330
+3FA
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+  0
+INSERT
+  5
+3FD
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_KAMERA
+ 10
+5600.0
+ 20
+160.0
+ 30
+0.0
+ 50
+90.0
+  0
+ATTRIB
+  5
+3FF
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+5390.0
+ 20
+160.0
+ 30
+0.0
+ 40
+105.0
+  1
+C4
+  7
+GYM
+ 11
+5390.0
+ 21
+160.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+3FE
+330
+3FD
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+  0
+INSERT
+  5
+400
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_KAMERA
+ 10
+9973.0
+ 20
+11253.0
+ 30
+0.0
+ 50
+188.2
+  0
+ATTRIB
+  5
+402
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+10002.952076078158
+ 20
+11045.146991509364
+ 30
+0.0
+ 40
+105.0
+  1
+C5
+  7
+GYM
+ 11
+10002.952076078158
+ 21
+11045.146991509364
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+401
+330
+400
+100
+AcDbEntity
+  8
+E-ZAYIF-KAMERA
+  0
+INSERT
+  5
+403
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+2300.0
+ 20
+4600.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+405
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+2300.0
+ 20
+4930.0
+ 30
+0.0
+ 40
+105.0
+  1
+H1
+  7
+GYM
+ 11
+2300.0
+ 21
+4930.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+404
+330
+403
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+406
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+5100.0
+ 20
+6950.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+408
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+5100.0
+ 20
+7280.0
+ 30
+0.0
+ 40
+105.0
+  1
+H2
+  7
+GYM
+ 11
+5100.0
+ 21
+7280.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+407
+330
+406
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+409
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+7850.0
+ 20
+4950.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+40B
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7850.0
+ 20
+5280.0
+ 30
+0.0
+ 40
+105.0
+  1
+H3
+  7
+GYM
+ 11
+7850.0
+ 21
+5280.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+40A
+330
+409
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+40C
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+3600.0
+ 20
+2200.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+40E
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3600.0
+ 20
+2530.0
+ 30
+0.0
+ 40
+105.0
+  1
+H4
+  7
+GYM
+ 11
+3600.0
+ 21
+2530.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+40D
+330
+40C
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+40F
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+7350.0
+ 20
+2050.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+411
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7350.0
+ 20
+2380.0
+ 30
+0.0
+ 40
+105.0
+  1
+H5
+  7
+GYM
+ 11
+7350.0
+ 21
+2380.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+410
+330
+40F
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+412
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_HOPARLOR
+ 10
+8350.0
+ 20
+11350.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+414
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+8350.0
+ 20
+11680.0
+ 30
+0.0
+ 40
+105.0
+  1
+H6
+  7
+GYM
+ 11
+8350.0
+ 21
+11680.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+413
+330
+412
+100
+AcDbEntity
+  8
+E-ZAYIF-SES
+  0
+INSERT
+  5
+415
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_VERI
+ 10
+1920.0
+ 20
+6050.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+417
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1920.0
+ 20
+6280.0
+ 30
+0.0
+ 40
+105.0
+  1
+D1
+  7
+GYM
+ 11
+1920.0
+ 21
+6280.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+416
+330
+415
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+  0
+INSERT
+  5
+418
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_VERI
+ 10
+1920.0
+ 20
+5550.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+41A
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1920.0
+ 20
+5780.0
+ 30
+0.0
+ 40
+105.0
+  1
+D2
+  7
+GYM
+ 11
+1920.0
+ 21
+5780.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+419
+330
+418
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+  0
+INSERT
+  5
+41B
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_VERI
+ 10
+4600.0
+ 20
+6100.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+41D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+4600.0
+ 20
+6330.0
+ 30
+0.0
+ 40
+105.0
+  1
+AP1
+  7
+GYM
+ 11
+4600.0
+ 21
+6330.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+41C
+330
+41B
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+  0
+INSERT
+  5
+41E
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_VERI
+ 10
+7550.0
+ 20
+10350.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+420
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7550.0
+ 20
+10580.0
+ 30
+0.0
+ 40
+105.0
+  1
+AP2
+  7
+GYM
+ 11
+7550.0
+ 21
+10580.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+41F
+330
+41E
+100
+AcDbEntity
+  8
+E-ZAYIF-VERI
+  0
+INSERT
+  5
+421
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+2950.0
+ 20
+5550.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+423
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+2950.0
+ 20
+5790.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y1
+  7
+GYM
+ 11
+2950.0
+ 21
+5790.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+422
+330
+421
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+424
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+5900.0
+ 20
+7050.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+426
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+5900.0
+ 20
+7290.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y2
+  7
+GYM
+ 11
+5900.0
+ 21
+7290.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+425
+330
+424
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+427
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+7950.0
+ 20
+3850.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+429
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7950.0
+ 20
+4090.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y3
+  7
+GYM
+ 11
+7950.0
+ 21
+4090.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+428
+330
+427
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+42A
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+4100.0
+ 20
+1700.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+42C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+4100.0
+ 20
+1940.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y4
+  7
+GYM
+ 11
+4100.0
+ 21
+1940.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+42B
+330
+42A
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+42D
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+7200.0
+ 20
+11450.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+42F
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+7200.0
+ 20
+11690.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y5
+  7
+GYM
+ 11
+7200.0
+ 21
+11690.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+42E
+330
+42D
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+430
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_DEDEKTOR
+ 10
+9850.0
+ 20
+6350.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+432
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+9850.0
+ 20
+6590.0
+ 30
+0.0
+ 40
+105.0
+  1
+Y6
+  7
+GYM
+ 11
+9850.0
+ 21
+6590.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+431
+330
+430
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+433
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_YANGIN_BUTON
+ 10
+517.0
+ 20
+3403.0
+ 30
+0.0
+ 50
+275.9
+  0
+ATTRIB
+  5
+435
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+745.7816479369501
+ 20
+3426.6422834610667
+ 30
+0.0
+ 40
+105.0
+  1
+YB1
+  7
+GYM
+ 11
+745.7816479369501
+ 21
+3426.6422834610667
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+434
+330
+433
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+436
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_YANGIN_BUTON
+ 10
+3289.0
+ 20
+194.0
+ 30
+0.0
+ 50
+309.5
+  0
+ATTRIB
+  5
+438
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+3466.473654179176
+ 20
+340.2979906638856
+ 30
+0.0
+ 40
+105.0
+  1
+YB2
+  7
+GYM
+ 11
+3466.473654179176
+ 21
+340.2979906638856
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+437
+330
+436
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+  0
+INSERT
+  5
+439
+330
+17
+100
+AcDbEntity
+  8
+E-ZAYIF-YANGIN
+100
+AcDbBlockReference
+ 66
+1
+  2
+E_YANGIN_BUTON
+ 10
+1551.0
+ 20
+8286.0
+ 30
+0.0
+ 50
+186.1
+  0
+ATTRIB
+  5
+43B
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+1575.4407364073336
+ 20
+8057.302272849363
+ 30
+0.0
+ 40
+105.0
+  1
+SR1
+  7
+GYM
+ 11
+1575.4407364073336
+ 21
+8057.302272849363
+ 31
+0.0
+100
+AcDbAttribute
+  2
+KOD
+ 70
+0
+  0
+SEQEND
+  5
+43A
+330
+439
+100
+AcDbEntity
+  8
 E-ZAYIF-YANGIN
   0
 LWPOLYLINE
   5
-368
+43C
 330
 17
 100
@@ -30435,41 +36795,41 @@ AcDbPolyline
  70
 0
  10
-2350.0
+2327.0
  20
-7550.0
+8369.0
  10
-2550.0
+2950.0
  20
-6050.0
+5550.0
  10
-5300.0
+5900.0
  20
+7050.0
+ 10
+7950.0
+ 20
+3850.0
+ 10
+4100.0
+ 20
+1700.0
+ 10
 7200.0
- 10
-7700.0
  20
-4400.0
+11450.0
  10
-4600.0
+9850.0
  20
-1650.0
+6350.0
  10
-7850.0
+1551.0
  20
-11100.0
- 10
-9600.0
- 20
-6700.0
- 10
-2250.0
- 20
-7300.0
+8286.0
   0
 INSERT
   5
-369
+43D
 330
 17
 100
@@ -30483,15 +36843,17 @@ AcDbBlockReference
   2
 E_PANO
  10
-2350.0
+2327.0
  20
-7550.0
+8369.0
  30
 0.0
+ 50
+186.1
   0
 ATTRIB
   5
-36B
+43F
 330
 17
 100
@@ -30501,9 +36863,9 @@ AcDbEntity
 100
 AcDbText
  10
-2350.0
+2367.3803471077686
  20
-7930.0
+7991.151581229382
  30
 0.0
  40
@@ -30513,9 +36875,9 @@ AP
   7
 GYM
  11
-2350.0
+2367.3803471077686
  21
-7930.0
+7991.151581229382
  31
 0.0
 100
@@ -30527,7 +36889,7 @@ KOD
   0
 ATTRIB
   5
-36C
+440
 330
 17
 100
@@ -30537,9 +36899,9 @@ AcDbEntity
 100
 AcDbText
  10
-2350.0
+2277.0558864719706
  20
-7080.0
+8836.338833742606
  30
 0.0
  40
@@ -30549,9 +36911,9 @@ AcDbText
   7
 GYM
  11
-2350.0
+2277.0558864719706
  21
-7080.0
+8836.338833742606
  31
 0.0
 100
@@ -30563,9 +36925,9 @@ TANIM
   0
 SEQEND
   5
-36A
+43E
 330
-369
+43D
 100
 AcDbEntity
   8
@@ -30573,7 +36935,7 @@ E-PANO
   0
 TEXT
   5
-36D
+441
 330
 17
 100
@@ -30611,7 +36973,7 @@ AcDbText
   0
 TEXT
   5
-36E
+442
 330
 17
 100
@@ -30649,9 +37011,9 @@ AcDbText
   0
 VIEWPORT
   5
-373
+447
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30753,9 +37115,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-374
+448
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30787,9 +37149,9 @@ AcDbPolyline
   0
 INSERT
   5
-375
+449
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30811,9 +37173,9 @@ ANTET_A3
   0
 ATTRIB
   5
-377
+44B
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30849,9 +37211,9 @@ PROJE
   0
 ATTRIB
   5
-378
+44C
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30887,9 +37249,9 @@ DISIPLIN
   0
 ATTRIB
   5
-379
+44D
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30925,9 +37287,9 @@ PAFTA_ADI
   0
 ATTRIB
   5
-37A
+44E
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -30963,9 +37325,9 @@ PAFTA_NO
   0
 ATTRIB
   5
-37B
+44F
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31001,9 +37363,9 @@ OLCEK
   0
 ATTRIB
   5
-37C
+450
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31039,9 +37401,9 @@ TARIH
   0
 ATTRIB
   5
-37D
+451
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31077,9 +37439,9 @@ REV
   0
 ATTRIB
   5
-37E
+452
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31115,9 +37477,9 @@ BIRIM
   0
 ATTRIB
   5
-37F
+453
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31153,9 +37515,9 @@ DURUM
   0
 ATTRIB
   5
-380
+454
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31191,9 +37553,9 @@ NOT
   0
 SEQEND
   5
-376
+44A
 330
-375
+449
 100
 AcDbEntity
  67
@@ -31203,9 +37565,9 @@ G-ANTET
   0
 VIEWPORT
   5
-381
+455
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31271,26 +37633,6 @@ AcDbViewport
  72
 100
 331
-93
-331
-94
-331
-95
-331
-96
-331
-97
-331
-98
-331
-99
-331
-9A
-331
-9B
-331
-9C
-331
 9D
 331
 9E
@@ -31300,6 +37642,14 @@ AcDbViewport
 A0
 331
 A1
+331
+A2
+331
+A3
+331
+A4
+331
+A5
 331
 A6
 331
@@ -31313,7 +37663,19 @@ AA
 331
 AB
 331
-AC
+B0
+331
+B1
+331
+B2
+331
+B3
+331
+B4
+331
+B5
+331
+B6
  90
 0
   1
@@ -31351,9 +37713,9 @@ AC
   0
 TEXT
   5
-382
+456
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31387,9 +37749,9 @@ AcDbText
   0
 LINE
   5
-383
+457
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31417,9 +37779,9 @@ AcDbLine
   0
 TEXT
   5
-384
+458
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31453,9 +37815,9 @@ AcDbText
   0
 LINE
   5
-385
+459
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31483,9 +37845,9 @@ AcDbLine
   0
 TEXT
   5
-386
+45A
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31519,9 +37881,9 @@ AcDbText
   0
 LINE
   5
-387
+45B
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31549,9 +37911,9 @@ AcDbLine
   0
 TEXT
   5
-388
+45C
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31585,9 +37947,9 @@ AcDbText
   0
 LINE
   5
-389
+45D
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31615,9 +37977,9 @@ AcDbLine
   0
 TEXT
   5
-38A
+45E
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31651,9 +38013,9 @@ AcDbText
   0
 LINE
   5
-38B
+45F
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31681,9 +38043,9 @@ AcDbLine
   0
 TEXT
   5
-38C
+460
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31717,9 +38079,9 @@ AcDbText
   0
 LINE
   5
-38D
+461
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31747,9 +38109,9 @@ AcDbLine
   0
 TEXT
   5
-38E
+462
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31783,9 +38145,9 @@ AcDbText
   0
 LINE
   5
-38F
+463
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31813,9 +38175,9 @@ AcDbLine
   0
 TEXT
   5
-390
+464
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31849,9 +38211,9 @@ AcDbText
   0
 LINE
   5
-391
+465
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31879,9 +38241,9 @@ AcDbLine
   0
 TEXT
   5
-392
+466
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31915,9 +38277,9 @@ AcDbText
   0
 TEXT
   5
-393
+467
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31951,9 +38313,9 @@ AcDbText
   0
 TEXT
   5
-394
+468
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -31987,9 +38349,9 @@ AcDbText
   0
 TEXT
   5
-395
+469
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -32023,9 +38385,9 @@ AcDbText
   0
 TEXT
   5
-396
+46A
 330
-36F
+443
 100
 AcDbEntity
  67
@@ -32157,19 +38519,19 @@ Model
   3
 E-01 AYDINLATMA PLANI
 350
-372
+446
   3
 E-02 PRİZ VE KUVVET PLANI
 350
-39A
+46E
   3
 E-03 ZAYIF AKIM PLANI
 350
-3BE
+492
   3
 E-04 ELEKTRİK GENEL YERLEŞİM
 350
-3E8
+4BC
   0
 DICTIONARY
   5
@@ -33035,7 +39397,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-41D
+4F1
   0
 DICTIONARYVAR
   5
@@ -33047,7 +39409,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-09-14T14:19:44.933842+00:00
+1.4.4 @ 2026-09-15T06:10:54.997308+00:00
   0
 VISUALSTYLE
   5
@@ -33751,7 +40113,7 @@ X-Ray
   0
 LAYOUT
   5
-372
+446
 330
 D
 100
@@ -33873,13 +40235,13 @@ E-01 AYDINLATMA PLANI
  76
 1
 330
-36F
+443
 331
-373
+447
   0
 LAYOUT
   5
-39A
+46E
 330
 D
 100
@@ -34001,13 +40363,13 @@ E-02 PRİZ VE KUVVET PLANI
  76
 1
 330
-397
+46B
 331
-39B
+46F
   0
 LAYOUT
   5
-3BE
+492
 330
 D
 100
@@ -34129,13 +40491,13 @@ E-03 ZAYIF AKIM PLANI
  76
 1
 330
-3BB
+48F
 331
-3BF
+493
   0
 LAYOUT
   5
-3E8
+4BC
 330
 D
 100
@@ -34257,13 +40619,13 @@ E-04 ELEKTRİK GENEL YERLEŞİM
  76
 1
 330
-3E5
+4B9
 331
-3E9
+4BD
   0
 DICTIONARYVAR
   5
-41D
+4F1
 330
 2D
 100
@@ -34271,7 +40633,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-09-14T14:19:45.069552+00:00
+1.4.4 @ 2026-09-15T06:10:55.108674+00:00
   0
 ENDSEC
   0

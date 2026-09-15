@@ -10,7 +10,7 @@ import proj as P, helpers as h, draw as D, draw_mep as M
 W, HH = 420*mm, 297*mm
 TOP, BOT, L, R = HH-24.6*mm, 14*mm, 12*mm, W-12*mm
 CW = R-L
-N = 6
+N = 7
 DISIPLIN = "ELEKTRİK PROJESİ"
 
 def sayfa(c, no, baslik, ust=None):
@@ -105,11 +105,11 @@ def s2(c):
     for ad, d in P.ISLAK.items():
         for n in ("soyunma", "dus", "wc"):
             q = d[n].representative_point(); M.sembol(v, q.x, q.y, "downlight")
-    for kod, x, y, t in P.ACIL:
-        M.sembol(v, x, y, "acil", "E" if "acil" in t else "→")
-    for kod, x, y, t in P.ANAHTAR: M.sembol(v, x, y, "anahtar", kod)
-    for kod, x, y, t in P.SENSOR:  M.sembol(v, x, y, "sensor")
-    M.sembol(v, *P.PANO, "pano")
+    for kod, x, y, t, a in P.ACIL:
+        M.sembol(v, x, y, "acil", "E" if "acil" in t else "→", a)
+    for kod, x, y, t, a in P.ANAHTAR: M.sembol(v, x, y, "anahtar", kod, a)
+    for kod, x, y, t, a in P.SENSOR:  M.sembol(v, x, y, "sensor")
+    M.sembol(v, *P.PANO, "pano", None, P.PANO_ACI)
     D.kuzey_ok(v, L+pw-13*mm, TOP-13*mm); D.olcek_cubugu(v, L+5*mm, BOT+11*mm)
     h.lejant(c, L+5*mm, BOT+2*mm, [(HexColor("#FFF3C4"), "Lineer LED 40 W"),
         (HexColor("#E8F5EC"), "Acil / yönlendirme"), (M.C_AYD, "Anahtar · sensör")], 6.0)
@@ -144,16 +144,16 @@ def s3(c):
     pw = CW*0.585
     v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     M.altlik(v); M.ekipman_soluk(v)
-    for kod, x, y, t in P.PRIZ:      M.sembol(v, x, y, "priz", kod)
-    for kod, x, y, t in P.PRIZ_IP44: M.sembol(v, x, y, "priz_ip44", kod)
-    for kod, zon, btu, (x, y) in P.KLIMA:
-        M.cihaz(v, x, y, kod, M.C_KLIMA, 7.5*mm, 4.2*mm)
-    for kod, x, y, ad in P.ISITICI:
-        M.cihaz(v, x, y, kod, M.C_SICAK, 7.5*mm, 4.2*mm)
-    for kod, x, y, ad in P.FAN:
+    for kod, x, y, t, a in P.PRIZ:      M.sembol(v, x, y, "priz", kod, a)
+    for kod, x, y, t, a in P.PRIZ_IP44: M.sembol(v, x, y, "priz_ip44", kod, a)
+    for kod, zon, btu, (x, y), a in P.KLIMA:
+        M.cihaz(v, x, y, kod, M.C_KLIMA, 7.5*mm, 4.2*mm, a)
+    for kod, x, y, ad, a in P.ISITICI:
+        M.cihaz(v, x, y, kod, M.C_SICAK, 7.5*mm, 4.2*mm, a)
+    for kod, x, y, ad, a in P.FAN:
         M.cihaz(v, x, y, kod, M.C_BESLEME if "TH" in kod else
-                (M.C_ISLAK if "IS" in kod else M.C_EGZOZ), 7.5*mm, 4.2*mm)
-    M.sembol(v, *P.PANO, "pano")
+                (M.C_ISLAK if "IS" in kod else M.C_EGZOZ), 7.5*mm, 4.2*mm, a)
+    M.sembol(v, *P.PANO, "pano", None, P.PANO_ACI)
     D.kuzey_ok(v, L+pw-13*mm, TOP-13*mm); D.olcek_cubugu(v, L+5*mm, BOT+11*mm)
     h.lejant(c, L+5*mm, BOT+2*mm, [(M.C_PRIZ, "İkili topraklı priz"), (M.C_SICAK, "Su ısıtıcı"),
                                    (M.C_KLIMA, "Klima iç ünite"), (M.C_BESLEME, "Fan")], 6.0)
@@ -197,15 +197,15 @@ def s4(c):
     v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     M.altlik(v); M.ekipman_soluk(v)
     for kod, x, y, t in P.HOPARLOR: M.sembol(v, x, y, "hoparlor", kod)
-    for kod, x, y, t in P.KAMERA:   M.sembol(v, x, y, "kamera", kod)
+    for kod, x, y, t, a in P.KAMERA: M.sembol(v, x, y, "kamera", kod, a)
     for kod, x, y, t in P.VERI:     M.sembol(v, x, y, "veri", kod)
     for kod, x, y, t in P.DEDEKTOR: M.sembol(v, x, y, "dedektor", kod)
-    for kod, x, y, t in P.YANGIN:   M.sembol(v, x, y, "yangin", kod)
+    for kod, x, y, t, a in P.YANGIN:   M.sembol(v, x, y, "yangin", kod, a)
     # yangın algılama çevrimi: panodan başlayıp dedektörleri dolaşan tek hat
     _loop = [P.PANO] + [(d[1], d[2]) for d in P.DEDEKTOR] + [(P.YANGIN[2][1], P.YANGIN[2][2])]
     for i in range(len(_loop)-1):
         D.line(v, _loop[i], _loop[i+1], h.tint(M.C_YANGIN, 0.55), 0.6, (2.2, 1.6))
-    M.sembol(v, *P.PANO, "pano")
+    M.sembol(v, *P.PANO, "pano", None, P.PANO_ACI)
     # soyunma bloklarına "kamera yok" notu
     for ad, d in P.ISLAK.items():
         q = d["tum"].representative_point()
@@ -381,10 +381,77 @@ def s6(c):
       "uzunluklarından türetilmiş yaklaşık değerlerdir; uygulama öncesi DXF (R2010) ile "
       "kesinleştirilmelidir.", fs=6.3, acc=h.NAVY2)
 
+# ══ 7 · PANO YÜK VE GERİLİM DÜŞÜMÜ HESABI ════════════════════════════════════
+def s7(c):
+    sayfa(c, 7, "Pano yük ve gerilim düşümü hesabı",
+          "Linye bazlı akım · kesici · kablo kesiti · ΔU kontrolü")
+    y = TOP
+    y = h.para(c, L, y-1*mm,
+      f"Hesap tek fazlı son devreler için U={P.U_FAZ:.0f} V, ana besleme için U={P.U_HAT:.0f} V üzerinden "
+      f"yapılmıştır. Bakır özdirenci ρ = {str(P.RHO_CU).replace('.',',')} Ω·mm²/m (70 °C işletme sıcaklığı), "
+      f"akım taşıma kapasiteleri PVC yalıtımlı bakır iletken, B2 döşeme yöntemi, 2 yüklü iletken ve 30 °C "
+      f"ortam için TS HD 60364-5-52'ye göre alınmıştır. Kablo boyları pano konumundan linye ağırlık merkezine "
+      f"kuş uçuşu mesafenin {str(P.HAT_KATSAYI).replace('.',',')} katı artı {P.HAT_DUSEY:.0f} m düşey pay ile "
+      f"hesaplanmıştır (VARSAYIM — güzergâh kesinleştiğinde tek yerden güncellenir). Her linyede "
+      f"Ib ≤ In ≤ Iz ve ΔU ≤ sınır koşulları ayrı ayrı denetlenir.", CW, h.F, 7.6, h.INK, 10.4)
+    rows = [[r[0], r[1], r[2], f"{h.tl(r[3],2)}", f"{h.tl(r[4],2)}",
+             str(r[5]).replace(".", ","), f"{r[6]:.1f}".replace(".", ","), f"{r[7]}",
+             r[8], f"{r[9]:.1f}".replace(".", ","), f"{r[10]:.1f}".replace(".", ","),
+             f"{r[12]:.2f}".replace(".", ","), f"{r[13]:.0f}", r[14]]
+            for r in P.PANO_HESAP]
+    rows.append(["", h.TR_UP("TOPLAM"), "", f"{h.tl(P.BAGLI_KW,2)}", f"{h.tl(P.TALEP_KW,2)}",
+                 "", "", "", "", "", "", f"maks {P.DU_MAX:.2f}".replace(".", ","), "", ""])
+    def _snc(row):
+        return HexColor("#E7F3EC") if row[13] == "UYGUN" else (HexColor("#FBE3E1") if row[13] else None)
+    y = h.tablo(c, L, y-4*mm,
+        [("Linye",0.042),("Tanım",0.200),("Faz",0.034),("Pb kW",0.048),("Pt kW",0.048),
+         ("cosφ",0.040),("Ib A",0.044),("In A",0.040),("Kablo",0.058),("Iz A",0.042),
+         ("L m",0.042),("ΔU %",0.046),("Sınır %",0.048),("Sonuç",0.068)],
+        rows, CW, satir_h=5.5*mm, bas_h=6.6*mm, fs=6.0, hfs=5.8,
+        hizala=["c","l","c","r","r","c","r","r","c","r","r","r","c","c"],
+        renkli_sutun={13: _snc})
+
+    # alt bölüm: ana besleme · kaçak akım · notlar
+    yy = y-7*mm; w1 = CW*0.315; w2 = CW*0.345; w3 = CW-w1-w2-2*6*mm
+    h.txt(c, L, yy, h.TR_UP("Ana besleme hesabı"), h.FB, 8.0, h.NAVY)
+    rows2 = [["Talep gücü (eşzamanlılık sonrası)", f"{h.tl(P.TALEP_KW,2)} kW"],
+             ["Güç katsayısı (kabul)", ("%.2f" % P.ANA_COSFI).replace(".", ",")],
+             ["Hesap akımı Ib = P / (√3·U·cosφ)", ("%.1f A" % P.ANA_IB).replace(".", ",")],
+             ["Ana kesici In", f"3×{P.ANA_IN} A"],
+             ["Ana kaçak akım koruması", P.ANA_KACAK],
+             ["Besleme kablosu", P.ANA_KABLO],
+             ["Kablo akım kapasitesi Iz", f"{P.ANA_IZ:.0f} A"],
+             ["Hat uzunluğu (VARSAYIM)", f"{P.ANA_L:.0f} m"],
+             ["Gerilim düşümü ΔU", ("%.2f V" % P.ANA_DU).replace(".", ",") + "  ·  %" +
+                                   ("%.2f" % P.ANA_DU_P).replace(".", ",")],
+             ["Abonelik önerisi", P.ABONELIK]]
+    h.tablo(c, L, yy-5*mm, [("Büyüklük",0.62),("Değer",0.38)], rows2, w1,
+            satir_h=5.4*mm, bas_h=6.4*mm, fs=6.1, hfs=6.0, hizala=["l","r"])
+    x2 = L+w1+6*mm
+    h.txt(c, x2, yy, h.TR_UP("Kaçak akım koruma grupları"), h.FB, 8.0, h.NAVY)
+    h.tablo(c, x2, yy-5*mm, [("Kod",0.11),("Cihaz",0.30),("Kapsam",0.59)],
+            [[k[0], k[1], k[2]] for k in P.KACAK_AKIM], w2,
+            satir_h=5.4*mm, bas_h=6.4*mm, fs=6.1, hfs=6.0, hizala=["c","l","l"])
+    x3 = x2+w2+6*mm
+    _v = lambda x, n=2: ("%.*f" % (n, x)).replace(".", ",")
+    yyy = h.notkutu(c, x3, yy+1*mm, w3, "Sonuç",
+      f"Tüm {len(P.PANO_HESAP)} linye Ib ≤ In ≤ Iz ve ΔU ≤ sınır koşullarını sağlamaktadır "
+      f"({len(P.PANO_UYGUNSUZ)} uygunsuz linye). En yüksek son devre gerilim düşümü "
+      f"%{_v(P.DU_MAX)} ({P.DU_MAX_LINYE}); ana besleme ile birlikte en uzak tüketicide toplam "
+      f"%{_v(P.TOPLAM_DU_MAX)} olup TS HD 60364-5-52'nin %5 sınırının altındadır. "
+      f"Faz dengesizliği %{_v(P.FAZ_DENGE, 1)}'dir.", fs=6.2, acc=h.GREEN)
+    h.notkutu(c, x3, yyy-4*mm, w3, "Uygulamada dikkat",
+      "Mevcut sayaç ve kolon hattı kapasitesi BİLİNMİYOR; abonelik yükseltme gerekip gerekmediği "
+      "yerinde tespit edilecektir. W1 ve W2 su ısıtıcıları 6 kW / 26,1 A ile panonun en büyük "
+      "tekil yükleridir ve farklı fazlara dağıtılmıştır. Z2 yangın algılama paneli kaçak akım "
+      "rölesi arkasına alınmaz; kendi aküsü ile 60 dakika beslenir. Tüm son devrelerde 30 mA "
+      "A tipi kaçak akım koruması, ana girişte 300 mA S tipi seçici koruma kullanılacaktır.",
+      fs=6.2, acc=h.RED)
+
 def build(path="output/Gym_Elektrik_Proje_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
     c.setTitle(f"Maltepe / İdealtepe — Elektrik Projesi ({P.REV})")
-    for fn in (s1, s2, s3, s4, s5, s6):
+    for fn in (s1, s2, s3, s4, s5, s6, s7):
         fn(c); c.showPage()
     c.save(); print("→", path)
 

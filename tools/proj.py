@@ -164,6 +164,89 @@ M2_YENI_BOLME  = round((L_ISLAK*0.55)*H, 1)     # yeni/yenilenecek alçıpan bö
 ADET_ARMATUR   = ARMATUR_ADET
 
 
+# ── DUVAR YÖNÜ: cihazlar duvara göre döndürülür ───────────────────────────────
+_DUVAR_SEG = []
+for _g in (SALON, ERKEK, KADIN):
+    _r = list(_g.exterior.coords)
+    for _i in range(len(_r)-1):
+        _a, _b = _r[_i], _r[_i+1]
+        if math.dist(_a, _b) > 0.12:
+            _DUVAR_SEG.append((_a, _b))
+
+def _segler(poly=None):
+    """Duvar segmentleri — poly verilirse yalnızca o hacmin çeperi (cihaz komşu
+    hacmin duvarına yapışmasın diye)."""
+    if poly is None: return _DUVAR_SEG
+    r = list(poly.exterior.coords)
+    return [(r[i], r[i+1]) for i in range(len(r)-1) if math.dist(r[i], r[i+1]) > 0.12]
+
+def duvar_yonu(p, poly=None):
+    """En yakın duvar segmentini bulur.
+    Döner: (duvar_acisi_derece, ice_bakan_normal_acisi_derece, mesafe_m)"""
+    from shapely.geometry import LineString as _L, Point as _Pt
+    pt = _Pt(p); en = None
+    for a, b in _segler(poly):
+        d = _L([a, b]).distance(pt)
+        if en is None or d < en[0]: en = (d, a, b)
+    d, a, b = en
+    ac = math.degrees(math.atan2(b[1]-a[1], b[0]-a[0]))
+    # içe bakan normal: iki adaydan iç hacimde kalanı seç
+    ref = poly if poly is not None else SALON
+    for n_ac in (ac+90, ac-90):
+        q = (p[0]+math.cos(math.radians(n_ac))*0.35,
+             p[1]+math.sin(math.radians(n_ac))*0.35)
+        if ref.contains(_Pt(q)) or SALON.contains(_Pt(q)) \
+           or ERKEK.contains(_Pt(q)) or KADIN.contains(_Pt(q)):
+            return round(ac % 360, 1), round(n_ac % 360, 1), round(d, 3)
+    return round(ac % 360, 1), round((ac+90) % 360, 1), round(d, 3)
+
+def duvara_yapistir(p, ofset=0.16, poly=None):
+    """Noktayı en yakın duvar segmentine dik izdüşürür ve içeri ofset kadar çeker."""
+    from shapely.geometry import LineString as _L, Point as _Pt
+    pt = _Pt(p); en = None
+    for a, b in _segler(poly):
+        ls = _L([a, b]); d = ls.distance(pt)
+        if en is None or d < en[0]: en = (d, ls, a, b)
+    _, ls, a, b = en
+    q = ls.interpolate(ls.project(pt))
+    _, n_ac, _ = duvar_yonu((q.x, q.y), poly)
+    return (round(q.x + math.cos(math.radians(n_ac))*ofset, 3),
+            round(q.y + math.sin(math.radians(n_ac))*ofset, 3))
+
+def _ayir_duvar_uzeri(cihazlar, asgari=0.42):
+    """Duvar üzerindeki cihazları çevre boyunca 1B olarak ayırır (çakışma çözer).
+    cihazlar: [(anahtar, (x,y))] → {anahtar: (x,y)}"""
+    from shapely.geometry import LineString as _L, Point as _Pt
+    halkalar = [(g, _L(g.exterior.coords)) for g in (SALON, ERKEK, KADIN)]
+    gruplar = {}
+    for k, p in cihazlar:
+        i = min(range(len(halkalar)), key=lambda j: halkalar[j][1].distance(_Pt(p)))
+        gruplar.setdefault(i, []).append((k, p))
+    sonuc = {}
+    for i, liste in gruplar.items():
+        g, r = halkalar[i]; L = r.length
+        kayit = sorted(((r.project(_Pt(p)), k) for k, p in liste))
+        # ileri geçiş: asgari aralığı zorla
+        for j in range(1, len(kayit)):
+            if kayit[j][0] - kayit[j-1][0] < asgari:
+                kayit[j] = (kayit[j-1][0] + asgari, kayit[j][1])
+        # halka başına taşarsa geriye doğru sıkıştır
+        if kayit and kayit[-1][0] > L - 0.2:
+            kaydir = kayit[-1][0] - (L - 0.2)
+            kayit = [(max(0.2, s0 - kaydir), k) for s0, k in kayit]
+        for s0, k in kayit:
+            q = r.interpolate(s0 % L)
+            _, n_ac, _ = duvar_yonu((q.x, q.y), g)
+            sonuc[k] = (round(q.x + math.cos(math.radians(n_ac))*0.16, 3),
+                        round(q.y + math.sin(math.radians(n_ac))*0.16, 3))
+    return sonuc
+
+def cihaz_acisi(p, poly=None):
+    """Duvara monte sembolün dönme açısı: sembolün 'yukarı'sı hacmin içine bakar."""
+    _, n_ac, _ = duvar_yonu(p, poly)
+    return round((n_ac - 90) % 360, 1)
+
+
 # ═══════════════════════ MEKANİK PROJE — sistem yerleşimi ══════════════════════
 from shapely.geometry import LineString as _LS
 
@@ -180,8 +263,8 @@ KANAL = {
 }
 # menfez / valf: (kod, x, y, debi m³/h, tip)
 MENFEZ = [
- ("M1", 1.55, 5.60, 250, "besleme"), ("M2", 4.10, 6.35, 250, "besleme"),
- ("M3", 7.05, 7.20, 250, "besleme"), ("M4", 8.05,10.60, 250, "besleme"),
+ ("M1", 1.95, 4.75, 250, "besleme"), ("M2", 4.30, 5.15, 250, "besleme"),
+ ("M3", 7.45, 7.15, 250, "besleme"), ("M4", 8.55,10.05, 250, "besleme"),
  ("E1", 2.90, 1.60, 255, "egzoz"),   ("E2", 5.60, 1.20, 255, "egzoz"),
  ("E3", 8.20, 1.40, 250, "egzoz"),
  ("V1", 9.45, 8.05,  80, "valf"),    ("V2",10.35, 8.10,  40, "valf"),
@@ -190,18 +273,24 @@ MENFEZ = [
 PANJUR = [("TH", 0.30, 6.25, "Dış hava panjuru 500×300 + kuş teli"),
           ("EG", 0.42, 2.45, "Egzoz panjuru 400×300"),
           ("EI",11.45, 2.40, "Islak hacim egzoz çıkışı Ø160")]
-FAN = [("F-TH", 1.20, 7.05, "Kanal tipi taze hava fanı — 1.000 m³/h / 250 Pa"),
+FAN = [(k, x, y, t, round(duvar_yonu((x, y))[0] % 180, 1)) for k, x, y, t in
+      [("F-TH", 1.20, 7.05, "Kanal tipi taze hava fanı — 1.000 m³/h / 250 Pa"),
        ("F-EG", 1.25, 1.95, "Kanal tipi egzoz fanı — 760 m³/h / 200 Pa"),
-       ("F-IS", 9.45, 5.40, "Islak hacim egzoz fanı — 240 m³/h, sessiz tip")]
+       ("F-IS", 9.45, 5.40, "Islak hacim egzoz fanı — 240 m³/h, sessiz tip")]]
 
 # ── iklimlendirme: bölge bazlı split küme ─────────────────────────────────────
 def _btu(m2, w=180): return int(round(m2*w*3.412/1000)*1000)
-KLIMA = [
- ("K1","ARENA · SERBEST AĞIRLIK", 24000, (5.95, 0.28)),
+_KLIMA0 = [
+ ("K1","ARENA · SERBEST AĞIRLIK", 24000, (6.85, 0.28)),
  ("K2","FONKSİYONEL · KARDİYO",   18000, (7.95, 6.95)),
  ("K3","GİRİŞ · BANKO · SİRKÜLASYON", 12000, (1.30, 7.35)),
  ("K4","DİNLENME SALONU",         12000, (7.05,11.90)),
 ]
+# iç üniteler SALON çeperine yapışır — komşu ıslak hacmin duvarına kaymamalı
+KLIMA = [(k, z, b, duvara_yapistir(p, 0.18, SALON),
+          cihaz_acisi(duvara_yapistir(p, 0.18, SALON), SALON))
+         for k, z, b, p in _KLIMA0]
+KLIMA_KOT = 2.40                      # iç ünite alt kotu (m)
 KLIMA_BTU  = sum(k[2] for k in KLIMA)
 ADET_KLIMA = len(KLIMA)
 DIS_UNITE = (11.90, 6.10)     # arka cephe duvarı — kapalı alana dâhil değil
@@ -237,8 +326,12 @@ L_SICAK   = round(L_TEMIZ20*1.35, 1)
 L_PIS100  = _uzunluk(PIS_SU["Ø100"])
 L_PIS70   = round(sum(_LS(h).length for h in PIS_SU["Ø70"]), 1)
 L_PIS50   = round(sum(_LS(h).length for h in PIS_SU["Ø50"]), 1)
-ISITICI = [("SI-1", 9.70, 7.60, "Elektrikli ani su ısıtıcı 6 kW — erkek bloğu"),
-           ("SI-2",10.55, 2.15, "Elektrikli ani su ısıtıcı 6 kW — kadın bloğu")]
+def _isitici(k, x, y, t, poly):
+    q = duvara_yapistir((x, y), 0.15, poly)
+    return (k, q[0], q[1], t, cihaz_acisi(q, poly))
+ISITICI = [_isitici("SI-1", 9.70, 7.60, "Elektrikli ani su ısıtıcı 6 kW — erkek bloğu", ERKEK),
+           _isitici("SI-2",10.55, 2.15, "Elektrikli ani su ısıtıcı 6 kW — kadın bloğu", KADIN)]
+ISITICI_KOT = 1.90
 VITRIFIYE = [("WC-1",10.35,8.10,"Klozet + lavabo"),("DU-1", 9.45,8.05,"Duş teknesi + kabin"),
              ("WC-2", 9.85,1.35,"Klozet + lavabo"),("DU-2",10.75,1.85,"Duş teknesi + kabin")]
 
@@ -261,46 +354,79 @@ def _duvar_boyunca(poly, n, ofset=0.18, basla=0.0):
     return [(r.interpolate((basla + i/n) * L).x, r.interpolate((basla + i/n) * L).y)
             for i in range(n)]
 
-PRIZ = [("P%d" % (i+1), x, y, "ikili topraklı priz")
-        for i, (x, y) in enumerate(_duvar_boyunca(SALON, 18, 0.20, 0.02))]
-PRIZ += [("PB1", 1.95, 6.35, "banko kuvvet + veri kutusu"),
-         ("PK1", 4.70, 1.05, "kardiyo prizi — koşu bandı 1"),
-         ("PK2", 7.30, 1.05, "kardiyo prizi — koşu bandı 2"),
-         ("PK3", 8.30, 2.55, "kardiyo prizi — bisiklet")]
-PRIZ_IP44 = [("PI1", 9.80, 7.45, "IP44 priz — erkek soyunma"),
-             ("PI2",10.45, 2.75, "IP44 priz — kadın soyunma")]
-ANAHTAR = [("A1", 0.62, 4.05, "vaviyen — ana giriş"), ("A2", 2.45, 6.95, "vaviyen — banko"),
-           ("A3", 6.85, 8.35, "komütatör — fonksiyonel"), ("A4", 7.40, 9.35, "dinlenme salonu"),
-           ("A5", 3.55, 0.55, "arena aydınlatma"), ("A6", 8.70, 7.85, "erkek soyunma"),
-           ("A7", 9.15, 3.15, "kadın soyunma")]
-SENSOR  = [("S1", 9.70, 8.10, "hareket sensörü — erkek ıslak"),
-           ("S2",10.55, 1.90, "hareket sensörü — kadın ıslak"),
-           ("S3", 7.60, 9.60, "hareket sensörü — dinlenme geçişi")]
-# zayıf akım — SOYUNMA VE WC İÇİNE KAMERA KONULMAZ
-KAMERA  = [("C1", 1.35, 6.60, "giriş ve banko"), ("C2", 3.05, 7.95, "salon kuzey"),
-           ("C3", 8.15, 6.40, "salon doğu — soyunma koridoru girişi"),
-           ("C4", 4.40, 0.75, "kardiyo ve güney cephe"),
-           ("C5", 7.35, 9.85, "dinlenme salonu")]
-HOPARLOR= [("H%d" % (i+1), x, y, "tavan hoparlörü 6 W / 100 V")
-           for i, (x, y) in enumerate([(2.20,5.20),(5.30,6.90),(7.55,5.40),
-                                       (4.10,2.10),(7.60,2.30),(8.05,10.90)])]
-VERI    = [("D1", 1.95, 6.20, "banko — router + NVR rack 9U"),
-           ("D2", 1.95, 6.05, "banko — POS / kayıt"),
-           ("AP1",4.60, 6.60, "kablosuz erişim noktası"),
-           ("AP2",7.90, 9.80, "kablosuz erişim noktası — dinlenme")]
-DEDEKTOR= [("Y%d" % (i+1), x, y, "optik duman dedektörü")
-           for i, (x, y) in enumerate([(2.55,6.05),(5.30,7.20),(7.70,4.40),(4.60,1.65),
-                                       (7.85,11.10),(9.60,6.70)])]
-YANGIN  = [("YB1", 0.85, 3.35, "yangın ihbar butonu — ana çıkış"),
-           ("YB2", 3.60, 0.60, "yangın ihbar butonu — ikinci çıkış"),
-           ("SR1", 2.25, 7.30, "siren + flaşör")]
-ACIL    = [("AA%d" % (i+1), x, y, t) for i, (x, y, t) in enumerate([
-           (0.90,4.40,"acil aydınlatma"),(3.40,0.95,"acil aydınlatma"),
-           (5.25,7.35,"acil aydınlatma"),(8.00,9.90,"acil aydınlatma"),
-           (9.55,7.10,"acil aydınlatma"),
-           (0.75,3.85,"çıkış yönlendirme"),(3.45,0.45,"çıkış yönlendirme"),
-           (6.30,8.55,"çıkış yönlendirme")])]
-PANO    = (2.35, 7.55)     # ana dağıtım panosu — banko arkası
+def _duvara_oturt(liste, poly=None):
+    """(kod, x, y, tanım) → (kod, x, y, tanım, açı) — sembol duvara göre döner."""
+    return [(k, x, y, t, cihaz_acisi((x, y), poly)) for k, x, y, t in liste]
+
+# MONTAJ TÜRÜ belirleyicidir: duvar cihazları duvara oturtulur ve çakışmaları
+# çevre boyunca çözülür; tavan ve zemin cihazları serbest konumlandırılır.
+
+# — duvara monte: konumlar duvara izdüşürülüp 1B ayrıştırma ile çakışmadan kurtarılır
+_DUVAR_CIHAZ = (
+  [("P%d" % (i+1), (x, y), "ikili topraklı priz", "PRIZ")
+   for i, (x, y) in enumerate(_duvar_boyunca(SALON, 16, 0.20, 0.03))]
++ [("PI1", (9.80, 7.45), "IP44 priz — erkek soyunma", "PRIZ44"),
+   ("PI2", (10.45, 2.75), "IP44 priz — kadın soyunma", "PRIZ44"),
+   ("A1", (0.30, 4.40), "vaviyen — ana giriş", "ANAHTAR"),
+   ("A2", (1.05, 7.95), "vaviyen — banko", "ANAHTAR"),
+   ("A3", (6.10, 8.75), "komütatör — fonksiyonel", "ANAHTAR"),
+   ("A4", (6.45, 9.95), "dinlenme salonu", "ANAHTAR"),
+   ("A5", (3.95, 0.10), "arena aydınlatma", "ANAHTAR"),
+   ("A6", (8.85, 8.30), "erkek soyunma", "ANAHTAR"),
+   ("A7", (9.05, 4.40), "kadın soyunma", "ANAHTAR"),
+   ("C1", (0.55, 6.60), "giriş ve banko", "KAMERA"),
+   ("C2", (3.05, 8.55), "salon kuzey", "KAMERA"),
+   ("C3", (8.75, 6.05), "salon doğu — soyunma koridoru girişi", "KAMERA"),
+   ("C4", (5.60, 0.10), "kardiyo ve güney cephe", "KAMERA"),
+   ("C5", (9.60, 11.20), "dinlenme salonu", "KAMERA"),
+   ("YB1", (0.42, 3.55), "yangın ihbar butonu — ana çıkış", "YANGIN"),
+   ("YB2", (3.05, 0.55), "yangın ihbar butonu — ikinci çıkış", "YANGIN"),
+   ("SR1", (1.55, 8.30), "siren + flaşör", "YANGIN"),
+   ("AY1", (0.55, 4.95), "çıkış yönlendirme — ana giriş", "ACILY"),
+   ("AY2", (3.60, 0.15), "çıkış yönlendirme — ikinci çıkış", "ACILY"),
+   ("AY3", (6.75, 8.85), "çıkış yönlendirme — dinlenme geçişi", "ACILY"),
+   ("AP",  (2.35, 8.15), "ana dağıtım panosu", "PANO")]
+)
+_YERLESIM = _ayir_duvar_uzeri([(k, p_) for k, p_, t, tip in _DUVAR_CIHAZ], asgari=0.45)
+def _al(tip):
+    return [(k, _YERLESIM[k][0], _YERLESIM[k][1], t, cihaz_acisi(_YERLESIM[k]))
+            for k, p_, t, tp in _DUVAR_CIHAZ if tp == tip]
+
+PRIZ_DUVAR = _al("PRIZ")
+PRIZ_IP44  = _al("PRIZ44")
+ANAHTAR    = _al("ANAHTAR")
+KAMERA     = [(k, x, y, t, round((cihaz_acisi((x, y)) + 90) % 360, 1)) for k, x, y, t, a in _al("KAMERA")]
+YANGIN     = _al("YANGIN")
+ACIL_YON   = _al("ACILY")
+PANO       = (_YERLESIM["AP"][0], _YERLESIM["AP"][1])
+PANO_ACI   = cihaz_acisi(PANO)
+
+# — zemin / mobilya üstü prizler (duvarda DEĞİL: yer kutusu veya banko gömme)
+PRIZ_ZEMIN = [("PB1", 1.92, 6.20, "banko gömme kuvvet + veri kutusu", 0),
+              ("PK1", 4.70, 1.02, "yer kutusu — koşu bandı 1", 0),
+              ("PK2", 7.30, 1.02, "yer kutusu — koşu bandı 2", 0),
+              ("PK3", 8.62, 2.62, "yer kutusu — kondisyon bisikleti", 0)]
+PRIZ = PRIZ_DUVAR + PRIZ_ZEMIN
+
+# — tavana monte
+SENSOR   = [("S1", 9.98, 7.34, "hareket sensörü — erkek ıslak", 0),
+            ("S2",10.25, 2.05, "hareket sensörü — kadın ıslak", 0),
+            ("S3", 7.10, 9.55, "hareket sensörü — dinlenme geçişi", 0)]
+HOPARLOR = [("H%d" % (i+1), x, y, "tavan hoparlörü 6 W / 100 V")
+            for i, (x, y) in enumerate([(2.30,4.60),(5.10,6.95),(7.85,4.95),
+                                        (3.60,2.20),(7.35,2.05),(8.35,11.35)])]
+VERI     = [("D1", 1.92, 6.05, "banko — router + NVR rack 9U"),
+            ("D2", 1.92, 5.55, "banko — POS / kayıt"),
+            ("AP1",4.60, 6.10, "kablosuz erişim noktası — tavan"),
+            ("AP2",7.55, 10.35,"kablosuz erişim noktası — dinlenme, tavan")]
+DEDEKTOR = [("Y%d" % (i+1), x, y, "optik duman dedektörü")
+            for i, (x, y) in enumerate([(2.95,5.55),(5.90,7.05),(7.95,3.85),(4.10,1.70),
+                                        (7.20,11.45),(9.85,6.35)])]
+ACIL_TAVAN = [("AA%d" % (i+1), x, y, "acil aydınlatma — tavan")
+              for i, (x, y) in enumerate([(1.50,4.05),(4.05,1.40),(5.65,7.55),
+                                          (8.60,10.30),(9.20,5.95)])]
+ACIL     = [(k, x, y, "acil aydınlatma", 0) for k, x, y, t in ACIL_TAVAN] + ACIL_YON
+
 
 # ── linye (devre) tablosu ─────────────────────────────────────────────────────
 # (kod, tanım, koruma, kesit, bağlı güç kW, eşzamanlılık katsayısı)
@@ -320,8 +446,8 @@ _LINYE = [
  ("K2","Klima — fonksiyonel 18.000 BTU","1×16 A","3×2,5", 1.70, 0.85),
  ("K3","Klima — giriş 12.000 BTU","1×16 A","3×2,5", 1.15, 0.85),
  ("K4","Klima — dinlenme 12.000 BTU","1×16 A","3×2,5", 1.15, 0.70),
- ("W1","Su ısıtıcı — erkek bloğu 6 kW","1×32 A","3×4", 6.00, 0.50),
- ("W2","Su ısıtıcı — kadın bloğu 6 kW","1×32 A","3×4", 6.00, 0.50),
+ ("W1","Su ısıtıcı — erkek bloğu 6 kW","1×32 A","3×6", 6.00, 0.50),
+ ("W2","Su ısıtıcı — kadın bloğu 6 kW","1×32 A","3×6", 6.00, 0.50),
  ("V1","Havalandırma — taze hava + egzoz fanı","1×10 A","3×1,5", 0.45, 1.00),
  ("V2","Islak hacim egzoz fanı","1×6 A","3×1,5", 0.12, 0.80),
  ("Z1","Zayıf akım — rack, CCTV, ses, geçiş kontrol","1×10 A","3×2,5", 0.60, 0.90),
@@ -357,6 +483,135 @@ ELEKTRIK_YUK = [("Aydınlatma (LED + acil)", _grup("L")),
                 ("Zayıf akım ve yangın algılama", _grup("Z"))]
 KURULU_KW = BAGLI_KW
 TALEP_KW  = TALEP_KW_E
+
+
+# ═══════════ PANO YÜK VE GERİLİM DÜŞÜMÜ HESABI (E-07) ═════════════════════════
+# Kabuller — hepsi tek yerden değiştirilebilir:
+U_FAZ      = 230.0        # V, faz-nötr
+U_HAT      = 400.0        # V, fazlar arası
+RHO_CU     = 0.0225       # Ω·mm²/m — bakır, 70 °C işletme sıcaklığı (TS HD 60364-5-52)
+COSFI      = {"L": 0.95, "P": 0.90, "K": 0.85, "W": 1.00, "V": 0.85, "Z": 0.90}
+DU_SINIR   = {"L": 3.0, "P": 5.0, "K": 5.0, "W": 5.0, "V": 5.0, "Z": 3.0}   # % (TS HD 60364-5-52 Ek G)
+# PVC yalıtımlı bakır, B2 döşeme yöntemi, 2 yüklü iletken, 30 °C (A)
+IZ_B2      = {1.5: 16.5, 2.5: 23.0, 4.0: 31.0, 6.0: 40.0, 10.0: 54.0, 16.0: 73.0}
+HAT_KATSAYI = 1.25        # güzergâh kıvrımı payı
+HAT_DUSEY   = 6.0         # m — panodan tavana ve cihaza iniş payı
+
+# her linyenin ağırlık merkezi (kablo boyu hesabı için)
+_LINYE_NOKTA = {
+ "L1": (5.30, 3.20), "L2": (6.40, 7.45), "L3": (8.05, 11.10), "L4": (1.55, 3.60),
+ "L5": (9.90, 5.20), "L6": (3.60, 5.40),
+ "P1": (3.00, 8.20), "P2": (6.60, 1.10), "P3": (1.92, 6.20), "P4": (7.90, 1.40),
+ "P5": (10.10, 6.60),
+ "K1": (6.85, 0.18), "K2": (7.60, 8.10), "K3": (0.90, 3.60), "K4": (8.50, 11.60),
+ "W1": (10.47, 7.71), "W2": (10.90, 2.05),
+ "V1": (2.40, 2.10), "V2": (9.90, 4.90),
+ "Z1": (1.92, 6.05), "Z2": (1.40, 5.60),
+}
+def _kesit_mm2(metin):        # "3×2,5" → 2.5
+    return float(metin.split("×")[1].replace(",", "."))
+def _kesici_a(metin):         # "1×16 A" → 16
+    return int(metin.split("×")[1].split()[0])
+
+def _hat_uzunluk(kod):
+    return round(math.dist(PANO, _LINYE_NOKTA[kod])*HAT_KATSAYI + HAT_DUSEY, 1)
+
+PANO_HESAP = []               # kod, tanım, faz, Pb, Pt, cosφ, Ib, In, kesit, Iz, L, ΔU V, ΔU %, sınır, sonuç
+for kod, tanim, kor, kes, faz, bagli, es, talep in LINYE:
+    grup = kod[0]
+    cf   = COSFI[grup]
+    Ib   = bagli*1000/(U_FAZ*cf)
+    In   = _kesici_a(kor)
+    Akes = _kesit_mm2(kes)
+    Iz   = IZ_B2[Akes]
+    Lm   = _hat_uzunluk(kod)
+    dU   = 2*Lm*Ib*RHO_CU*cf/Akes              # V — tek fazlı
+    dUp  = 100*dU/U_FAZ
+    sinir= DU_SINIR[grup]
+    ok   = (Ib <= In <= Iz) and (dUp <= sinir)
+    PANO_HESAP.append((kod, tanim, faz, bagli, talep, cf, round(Ib,1), In, kes,
+                       Iz, Lm, round(dU,1), round(dUp,2), sinir,
+                       "UYGUN" if ok else "GÖZDEN GEÇİR"))
+PANO_UYGUNSUZ = [r for r in PANO_HESAP if r[14] != "UYGUN"]
+DU_MAX = max(r[12] for r in PANO_HESAP)
+DU_MAX_LINYE = [r[0] for r in PANO_HESAP if r[12] == DU_MAX][0]
+
+# ── ana besleme (sayaç / kolon → gym panosu) ──────────────────────────────────
+ANA_COSFI   = 0.92
+ANA_IB      = round(TALEP_KW*1000/(math.sqrt(3)*U_HAT*ANA_COSFI), 1)
+ANA_IN      = ANA_KESICI//3
+ANA_KESIT   = 10.0
+ANA_IZ      = IZ_B2[ANA_KESIT]
+ANA_L       = 25.0          # m — VARSAYIM: sayaç panosu ile gym panosu arası
+ANA_DU      = round(math.sqrt(3)*ANA_L*ANA_IB*RHO_CU*ANA_COSFI/ANA_KESIT, 2)
+ANA_DU_P    = round(100*ANA_DU/U_HAT, 2)
+ANA_KABLO   = f"NYY 5×{int(ANA_KESIT)} mm²"
+TOPLAM_DU_MAX = round(ANA_DU_P + DU_MAX, 2)
+
+# ── kaçak akım koruma grupları ────────────────────────────────────────────────
+KACAK_AKIM = [
+ ("RCD-1","4×40 A / 30 mA, A tipi","Aydınlatma grubu — L1 · L2 · L3 · L4 · L6"),
+ ("RCD-2","4×40 A / 30 mA, A tipi","Priz grubu — P1 · P2 · P3 · P4"),
+ ("RCD-3","2×40 A / 30 mA, A tipi","Islak hacim — L5 · P5 (ayrı, TS HD 60364-7-701)"),
+ ("RCD-4","2×40 A / 30 mA, A tipi","Su ısıtıcıları — W1 · W2 (her biri ayrı bloklu)"),
+ ("RCD-5","4×40 A / 30 mA, A tipi","Klima ve havalandırma — K1–K4 · V1 · V2"),
+ ("—",    "Korumasız (izlenir)",   "Z2 yangın algılama paneli — kesintisiz beslenir, "
+                                   "kaçak akım rölesi arkasına alınmaz"),
+]
+ANA_KACAK = "4×63 A / 300 mA, S tipi (seçicilik) — ana giriş"
+
+# ── tavan tesisat koordinasyon kotları (M-07) ────────────────────────────────
+# Asma tavan boşluğu bölgeden bölgeye farklıdır; her bölge için ayrı kot dizilimi.
+# (no, kot_alt, kot_ust, ad, renk_anahtari)
+TAVAN_KATMAN = {
+ "T2": [   # giriş · dinlenme — boşluk 450 mm (2,75 → 3,20).  Temiz su bu bölgeden geçmez.
+  (1, 3.00, 3.17, "Kol hava kanalı 300×150 mm + 25 mm izolasyon", "kanal"),
+  (2, 2.93, 2.99, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
+  (3, 2.86, 2.92, "Kablo tavası 100×60 mm — kuvvet ve aydınlatma", "kablo"),
+  (4, 2.86, 2.92, "Zayıf akım kanalı 50×50 mm — tavadan ≥ 200 mm yatay ayrık", "zayif"),
+  (5, 2.7625, 2.83, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+ ],
+ "T4": [   # soyunma — boşluk 600 mm (2,60 → 3,20).  Islak hacim egzozu bu bölgeden geçmez.
+  (6, 2.99, 3.17, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal"),
+  (7, 2.91, 2.97, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
+  (8, 2.84, 2.90, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo"),
+  (9, 2.78, 2.83, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif"),
+  (10, 2.72, 2.77, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su"),
+  (11, 2.6125, 2.67, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+ ],
+ "T3": [   # duş · WC — boşluk 800 mm (2,40 → 3,20)
+  (12, 2.94, 3.14, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal"),
+  (13, 2.86, 2.92, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
+  (14, 2.79, 2.85, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo"),
+  (15, 2.73, 2.78, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif"),
+  (16, 2.67, 2.72, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su"),
+  (17, 2.50, 2.66, "Islak hacim egzoz kanalı Ø160 mm + izolasyon", "kanal"),
+  (18, 2.4125, 2.47, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+ ],
+}
+TAVAN_BOSLUK = {"T2": 0.45, "T3": 0.80, "T4": 0.60}   # v("tavan_h") = 3,20 kabulüne göre
+def tavan_serbestlik(tip):
+    """Tesisatın en alt kotu ile asma tavan taşıyıcısının üst kotu arası (mm)."""
+    kat = TAVAN_KATMAN[tip]
+    tes = min(k[1] for k in kat if k[4] != "tavan")
+    tas = max(k[2] for k in kat if k[4] == "tavan")
+    return round((tes-tas)*1000)
+TAVAN_SERBESTLIK = {t: tavan_serbestlik(t) for t in TAVAN_KATMAN}
+
+TAVAN_KOORD = [
+ ("Kanal en üstte", "Hava kanalı en büyük kesitli ve eğimsiz elemandır; önce o yerleştirilir, "
+  "diğer tesisat altından geçer."),
+ ("Eğimli borular önceliklidir", "Pis su (%2) ve klima drenajı (%1) eğimini kaybedemez; "
+  "kanal bu hatların altından geçemez, çakışmada kanal yönlendirilir."),
+ ("Kuvvet / zayıf akım ayrımı", "Kuvvet kablosu ile zayıf akım kanalı arasında en az 200 mm "
+  "yatay ayrım; kesişme zorunluysa 90° ve ekranlı geçiş."),
+ ("Askı bağımsızlığı", "Kanal, boru, tava ve armatür askıları doğrudan döşemeye bağlanır; "
+  "alçıpan karkasına hiçbir tesisat asılmaz."),
+ ("Serbest yükseklik", "T2 altında 400 mm, T4 altında 600 mm, T3 altında 800 mm tesisat boşluğu "
+  "vardır; yukarıdaki katman dizilimi bu boşluklara sığar."),
+ ("Revizyon erişimi", "Vana, damper, klima drenaj sifonu ve rakor bulunan her nokta altında "
+  "300×300 mm revizyon kapağı açılır."),
+]
 
 
 # ── MEKANİK poz listesi (detay) ───────────────────────────────────────────────
@@ -420,7 +675,7 @@ B_ELK = [
 ("05.21","ELEKTRİK","IP44 priz — ıslak hacim","adet", len(PRIZ_IP44), 950, 1600,"M"),
 ("05.22","ELEKTRİK","Priz linyesi NHXMH 3×2,5 mm² — spiral boru ve işçilik dâhil","m", L_LINYE25, 140, 230,"M"),
 ("05.23","ELEKTRİK","Klima besleme hattı 3×2,5 mm² + hat sonu kesici","adet", len(KLIMA), 3400, 5700,"M"),
-("05.24","ELEKTRİK","Su ısıtıcı besleme hattı 3×4 mm² + 32 A kesici","adet",2, 5200, 8800,"M"),
+("05.24","ELEKTRİK","Su ısıtıcı besleme hattı 3×6 mm² + 32 A kesici + 30 mA kaçak akım","adet",2, 6400, 10800,"M"),
 ("05.25","ELEKTRİK","Havalandırma fanı besleme ve hız kontrol hattı","adet",3, 2400, 4000,"M"),
 ("05.26","ELEKTRİK","Banko kuvvet + veri kutusu (gömme)","adet",1, 7500, 12500,"M"),
 ("05.30","ELEKTRİK","Cat6 veri prizi + kablolama","adet",6, 1450, 2450,"M"),
@@ -738,4 +993,424 @@ SONRAKI_5 = [
  ("3","İstanbul GSİM'e yazılı ön görüş başvurusu","Bu projenin tek kritik belirsizliği. Dilekçe ekine bu dosyanın 3. ve 5. sayfası konulabilir."),
  ("4","Proje müellifi (mimar) tayini","1/100 onaylı vaziyet planı olmadan ne GSİM ne belediye dosyası açılabilir."),
  ("5","BoQ ile 3 müteahhitten teklif","Birim fiyat sütunları boş .xlsx dosyası hazır; teklifler aynı metraj üzerinden karşılaştırılabilir."),
+]
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  MİMARİ UYGULAMA PROJESİ VERİSİ  (Rev D)
+#  Tüm kaplama, bölme, tavan, kapı ve detay bilgisi bu bloktan türetilir.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── kot referansı ──────────────────────────────────────────────────────────────
+# ±0,00 = BİTMİŞ ZEMİN KOTU (salon).  Mevcut şap üst kotu = −0,053 kabul edildi;
+# tüm kuru hacimlerde bitmiş kot 53 mm tesviye ile eşitlenir → eşik/tökezleme yok.
+KOT_MEVCUT_SAP   = -0.053     # m — VARSAYIM, yerinde ölçümle doğrulanacak
+KOT_ISLAK        = -0.020     # m — duş/WC bitmiş kotu (su taşkını kontrolü)
+KOT_YAPISAL_TAVAN = v("tavan_h")          # 3,20 m — VARSAYIM
+
+# ── ZEMİN KAPLAMA TİPLERİ ──────────────────────────────────────────────────────
+# kod, ad, [(katman, mm, tarama)], bitmiş kot, standart/performans
+ZEMIN_TIPLERI = [
+ ("Z1", "Arena · serbest ağırlık — ağır hizmet kauçuk",
+  [("Mevcut betonarme döşeme / şap — yüzey temizliği, ±3 mm/2 m tesviye", 0, "beton"),
+   ("Çimento esaslı kendinden yayılan tesviye şapı", 3, "sap"),
+   ("Kauçuk titreşim yalıtım matı, SBR granül 700 kg/m³", 10, "kaucuk"),
+   ("Granül kauçuk karo 1000×1000 mm, EPDM %10 taneli, Shore A 55±5", 40, "kaucuk")],
+  0.000, "EN 14041 · yangın Bfl-s1 · EN ISO 10140 ΔLw ≥ 18 dB · serbest ağırlık düşürmeye uygun"),
+ ("Z2", "Fonksiyonel · kardiyo — kauçuk karo",
+  [("Mevcut betonarme döşeme / şap", 0, "beton"),
+   ("Çimento esaslı tesviye şapı (kot eşitleme)", 30, "sap"),
+   ("Granül kauçuk karo 1000×1000 mm, Shore A 60", 20, "kaucuk"),
+   ("Puzzle kilitli kuru derz · çeperde 5 mm genleşme boşluğu", 3, "kaucuk")],
+  0.000, "EN 14041 · Bfl-s1 · kardiyo cihazı nokta yükü ≥ 4 kN/m²"),
+ ("Z3", "Giriş · banko · dinlenme — SPC / LVT",
+  [("Mevcut betonarme döşeme / şap", 0, "beton"),
+   ("Çimento esaslı tesviye şapı (kot eşitleme)", 42, "sap"),
+   ("IXPE akustik şilte", 2, "sunger"),
+   ("SPC klik LVT, 0,55 mm aşınma tabakası", 5, "lvt"),
+   ("Çeperde 8 mm genleşme boşluğu, süpürgelik altında gizlenir", 4, "lvt")],
+  0.000, "EN ISO 10874 aşınma sınıfı 33 / AC5 · EN 14041 Bfl-s1 · kaymazlık DS"),
+ ("Z4", "Duş · WC — su yalıtımlı seramik",
+  [("Mevcut şap kırımı sonrası betonarme döşeme (tesisat boşluğu)", 0, "beton"),
+   ("Atık boru yatağı + tesisat şapı", 25, "sap"),
+   ("Eğim şapı — süzgeğe doğru %1,5", 15, "sap"),
+   ("Çimento esaslı 2 bileşenli su yalıtımı, 2 kat (köşelerde 12 cm bant)", 2, "yalitim"),
+   ("C2TE S1 sınıfı yapıştırıcı", 5, "sap"),
+   ("Porselen seramik 300×300 mm, R11 / B kaymazlık", 8, "seramik")],
+  KOT_ISLAK, "EN 14891 su yalıtımı · EN 16165 Ek B (R11) · Ek A (B sınıfı ıslak ayak)"),
+ ("Z5", "Soyunma — porselen seramik",
+  [("Mevcut betonarme döşeme / şap", 0, "beton"),
+   ("Çimento esaslı tesviye şapı (kot eşitleme)", 38, "sap"),
+   ("Çimento esaslı su yalıtımı, tek kat (sıçrama koruması)", 1, "yalitim"),
+   ("C2TE yapıştırıcı", 5, "sap"),
+   ("Porselen seramik 600×600 mm, R10", 9, "seramik")],
+  0.000, "EN 16165 Ek B (R10) · EN 14411 BIa · rektifiye, 2 mm derz"),
+ ("Z6", "Ring platformu (ekipmana bağlı — işverence temin)",
+  [("Bitmiş zemin Z1 üzeri ayarlı çelik ayak + 50×100 ahşap kadron @400 mm", 200, "ahsap"),
+   ("Su kontraplağı 2 kat 18 mm, şaşırtmalı vidalı", 36, "ahsap"),
+   ("EVA şok emici köpük", 40, "sunger"),
+   ("Kanvas kaplama, kenarda gergi profili", 10, "kaucuk"),
+   ("Kenarda 100 mm kauçuk kenar bandı + sarı-siyah ikaz şeridi", 14, "kaucuk")],
+  0.300, "Ekipman üreticisi montaj talimatına tabi · platform kenarı zeminden 30 cm"),
+]
+ZEMIN_KALINLIK = {z[0]: sum(k[1] for k in z[2]) for z in ZEMIN_TIPLERI}
+
+# ── DUVAR TİPLERİ ──────────────────────────────────────────────────────────────
+# kod, ad, toplam_mm, [(katman, mm)], performans
+DUVAR_TIPLERI = [
+ ("D1", "Mevcut taşıyıcı / dolgu duvar — boyalı", 206,
+  [("Mevcut yığma veya betonarme duvar", 200),
+   ("Çimento esaslı tamir harcı ile yüzey onarımı", 0),
+   ("Saten alçı perdah, 2 kat", 3),
+   ("Akrilik astar + su bazlı silikonlu mat iç cephe boyası, 2 kat", 3)],
+  "Sınıf 1 yıkanabilir boya · mevcut duvar kalınlığı VARSAYIM, yerinde ölçülecek"),
+ ("D2", "Alçıpan bölme — kuru hacim", 100,
+  [("12,5 mm A tipi alçıpan, 2 kat (şaşırtmalı derz)", 25),
+   ("50×0,6 mm galvaniz C profil @400 mm + U tabanlık", 50),
+   ("Taşyünü dolgu 40 mm / 50 kg/m³", 0),
+   ("12,5 mm A tipi alçıpan, 2 kat", 25)],
+  "Rw ≈ 51 dB (EN ISO 717-1) · U tabanlık altında butil ses bandı"),
+ ("D3", "Alçıpan bölme — ıslak hacim yüzü", 100,
+  [("12,5 mm H2 (su itici / yeşil) alçıpan, 2 kat — ıslak yüz", 25),
+   ("50×0,6 mm galvaniz C profil @400 mm + U tabanlık", 50),
+   ("Taşyünü dolgu 40 mm / 50 kg/m³", 0),
+   ("12,5 mm A tipi alçıpan, 2 kat — kuru yüz", 25)],
+  "EN 520 tip H2 · ıslak yüzde 2 kat çimento esaslı su yalıtımı + seramik (kalınlık hariç)"),
+ ("D4", "Akustik giydirme — arena çeperi", 95,
+  [("Mevcut duvardan bağımsız 20 mm hava boşluğu", 20),
+   ("50×0,6 mm C profil karkas (duvara bağlantısız, tavan-döşeme arası)", 50),
+   ("Taşyünü dolgu 50 mm / 70 kg/m³", 0),
+   ("12,5 mm yüksek yoğunluklu akustik alçıpan", 12.5),
+   ("12,5 mm A tipi alçıpan + saten + boya", 12.5)],
+  "ΔRw ≈ +10 dB · üst kat konut VARSAYIMI gereği arena çeperinde uygulanır"),
+ ("D5", "Seramik kaplı duvar — ıslak hacim", 216,
+  [("Mevcut duvar veya D3 ıslak yüzü", 200),
+   ("Çimento esaslı 2 bileşenli su yalıtımı, 2 kat; köşe ve zemin birleşiminde 12 cm bant", 2),
+   ("C2TE S1 yapıştırıcı", 5),
+   ("Porselen seramik 300×600 mm, rektifiye", 9)],
+  "EN 14891 · duş kabininde tavana kadar, WC'de h=1,60 m, üstü küf önleyici banyo boyası"),
+ ("D6", "Ayna duvarı — arena güney çeperi", 212,
+  [("D1 veya D4 üzerine 18 mm su kontraplağı taşıyıcı altlık", 18),
+   ("6 mm güvenlik filmli ayna, yapıştırma + mekanik emniyet profili", 6)],
+  "Ayna alt kotu +0,30 · üst kotu +2,30 · kırılmaya karşı arka yüz güvenlik filmi (EN 12600)"),
+]
+DUVAR_T_MM = {d[0]: d[2] for d in DUVAR_TIPLERI}
+
+# ── TAVAN TİPLERİ ──────────────────────────────────────────────────────────────
+# kod, ad, kot_m, [(katman/açıklama)], not
+TAVAN_TIPLERI = [
+ ("T1", "Açık (endüstriyel) tavan", 3.20,
+  ["Mevcut döşeme altı raspa + temizlik",
+   "Tüm MEP tesisatı görünür — düzenli askı ve hizalı güzergâh zorunlu",
+   "2 kat siyah su bazlı akrilik boya (döşeme altı, kanal ve askılar dâhil)",
+   "Arena üzerinde 12 adet 1200×600×50 mm asma akustik taşyünü baffle (αw ≈ 0,90)"],
+  "Arena · fonksiyonel — serbest yükseklik korunur, ekipman kotu 2,15 m'ye kadar"),
+ ("T2", "Alçıpan asma tavan — kuru hacim", 2.75,
+  ["Ayarlı askı çubuğu @900 mm, TC47 ana profil @900 / TU27 taşıyıcı @400 mm",
+   "12,5 mm A tipi alçıpan tek kat",
+   "Derz bandı + 2 kat saten alçı + astar + 2 kat mat boya",
+   "Kenar gölge derzi 10 mm (duvar birleşiminde ayrılma çatlağı önlemi)"],
+  "Giriş · banko · dinlenme — üstünde 450 mm tesisat boşluğu (kanal + tava + bakır hat sığsın diye "
+  "kot 2,80'den 2,75'e indirilmiştir)"),
+ ("T3", "Alçıpan asma tavan — ıslak hacim", 2.40,
+  ["Galvaniz ayarlı askı @900 mm, TC47 / TU27 karkas",
+   "12,5 mm H2 (su itici) alçıpan tek kat",
+   "Su bazlı, küf önleyici yarı mat banyo boyası, 2 kat",
+   "300×300 mm menteşeli revizyon kapağı (her ıslak hacimde 1 adet)"],
+  "Duş · WC — üstünde 800 mm tesisat boşluğu (egzoz kanalı geçişi)"),
+ ("T4", "Alçıpan asma tavan — soyunma", 2.60,
+  ["T2 ile aynı karkas ve kaplama",
+   "Soyunma/duş sınırında kot geçiş bandı (dikme)",
+   "Nem nedeniyle duş kapısı önünde 1,0 m şeridinde H2 alçıpan"],
+  "Erkek · kadın soyunma — üstünde 600 mm tesisat boşluğu"),
+]
+TAVAN_KOT = {t[0]: t[2] for t in TAVAN_TIPLERI}
+
+# ── SÜPÜRGELİK ─────────────────────────────────────────────────────────────────
+SUPURGELIK = [
+ ("S1", "Kauçuk süpürgelik 100×8 mm — zemin kaplamasıyla aynı malzeme, üst kenarı 45° pahlı"),
+ ("S2", "MDF lake süpürgelik 80×16 mm — RAL 9003, akrilik mastik ile duvara yalanır"),
+ ("S3", "Süpürgelik yok — duvar seramiği zemine iner; birleşimde içbükey (kaveto) profil"),
+ ("S4", "Porselen süpürgelik 80 mm — zemin karosundan kesme, rektifiye kenar"),
+]
+
+# ── MAHAL LİSTESİ (finishes schedule) ──────────────────────────────────────────
+# no, ad, m², zemin, süpürgelik, duvar, tavan, tavan_kot, kapı, ıslak?, not
+MAHAL_LISTESI = [
+ ("101","GİRİŞ · BANKO · SİRKÜLASYON", ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],
+  "Z3","S2","D1","T2",2.75,"K01 · K09", False,
+  "Cephe vitrini mevcut (P01); alt 1,20 m buzlu folyo. Banko arkası D1 üzeri lake MDF panel."),
+ ("102","ARENA · SERBEST AĞIRLIK", ZON_M2["ARENA · SERBEST AĞIRLIK"],
+  "Z1","S1","D1 + D4 (güney çeper) + D6 (ayna, 4,80 m)","T1",3.20,"—", False,
+  "Ring platformu Z6. Ağırlık düşürme kural olarak yasak — uyarı levhası."),
+ ("103","FONKSİYONEL · KARDİYO", ZON_M2["FONKSİYONEL · KARDİYO"],
+  "Z2","S1","D1 / D2 (soyunma bloğu cephesi)","T1",3.20,"—", False,
+  "Koşu bandı arkasında 60 cm serbest güvenlik mesafesi bırakılacak."),
+ ("104","DİNLENME SALONU", ZON_M2["DİNLENME SALONU"],
+  "Z3","S2","D1","T2",2.75,"—", False,
+  "Yönetmelik gereği asgari 15 m² dinlenme alanı — sağlanıyor."),
+ ("105","ERKEK SOYUNMA", ISLAK_M2_DETAY["ERKEK"]["soyunma"],
+  "Z5","S4","D2 / D3","T4",2.60,"K03", False,
+  "8 kişilik soyunma dolabı + 1,60 m bank + boy aynası. Yönetmelik asgarisi 8 m² blok bazında."),
+ ("106","ERKEK DUŞ", ISLAK_M2_DETAY["ERKEK"]["dus"],
+  "Z4","S3","D3 + D5 (tavana kadar)","T3",2.40,"K07", True,
+  "1 duş yeri; 100×100 mm paslanmaz süzgeç, %1,5 eğim, termostatik batarya."),
+ ("107","ERKEK WC", ISLAK_M2_DETAY["ERKEK"]["wc"],
+  "Z4","S3","D3 + D5 (h=1,60 m)","T3",2.40,"K05", True,
+  "1 klozet + 1 lavabo; ekstraktör fan kapı menfezi ile telafi havası."),
+ ("108","KADIN SOYUNMA", ISLAK_M2_DETAY["KADIN"]["soyunma"],
+  "Z5","S4","D2 / D3","T4",2.60,"K04", False,
+  "8 kişilik soyunma dolabı + 1,60 m bank + boy aynası."),
+ ("109","KADIN DUŞ", ISLAK_M2_DETAY["KADIN"]["dus"],
+  "Z4","S3","D3 + D5 (tavana kadar)","T3",2.40,"K08", True,
+  "1 duş yeri; 100×100 mm paslanmaz süzgeç, %1,5 eğim, termostatik batarya."),
+ ("110","KADIN WC", ISLAK_M2_DETAY["KADIN"]["wc"],
+  "Z4","S3","D3 + D5 (h=1,60 m)","T3",2.40,"K06", True,
+  "1 klozet + 1 lavabo; ekstraktör fan kapı menfezi ile telafi havası."),
+]
+MAHAL_TOPLAM = round(sum(m[2] for m in MAHAL_LISTESI), 2)
+# net mahal alanları toplamı, iç bölme duvar kalınlıkları hariçtir:
+MAHAL_DUVAR_PAYI = round(A["ic_toplam"] - MAHAL_TOPLAM, 2)
+MAHAL_NO = {m[1]: m[0] for m in MAHAL_LISTESI}
+
+# mahal etiket noktaları (plan üzerinde numara balonu)
+MAHAL_NOKTA = {}
+for _z in ZONES: MAHAL_NOKTA[MAHAL_NO[_z[0]]] = _z[5]
+for _ad, _d in ISLAK.items():
+    _blok = "ERKEK" if _ad == "ERKEK" else "KADIN"
+    for _n, _no in (("soyunma", "105" if _blok=="ERKEK" else "108"),
+                    ("dus",     "106" if _blok=="ERKEK" else "109"),
+                    ("wc",      "107" if _blok=="ERKEK" else "110")):
+        _q = _d[_n].representative_point(); MAHAL_NOKTA[_no] = (_q.x, _q.y)
+
+# ── KAPI VE PENCERE LİSTESİ ────────────────────────────────────────────────────
+# kod, adet, mahal, en_mm, yuk_mm, tip, kasa/kanat, donanım, yangın/özel
+KAPI_LISTESI = [
+ ("K01",1,"101 Giriş",1600,2400,"Çift kanat cam kapı (2×800)",
+  "Mevcut alüminyum doğrama + 8 mm temperli cam",
+  "Panik kolu (EN 1125), hidrolik kapı kapatıcı, eşiksiz alt profil",
+  "Açılış yönü DIŞARI çevrilecek — mevcut doğrama revize"),
+ ("K02",1,"101 → GB cephe",1000,2100,"Tek kanat acil çıkış",
+  "Alüminyum + 8 mm temperli cam",
+  "Panik bar (EN 1125), kapı kapatıcı, dışa açılır",
+  "Acil çıkış levhası + acil aydınlatma AY3 üstünde"),
+ ("K03",1,"105 Erkek soyunma",900,2100,"Tek kanat panel kapı",
+  "MDF laminat kaplı kanat, WPC kasa ve pervaz",
+  "Paslanmaz kol, silindirli kilit, 3 adet menteşe",
+  "Alt kısmında 150 cm² net hava geçiş menfezi"),
+ ("K04",1,"108 Kadın soyunma",900,2100,"Tek kanat panel kapı",
+  "MDF laminat kaplı kanat, WPC kasa ve pervaz",
+  "Paslanmaz kol, silindirli kilit, 3 adet menteşe",
+  "Alt kısmında 150 cm² net hava geçiş menfezi"),
+ ("K05",1,"107 Erkek WC",700,2000,"Tek kanat WC kapısı",
+  "Tam WPC (su geçirmez) kanat ve kasa",
+  "Kilit göstergeli WC kolu, paslanmaz menteşe",
+  "Alt menfez 150 cm² — egzoz telafi havası"),
+ ("K06",1,"110 Kadın WC",700,2000,"Tek kanat WC kapısı",
+  "Tam WPC (su geçirmez) kanat ve kasa",
+  "Kilit göstergeli WC kolu, paslanmaz menteşe",
+  "Alt menfez 150 cm² — egzoz telafi havası"),
+ ("K07",1,"106 Erkek duş",700,1950,"Duş kapağı",
+  "6 mm temperli cam, alüminyum profil",
+  "Paslanmaz menteşe, manyetik fitil",
+  "Alt kenar zeminden 15 mm yukarıda"),
+ ("K08",1,"109 Kadın duş",700,1950,"Duş kapağı",
+  "6 mm temperli cam, alüminyum profil",
+  "Paslanmaz menteşe, manyetik fitil",
+  "Alt kenar zeminden 15 mm yukarıda"),
+ ("K09",1,"101 Depo / teknik dolap",700,2000,"Tek kanat dolap kapağı",
+  "MDF laminat, banko arkası niş",
+  "Bas-aç mandal, kilitli",
+  "Havalandırma menfezli — NVR ve router ısısı için"),
+]
+PENCERE_LISTESI = [
+ ("P01",1,"101 Giriş — batı cephe vitrini","Mevcut alüminyum doğrama + 8 mm temperli cam",
+  "Alt 1,20 m buzlu folyo · üst bant şeffaf · iç yüzde güneş kontrol filmi",
+  "Mevcut — ölçü yerinde alınacak (VARSAYIM: 5,62 m açıklık)"),
+ ("P02",1,"101 Giriş — GB cephe vitrini","Mevcut alüminyum doğrama + 8 mm temperli cam",
+  "Alt 1,20 m buzlu folyo · K02 acil çıkış bu doğrama içinde",
+  "Mevcut — ölçü yerinde alınacak (VARSAYIM: 2,02 m açıklık)"),
+]
+
+# ── YIKIM / SÖKÜM İŞ KALEMLERİ ─────────────────────────────────────────────────
+# kod, tanım, metraj, birim, not
+YIKIM = [
+ ("Y01","Mevcut mağaza rafı, teşhir ünitesi ve mobilyanın sökülüp taşınması",
+  1,"komple","İşverence devralınacak parçalar önceden ayrılır"),
+ ("Y02","Mevcut asma tavan ve aydınlatma armatürlerinin sökümü",
+  A["ic_toplam"],"m²","VARSAYIM — mevcutta asma tavan bulunduğu kabul edildi"),
+ ("Y03","Mevcut zemin kaplamasının (laminat / seramik) sökümü, altlık temizliği",
+  A["ic_toplam"],"m²","Şap yüzeyi tesviye kontrolüne hazır bırakılır"),
+ ("Y04","Islak hacim alanında mevcut şap kırımı (tesisat boşluğu için, ort. 70 mm)",
+  A["islak_toplam"],"m²","Kırım öncesi döşeme donatısı için tarama yapılacak"),
+ ("Y05","Mevcut sıva üstü elektrik tesisatı ve tablosunun sökümü",
+  1,"komple","Enerji kesilerek, yetkili elektrikçi nezaretinde"),
+ ("Y06","Mevcut ıslak hacim (varsa) armatür ve duvar seramiği sökümü",
+  A["islak_toplam"],"m²","VARSAYIM — yerinde tespit sonrası revize edilecek"),
+ ("Y07","Yeni kapı boşluklarının açılması, lento teşkili",
+  2,"adet","Taşıyıcı duvarda ise statik görüş alınacak — ZORUNLU"),
+ ("Y08","Moloz çuvallama, yatay-düşey taşıma ve belediye döküm sahasına nakli",
+  14,"m³","VARSAYIM — söküm sonrası gerçek hacimle revize edilecek"),
+]
+YIKIM_NOT = ("Mevcutta iç bölme duvarı bulunmadığı, mekânın tek hacim mağaza olduğu VARSAYILMIŞTIR. "
+             "Söküm öncesi mevcut durum rölövesi alınacak; taşıyıcı sistemde hiçbir elemana "
+             "dokunulmayacaktır. Kolon, perde ve döşeme kirişlerinde kesme/delme yasaktır.")
+
+# ── KESİT HATLARI ──────────────────────────────────────────────────────────────
+KESIT_HATLARI = {
+ "A-A": ((-0.70, 7.30), (12.30, 7.30),
+         "Enine kesit — fonksiyonel alan, erkek duş ve WC bloğu"),
+ "B-B": ((6.60, -0.70), (6.60, 13.70),
+         "Boyuna kesit — arena, altıgen ring, fonksiyonel alan ve dinlenme salonu"),
+}
+
+# hangi hacimde olduğumuzu döndüren yardımcı (kesit üretimi için)
+_MAHAL_GEOM = ([(z[0], MAHAL_NO[z[0]], z[1]) for z in ZONES] +
+               [("ERKEK SOYUNMA","105",ISLAK["ERKEK"]["soyunma"]),
+                ("ERKEK DUŞ",    "106",ISLAK["ERKEK"]["dus"]),
+                ("ERKEK WC",     "107",ISLAK["ERKEK"]["wc"]),
+                ("KADIN SOYUNMA","108",ISLAK["KADIN"]["soyunma"]),
+                ("KADIN DUŞ",    "109",ISLAK["KADIN"]["dus"]),
+                ("KADIN WC",     "110",ISLAK["KADIN"]["wc"])])
+_MAHAL_BILGI = {m[0]: m for m in MAHAL_LISTESI}
+
+def kesit_dizisi(a, b, adim=0.01):
+    """Kesit hattı boyunca hangi mahalden geçildiğini tarar.
+    Döner: [(mahal_no | None, s_bas, s_son)] — s = hat başından uzaklık (m).
+    None = duvar veya yapı dışı."""
+    import math as _m
+    L = _m.dist(a, b); n = max(2, int(L/adim))
+    ux, uy = (b[0]-a[0])/L, (b[1]-a[1])/L
+    dizi = []
+    for i in range(n+1):
+        s = i*L/n; p = Point(a[0]+ux*s, a[1]+uy*s)
+        no = None
+        for ad, mno, g in _MAHAL_GEOM:
+            if g.contains(p): no = mno; break
+        if dizi and dizi[-1][0] == no: dizi[-1][2] = s
+        else: dizi.append([no, s, s])
+    return [(d[0], round(d[1], 3), round(d[2], 3)) for d in dizi if d[2]-d[1] > 0.015]
+
+# kesit bakış yönü: kesit düzleminin hangi tarafındaki hacim görünür (+1 / −1)
+KESIT_BAKIS = {"A-A": +1, "B-B": -1}
+SALON_MAHAL = {MAHAL_NO[z[0]] for z in ZONES}     # 101–104: aralarında fiziksel bölme YOK
+
+def kesit_uzunluk(ad):
+    a, b = KESIT_HATLARI[ad][0], KESIT_HATLARI[ad][1]
+    return math.dist(a, b)
+
+# ── İÇ GÖRÜNÜŞLER ──────────────────────────────────────────────────────────────
+# kod, başlık, genişlik_m, yükseklik_m (yapısal), tavan_kot, [öğeler]
+# öğe: (tip, x_bas, x_son, z_alt, z_ust, etiket)
+IC_GORUNUS = [
+ ("G-01","GİRİŞ VE BANKO DUVARI — 101'den batıya bakış", 5.60, 3.20, 2.75, [
+   ("cam",   0.20, 5.40, 0.00, 2.40, "Mevcut cephe vitrini P01 — alt 1,20 m buzlu folyo"),
+   ("dolgu", 0.20, 5.40, 0.00, 1.20, "Buzlu folyo bandı"),
+   ("kapi",  1.90, 3.50, 0.00, 2.40, "K01 çift kanat cam giriş kapısı — dışa açılır"),
+   ("mobilya",4.20, 5.40, 0.00, 1.10, "Banko — 120×60 cm, lake MDF + kompakt lamine tezgâh"),
+   ("levha", 0.40, 1.30, 1.60, 2.10, "Tesis tabelası ve çalışma saatleri"),
+   ("tavan", 0.00, 5.60, 2.75, 2.75, "T2 alçıpan asma tavan +2,75"),
+ ]),
+ ("G-02","ARENA GÜNEY DUVARI — 102'den güneye bakış", 5.02, 3.20, 3.20, [
+   ("giydirme",0.00, 5.02, 0.00, 3.20, "D4 akustik giydirme — mevcut duvardan bağımsız karkas, 50 mm taşyünü"),
+   ("ayna",  0.10, 4.90, 0.30, 2.30, "D6 ayna duvarı 4,80×2,00 m — 6 mm, arka yüz güvenlik filmli"),
+   ("ekipman",0.00, 2.03, 0.00, 1.45, "F1 — koşu bandı (245×74 cm), duvardan 60 cm serbest"),
+   ("ekipman",2.18, 4.63, 0.00, 1.45, "F2 — koşu bandı (245×74 cm)"),
+   ("supurgelik",0.00, 5.02, 0.00, 0.10, "S1 kauçuk süpürgelik 100 mm"),
+   ("levha", 4.25, 4.90, 2.45, 2.90, "«Ağırlık düşürmek yasaktır» uyarı levhası"),
+   ("tavan", 0.00, 5.02, 3.20, 3.20, "T1 açık tavan +3,20 — siyah boyalı, akustik baffle"),
+ ]),
+ ("G-03","SOYUNMA BLOĞU CEPHESİ — salondan doğuya bakış", 8.05, 3.20, 3.20, [
+   ("duvar", 0.00, 8.05, 0.00, 3.20, "D2 alçıpan bölme — salon yüzü saten + mat boya"),
+   ("kapi",  2.50, 3.40, 0.00, 2.10, "K04 kadın soyunma kapısı 90×210 — alt menfez 150 cm²"),
+   ("kapi",  6.22, 7.12, 0.00, 2.10, "K03 erkek soyunma kapısı 90×210 — alt menfez 150 cm²"),
+   ("levha", 2.70, 3.20, 2.25, 2.60, "Piktogram — KADIN"),
+   ("levha", 6.42, 6.92, 2.25, 2.60, "Piktogram — ERKEK"),
+   ("ekipman",3.90, 5.45, 0.00, 0.95, "D2 — dambıl rafı / sehpa (duvar önü, 155×39 cm)"),
+   ("supurgelik",0.00, 8.05, 0.00, 0.10, "S1 kauçuk süpürgelik 100 mm"),
+   ("tavan", 0.00, 8.05, 3.20, 3.20, "T1 açık tavan +3,20 — bölme tavan üstünden döşemeye devam eder"),
+ ]),
+ ("G-04","ERKEK SOYUNMA İÇ GÖRÜNÜŞ — 105'ten kuzeye bakış", 2.60, 3.20, 2.60, [
+   ("duvar", 0.00, 2.60, 0.00, 2.60, "D2 / D3 alçıpan — saten + mat boya"),
+   ("mobilya",0.10, 1.70, 0.00, 1.80, "8 gözlü soyunma dolabı 160×45×180 cm — laminat, havalandırma delikli"),
+   ("mobilya",1.85, 2.50, 0.42, 0.45, "Bank 160×35 cm, ahşap latalı, duvara konsol bağlantılı"),
+   ("ayna",  1.85, 2.45, 0.90, 2.00, "Boy aynası 60×110 cm — güvenlik filmli"),
+   ("askilik",1.80, 2.55, 1.70, 1.75, "Paslanmaz askılık — 5 kancalı"),
+   ("supurgelik",0.00, 2.60, 0.00, 0.08, "S4 porselen süpürgelik 80 mm"),
+   ("tavan", 0.00, 2.60, 2.60, 2.60, "T4 alçıpan asma tavan +2,60"),
+ ]),
+]
+
+# ── İMALAT DETAYLARI (1:10) ────────────────────────────────────────────────────
+# kod, başlık, tip, veri, notlar[]
+DETAYLAR = [
+ ("D-01","Z1 ZEMİN KATMAN DETAYI — arena · serbest ağırlık","katman","Z1",
+  ["Kauçuk karo çeperde 5 mm genleşme boşluğu ile biter; boşluk süpürgelik altında kalır.",
+   "Titreşim matı duvara 50 mm yukarı dönerek yüzer döşeme teşkil eder (yan geçiş sesi kesilir).",
+   "Karo altı kuru uygulamadır — yapıştırıcı kullanılmaz, sökülüp değiştirilebilir."]),
+ ("D-02","Z4 ISLAK HACİM ZEMİN VE DUVAR BİRLEŞİMİ","katman","Z4",
+  ["Su yalıtımı duvarda en az 300 mm, duş kabininde 2000 mm yukarı döner.",
+   "Zemin-duvar köşesinde 120 mm elastik su yalıtım bandı, yalıtımın iki katı arasına gömülür.",
+   "Seramik derzi çimento esaslı (CG2 WA); köşe derzleri silikon (sınıf 25LM, küf önleyici)."]),
+ ("D-03","Z3 / Z1 ZEMİN KOT VE MALZEME GEÇİŞ DETAYI","gecis",None,
+  ["Bitmiş zemin kotları eşittir (±0,00) — eşik veya rampa oluşmaz, tökezleme riski yoktur.",
+   "Geçişte 40 mm alüminyum düz geçiş profili; kauçuk tarafta 5 mm genleşme boşluğu bırakılır.",
+   "Tesviye şapı kalınlıkları farklıdır (Z1: 3 mm · Z2: 30 mm · Z3: 42 mm · Z5: 38 mm)."]),
+ ("D-04","D2 ALÇIPAN BÖLME — YATAY KESİT VE KÖŞE","duvar","D2",
+  ["C profiller @400 mm; kapı kenarlarında ve 3,0 m'den uzun duvarlarda kutu profil takviye.",
+   "Alçıpan derzleri iki yüzde şaşırtmalı; ikinci kat ilk katla 600 mm kaydırılır.",
+   "Ağır asma yük (ayna, dolap, TV) için karkas içine 18 mm kontraplak takviye gömülür."]),
+ ("D-05","D3 ISLAK BÖLME + DUŞ SÜZGEÇ VE EĞİM DETAYI","islak",None,
+  ["Duş zemini süzgeğe %1,5 eğimli; süzgeç 100×100 mm paslanmaz, kokulu sifon (50 mm su tutuşlu).",
+   "Süzgeç flanşı su yalıtımının iki katı arasına sıkıştırılır — sızdırmazlık burada sağlanır.",
+   "U tabanlık profil butil bant üzerine oturur; alçıpan alt kenarı bitmiş zeminden 10 mm yukarıda."]),
+ ("D-06","T2 / T3 ASMA TAVAN KENAR VE REVİZYON KAPAĞI","tavan",None,
+  ["Duvar birleşiminde 10 mm gölge derzi — farklı oturma nedeniyle çatlamayı önler.",
+   "Askı @900 mm; kanal, boru veya armatür ağırlığı alçıpan karkasına asılmaz, ayrı askılanır.",
+   "Her ıslak hacimde 300×300 mm revizyon kapağı; vana ve klima drenaj bağlantısı altında."]),
+ ("D-07","Z6 RING PLATFORMU KENAR DETAYI","katman","Z6",
+  ["Platform ekipman üreticisinin montaj talimatına tabidir; bu detay çevre bitişini tanımlar.",
+   "Kenarda 100 mm kauçuk kenar bandı + sarı-siyah ikaz şeridi (kot farkı 30 cm).",
+   "Platform altı boşluğu havalandırmalı bırakılır, temizlik için 2 gözde sökülebilir kapak."]),
+ ("D-08","D6 AYNA MONTAJ DETAYI","ayna",None,
+  ["Ayna alt kotu +0,30 (süpürgelik üstü), üst kotu +2,30.",
+   "Arka yüzde güvenlik filmi (EN 12600 sınıf 2B2) ZORUNLU — serbest ağırlık alanında kırılma riski.",
+   "Yapıştırma + alt ve üstte alüminyum mekanik emniyet profili; ayna arkası nemsiz kalmalı."]),
+]
+
+# ── YANGIN / TAHLİYE VERİSİ ────────────────────────────────────────────────────
+CIKISLAR = [("Ç1", (0.24, 4.30), 1.60, "ANA ÇIKIŞ — batı cephe"),
+            ("Ç2", (3.35, 0.10), 1.00, "ACİL ÇIKIŞ — güneybatı cephe")]
+YANGIN_EKIPMAN = [
+ ("YD1", (0.95, 7.55), "Yangın dolabı — 30 m hortum, TS EN 671-2 (opsiyon: GSİM talebine göre)"),
+ ("YT1", (0.70, 3.90), "6 kg ABC kuru kimyevi tozlu yangın söndürücü — çıkış yanında"),
+ ("YT2", (8.00, 9.20), "6 kg ABC kuru kimyevi tozlu yangın söndürücü — dinlenme/soyunma yakını"),
+ ("YT3", (6.60, 0.55), "6 kg ABC kuru kimyevi tozlu yangın söndürücü — acil çıkış yanında"),
+]
+TAHLIYE_YOL = [  # (mahal_no, [nokta...], çıkış kodu) — kapılardan geçer, ekipmanın etrafından dolaşır
+ ("104", [(8.05,11.10),(7.05,9.70),(6.55,8.88),(5.00,8.10),(2.60,6.50),(0.45,4.35)], "Ç1"),
+ ("103", [(6.40,7.45),(4.60,7.30),(2.40,6.30),(0.45,4.35)], "Ç1"),
+ ("102", [(5.30,1.62),(4.30,0.95),(3.40,0.40)], "Ç2"),
+ ("105", [(9.80,6.30),(8.95,7.05),(8.40,7.28),(6.80,7.55),(4.20,6.70),(2.00,5.70),(0.45,4.35)], "Ç1"),
+ ("108", [(10.10,3.30),(9.35,3.38),(8.60,3.50),(7.85,5.30),(7.55,7.00),(5.00,7.50),(2.20,6.10),(0.45,4.35)], "Ç1"),
+]
+def tahliye_uzunluk(yol): return round(sum(math.dist(yol[i],yol[i+1]) for i in range(len(yol)-1)),1)
+TAHLIYE_MAX = max(tahliye_uzunluk(y[1]) for y in TAHLIYE_YOL)
+TAHLIYE_SINIR = 45.0   # BYKHY Tablo 5.5 — tek yönde kaçış olmayan, 2 çıkışlı tesis
+
+# ── MİMARİ GENEL NOTLAR ────────────────────────────────────────────────────────
+MIMARI_NOTLAR = [
+ "Tüm ölçüler metre (m), kaplama katman kalınlıkları milimetre (mm) cinsindendir. Ölçü okunur, çizimden ölçü alınmaz.",
+ "±0,00 kotu bitmiş zemin kotudur. Mevcut şap üst kotu −0,053 VARSAYILMIŞTIR; söküm sonrası yerinde ölçülüp tüm tesviye şapı kalınlıkları revize edilecektir.",
+ "Taşıyıcı sistemde (kolon, perde, kiriş, döşeme) hiçbir kesme, delme veya yük artışı yapılmayacaktır. Gerekli hâllerde statik proje müellifinden yazılı görüş alınacaktır.",
+ "Mevcut duvar kalınlıkları ve tavan yüksekliği VARSAYIMDIR; rölöve sonrası mahal listesi ve tavan kotları güncellenecektir.",
+ "Alçıpan imalatlarda profil aralığı 400 mm'yi geçmeyecek; 3,0 m üzeri duvarlarda ve kapı kenarlarında kutu profil takviyesi yapılacaktır.",
+ "Islak hacimlerde su yalıtımı EN 14891'e uygun, çimento esaslı 2 bileşenli, 2 kat; tüm köşe ve boru geçişlerinde bant ve manşet kullanılacaktır.",
+ "Islak hacim imalatı bitiminde, seramik öncesi 24 saatlik su tutma (taşkın) testi yapılacak ve tutanağa bağlanacaktır.",
+ "Kauçuk zemin, üst kat konut VARSAYIMI nedeniyle titreşim matı ile yüzer döşeme olarak teşkil edilecektir; mat duvara 50 mm yukarı dönecektir.",
+ "Tüm cam yüzeylerde (kapı, ayna, vitrin) temperli veya lamine güvenlik camı kullanılacaktır (EN 12600).",
+ "Kaçış kapıları kaçış yönünde açılacak, üzerinde kilit veya sürgü bulunmayacak, panik donanımlı olacaktır (EN 1125).",
+ "Asma tavan üstündeki mekanik ve elektrik tesisatı bağımsız askılanacak; ağırlık alçıpan karkasına aktarılmayacaktır.",
+ "Boya, seramik ve kauçuk renk/desen seçimleri numune onayına tabidir; onaysız imalat bedeli yükleniciye aittir.",
+ "Bu set mimari uygulama setidir; ruhsat için proje müellifi mimar tarafından imzalanmış 1/50 onaylı takım ayrıca düzenlenecektir.",
 ]

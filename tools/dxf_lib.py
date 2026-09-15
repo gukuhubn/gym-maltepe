@@ -25,6 +25,16 @@ KATMANLAR = [
  ("A-MOBILYA",       9, "Continuous", 18, "Mimari — sabit mobilya"),
  ("A-BOLGE",       254, "Continuous",  9, "Mimari — zemin bölge taraması"),
  ("A-YAZI",          8, "Continuous", 13, "Mimari — mahal adı ve alan"),
+ ("A-MAHAL",         6, "Continuous", 18, "Mimari — mahal numarası ve kapı kodu balonu"),
+ ("A-KESIT-HAT",     1, "DASHDOT",    35, "Mimari — kesit ve görünüş hattı"),
+ ("A-ZEMIN-SINIR",  30, "Continuous", 25, "Mimari — zemin kaplama tipi sınırı"),
+ ("A-ZEMIN-YAZI",   30, "Continuous", 13, "Mimari — zemin kaplama tipi ve kotu"),
+ ("A-ZEMIN-DERZ",  253, "Continuous",  9, "Mimari — kauçuk karo derz ızgarası"),
+ ("A-TAVAN-SINIR", 150, "Continuous", 25, "Mimari — asma tavan tipi sınırı"),
+ ("A-TAVAN-YAZI",  150, "Continuous", 13, "Mimari — asma tavan tipi ve kotu"),
+ ("A-TAVAN-KAPAK", 150, "Continuous", 18, "Mimari — revizyon kapağı 300×300"),
+ ("A-YANGIN-KACIS", 3, "Continuous", 50, "Mimari — kaçış yolu ve çıkış"),
+ ("A-YANGIN-EKIP",  1, "Continuous", 35, "Mimari — söndürücü, dolap, ihbar"),
  ("M-HAVA-BESLEME",  3, "Continuous", 35, "Mekanik — taze hava kanalı"),
  ("M-HAVA-EGZOZ",    1, "Continuous", 35, "Mekanik — egzoz kanalı"),
  ("M-HAVA-ISLAK",    6, "Continuous", 25, "Mekanik — ıslak hacim egzoz kanalı"),
@@ -316,11 +326,15 @@ def bloklari_kur(doc):
         (0,-960), align=TextEntityAlignment.MIDDLE_CENTER)
     return doc
 
-def blok(msp, ad, p, katman, oznitelik=None, aci=0, olcek=1.0):
+def blok(msp, ad, p, katman, oznitelik=None, aci=0, olcek=1.0, yazi_yatay=True):
+    """Sembol duvara göre döner; öznitelik yazıları YATAY kalır (okunabilirlik)."""
     ref = msp.add_blockref(ad, M(p), dxfattribs={
         "layer": katman, "rotation": aci, "xscale": olcek, "yscale": olcek})
     if oznitelik:
         ref.add_auto_attribs({k: str(v) for k, v in oznitelik.items()})
+        if yazi_yatay and aci:
+            for at in ref.attribs:
+                at.dxf.rotation = 0.0
     return ref
 
 

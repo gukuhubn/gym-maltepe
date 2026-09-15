@@ -28,15 +28,20 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
 
 3 · DOSYALAR
 --------------------------------------------------------------------------------
-  GYM-MIM-Altlik-R2010.dxf      Mimari altlık — diğerlerine XREF olarak bağlanabilir
+  GYM-MIM-Uygulama-R2010.dxf    Mimari — 5 pafta (altlık, uygulama, zemin kaplama,
+                                tavan planı, yangın ve tahliye). Diğerlerine XREF bağlanabilir.
   GYM-MEK-Uygulama-R2010.dxf    Mekanik — 4 pafta
   GYM-ELK-Uygulama-R2010.dxf    Elektrik — 4 pafta
-  GYM-MEP-Birlesik-R2010.dxf    Tümü — 9 pafta (tek dosyada çalışmak isteyenler için)
+  GYM-BIRLESIK-R2010.dxf        Tümü — 13 pafta (tek dosyada çalışmak isteyenler için)
   KATMAN-LISTESI.csv            Katman standardı (Excel ile açılır)
 
 4 · PAFTALAR (kâğıt alanı sekmeleri)
 --------------------------------------------------------------------------------
   A-01   MİMARİ ALTLIK                    (MİMARİ)
+  A-02   MİMARİ UYGULAMA PLANI            (MİMARİ)
+  A-03   ZEMİN KAPLAMA PLANI              (MİMARİ)
+  A-04   TAVAN PLANI (RCP)                (MİMARİ)
+  A-05   YANGIN VE TAHLİYE PLANI          (MİMARİ)
   M-01   HAVALANDIRMA PLANI               (MEKANİK TESİSAT)
   M-02   İKLİMLENDİRME PLANI              (MEKANİK TESİSAT)
   M-03   SIHHİ TESİSAT PLANI              (MEKANİK TESİSAT)
@@ -51,7 +56,7 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
   durumlarıyla gösterir. Bir katmanı bir paftada görmek isterseniz o paftanın
   görüntü penceresini seçip katmanı çözün — diğer paftalar etkilenmez.
 
-5 · KATMAN STANDARDI (40 katman)
+5 · KATMAN STANDARDI (50 katman)
 --------------------------------------------------------------------------------
   Önek:  A- mimari · M- mekanik · E- elektrik · G- genel (ölçü, antet, yazı)
 
@@ -63,6 +68,16 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
   A-MOBILYA          renk   9  Continuous   18  Mimari — sabit mobilya
   A-BOLGE            renk 254  Continuous    9  Mimari — zemin bölge taraması
   A-YAZI             renk   8  Continuous   13  Mimari — mahal adı ve alan
+  A-MAHAL            renk   6  Continuous   18  Mimari — mahal numarası ve kapı kodu balonu
+  A-KESIT-HAT        renk   1  DASHDOT      35  Mimari — kesit ve görünüş hattı
+  A-ZEMIN-SINIR      renk  30  Continuous   25  Mimari — zemin kaplama tipi sınırı
+  A-ZEMIN-YAZI       renk  30  Continuous   13  Mimari — zemin kaplama tipi ve kotu
+  A-ZEMIN-DERZ       renk 253  Continuous    9  Mimari — kauçuk karo derz ızgarası
+  A-TAVAN-SINIR      renk 150  Continuous   25  Mimari — asma tavan tipi sınırı
+  A-TAVAN-YAZI       renk 150  Continuous   13  Mimari — asma tavan tipi ve kotu
+  A-TAVAN-KAPAK      renk 150  Continuous   18  Mimari — revizyon kapağı 300×300
+  A-YANGIN-KACIS     renk   3  Continuous   50  Mimari — kaçış yolu ve çıkış
+  A-YANGIN-EKIP      renk   1  Continuous   35  Mimari — söndürücü, dolap, ihbar
   M-HAVA-BESLEME     renk   3  Continuous   35  Mekanik — taze hava kanalı
   M-HAVA-EGZOZ       renk   1  Continuous   35  Mekanik — egzoz kanalı
   M-HAVA-ISLAK       renk   6  Continuous   25  Mekanik — ıslak hacim egzoz kanalı
