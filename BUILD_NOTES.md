@@ -489,3 +489,107 @@ Statik proje kapsam dışıdır; taşıyıcı sistemde hiçbir müdahale öngör
 Yapısal döşeme altı kotu (+3,20), mevcut duvar kalınlığı (200 mm), mevcut şap üst kotu (−0,053)
 ve mevcut asma tavan varlığı **VARSAYIMDIR** — söküm sonrası rölöve ile doğrulanıp tüm set
 tek yerden (`tools/proj.py`) güncellenecektir.
+
+
+---
+
+## 15 · Rev E — referans projeyle kalibrasyon, keşif özeti ve bütçe paketi
+
+İşveren, kendi Aqua Florya / Saltbae projesinin as-built ve hakediş dosyalarını
+paylaşarak "buna benzet" dedi. Paylaşılan referans:
+
+| Dosya | İçerik |
+|---|---|
+| `R1_AQUA FLORYA SALTBAE - VOGELKOPP - KESİN HAKEDİŞİ 13.05.2025.xlsx` | Kesin hakediş — kapak, icmal, taşeron bazlı hakedişler, metraj cetvelleri, ödeme tabloları |
+| `2025'0520_Saltbae_AquaFlorya_Butce.xlsx` | Yüklenici/firma bazlı bütçe takibi, çok para birimli |
+| `ADP / UDP Yükleme Cetveli R00.xlsx` | Çift dilli elektrik pano yükleme cetveli |
+| `AS BUILT PROJESİ-*` (mimari · mekanik · elektrik) | DWG setleri, ADP/UDP tek hat şemaları, as-built raporu |
+
+### 15.1 · Benimsenen formatlar
+
+- **Keşif özeti:** ŞARTNAME NO · POZ NO · YAPILACAK İŞİN CİNSİ · MAHAL / PROJE REFERANSI ·
+  AÇIKLAMA/MARKA · BİRİM · MİKTAR · MALZEME BF/TF · İŞÇİLİK BF/TF · GENEL GİDER · KÂR+RİSK ·
+  TOPLAM BF/TF. Hiyerarşik poz numarası (A · A.1 · A.1.1) ve MasterFormat benzeri şartname no.
+- **Metraj cetveli:** S.NO · YAPILACAK İMALAT AÇIKLAMASI · Birim · Adet · En · Boy · Yükseklik ·
+  TOPLANAN (+) · ÇIKARILAN (−) · KISMİ YEKÜN · SAYFA YEKÜNÜ. Kapı ve pencere boşlukları
+  **minha** olarak eksi satırla düşülür.
+- **Hakediş:** kapak (KDV, tevkifat, avans mahsubu, ödenecek net tutar) · imalat icmali
+  (uygulama paketi bazında, koordinasyon bedeliyle) · poz bazlı gerçekleşme · kesintiler ·
+  ödeme takibi.
+- **Bütçe takibi:** iş kalemi · yüklenici/firma · para birimi · sözleşme bedeli · revize bütçe ·
+  kur · ödenen · kalan · açıklama.
+- **Pano yükleme cetveli:** çift dilli başlıklar, kaçak akım rölesi gruplamalı, L1/L2/L3 faz
+  dağılımlı, diversite katsayılı altbilgi, yedek linyeli.
+- **Dosya adı kodlaması:** `A_00_00_GF_00_1_01 (Pafta Adı)` — disiplin_yapı_blok_kat_tip_ölçek_sıra.
+- **Klasör yapısı:** disiplin bazlı (01_MİMARİ · 02_MEKANİK · 03_ELEKTRİK · 04_BÜTÇE VE HAKEDİŞ).
+
+### 15.2 · BİRİM FİYAT KALİBRASYONU — en önemli bulgu
+
+Referans hakedişteki **gerçekleşmiş** birim fiyatlar (Mayıs 2025, KDV hariç) ile Rev C'deki
+tahminler karşılaştırıldığında, mimari kalemlerde ciddi bir sapma çıktı:
+
+| İmalat | Referans (05/2025) | Eylül 2026 karşılığı (×1,40) | Rev C tahmini | Sapma |
+|---|---|---|---|---|
+| Alçıpan bölme — çift yüz çift kat | 2.450 TL/m² | 3.430 TL/m² | 600–950 TL/m² | **≈ 4,4×** |
+| Alçıpan asma tavan (dıamant) | 1.450 TL/m² | 2.030 TL/m² | — (kalem yoktu) | — |
+| Seramik işçiliği (zemin / duvar) | 700 / 725 TL/m² | 980 / 1.015 TL/m² | 750–1.200 (mlz+işç) | ≈ 2,0× |
+| Şap (malzeme + işçilik) | 600 TL/m² | 840 TL/m² | — | — |
+| Çimento esaslı su yalıtımı | 610 TL/m² | 854 TL/m² | 480–780 TL/m² | ≈ 1,4× |
+| Şap söküm | 471 TL/m² | 660 TL/m² | 260–450 TL/m² | ≈ 1,9× |
+| Düz işçi / usta yevmiyesi | 3.500 / 4.500 TL | 4.900 / 6.300 TL | — | — |
+
+**Eskalasyon kabulü:** Mayıs 2025 → Eylül 2026 (16 ay) için **×1,40** (yıllık ≈ %28 inşaat
+maliyet artışı). Katsayı `tools/fiyat.py` içinde tek yerdedir.
+
+Rev E'de mimari kalemlerin tamamı bu referansa göre yeniden fiyatlandırılmış; ayrıca Rev C'de
+hiç yer almayan **iç doğrama grubu** (K02–K09 kapıları, 165–266 bin TL) eklenmiştir. Şantiye
+genel gideri oranı, referans projedeki gerçekleşmeye uyacak şekilde %9'dan **%12**'ye çıkarılmıştır.
+
+**Mekanik ve elektrik kalemleri kalibrasyona dâhil edilmemiştir:** referans proje bir restoran
+(mutfak egzozu, VRF, soğuk oda, 630 A abonelik) olduğundan birim fiyatları bu 104 m²'lik
+stüdyoyla karşılaştırılabilir değildir. Bu kalemler Rev C değerleriyle korunmuştur.
+
+### 15.3 · Bütçenin değişimi
+
+| | Rev C | Rev E | Değişim |
+|---|---|---|---|
+| Mimari imalat | 811 bin – 1,45 milyon TL | 1,72 – 2,80 milyon TL | ≈ 2,1× |
+| Mekanik | 514 – 867 bin TL | değişmedi | — |
+| Elektrik | 403 – 683 bin TL | değişmedi | — |
+| **Önerilen senaryo — genel toplam** | **1,95 – 3,38 milyon TL** | **3,15 – 5,18 milyon TL** | **≈ 1,6×** |
+| TL/m² | 18.775 – 32.593 | 30.394 – 49.877 | — |
+
+### 15.4 · İki bütçe modelinin mutabakatı
+
+Artık iki bağımsız model var ve QA bunların ayrışmasını denetliyor:
+
+1. **Poz bazlı model** (`proj.B`, 111 poz) — senaryolu (MİNİMUM / ÖNERİLEN, Seçenek A/B),
+   A3 dosyası ve sunumu besler.
+2. **Metraj bazlı model** (`metraj.py` + `fiyat.py`, 61 poz · 160 metraj satırı) — keşif özeti,
+   hakediş ve bütçe takibi dosyalarını besler.
+
+Genel gider farklı ele alındığı için karşılaştırma J paketi hariç yapılır:
+**1.721.992 vs 1.770.879 TL (%+3)** ve **2.804.540 vs 2.649.731 TL (%−6)**.
+QA, sapma %15'i aşarsa hata verir.
+
+### 15.5 · Yeni teslimatlar
+
+| Dosya | İçerik |
+|---|---|
+| `Gym_Kesif_Ozeti_BoQ.xlsx` | 7 sayfa — kapak, icmal, keşif özeti (61 poz), bütçe tahmini, mekanik/elektrik keşif, 160 satırlık metraj cetvelleri |
+| `Gym_Hakedis_Sablonu.xlsx` | 5 sayfa — kapak, icmal, poz bazlı hakediş detayı, kesintiler/avans, ödeme takibi |
+| `Gym_Butce_Takip.xlsx` | 2 sayfa — 22 iş kalemi bütçe takibi, 8 aylık nakit akışı |
+| `Gym_Pano_Yukleme_Cetveli.xlsx` | 2 sayfa — ADP yükleme cetveli (referans formatında), gerilim düşümü kontrol cetveli |
+| `Gym_Proje_Paketi.zip` | 6 klasör, 21 dosya — referans klasör yapısı ve dosya adı kodlamasıyla |
+
+### 15.6 · Metraj motorunun kurduğu ilişkiler
+
+`tools/metraj.py` her miktarı geometriden türetir; elle girilen tek şey birim fiyattır:
+
+- Bölme duvar alanı = mahal çeperi × 3,20 m (yapısal döşemeye kadar) − kapı boşlukları
+- Süpürgelik = mahal çevresi − kapı genişlikleri − salon bölge sınırları (fiziksel duvar yok)
+- Duvar seramiği = ıslak hacim çevresi × (duşta 2,40 · WC'de 1,60 m) − kapı boşlukları
+- Boya = mahal çevresi × tavan kotu − kapı − vitrin − ayna duvarı
+- Moloz hacmi = kaplama sökümü + asma tavan sökümü + ıslak hacim şap kırımı kalınlıklarından
+
+Bu sayede bir mahal ölçüsü değiştiğinde metraj, keşif özeti, hakediş ve bütçe birlikte güncellenir.

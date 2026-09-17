@@ -82,7 +82,7 @@ for sen in ("M","O"):
             dh=1 if kod=="M" else (1 if (kod=="O" and sen=="O") else
                (1 if (kod=="A" and isl=="A") else (1 if (kod=="B" and isl=="B") else 0)))
             lo+=round(mik*l)*dh; hi+=round(mik*h_)*dh
-        if abs(lo-m["imalat"][0])>2 or abs(hi-m["imalat"][1])>2:
+        if abs(lo-m["imalat"][0])>len(P.B) or abs(hi-m["imalat"][1])>len(P.B):   # satır bazlı yuvarlama payı
             hata(f"{sen}/{isl}: xlsx {lo}-{hi} ≠ PDF {m['imalat'][0]:.0f}-{m['imalat'][1]:.0f}")
         else: ok(f"senaryo {sen}/{isl}: BoQ formülü = PDF maliyet modeli")
 mO=P.maliyet("O","A")
@@ -238,6 +238,41 @@ else: ok("tüm kuru hacimlerde bitmiş zemin kotu ±0,00 (eşiksiz geçiş)")
 if P.PANO_UYGUNSUZ: hata(f"pano hesabında {len(P.PANO_UYGUNSUZ)} uygunsuz linye")
 else: ok(f"pano hesabı: 21 linye uygun · maks ΔU %{P.DU_MAX} · toplam %{P.TOPLAM_DU_MAX}")
 
+print("\n6d · KEŞİF / METRAJ / BÜTÇE MODELİ")
+import metraj as _MT, fiyat as _FY
+_mek = (sum(x[4]*x[5] for x in P.B_MEK), sum(x[4]*x[6] for x in P.B_MEK))
+_elk = (sum(x[4]*x[5] for x in P.B_ELK), sum(x[4]*x[6] for x in P.B_ELK))
+_mim = (sum(x[4]*x[5] for x in P.B)-_mek[0]-_elk[0],
+        sum(x[4]*x[6] for x in P.B)-_mek[1]-_elk[1])
+_j = _FY.grup_toplam()["J"]
+_ke = (_FY.MIMARI_MIN-_j[0], _FY.MIMARI_MAX-_j[1])
+for i, (etiket, a, b) in enumerate((("düşük", _mim[0], _ke[0]), ("yüksek", _mim[1], _ke[1]))):
+    sapma = 100*(b/a-1)
+    if abs(sapma) > 15:
+        hata(f"bütçe modelleri ayrışıyor ({etiket}): poz bazlı {a:,.0f} vs metraj bazlı {b:,.0f} "
+             f"(%{sapma:+.0f})")
+    else:
+        ok(f"poz bazlı ve metraj bazlı mimari bütçe {etiket} uçta uyumlu "
+           f"({a:,.0f} vs {b:,.0f} TL · %{sapma:+.0f})")
+_eksik_fiyat = [c.poz for c in _MT.CETVEL if c.poz not in _FY.F]
+if _eksik_fiyat: hata(f"birim fiyatı tanımsız poz: {_eksik_fiyat}")
+else: ok(f"{len(_MT.CETVEL)} metraj pozunun tamamında birim fiyat tanımlı")
+_negatif = [c.poz for c in _MT.CETVEL if c.miktar <= 0]
+if _negatif: hata(f"sıfır veya negatif metraj: {_negatif}")
+else: ok(f"tüm metrajlar pozitif · toplam {sum(len(c.satir) for c in _MT.CETVEL)} cetvel satırı")
+from openpyxl import load_workbook as _lw
+_wb = _lw("output/Gym_Kesif_Ozeti_BoQ.xlsx")
+_bek = ["1 · KAPAK","2 · İCMAL","3 · KEŞİF ÖZETİ","4 · BÜTÇE TAHMİNİ",
+        "5 · MEKANİK KEŞİF","6 · ELEKTRİK KEŞİF","7 · METRAJ"]
+if _wb.sheetnames != _bek: hata(f"keşif özeti sayfaları: {_wb.sheetnames}")
+else: ok("keşif özeti 7 sayfa · icmal · metraj cetvelleri")
+_bos = sum(1 for r in range(5, 5+len(_FY.satirlar())+12)
+           if _wb["3 · KEŞİF ÖZETİ"].cell(r, 8).value is None
+           and _wb["3 · KEŞİF ÖZETİ"].cell(r, 1).value
+           and "." in str(_wb["3 · KEŞİF ÖZETİ"].cell(r, 1).value))
+if _bos < 40: hata(f"keşif özetinde boş birim fiyat hücresi yalnız {_bos} adet")
+else: ok(f"keşif özetinde {_bos} poz için birim fiyat hücresi boş (teklife hazır)")
+
 print("\n7 · TESLİMAT LİSTESİ")
 for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
           "output/Gym_Insaat_Seti_A3.pdf","output/Gym_Mimari_Proje_A3.pdf",
@@ -245,7 +280,10 @@ for f in ("output/Gym_Donusum_Dosyasi_A3.pdf","output/Gym_Sunum_16x9.pdf",
           "output/Gym_Maliyet_BoQ.xlsx","output/Gym_Mekanik_BoQ.xlsx",
           "output/Gym_Elektrik_BoQ.xlsx","output/Gym_Model.html",
           "output/Render_Promptlari.md","output/Gym_CAD_Seti_DXF.zip",
-          "output/Gym_CAD_Paftalar.pdf","cad/OKUBENI-CAD.txt","BUILD_NOTES.md"):
+          "output/Gym_CAD_Paftalar.pdf","output/Gym_Kesif_Ozeti_BoQ.xlsx",
+          "output/Gym_Hakedis_Sablonu.xlsx","output/Gym_Butce_Takip.xlsx",
+          "output/Gym_Pano_Yukleme_Cetveli.xlsx","output/Gym_Proje_Paketi.zip",
+          "cad/OKUBENI-CAD.txt","BUILD_NOTES.md"):
     if Path(f).exists(): ok(f"{f}  ({Path(f).stat().st_size/1e6:.2f} MB)")
     else: hata(f"EKSİK: {f}")
 

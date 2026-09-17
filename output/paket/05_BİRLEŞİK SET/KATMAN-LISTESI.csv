@@ -1,0 +1,51 @@
+﻿Katman adı;ACI renk;Çizgi tipi;Kalem (1/100 mm);Açıklama
+A-DUVAR-MEVCUT;8;Continuous;35;Mimari — mevcut duvar (korunuyor)
+A-DUVAR-YENI;1;Continuous;35;Mimari — yeni alçıpan bölme
+A-CEPHE;5;Continuous;25;Mimari — cephe doğraması
+A-KAPI;8;Continuous;18;Mimari — kapı ve açılım
+A-EKIPMAN;9;Continuous;18;Mimari — spor ekipmanı (işverence temin)
+A-MOBILYA;9;Continuous;18;Mimari — sabit mobilya
+A-BOLGE;254;Continuous;9;Mimari — zemin bölge taraması
+A-YAZI;8;Continuous;13;Mimari — mahal adı ve alan
+A-MAHAL;6;Continuous;18;Mimari — mahal numarası ve kapı kodu balonu
+A-KESIT-HAT;1;DASHDOT;35;Mimari — kesit ve görünüş hattı
+A-ZEMIN-SINIR;30;Continuous;25;Mimari — zemin kaplama tipi sınırı
+A-ZEMIN-YAZI;30;Continuous;13;Mimari — zemin kaplama tipi ve kotu
+A-ZEMIN-DERZ;253;Continuous;9;Mimari — kauçuk karo derz ızgarası
+A-TAVAN-SINIR;150;Continuous;25;Mimari — asma tavan tipi sınırı
+A-TAVAN-YAZI;150;Continuous;13;Mimari — asma tavan tipi ve kotu
+A-TAVAN-KAPAK;150;Continuous;18;Mimari — revizyon kapağı 300×300
+A-YANGIN-KACIS;3;Continuous;50;Mimari — kaçış yolu ve çıkış
+A-YANGIN-EKIP;1;Continuous;35;Mimari — söndürücü, dolap, ihbar
+M-HAVA-BESLEME;3;Continuous;35;Mekanik — taze hava kanalı
+M-HAVA-EGZOZ;1;Continuous;35;Mekanik — egzoz kanalı
+M-HAVA-ISLAK;6;Continuous;25;Mekanik — ıslak hacim egzoz kanalı
+M-HAVA-MENFEZ;3;Continuous;25;Mekanik — menfez ve valf
+M-HAVA-BRANSMAN;3;DASHED;18;Mekanik — menfez branşmanı
+M-HAVA-CIHAZ;2;Continuous;35;Mekanik — fan ve panjur
+M-KLIMA-IC;4;Continuous;35;Mekanik — klima iç ünite
+M-KLIMA-DIS;4;Continuous;35;Mekanik — klima dış ünite platformu
+M-KLIMA-BAKIR;4;Continuous;25;Mekanik — soğutucu akışkan bakır hattı
+M-KLIMA-DRENAJ;4;DASHED;18;Mekanik — klima drenaj hattı
+M-SIHHI-TEMIZ;5;Continuous;25;Mekanik — temiz su PPRC
+M-SIHHI-SICAK;30;DASHED;25;Mekanik — sıcak su PPRC izoleli
+M-SIHHI-PIS;8;Continuous;35;Mekanik — pis su PVC
+M-SIHHI-CIHAZ;8;Continuous;25;Mekanik — vitrifiye ve su ısıtıcı
+M-YAZI;7;Continuous;13;Mekanik — etiket ve not
+E-AYD-ARMATUR;2;Continuous;25;Elektrik — lineer LED armatür
+E-AYD-DOWNLIGHT;2;Continuous;25;Elektrik — IP44 downlight
+E-AYD-ACIL;3;Continuous;25;Elektrik — acil aydınlatma / yönlendirme
+E-AYD-ANAHTAR;2;Continuous;18;Elektrik — anahtar ve sensör
+E-KUVVET-PRIZ;5;Continuous;25;Elektrik — priz
+E-KUVVET-CIHAZ;5;Continuous;25;Elektrik — klima/ısıtıcı/fan beslemesi
+E-ZAYIF-KAMERA;6;Continuous;25;Elektrik — IP kamera
+E-ZAYIF-SES;6;Continuous;25;Elektrik — tavan hoparlörü
+E-ZAYIF-VERI;6;Continuous;25;Elektrik — veri prizi ve rack
+E-ZAYIF-YANGIN;1;Continuous;25;Elektrik — dedektör, buton, siren
+E-ZAYIF-LINYE;6;DASHED;13;Elektrik — yangın algılama çevrimi
+E-PANO;7;Continuous;50;Elektrik — ana dağıtım panosu
+E-YAZI;7;Continuous;13;Elektrik — etiket ve not
+G-OLCU;7;Continuous;13;Genel — ölçülendirme
+G-YAZI;7;Continuous;18;Genel — başlık ve açıklama
+G-ANTET;7;Continuous;25;Genel — antet ve pafta çerçevesi
+G-KUZEY;7;Continuous;25;Genel — kuzey oku ve ölçek

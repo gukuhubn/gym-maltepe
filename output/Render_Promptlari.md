@@ -1,6 +1,6 @@
 # RENDER PROMPT SETİ
 
-**MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU** · Rev C · 13 Eylül 2026
+**MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU** · Rev E · 17 Eylül 2026
 
 Bu dosyadaki görseller Three.js kütle modelinden alınan PNG'ler **image-to-image** girdisi
 yapılarak üretilmiştir; böylece geometri plana sadık kalır ve model halüsinasyon yapmaz.

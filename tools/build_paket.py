@@ -1,0 +1,186 @@
+# -*- coding: utf-8 -*-
+"""TESLİM PAKETİ — referans projedeki klasör ve dosya adlandırma düzeninde.
+
+Referans (AQUA FLORYA / SALTBAE) klasör yapısı:
+   AS BUILT PROJESİ-(VOGELKOPP İNŞAAT)        → mimari dwg + as-built raporu
+   AS BUILT PROJELERİ - MEKANİK (TOROS)       → mekanik dwg
+   AS BUILT PROJESİ-ELEKTRİK (MAKSER)         → elektrik dwg + ADP/UDP pdf + yükleme cetveli
+   ..._Butce.xlsx / ..._KESİN HAKEDİŞİ.xlsx   → bütçe ve hakediş
+
+Dosya adı kodlaması referanstakiyle aynıdır:
+   A_00_00_GF_00_1_01 (Zemin Kat Planı)
+   disiplin _ yapı _ blok _ kat _ tip _ ölçek _ sıra   (pafta adı parantez içinde)
+"""
+import sys, os, shutil, zipfile
+sys.path.insert(0, os.path.dirname(__file__))
+from pathlib import Path
+import proj as P
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT  = ROOT/"output"
+PKT  = OUT/"paket"
+
+# (hedef klasör, hedef dosya adı, kaynak)
+DOSYALAR = [
+ # ── 01 MİMARİ ────────────────────────────────────────────────────────────────
+ ("01_MİMARİ", "A_00_00_GF_00_1_00 (Mimari Uygulama Seti).pdf",
+  "output/Gym_Mimari_Proje_A3.pdf"),
+ ("01_MİMARİ", "A_00_00_GF_00_1_01 (Uygulama · Zemin Döşeme · Tavan Planı).dxf",
+  "cad/GYM-MIM-Uygulama-R2010.dxf"),
+ ("01_MİMARİ", "MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf", None),     # A-09 sayfası
+ ("01_MİMARİ", "PROJE RAPORU.pdf", None),                            # üretilir
+ # ── 02 MEKANİK ───────────────────────────────────────────────────────────────
+ ("02_MEKANİK", "M_00_00_GF_00_1_00 (Mekanik Tesisat Projesi).pdf",
+  "output/Gym_Mekanik_Proje_A3.pdf"),
+ ("02_MEKANİK", "M_00_00_GF_00_1_01 (Mekanik Uygulama).dxf",
+  "cad/GYM-MEK-Uygulama-R2010.dxf"),
+ # ── 03 ELEKTRİK ──────────────────────────────────────────────────────────────
+ ("03_ELEKTRİK", "E_00_00_GF_00_1_00 (Elektrik Tesisat Projesi).pdf",
+  "output/Gym_Elektrik_Proje_A3.pdf"),
+ ("03_ELEKTRİK", "E_00_00_GF_00_1_01 (Elektrik Uygulama).dxf",
+  "cad/GYM-ELK-Uygulama-R2010.dxf"),
+ ("03_ELEKTRİK", "ADP.pdf", None),                                   # tek hat şeması
+ ("03_ELEKTRİK", "ADP Yükleme Cetveli R00.xlsx",
+  "output/Gym_Pano_Yukleme_Cetveli.xlsx"),
+ # ── 04 BÜTÇE VE HAKEDİŞ ──────────────────────────────────────────────────────
+ ("04_BÜTÇE VE HAKEDİŞ", f"{P.TARIH.replace(' ', '')}_Gym_Maltepe_Kesif_Ozeti_BoQ.xlsx",
+  "output/Gym_Kesif_Ozeti_BoQ.xlsx"),
+ ("04_BÜTÇE VE HAKEDİŞ", f"{P.TARIH.replace(' ', '')}_Gym_Maltepe_Butce.xlsx",
+  "output/Gym_Butce_Takip.xlsx"),
+ ("04_BÜTÇE VE HAKEDİŞ", "Gym_Maltepe_HAKEDİŞ ŞABLONU.xlsx",
+  "output/Gym_Hakedis_Sablonu.xlsx"),
+ # ── 05 BİRLEŞİK SET ──────────────────────────────────────────────────────────
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — İNŞAAT UYGULAMA SETİ (29 pafta).pdf",
+  "output/Gym_Insaat_Seti_A3.pdf"),
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (13 pafta).pdf",
+  "output/Gym_CAD_Paftalar.pdf"),
+ ("05_BİRLEŞİK SET", "GYM-BIRLESIK-R2010.dxf", "cad/GYM-BIRLESIK-R2010.dxf"),
+ ("05_BİRLEŞİK SET", "KATMAN-LISTESI.csv", "cad/KATMAN-LISTESI.csv"),
+ # ── 06 YATIRIM DOSYASI ───────────────────────────────────────────────────────
+ ("06_YATIRIM DOSYASI", "GYM MALTEPE — DÖNÜŞÜM VE FİZİBİLİTE DOSYASI.pdf",
+  "output/Gym_Donusum_Dosyasi_A3.pdf"),
+ ("06_YATIRIM DOSYASI", "GYM MALTEPE — SUNUM (16x9).pdf", "output/Gym_Sunum_16x9.pdf"),
+ ("06_YATIRIM DOSYASI", "GYM MALTEPE — 3B MODEL VE RENDER GALERİSİ.html",
+  "output/Gym_Model.html"),
+]
+
+def _pdf_sayfa(kaynak, sayfalar, hedef):
+    """PDF'ten belirli sayfaları ayıklar."""
+    import types
+    for _m in ("cryptography", "cryptography.exceptions", "cryptography.hazmat"):
+        sys.modules.setdefault(_m, types.ModuleType(_m))
+    from pypdf import PdfReader, PdfWriter
+    rd = PdfReader(str(kaynak)); wr = PdfWriter()
+    for i in sayfalar: wr.add_page(rd.pages[i])
+    with open(hedef, "wb") as f: wr.write(f)
+
+OKUBENI = f"""GYM MALTEPE / İDEALTEPE — PROJE VE BÜTÇE TESLİM PAKETİ
+{P.PROJE}
+{P.REV} · {P.TARIH}
+================================================================================
+
+Bu paket, işverenin AQUA FLORYA / SALTBAE projesindeki teslim düzeni örnek
+alınarak hazırlanmıştır: disiplin bazlı klasörler, aynı dosya adı kodlaması,
+aynı keşif özeti / metraj cetveli / hakediş ve pano yükleme cetveli formatları.
+
+1 · KLASÖR YAPISI
+--------------------------------------------------------------------------------
+  01_MİMARİ              Mimari uygulama seti (13 pafta) · DXF · mahal listesi · rapor
+  02_MEKANİK             Mekanik tesisat projesi (7 pafta) · DXF
+  03_ELEKTRİK            Elektrik tesisat projesi (7 pafta) · DXF · ADP tek hat şeması
+                         · ADP yükleme cetveli (referans formatında)
+  04_BÜTÇE VE HAKEDİŞ    Keşif özeti + metraj cetvelleri · bütçe takibi · hakediş şablonu
+  05_BİRLEŞİK SET        29 paftalık tek PDF · birleşik DXF · katman listesi
+  06_YATIRIM DOSYASI     Fizibilite dosyası · sunum · 3B model
+
+2 · DOSYA ADI KODLAMASI
+--------------------------------------------------------------------------------
+  A_00_00_GF_00_1_01 (Pafta Adı)
+  │ │  │  │  │  │ └─ sıra no
+  │ │  │  │  │  └─── ölçek grubu (1 = plan, 3 = kesit/görünüş)
+  │ │  │  │  └────── kat kodu (GF = zemin kat)
+  │ │  │  └───────── blok
+  │ │  └──────────── yapı
+  │ └─────────────── disiplin (A mimari · M mekanik · E elektrik)
+
+3 · FORMAT
+--------------------------------------------------------------------------------
+  Paftalar : A3 yatay (420 × 297 mm), 1/1 ölçekte basılır
+  Plan     : 1/75 · Kesit-görünüş : 1/50 · Detay : 1/10 – 1/1
+  CAD      : DXF R2010 (AC1024), model uzayı MİLİMETRE ($INSUNITS = 4)
+             AutoCAD / BricsCAD / ZWCAD / DraftSight doğrudan açar.
+             DWG'ye çevirmek için: Farklı Kaydet → AutoCAD 2018 Çizim (*.dwg)
+
+4 · BÜTÇE DOSYALARININ KULLANIMI
+--------------------------------------------------------------------------------
+  Keşif Özeti BoQ    : «3 · KEŞİF ÖZETİ» sayfasındaki SARI hücrelere birim fiyat
+                       girilir; malzeme / işçilik / genel gider / kâr-risk ayrı
+                       sütunlardadır. İcmal ve toplamlar canlı formülle hesaplanır.
+                       «7 · METRAJ» sayfasında her pozun metraj cetveli satır satır
+                       verilmiştir; kapı-pencere boşlukları MİNHA olarak düşülmüştür.
+  Bütçe Takibi       : Sözleşmeler imzalandıkça SÖZLEŞME BEDELİ ve ÖDENEN sütunları
+                       doldurulur; sapma yüzdesi otomatik hesaplanır.
+  Hakediş Şablonu    : Her dönem «BU HAKEDİŞ %» veya poz bazında «BU HAKEDİŞ METRAJ»
+                       doldurulur; kapak sayfası KDV, tevkifat ve avans mahsubuyla
+                       ödenecek net tutarı verir.
+
+5 · BİRİM FİYAT KAYNAĞI — ÖNEMLİ
+--------------------------------------------------------------------------------
+  Bütçe tahmini sütunları, işverenin kendi referans projesi olan
+  AQUA FLORYA / SALTBAE (Vogelkopp İnşaat kesin hakedişi, 13.05.2025) gerçekleşen
+  birim fiyatlarının Eylül 2026'ya ×1,40 ile eskale edilmesiyle kurulmuştur.
+
+  Bu kalibrasyon sonucunda mimari imalat bütçesi, önceki revizyona (Rev C) göre
+  yaklaşık 2,8 kat yükselmiştir. Rev C'deki birim fiyatlar piyasa gerçeğinin
+  altındaydı; örneğin alçıpan bölme 663 TL/m² iken referans karşılığı 3.430 TL/m².
+
+  Mekanik ve elektrik kalemleri, referans projenin kapsamı (restoran mutfağı, VRF,
+  soğuk oda, 630 A abonelik) bu projeyle karşılaştırılabilir olmadığı için
+  kalibrasyona dâhil edilmemiş, Rev C değerleriyle korunmuştur.
+
+6 · SINIRLAR
+--------------------------------------------------------------------------------
+  Bu set MİMARİ + MEKANİK + ELEKTRİK UYGULAMA SETİDİR. Ruhsat başvurusu için proje
+  müellifi mimar ve tesisat mühendislerince imzalanmış 1/50 onaylı takım ayrıca
+  düzenlenecektir. Statik proje kapsam dışıdır; taşıyıcı sisteme müdahale yoktur.
+
+  Yapısal döşeme altı kotu (+3,20), mevcut duvar kalınlığı (200 mm), mevcut şap üst
+  kotu (−0,053) ve mevcut asma tavan varlığı VARSAYIMDIR. Söküm sonrası rölöve ile
+  doğrulanacak; tüm paftalar, metrajlar ve bütçe tek kaynaktan (tools/proj.py)
+  yeniden üretilecektir.
+
+  Ön tasarım — yerinde doğrulanmadan ve ruhsat alınmadan uygulama yapılamaz.
+"""
+
+def build(cikti="output/Gym_Proje_Paketi.zip"):
+    if PKT.exists(): shutil.rmtree(PKT)
+    PKT.mkdir(parents=True)
+    # ── türetilen dosyalar
+    _pdf_sayfa(OUT/"Gym_Mimari_Proje_A3.pdf", [8],
+               PKT/"__mahal.pdf")
+    _pdf_sayfa(OUT/"Gym_Elektrik_Proje_A3.pdf", [4, 6],
+               PKT/"__adp.pdf")
+    _pdf_sayfa(OUT/"Gym_Mimari_Proje_A3.pdf", [0],
+               PKT/"__rapor.pdf")
+    tureti = {"MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf": PKT/"__mahal.pdf",
+              "ADP.pdf": PKT/"__adp.pdf",
+              "PROJE RAPORU.pdf": PKT/"__rapor.pdf"}
+    n = 0
+    for klasor, ad, kaynak in DOSYALAR:
+        hedef = PKT/klasor; hedef.mkdir(parents=True, exist_ok=True)
+        src = Path(tureti[ad]) if kaynak is None else ROOT/kaynak
+        if not src.exists():
+            print(f"  ! eksik: {src}"); continue
+        shutil.copy2(src, hedef/ad); n += 1
+    for t in tureti.values():
+        if Path(t).exists(): Path(t).unlink()
+    (PKT/"OKUBENI.txt").write_text(OKUBENI, encoding="utf-8")
+    with zipfile.ZipFile(cikti, "w", zipfile.ZIP_DEFLATED) as z:
+        for f in sorted(PKT.rglob("*")):
+            if f.is_file():
+                z.write(f, f"Gym_Maltepe_Proje_Paketi/{f.relative_to(PKT)}")
+    boyut = Path(cikti).stat().st_size/1e6
+    print(f"→ {cikti}  ·  {n+1} dosya · 6 klasör · {boyut:.2f} MB")
+
+if __name__ == "__main__":
+    build()

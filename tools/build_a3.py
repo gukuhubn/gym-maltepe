@@ -584,7 +584,8 @@ def s10(c):
         pay=100*(lo+hi)/2/((mO["imalat"][0]+mO["imalat"][1])/2)
         rows.append([g, h.tl(lo), h.tl(hi), f"%{pay:.0f}"])
     rows.append(["İMALAT ARA TOPLAMI", h.tl(mO["imalat"][0]), h.tl(mO["imalat"][1]), "%100"])
-    rows.append(["Şantiye genel giderleri (%9)", h.tl(mO["santiye"][0]), h.tl(mO["santiye"][1]), ""])
+    rows.append([f"Şantiye genel giderleri (%{int(P.V['santiye_gider'][0]*100)})",
+                 h.tl(mO["santiye"][0]), h.tl(mO["santiye"][1]), ""])
     rows.append(["Beklenmedik giderler (%15)", h.tl(mO["beklenmedik"][0]), h.tl(mO["beklenmedik"][1]), ""])
     rows.append(["GENEL TOPLAM — ÖNERİLEN", h.tl(mO["toplam"][0]), h.tl(mO["toplam"][1]), ""])
     yy=h.tablo(c, L, y, [("Maliyet başlığı",0.48),("Düşük (TL)",0.20),("Yüksek (TL)",0.20),("Pay",0.12)],
@@ -602,7 +603,7 @@ def s10(c):
     veri=sorted([(g, *mO["gruplar"][g]) for g in P.GRUPLAR], key=lambda r:-(r[1]+r[2]))
     by=D.bar_araligi(c, L, yy-16*mm, tw_, 70*mm, veri)
     h.notkutu(c, L, by-2*mm, tw_, "TL/m² NEDEN YÜKSEK GÖRÜNÜYOR?",
-      "2026 İstanbul konut yenilemesi için sıkça anılan 5.500–8.500 TL/m² çıpası bu projeye "
+      "2026 İstanbul konut yenilemesi için sıkça anılan çıpalar bu projeye "
       "doğrudan uygulanamaz. Birinci neden: bu bir ticari dönüşümdür — ıslak hacmin komple yenilenmesi, "
       "mekanik havalandırma, yangın algılama, engelli düzenlemesi ve spor zemini konut yenilemesinde "
       "bulunmayan kalemlerdir. İkinci ve daha belirleyici neden ölçek: pano, yangın algılama, "
@@ -634,6 +635,18 @@ def s10(c):
       "işverenden alındığında BoQ'nun 3. sayfasına bilgi amaçlı işlenmelidir. "
       "Nakliye, montaj ve devreye alma bedelleri tedarikçi kapsamında değilse ayrıca bütçelenmelidir.",
       fs=6.3, acc=h.COPPER)
+    h.notkutu(c, x2, yy4-8*mm-46*mm, w2, "BİRİM FİYATLAR NEREDEN GELİYOR — REV E KALİBRASYONU",
+      "Birim fiyatlar, işverenin kendi referans projesi AQUA FLORYA / SALTBAE'nin gerçekleşen "
+      "sözleşme fiyatlarıyla (Vogelkopp İnşaat kesin hakedişi, 13.05.2025, KDV hariç) kalibre edilmiş "
+      "ve Eylül 2026'ya ×1,40 ile eskale edilmiştir. Referanstan alınan başlıca oranlar: alçıpan "
+      "bölme (çift yüz çift kat) 2.450 TL/m², alçıpan asma tavan 1.450 TL/m², seramik işçiliği "
+      "700–725 TL/m², şap 600 TL/m², çimento esaslı su yalıtımı 610 TL/m², düz işçi yevmiyesi "
+      "3.500 TL. Rev C'deki mimari birim fiyatlar bu referansın belirgin altında kalmıştı (örneğin "
+      "alçıpan bölme 663 TL/m²); Rev E'de tüm mimari kalemler yeniden fiyatlandırılmış, mimari "
+      "imalat bedeli yaklaşık 2,1 kat artmıştır. Mekanik ve elektrik kalemleri, referans projenin "
+      "kapsamı (restoran mutfağı, VRF, soğuk oda, 630 A abonelik) bu projeyle karşılaştırılabilir "
+      "olmadığı için Rev C değerleriyle korunmuştur. Poz bazlı ayrıntı ve metraj cetvelleri için "
+      "Gym_Kesif_Ozeti_BoQ.xlsx dosyasına bakınız.", fs=6.3, acc=h.NAVY2)
 
 # ══ 11 İŞ PROGRAMI ═════════════════════════════════════════════════════════════
 def s11(c):

@@ -9,9 +9,10 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev C"
-TARIH      = "13 Eylül 2026"
-FIYAT_TARIH= "Eylül 2026 piyasa mertebesi"
+REV        = "Rev E"
+TARIH      = "17 Eylül 2026"
+FIYAT_TARIH= ("Eylül 2026 · Aqua Florya / Saltbae kesin hakedişi (Mayıs 2025) "
+              "birim fiyatları ×1,40 eskalasyonla")
 PROJE      = "MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU"
 KISA       = "Gym Dönüşüm Dosyası"
 ALTBILGI   = ("Ön tasarım — yerinde doğrulanmadan ve ruhsat alınmadan uygulama yapılamaz.  "
@@ -34,7 +35,7 @@ V = {  # deger, birim, kaynak/varsayim notu
  "pis_su_kot":     (None,"cm","BİLİNMİYOR — ıslak hacim çözümünü belirler"),
  "ust_kat_konut":  (True,"","VARSAYIM (konservatif) — akustik kalemleri buna göre"),
  "beklenmedik":    (0.15,"","ıslak hacim belirsizliği yüksek"),
- "santiye_gider":  (0.09,"","genel giderler %8–10 ortası"),
+ "santiye_gider":  (0.12,"","şantiye kurulumu, temizlik, nakliye, poz dışı işçilik — referans projede %12"),
 }
 def v(k): return V[k][0]
 
@@ -698,42 +699,47 @@ B_ELK = [
 # ───────────────────────── BoQ — poz listesi ───────────────────────────────────
 # (poz, grup, tanim, birim, miktar, bf_dusuk, bf_yuksek, senaryo)  senaryo: M=minimum, O=onerilen
 B = [
-("01.01","YIKIM · SÖKÜM","Mobilya mağazası raf/vitrin/tezgâh sökümü ve tasnifi","m²",A["ic_toplam"],   180,   320,"M"),
-("01.02","YIKIM · SÖKÜM","Mevcut zemin kaplaması sökümü ve şap tesviyesi","m²",      A["ic_toplam"],   260,   450,"M"),
-("01.03","YIKIM · SÖKÜM","Islak hacim mevcut seramik + vitrifiye sökümü","m²",       ISLAK_M2,         380,   620,"M"),
-("01.04","YIKIM · SÖKÜM","Moloz yükleme, indirme ve nakliye (konteyner)","götürü",   1,             28000, 55000,"M"),
-("02.01","DUVAR · ALÇIPAN","Alçıpan bölme duvar — 100 mm, çift kat, taşyünü dolgulu","m²", M2_YENI_BOLME, 600, 950,"M"),
-("02.02","DUVAR · ALÇIPAN","Islak hacim bölmelerinde yeşil alçıpan / betopan yükseltmesi","m²", round(M2_YENI_BOLME*0.45,1), 260, 420,"M"),
-("02.03","DUVAR · ALÇIPAN","Mevcut duvar tamiri, saten alçı ve yüzey hazırlığı","m²", M2_DUVAR_SALON,    220,   380,"M"),
-("02.04","DUVAR · ALÇIPAN","Akustik asma tavan adası (arena üzeri) — 12 m²","m²",    12,                750,  1250,"O"),
-("03.02","ISLAK HACİM","Su yalıtımı — çift bileşenli, dönüş 30 cm","m²",             round(ISLAK_M2+L_ISLAK*0.30,1), 480, 780,"M"),
-("03.03","ISLAK HACİM","Zemin seramiği R11 kaymaz (malzeme + işçilik)","m²",         ISLAK_M2,         750,  1200,"M"),
-("03.04","ISLAK HACİM","Duvar fayansı h=2,20 m (malzeme + işçilik)","m²",            M2_SERAMIK_D,     850,  1350,"M"),
-("03.05","ISLAK HACİM","Vitrifiye seti — 2 klozet, 2 lavabo, armatürler","takım",    2,              12000, 22000,"M"),
-("03.06","ISLAK HACİM","Duş teknesi + cam duşakabin (2 adet)","adet",                2,              16000, 30000,"M"),
-("03.08","ISLAK HACİM","SEÇENEK A — ıslak hacim zemini 15–20 cm yükseltme (hafif dolgu + şap + basamak/rampa)","m²", ISLAK_M2, 850, 1400,"O"),
-("03.09","ISLAK HACİM","SEÇENEK B — öğütücülü gri su / atık su pompası (2 ünite + hat)","takım",  1, 72000, 128000,"—"),
-("04.01","ZEMİN","Kauçuk karo 40 mm — arena / serbest ağırlık","m²",                ZON_M2["ARENA · SERBEST AĞIRLIK"], 1150, 1800,"M"),
-("04.02","ZEMİN","Titreşim matı 10 mm (arena altı — üst katta konut varsayımı)","m²",ZON_M2["ARENA · SERBEST AĞIRLIK"],  300,  520,"O"),
-("04.03","ZEMİN","Kauçuk karo 20 mm — fonksiyonel / kardiyo","m²",                  ZON_M2["FONKSİYONEL · KARDİYO"],    700, 1150,"M"),
-("04.04","ZEMİN","LVT / laminat parke — dinlenme + giriş / banko","m²",             round(ZON_M2["DİNLENME SALONU"]+ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],2), 550, 950,"M"),
-("04.05","ZEMİN","Süpürgelik, geçiş profilleri, eşikler","m",                       round(L_SALON+L_ISLAK,1),           160,  290,"M"),
-("07.01","BOYA · DEKOR","Silinebilir mat duvar boyası (astar + 2 kat)","m²",         M2_DUVAR_SALON,   150,   280,"M"),
-("07.02","BOYA · DEKOR","Tavan boyası / açık tavan siyah boya (endüstriyel)","m²",   M2_TAVAN,         180,   310,"M"),
-("07.03","BOYA · DEKOR","Ayna — arena ve fonksiyonel alan (6 mm, montaj dahil)","m²",14,              1150,  1950,"O"),
-("07.04","BOYA · DEKOR","Duvar grafiği / marka uygulaması","götürü",                 1,              28000,  60000,"O"),
-("08.01","MARANGOZ","Resepsiyon bankosu — 2,40 m, kompakt lamine tezgâh","m",        2.4,            11000,  19000,"M"),
-("08.02","MARANGOZ","Soyunma dolabı / askılık — 24 göz (2 blok)","göz",              24,              2400,   4200,"M"),
-("08.03","MARANGOZ","Oturma bankı (soyunma) + dinlenme mobilyası","götürü",          1,              34000,  66000,"O"),
-("09.01","YANGIN · GÜVENLİK","6 kg KKT yangın söndürücü + dolap + montaj","adet",     4,               3200,   5400,"M"),
-("09.03","YANGIN · GÜVENLİK","Keskin köşe / kolon darbe hafifletici kaplama","m",     18,               850,   1500,"M"),
-("09.04","YANGIN · GÜVENLİK","Engelli erişimi — rampa, tutamak, kapı genişliği düzenlemesi","götürü",1,30000,  65000,"M"),
-("09.05","YANGIN · GÜVENLİK","İlk yardım dolabı, AED, acil çıkış donanımı","takım",   1,              24000,  45000,"M"),
-("10.01","TABELA · DIŞ","Işıklı kutu harf tabela + cephe folyo","götürü",            1,              48000,  95000,"O"),
-("10.02","TABELA · DIŞ","Cephe doğrama temizlik / bakım, giriş kapısı revizyonu","götürü",1,          26000,  50000,"M"),
+("01.01","YIKIM · SÖKÜM","Mobilya mağazası raf/vitrin/tezgâh sökümü ve tasnifi","m²",A["ic_toplam"],   340,   580,"M"),
+("01.02","YIKIM · SÖKÜM","Mevcut zemin kaplaması sökümü ve şap tesviyesi","m²",      A["ic_toplam"],   420,   650,"M"),
+("01.03","YIKIM · SÖKÜM","Islak hacim mevcut seramik + vitrifiye sökümü","m²",       ISLAK_M2,         620,   950,"M"),
+("01.04","YIKIM · SÖKÜM","Moloz yükleme, indirme ve nakliye (konteyner)","götürü",   1,             48000, 75000,"M"),
+("02.01","DUVAR · ALÇIPAN","Alçıpan bölme duvar — 100 mm, çift kat, taşyünü dolgulu","m²", M2_YENI_BOLME, 3100, 3900,"M"),
+("02.02","DUVAR · ALÇIPAN","Islak hacim bölmelerinde yeşil alçıpan / betopan yükseltmesi","m²", round(M2_YENI_BOLME*0.45,1), 350, 520,"M"),
+("02.03","DUVAR · ALÇIPAN","Mevcut duvar tamiri, saten alçı ve yüzey hazırlığı","m²", M2_DUVAR_SALON,    380,   560,"M"),
+("02.04","DUVAR · ALÇIPAN","Akustik asma tavan adası (arena üzeri) — 12 m²","m²",    12,               2600,  4200,"O"),
+("03.02","ISLAK HACİM","Su yalıtımı — çift bileşenli, dönüş 30 cm","m²",             round(ISLAK_M2+L_ISLAK*0.30,1), 800, 1100,"M"),
+("03.03","ISLAK HACİM","Zemin seramiği R11 kaymaz (malzeme + işçilik)","m²",         ISLAK_M2,        1730,  2500,"M"),
+("03.04","ISLAK HACİM","Duvar fayansı h=2,20 m (malzeme + işçilik)","m²",            M2_SERAMIK_D,    1795,  2650,"M"),
+("03.05","ISLAK HACİM","Vitrifiye seti — 2 klozet, 2 lavabo, armatürler","takım",    2,              26000, 48000,"M"),
+("03.06","ISLAK HACİM","Duş teknesi + cam duşakabin (2 adet)","adet",                2,              22000, 40000,"M"),
+("03.08","ISLAK HACİM","SEÇENEK A — ıslak hacim zemini 15–20 cm yükseltme (hafif dolgu + şap + basamak/rampa)","m²", ISLAK_M2, 1400, 2300,"O"),
+("03.09","ISLAK HACİM","SEÇENEK B — öğütücülü gri su / atık su pompası (2 ünite + hat)","takım",  1, 95000, 170000,"—"),
+("04.01","ZEMİN","Kauçuk karo 40 mm — arena / serbest ağırlık","m²",                ZON_M2["ARENA · SERBEST AĞIRLIK"], 2750, 3920,"M"),
+("04.02","ZEMİN","Titreşim matı 10 mm (arena altı — üst katta konut varsayımı)","m²",ZON_M2["ARENA · SERBEST AĞIRLIK"],  830, 1260,"O"),
+("04.03","ZEMİN","Kauçuk karo 20 mm — fonksiyonel / kardiyo","m²",                  ZON_M2["FONKSİYONEL · KARDİYO"],   1650, 2400,"M"),
+("04.04","ZEMİN","LVT / laminat parke — dinlenme + giriş / banko","m²",             round(ZON_M2["DİNLENME SALONU"]+ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],2), 1370, 2120,"M"),
+("04.05","ZEMİN","Süpürgelik, geçiş profilleri, eşikler","m",                       round(L_SALON+L_ISLAK,1),           350,  550,"M"),
+("07.01","BOYA · DEKOR","Silinebilir mat duvar boyası (astar + 2 kat)","m²",         M2_DUVAR_SALON,   385,   610,"M"),
+("07.02","BOYA · DEKOR","Tavan boyası / açık tavan siyah boya (endüstriyel)","m²",   M2_TAVAN,         405,   630,"M"),
+("07.03","BOYA · DEKOR","Ayna — arena ve fonksiyonel alan (6 mm, montaj dahil)","m²",14,              4600,  7400,"O"),
+("07.04","BOYA · DEKOR","Duvar grafiği / marka uygulaması","götürü",                 1,              48000,  95000,"O"),
+("08.01","MARANGOZ","Resepsiyon bankosu — 2,40 m, kompakt lamine tezgâh","m",        2.4,            26000,  43000,"M"),
+("08.02","MARANGOZ","Soyunma dolabı / askılık — 24 göz (2 blok)","göz",              24,              2600,   4400,"M"),
+("08.03","MARANGOZ","Oturma bankı (soyunma) + dinlenme mobilyası","götürü",          1,              48000,  92000,"O"),
+("09.01","YANGIN · GÜVENLİK","6 kg KKT yangın söndürücü + dolap + montaj","adet",     4,               4500,   7600,"M"),
+("09.03","YANGIN · GÜVENLİK","Keskin köşe / kolon darbe hafifletici kaplama","m",     18,              1200,   2100,"M"),
+("09.04","YANGIN · GÜVENLİK","Engelli erişimi — rampa, tutamak, kapı genişliği düzenlemesi","götürü",1,42000,  90000,"M"),
+("09.05","YANGIN · GÜVENLİK","İlk yardım dolabı, AED, acil çıkış donanımı","takım",   1,              34000,  63000,"M"),
+("10.01","TABELA · DIŞ","Işıklı kutu harf tabela + cephe folyo","götürü",            1,              68000, 135000,"O"),
+("10.02","TABELA · DIŞ","Cephe doğrama temizlik / bakım, giriş kapısı revizyonu","götürü",1,          50000,  85000,"M"),
+("11.01","DOĞRAMA","İç kapı K03 · K04 — panel kapı 90×210, kasa, pervaz ve donanım","adet",2,  18500,  29000,"M"),
+("11.02","DOĞRAMA","WC kapısı K05 · K06 — tam WPC 70×200, alt menfezli","adet",          2,  15000,  24500,"M"),
+("11.03","DOĞRAMA","Duş kapağı K07 · K08 — 6 mm temperli cam 70×195","adet",             2,  17500,  28000,"M"),
+("11.04","DOĞRAMA","Depo / teknik dolap kapağı K09 — havalandırma menfezli","adet",      1,   9000,  15000,"M"),
+("11.05","DOĞRAMA","Acil çıkış kapısı K02 — panik bar (EN 1125), kapı kapatıcı","adet",  1,  54000,  88000,"M"),
 ] + B_MEK + B_ELK
 GRUPLAR = ["YIKIM · SÖKÜM","DUVAR · ALÇIPAN","ISLAK HACİM","ZEMİN","ELEKTRİK",
-           "MEKANİK","BOYA · DEKOR","MARANGOZ","YANGIN · GÜVENLİK","TABELA · DIŞ"]
+           "MEKANİK","BOYA · DEKOR","MARANGOZ","DOĞRAMA","YANGIN · GÜVENLİK","TABELA · DIŞ"]
 
 def _tut(r, hi):  return r[4]*(r[6] if hi else r[5])
 def maliyet(senaryo="O", islak="A"):
