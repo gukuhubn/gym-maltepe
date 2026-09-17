@@ -100,6 +100,9 @@ def sembol(v, x, y, tip, kod=None, aci=0.0):
         c.saveState(); c.translate(px0, py0); c.rotate(aci); c.translate(-px0, -py0)
     _sembol_ciz(v, x, y, tip, None)          # sembol döner
     if aci: c.restoreState()
+    if tip == "pano":                         # pano yazısı her zaman yatay okunur
+        px, py = v.p((x, y))
+        h.txt(c, px, py - 1.4*mm, "ADP", h.FB, 4.6, HexColor("#FFFFFF"), "c")
     if kod and tip in ("priz", "priz_ip44", "kamera", "hoparlor", "veri",
                        "dedektor", "yangin", "anahtar"):
         px, py = v.p((x, y))                  # etiket YATAY kalır
@@ -155,7 +158,6 @@ def _sembol_ciz(v, x, y, tip, kod=None):
         px, py = v.p((x, y))
         c.setFillColor(HexColor("#16273D")); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.7)
         c.rect(px-4.2*mm, py-2.8*mm, 8.4*mm, 5.6*mm, 1, 1)
-        h.txt(c, px, py-1.4*mm, "PANO", h.FB, 4.2, HexColor("#FFFFFF"), "c")
 
 
 def lejant_dikey(v_c, x, y, satirlar, w, s=6.0, adim=5.6*mm):
@@ -166,3 +168,143 @@ def lejant_dikey(v_c, x, y, satirlar, w, s=6.0, adim=5.6*mm):
         h.txt(c, x+8.5*mm, y, t, h.F, s, h.INK)
         y -= adim
     return y
+
+
+# ══════════════════════ LİNYE (TESİSAT HATTI) ÇİZİMİ ══════════════════════════
+# Uygulama projesi kuralı: tesisat hatları ortogonal döşenir; hat üzerine
+# iletken sayısı çentiği, kablo cinsi/kesiti ve boru çapı yazılır.
+_LINYE_RENK = {"L": C_AYD, "P": C_PRIZ, "K": C_KLIMA, "W": C_SICAK,
+               "V": C_BESLEME, "Z": C_ZAYIF}
+_BORU_CAP   = {2.5: "Ø20", 6.0: "Ø25", 1.5: "Ø16", 10.0: "Ø32"}
+
+
+def linye_rengi(kod):
+    return _LINYE_RENK.get(kod[0], C_PRIZ)
+
+
+# Zayıf akım hatları güç linyesi değildir; kendi kablo cinsleriyle etiketlenir.
+_ZAYIF_ETIKET = {
+ "Z1": "Z1 · U/UTP Cat6 + RG6 · kablo kanalı 50×50",
+ "Z2": "Z2 · JE-H(St)H 2×2×0,8 (FE180/E30) · yangın algılama çevrimi",
+}
+
+
+def linye_etiketi(kod):
+    """'P3 · NHXMH 3×2,5 · Ø20' — pafta üzerine yazılan hat tanımı."""
+    if kod in _ZAYIF_ETIKET: return _ZAYIF_ETIKET[kod]
+    l = next((x for x in P.LINYE if x[0] == kod), None)
+    if not l: return kod
+    kes = l[3]
+    try:
+        mm2 = float(kes.split("×")[1].replace(",", "."))
+    except Exception:
+        mm2 = 2.5
+    return f"{kod} · NHXMH {kes} · {_BORU_CAP.get(mm2, 'Ø20')}"
+
+
+def _centik(v, a, b, adet, renk, boy_mm=1.7, ara_mm=1.1):
+    """Hat üzerine iletken sayısı çentiği (kısa eğik çizgiler)."""
+    c = v.c
+    ax, ay = v.p(a); bx, by = v.p(b)
+    L = math.hypot(bx-ax, by-ay)
+    if L < (adet+1)*ara_mm + 6: return
+    ux, uy = (bx-ax)/L, (by-ay)/L
+    mx, my = (ax+bx)/2, (ay+by)/2
+    c.saveState(); c.setStrokeColor(renk); c.setLineWidth(0.45)
+    bas = -(adet-1)*ara_mm/2
+    for i in range(adet):
+        t = bas + i*ara_mm
+        px, py = mx+ux*t, my+uy*t
+        # 60° eğik çentik
+        dx, dy = (-uy*0.5 + ux*0.866)*boy_mm/2, (ux*0.5 + uy*0.866)*boy_mm/2
+        c.line(px-dx, py-dy, px+dx, py+dy)
+    c.restoreState()
+
+
+_ETIKET_KONUM = []      # çizim başına yerleştirilmiş etiket noktaları (pt)
+
+
+def etiket_sifirla():
+    _ETIKET_KONUM.clear()
+
+
+def _bos_yer(px, py, asgari_mm=17.0):
+    for qx, qy in _ETIKET_KONUM:
+        if math.hypot(px-qx, py-qy) < asgari_mm*mm: return False
+    return True
+
+
+def linye(v, kod, segmentler, etiket=True, lw=0.85, centik=True):
+    """Bir linyenin ortogonal güzergâhını çizer.
+
+    `segmentler`: [[(x,y), ...], ...] — her biri ortogonal poligon.
+    Çapraz segment bulunursa çizilmez; bu bir çizim hatasıdır ve denetim
+    ajanı tarafından yakalanır.
+    """
+    renk = linye_rengi(kod)
+    try:
+        iletken = int(P.LINYE and next(x for x in P.LINYE if x[0] == kod)[3].split("×")[0])
+    except Exception:
+        iletken = 3
+    adaylar = []
+    for g in segmentler:
+        for a, b in zip(g, g[1:]):
+            if abs(a[0]-b[0]) > 1e-6 and abs(a[1]-b[1]) > 1e-6:
+                continue                      # çapraz hat çizilmez
+            D.line(v, a, b, renk, lw)
+            adaylar.append((math.dist(a, b), a, b))
+    adaylar.sort(key=lambda t: -t[0])
+    en_uzun = (adaylar[0][1], adaylar[0][2]) if adaylar else None
+    # etiket, çakışmayan en uzun segmentin ortasına konur
+    yerlesim = None
+    for d, a, b in adaylar:
+        if d < 0.9: break
+        for t in (0.5, 0.32, 0.68, 0.2, 0.8):
+            px, py = v.p((a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t))
+            if _bos_yer(px, py):
+                yerlesim = (a, b, px, py); break
+        if yerlesim: break
+    if centik and en_uzun:
+        _centik(v, en_uzun[0], en_uzun[1], iletken, renk)
+    if etiket and yerlesim:
+        a, b, _px, _py = yerlesim
+        px, py = _px, _py
+        _ETIKET_KONUM.append((px, py))
+        yatay = abs(a[1]-b[1]) < 1e-6
+        c = v.c; c.saveState()
+        c.setFillColor(HexColor("#FFFFFF"))
+        metin = linye_etiketi(kod)
+        gen = len(metin)*2.15 + 4
+        if yatay:
+            c.rect(px-gen/2*0.5*mm, py+0.9*mm, gen*0.5*mm, 3.0*mm, 0, 1)
+            h.txt(c, px, py+1.8*mm, metin, h.F, 4.6, renk, "c")
+        else:
+            c.translate(px-1.6*mm, py); c.rotate(90)
+            c.rect(-gen/2*0.5*mm, -1.1*mm, gen*0.5*mm, 3.0*mm, 0, 1)
+            h.txt(c, 0, 0, metin, h.F, 4.6, renk, "c")
+        c.restoreState()
+
+
+def linyeleri_ciz(v, kodlar, etiket=True, lw=0.85):
+    """data/yollar.json içindeki hazır güzergâhları çizer."""
+    import linye_yollari as LY
+    d = LY.yukle()
+    if not d: return 0
+    etiket_sifirla()
+    n = 0
+    for kod in kodlar:
+        kayit = d.get("linye", {}).get(kod)
+        if not kayit: continue
+        linye(v, kod, kayit["segment"], etiket=etiket, lw=lw); n += 1
+    return n
+
+
+def anahtar_hatlari_ciz(v, lw=0.6):
+    """Anahtar → armatür kumanda hatları (ince, kesikli)."""
+    import linye_yollari as LY
+    d = LY.yukle()
+    for kayit in (d.get("anahtar") or []):
+        for g in kayit["segment"]:
+            for a, b in zip(g, g[1:]):
+                if abs(a[0]-b[0]) > 1e-6 and abs(a[1]-b[1]) > 1e-6: continue
+                D.line(v, a, b, C_AYD, lw, (1.4, 1.2))

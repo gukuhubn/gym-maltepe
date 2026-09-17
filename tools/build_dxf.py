@@ -78,100 +78,17 @@ def olculer(msp):
 
 # ══════════════════════ MEKANİK ════════════════════════════════════════════════
 def mekanik(msp):
-    for ad, k in (("besleme", "M-HAVA-BESLEME"), ("egzoz", "M-HAVA-EGZOZ"),
-                  ("islak", "M-HAVA-ISLAK")):
-        d = P.KANAL[ad]
-        g = 0.50 if ad == "besleme" else (0.40 if ad == "egzoz" else 0.16)
-        sekil(msp, LineString(d["guzergah"]).buffer(g/2, cap_style=2, join_style=2), k)
-        poli(msp, d["guzergah"], k, False)
-        mid = LineString(d["guzergah"]).interpolate(0.30, normalized=True)
-        yazi(msp, (mid.x*K, mid.y*K+g*K/2+330),
-             f"{d['kesit']} · {d['debi']} m³/h", 160, "M-YAZI")
-    for kod, x, y, debi, tip in P.MENFEZ:
-        hat = P.KANAL["besleme" if tip == "besleme" else ("egzoz" if tip == "egzoz" else "islak")]
-        ls = LineString(hat["guzergah"]); q = ls.interpolate(ls.project(Point(x, y)))
-        cizgi(msp, (q.x, q.y), (x, y), "M-HAVA-BRANSMAN")
-        b = {"besleme": "M_MENFEZ_BESLEME", "egzoz": "M_MENFEZ_EGZOZ", "valf": "M_VALF"}[tip]
-        blok(msp, b, (x, y), "M-HAVA-MENFEZ", {"KOD": kod, "DEBI": f"{debi} m³/h"})
-    for kod, x, y, ad, a in P.FAN:
-        blok(msp, "M_FAN", (x, y), "M-HAVA-CIHAZ",
-             {"KOD": kod, "TANIM": ad.split("—")[-1].strip()}, aci=a)
-    for kod, x, y, ad in P.PANJUR:
-        blok(msp, "M_PANJUR", (x, y), "M-HAVA-CIHAZ", {"KOD": kod})
-    # iklimlendirme
-    for hat in P.BAKIR_HAT.values(): poli(msp, hat, "M-KLIMA-BAKIR", False)
-    for hat in P.DRENAJ.values(): poli(msp, hat, "M-KLIMA-DRENAJ", False)
-    for kod, zon, btu, (x, y), a in P.KLIMA:
-        blok(msp, "M_KLIMA_IC", (x, y), "M-KLIMA-IC",
-             {"KOD": kod, "KAPASITE": f"{btu} BTU"}, aci=a)
-    blok(msp, "M_KLIMA_DIS", P.DIS_UNITE, "M-KLIMA-DIS",
-         {"KOD": "DIŞ ÜNİTE PLATFORMU", "ADET": f"{P.ADET_KLIMA} adet"})
-    # sıhhi tesisat
-    poli(msp, P.TEMIZ_SU["Ø25"], "M-SIHHI-TEMIZ", False)
-    for br in P.TEMIZ_SU["Ø20"]:
-        poli(msp, br, "M-SIHHI-TEMIZ", False)
-        poli(msp, [(p[0]+0.09, p[1]+0.09) for p in br], "M-SIHHI-SICAK", False)
-    poli(msp, P.PIS_SU["Ø100"], "M-SIHHI-PIS", False)
-    for br in P.PIS_SU["Ø70"] + P.PIS_SU["Ø50"]: poli(msp, br, "M-SIHHI-PIS", False)
-    for kod, x, y, ad in P.VITRIFIYE:
-        if kod.startswith("WC"):
-            blok(msp, "M_KLOZET", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod})
-            blok(msp, "M_LAVABO", (x+0.55, y), "M-SIHHI-CIHAZ", {"KOD": "LV"})
-        else:
-            blok(msp, "M_DUS", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod})
-            blok(msp, "M_SUZGEC", (x, y), "M-SIHHI-CIHAZ")
-    for kod, x, y, ad, a in P.ISITICI:
-        blok(msp, "M_ISITICI", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod, "GUC": "6 kW"}, aci=a)
-    blok(msp, "M_SAYAC", P.SU_GIRIS, "M-SIHHI-TEMIZ", {"KOD": "SAYAÇ + ANA KESME"})
+    mekanik_havalandirma(msp)
+    mekanik_iklimlendirme(msp)
+    mekanik_sihhi(msp)
 
 # ══════════════════════ ELEKTRİK ═══════════════════════════════════════════════
 def elektrik(msp):
-    import draw as D
-    zon_linye = {"ARENA · SERBEST AĞIRLIK": "L1", "FONKSİYONEL · KARDİYO": "L2",
-                 "DİNLENME SALONU": "L3", "GİRİŞ · BANKO · SİRKÜLASYON": "L4"}
-    izgara = D.aydinlatma_izgara()
-    i = 0
-    for z in P.ZONES:
-        n = P.ZON_ARMATUR[z[0]]
-        for _ in range(n):
-            if i >= len(izgara): break
-            blok(msp, "E_ARMATUR_LINEER", izgara[i], "E-AYD-ARMATUR",
-                 {"LINYE": zon_linye[z[0]]}); i += 1
-    for ad, d in P.ISLAK.items():
-        for n in ("soyunma", "dus", "wc"):
-            q = d[n].representative_point()
-            blok(msp, "E_DOWNLIGHT", (q.x, q.y), "E-AYD-DOWNLIGHT", {"LINYE": "L5"})
-    for kod, x, y, t, a in P.ACIL:
-        b = "E_ACIL" if "acil" in t else "E_YONLENDIRME"
-        blok(msp, b, (x, y), "E-AYD-ACIL", {"KOD": kod}, aci=a)
-    for kod, x, y, t, a in P.ANAHTAR: blok(msp, "E_ANAHTAR", (x, y), "E-AYD-ANAHTAR", {"KOD": kod}, aci=a)
-    for kod, x, y, t, a in P.SENSOR:  blok(msp, "E_SENSOR",  (x, y), "E-AYD-ANAHTAR", {"KOD": kod})
-    linye_priz = {}
-    for j, (kod, x, y, t, a) in enumerate(P.PRIZ):
-        ln = "P4" if kod.startswith("PK") else ("P3" if kod.startswith("PB") else
-             ("P1" if j % 2 == 0 else "P2"))
-        blok(msp, "E_PRIZ", (x, y), "E-KUVVET-PRIZ", {"KOD": kod, "LINYE": ln}, aci=a)
-    for kod, x, y, t, a in P.PRIZ_IP44:
-        blok(msp, "E_PRIZ_IP44", (x, y), "E-KUVVET-PRIZ", {"KOD": kod}, aci=a)
-    for kod, zon, btu, (x, y), a in P.KLIMA:
-        blok(msp, "M_KLIMA_IC", (x, y), "E-KUVVET-CIHAZ",
-             {"KOD": kod, "KAPASITE": "1×16 A"}, aci=a)
-    for kod, x, y, ad, a in P.ISITICI:
-        blok(msp, "M_ISITICI", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "GUC": "1×32 A"}, aci=a)
-    for kod, x, y, ad, a in P.FAN:
-        blok(msp, "M_FAN", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "TANIM": "1×10 A"}, aci=a)
-    for kod, x, y, t, a in P.KAMERA: blok(msp, "E_KAMERA",  (x, y), "E-ZAYIF-KAMERA", {"KOD": kod}, aci=a)
-    for kod, x, y, t in P.HOPARLOR: blok(msp, "E_HOPARLOR",(x, y), "E-ZAYIF-SES",    {"KOD": kod})
-    for kod, x, y, t in P.VERI:     blok(msp, "E_VERI",    (x, y), "E-ZAYIF-VERI",   {"KOD": kod})
-    for kod, x, y, t in P.DEDEKTOR: blok(msp, "E_DEDEKTOR",(x, y), "E-ZAYIF-YANGIN", {"KOD": kod})
-    for kod, x, y, t, a in P.YANGIN:   blok(msp, "E_YANGIN_BUTON", (x, y), "E-ZAYIF-YANGIN", {"KOD": kod}, aci=a)
-    cevrim = [P.PANO] + [(d[1], d[2]) for d in P.DEDEKTOR] + [(P.YANGIN[2][1], P.YANGIN[2][2])]
-    poli(msp, cevrim, "E-ZAYIF-LINYE", False)
-    blok(msp, "E_PANO", P.PANO, "E-PANO",
-         {"KOD": "AP", "TANIM": f"3×{P.ANA_KESICI//3} A · {len(P.LINYE)} linye"}, aci=P.PANO_ACI)
-    for ad, d in P.ISLAK.items():
-        q = d["tum"].representative_point()
-        yazi(msp, (q.x*K, q.y*K-780), "KAMERA YOK", 190, "E-YAZI", stil="GYM-B", renk=1)
+    elektrik_aydinlatma(msp)
+    elektrik_kuvvet(msp)
+    elektrik_zayif(msp)
+    elektrik_toprak(msp)
+
 
 # ══════════════════════ MİMARİ UYGULAMA PAFTALARI ══════════════════════════════
 def _balon(msp, p, metin, r_mm=340, katman="A-MAHAL"):
@@ -266,6 +183,205 @@ def mimari_yangin(msp):
             msp.add_circle(M(pt), 220, dxfattribs={"layer": "A-YANGIN-EKIP"})
         yazi(msp, M(pt), kod, 150, "A-YANGIN-EKIP", stil="GYM-B")
 
+# ── LİNYE (ORTOGONAL TESİSAT HATTI) ──────────────────────────────────────────
+def linye_ciz(msp, kodlar, katman, etiket=True):
+    """data/yollar.json içindeki ortogonal güzergâhları çizer.
+
+    Çapraz segment çizilmez — tesisat hatları yalnız yatay/düşey ilerler.
+    """
+    import linye_yollari as LY, draw_mep as DM
+    d = LY.yukle()
+    if not d: return 0
+    n = 0
+    for kod in kodlar:
+        kayit = d["linye"].get(kod)
+        if not kayit: continue
+        en = (0.0, None, None)
+        for g in kayit["segment"]:
+            for a, b in zip(g, g[1:]):
+                if abs(a[0]-b[0]) > 1e-6 and abs(a[1]-b[1]) > 1e-6: continue
+                cizgi(msp, a, b, katman)
+                dd = math.dist(a, b)
+                if dd > en[0]: en = (dd, a, b)
+        if etiket and en[1]:
+            a, b = en[1], en[2]
+            mx, my = (a[0]+b[0])/2, (a[1]+b[1])/2
+            aci = 0 if abs(a[1]-b[1]) < 1e-6 else 90
+            yazi(msp, (mx*K, my*K+120), DM.linye_etiketi(kod), 150, "E-YAZI", aci=aci)
+        n += 1
+    return n
+
+
+def anahtar_sorti_ciz(msp, katman="E-AYD-SORTI"):
+    import linye_yollari as LY
+    d = LY.yukle()
+    if not d: return
+    for kayit in d.get("anahtar", []):
+        for g in kayit["segment"]:
+            for a, b in zip(g, g[1:]):
+                if abs(a[0]-b[0]) > 1e-6 and abs(a[1]-b[1]) > 1e-6: continue
+                cizgi(msp, a, b, katman)
+
+
+# ── DİSİPLİN ALT ÇİZİMLERİ (her pafta yalnız kendi içeriğini alır) ───────────
+def elektrik_aydinlatma(msp):
+    import draw as D
+    zon_linye = {"ARENA · SERBEST AĞIRLIK": "L1", "FONKSİYONEL · KARDİYO": "L2",
+                 "DİNLENME SALONU": "L3", "GİRİŞ · BANKO · SİRKÜLASYON": "L4"}
+    izgara = D.aydinlatma_izgara(); i = 0
+    anahtar_sorti_ciz(msp)
+    linye_ciz(msp, ["L1", "L2", "L3", "L4", "L5", "L6"], "E-AYD-LINYE")
+    for z in P.ZONES:
+        for _ in range(P.ZON_ARMATUR[z[0]]):
+            if i >= len(izgara): break
+            blok(msp, "E_ARMATUR_LINEER", izgara[i], "E-AYD-ARMATUR",
+                 {"LINYE": zon_linye[z[0]]}); i += 1
+    for ad, d in P.ISLAK.items():
+        for n in ("soyunma", "dus", "wc"):
+            q = d[n].representative_point()
+            blok(msp, "E_DOWNLIGHT", (q.x, q.y), "E-AYD-DOWNLIGHT", {"LINYE": "L5"})
+    for kod, x, y, t, a in P.ACIL:
+        blok(msp, "E_ACIL" if "acil" in t else "E_YONLENDIRME", (x, y),
+             "E-AYD-ACIL", {"KOD": kod}, aci=a)
+    for kod, x, y, t, a in P.ANAHTAR:
+        blok(msp, "E_ANAHTAR", (x, y), "E-AYD-ANAHTAR", {"KOD": kod}, aci=a)
+    for kod, x, y, t, a in P.SENSOR:
+        blok(msp, "E_SENSOR", (x, y), "E-AYD-ANAHTAR", {"KOD": kod})
+    _pano(msp)
+
+
+def elektrik_kuvvet(msp):
+    linye_ciz(msp, ["P1", "P2", "P6", "P3", "P4", "P5", "K1", "K2", "K3", "K4",
+                    "W1", "W2", "V1", "V2"], "E-KUVVET-LINYE")
+    _priz_linye = {"P1": ("PR12","PR13","PR14","PR15","PR16","PR1"),
+                   "P2": ("PR5","PR6","PR7","PR8","PR9"),
+                   "P6": ("PR2","PR3","PR4","PR10","PR11")}
+    for kod, x, y, t, a in P.PRIZ:
+        ln = "P4" if kod.startswith("PK") else ("P3" if kod.startswith("PB") else
+             next((k for k, v in _priz_linye.items() if kod in v), "P1"))
+        blok(msp, "E_PRIZ", (x, y), "E-KUVVET-PRIZ", {"KOD": kod, "LINYE": ln}, aci=a)
+    for kod, x, y, t, a in P.PRIZ_IP44:
+        blok(msp, "E_PRIZ_IP44", (x, y), "E-KUVVET-PRIZ", {"KOD": kod, "LINYE": "P5"}, aci=a)
+    for j, (kod, zon, btu, (x, y), a) in enumerate(P.KLIMA):
+        blok(msp, "M_KLIMA_IC", (x, y), "E-KUVVET-CIHAZ",
+             {"KOD": kod, "KAPASITE": "1×16 A"}, aci=a)
+    for j, (kod, x, y, ad, a) in enumerate(P.ISITICI):
+        blok(msp, "M_ISITICI", (x, y), "E-KUVVET-CIHAZ",
+             {"KOD": kod, "GUC": "1×20 A"}, aci=a)
+    for kod, x, y, ad, a in P.FAN:
+        blok(msp, "M_FAN", (x, y), "E-KUVVET-CIHAZ", {"KOD": kod, "TANIM": "1×10 A"}, aci=a)
+    _pano(msp)
+
+
+def elektrik_zayif(msp):
+    linye_ciz(msp, ["Z1"], "E-ZAYIF-TAVA")
+    linye_ciz(msp, ["Z2"], "E-ZAYIF-LINYE")
+    for kod, x, y, t, a in P.KAMERA: blok(msp, "E_KAMERA", (x, y), "E-ZAYIF-KAMERA", {"KOD": kod}, aci=a)
+    for kod, x, y, t in P.HOPARLOR: blok(msp, "E_HOPARLOR", (x, y), "E-ZAYIF-SES", {"KOD": kod})
+    for kod, x, y, t in P.VERI:     blok(msp, "E_VERI", (x, y), "E-ZAYIF-VERI", {"KOD": kod})
+    for kod, x, y, t in P.DEDEKTOR: blok(msp, "E_DEDEKTOR", (x, y), "E-ZAYIF-YANGIN", {"KOD": kod})
+    for kod, x, y, t, a in P.YANGIN:
+        blok(msp, "E_YANGIN_BUTON", (x, y), "E-ZAYIF-YANGIN", {"KOD": kod}, aci=a)
+    for ad, d in P.ISLAK.items():
+        q = d["tum"].representative_point()
+        yazi(msp, (q.x*K, q.y*K-520), "KAMERA YOK", 180, "E-YAZI", stil="GYM-B")
+    _pano(msp)
+
+
+def elektrik_toprak(msp):
+    """Topraklama ve potansiyel dengeleme paftası."""
+    import yol as Y
+    serit = [(e[1], e[2]) for e in P.ELEKTROT]
+    poli(msp, serit, "E-TOPRAK-SERIT", False)
+    for kod, x, y in P.ELEKTROT:
+        msp.add_circle((x*K, y*K), 200, dxfattribs={"layer": "E-TOPRAK-ELEKTROT"})
+        cizgi(msp, (x, y-0.14), (x, y+0.14), "E-TOPRAK-ELEKTROT")
+        cizgi(msp, (x-0.11, y-0.14), (x+0.11, y-0.14), "E-TOPRAK-ELEKTROT")
+        cizgi(msp, (x-0.07, y-0.21), (x+0.07, y-0.21), "E-TOPRAK-ELEKTROT")
+        yazi(msp, (x*K+300, y*K), kod, 170, "E-TOPRAK-YAZI", stil="GYM-B")
+    ana = Y.guzergah((P.ELEKTROT[1][1]-0.55, P.ELEKTROT[1][2]), P.ATB)
+    if ana:
+        cizgi(msp, (P.ELEKTROT[1][1], P.ELEKTROT[1][2]), ana[0], "E-TOPRAK-ILETKEN")
+        poli(msp, ana, "E-TOPRAK-ILETKEN", False)
+    for kod, x, y, aciklama in P.EPDB:
+        g = Y.guzergah(P.ATB, (x, y))
+        if g: poli(msp, g, "E-TOPRAK-ILETKEN", False)
+        poli(msp, [(x-0.28, y-0.13), (x+0.28, y-0.13),
+                   (x+0.28, y+0.13), (x-0.28, y+0.13)], "E-TOPRAK-BARA")
+        yazi(msp, (x*K, y*K), kod, 150, "E-TOPRAK-YAZI", stil="GYM-B")
+    ax, ay = P.ATB
+    poli(msp, [(ax-0.38, ay-0.16), (ax+0.38, ay-0.16),
+               (ax+0.38, ay+0.16), (ax-0.38, ay+0.16)], "E-TOPRAK-BARA")
+    yazi(msp, (ax*K, ay*K), "ATB", 180, "E-TOPRAK-YAZI", stil="GYM-B")
+    yazi(msp, (ax*K, ay*K-400),
+         f"Ra = {('%.1f' % P.TOPRAK_R_HESAP).replace('.', ',')} Ω ≤ "
+         f"{int(P.TOPRAK_HEDEF)} Ω", 150, "E-TOPRAK-YAZI")
+    _pano(msp)
+
+
+def _pano(msp):
+    blok(msp, "E_PANO", P.PANO, "E-PANO",
+         {"KOD": "ADP", "TANIM": f"3×{P.ANA_KESICI//3} A · {len(P.LINYE)} linye"},
+         aci=P.PANO_ACI)
+
+
+def mekanik_havalandirma(msp):
+    for ad, k in (("besleme", "M-HAVA-BESLEME"), ("egzoz", "M-HAVA-EGZOZ"),
+                  ("islak", "M-HAVA-ISLAK")):
+        d = P.KANAL[ad]
+        g = 0.50 if ad == "besleme" else (0.40 if ad == "egzoz" else 0.16)
+        sekil(msp, LineString(d["guzergah"]).buffer(g/2, cap_style=2, join_style=2), k)
+        poli(msp, d["guzergah"], k, False)
+        mid = LineString(d["guzergah"]).interpolate(0.30, normalized=True)
+        yazi(msp, (mid.x*K, mid.y*K+g*K/2+330),
+             f"{d['kesit']} · {d['debi']} m³/h", 160, "M-YAZI")
+    for kod, x, y, debi, tip in P.MENFEZ:
+        hat = P.KANAL["besleme" if tip == "besleme" else
+                      ("egzoz" if tip == "egzoz" else "islak")]
+        ls = LineString(hat["guzergah"]); q = ls.interpolate(ls.project(Point(x, y)))
+        # branşman ortogonal: önce yatay, sonra düşey
+        cizgi(msp, (q.x, q.y), (x, q.y), "M-HAVA-BRANSMAN")
+        cizgi(msp, (x, q.y), (x, y), "M-HAVA-BRANSMAN")
+        b = {"besleme": "M_MENFEZ_BESLEME", "egzoz": "M_MENFEZ_EGZOZ",
+             "valf": "M_VALF"}[tip]
+        blok(msp, b, (x, y), "M-HAVA-MENFEZ", {"KOD": kod, "DEBI": f"{debi} m³/h"})
+    for kod, x, y, ad, a in P.FAN:
+        blok(msp, "M_FAN", (x, y), "M-HAVA-CIHAZ",
+             {"KOD": kod, "TANIM": ad.split("—")[-1].strip()}, aci=a)
+    for kod, x, y, ad in P.PANJUR:
+        blok(msp, "M_PANJUR", (x, y), "M-HAVA-CIHAZ", {"KOD": kod})
+
+
+def mekanik_iklimlendirme(msp):
+    for hat in P.BAKIR_HAT.values(): poli(msp, hat, "M-KLIMA-BAKIR", False)
+    for hat in P.DRENAJ.values(): poli(msp, hat, "M-KLIMA-DRENAJ", False)
+    for kod, zon, btu, (x, y), a in P.KLIMA:
+        blok(msp, "M_KLIMA_IC", (x, y), "M-KLIMA-IC",
+             {"KOD": kod, "KAPASITE": f"{btu} BTU"}, aci=a)
+    blok(msp, "M_KLIMA_DIS", P.DIS_UNITE, "M-KLIMA-DIS",
+         {"KOD": "DIŞ ÜNİTE PLATFORMU", "ADET": f"{P.ADET_KLIMA} adet"})
+
+
+def mekanik_sihhi(msp):
+    poli(msp, P.TEMIZ_SU["Ø25"], "M-SIHHI-TEMIZ", False)
+    for br in P.TEMIZ_SU["Ø20"]:
+        poli(msp, br, "M-SIHHI-TEMIZ", False)
+        poli(msp, [(p[0]+0.09, p[1]+0.09) for p in br], "M-SIHHI-SICAK", False)
+    poli(msp, P.PIS_SU["Ø100"], "M-SIHHI-PIS", False)
+    for br in P.PIS_SU["Ø70"] + P.PIS_SU["Ø50"]: poli(msp, br, "M-SIHHI-PIS", False)
+    for kod, x, y, ad in P.VITRIFIYE:
+        if kod.startswith("WC"):
+            blok(msp, "M_KLOZET", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod})
+            blok(msp, "M_LAVABO", (x+0.55, y), "M-SIHHI-CIHAZ", {"KOD": "LV"})
+        else:
+            blok(msp, "M_DUS", (x, y), "M-SIHHI-CIHAZ", {"KOD": kod})
+            blok(msp, "M_SUZGEC", (x, y), "M-SIHHI-CIHAZ")
+    for kod, x, y, ad, a in P.ISITICI:
+        blok(msp, "M_ISITICI", (x, y), "M-SIHHI-CIHAZ",
+             {"KOD": kod, "GUC": "3 kW / 100 L"}, aci=a)
+    blok(msp, "M_SAYAC", P.SU_GIRIS, "M-SIHHI-TEMIZ", {"KOD": "SAYAÇ + ANA KESME"})
+
+
 # ══════════════════════ ANTET VE PAFTALAR ══════════════════════════════════════
 def antet_blogu(doc):
     """A3 antedi — kâğıt alanında 1:1, mm."""
@@ -301,6 +417,16 @@ def antet_blogu(doc):
                                          "prompt": "Alt not"})
     ad.dxf.insert = (2, 6); ad.dxf.text = ""
 
+PAFTA_BOYUT = (420, 297)          # A3 — TS EN ISO 216
+PAFTA_KENAR = (20, 10, 10, 10)    # sol(cilt), üst, sağ, alt — TS EN ISO 5457
+# Antette bulunması zorunlu alanlar (TMMOB MMO Proje Hazırlama ve Mesleki
+# Denetim Esasları + Yapı Ruhsatı eki proje antet gereklilikleri)
+ANTET_ALANLARI = [
+ "İŞVEREN", "PROJE", "YAPI / MAHAL", "DİSİPLİN", "PAFTA ADI", "PAFTA NO",
+ "ÖLÇEK", "TARİH", "REVİZYON", "ÇİZEN", "KONTROL", "ONAY",
+ "PROJE MÜELLİFİ / ODA SİCİL NO",
+]
+
 PAFTALAR = {
  "M-01": ("HAVALANDIRMA PLANI", "MEKANİK TESİSAT",
           ["M-KLIMA-", "M-SIHHI-", "E-"]),
@@ -316,6 +442,8 @@ PAFTALAR = {
  "E-03": ("ZAYIF AKIM PLANI", "ELEKTRİK",
           ["M-", "E-AYD-", "E-KUVVET-"]),
  "E-04": ("ELEKTRİK GENEL YERLEŞİM", "ELEKTRİK", ["M-"]),
+ "E-05": ("TOPRAKLAMA VE POTANSİYEL DENGELEME PLANI", "ELEKTRİK",
+          ["M-", "E-AYD-", "E-KUVVET-", "E-ZAYIF-"]),
  "A-01": ("MİMARİ ALTLIK", "MİMARİ",
           ["M-", "E-", "A-ZEMIN-", "A-TAVAN-", "A-YANGIN-"]),
  "A-02": ("MİMARİ UYGULAMA PLANI", "MİMARİ",
@@ -355,8 +483,11 @@ def pafta_ekle(doc, no, notlar=""):
     psp.add_text("LEJANT", height=4.0, dxfattribs={"layer": "G-ANTET", "style": "GYM-B"}
                  ).set_placement((236, y), align=TextEntityAlignment.MIDDLE_LEFT)
     y -= 8
+    # Lejant YALNIZ bu paftada fiilen kullanılan katmanları listeler.
+    kullanilan = {e.dxf.layer for e in doc.modelspace()}
     gorunur = [l for l in X.KATMANLAR
-               if not any(l[0].startswith(d) for d in donan)
+               if l[0] in kullanilan
+               and not any(l[0].startswith(d) for d in donan)
                and (l[0].startswith(("M-", "E-")) or l[0].startswith("A-DUVAR"))]
     for kat, renk, lt, lw, ack in gorunur[:26]:
         psp.add_line((236, y), (246, y), dxfattribs={"layer": "G-ANTET", "color": renk,
@@ -390,6 +521,9 @@ NOTLAR = {
  "E-03": "SOYUNMA VE WC ICINE KAMERA KONULMAZ.\nYangin algilama panosu kesintisiz beslenir.\n"
          "Topraklama direnci <= 10 ohm.",
  "E-04": "Elektrik disiplin genel yerlesimi.\nAyrinti icin E-01, E-02, E-03 paftalari.",
+ "E-05": "Topraklama ve potansiyel dengeleme.\nElektrot grubu yapi disinda, 4 adet 2 m Cu kapli\n"
+         "celik cubuk, 3 m aralik. Ra hesap 15,5 ohm <= 20 ohm.\n"
+         "ATB pano altinda; her islak blokta EPDB bulunur.",
  "A-01": "Mimari altlik — mevcut duvar korunur.\nKirmizi: yeni alcipan bolme.\n"
          "Olculer raster paftadan (+/-%3).",
  "A-02": "Mahal no, kapi kodu, duvar tipi ve\nkesit hatti gosterilmistir.\n"
@@ -418,14 +552,64 @@ def belge_uret(ad, mek=True, elk=True, paftalar=(), mim_detay=True):
     doc.set_modelspace_vport(height=14000, center=(CX, CY))
     return doc
 
+# ── TEKİL PAFTA: her pafta kendi DXF dosyası, model uzayında YALNIZ o paftanın
+#    geometrisi. (Tek model + katman dondurma yerine gerçek pafta ayrımı.)
+#    (pafta no) -> (mimari altlık detayı, çizim fonksiyon adları)
+TEKIL_PAFTA = {
+ "A-01": (False, ["olculer"]),
+ "A-02": (False, ["olculer", "mimari_mahal"]),
+ "A-03": (False, ["mimari_zemin", "mimari_mahal"]),
+ "A-04": (False, ["mimari_tavan", "mekanik_havalandirma", "elektrik_aydinlatma"]),
+ "A-05": (False, ["mimari_yangin"]),
+ "M-01": (False, ["mekanik_havalandirma"]),
+ "M-02": (False, ["mekanik_iklimlendirme"]),
+ "M-03": (False, ["mekanik_sihhi"]),
+ "M-04": (False, ["mekanik_havalandirma", "mekanik_iklimlendirme", "mekanik_sihhi"]),
+ "E-01": (False, ["elektrik_aydinlatma"]),
+ "E-02": (False, ["elektrik_kuvvet"]),
+ "E-03": (False, ["elektrik_zayif"]),
+ "E-04": (False, ["elektrik_aydinlatma", "elektrik_kuvvet", "elektrik_zayif"]),
+ "E-05": (False, ["elektrik_toprak"]),
+}
+
+
+def pafta_belgesi(no):
+    """Tek paftalık bağımsız DXF: model uyazında yalnız bu paftanın içeriği."""
+    ad, disiplin, _ = PAFTALAR[no]
+    mim_detay, fnlar = TEKIL_PAFTA[no]
+    doc = X.yeni_belge(f"{no}.dxf"); X.bloklari_kur(doc); antet_blogu(doc)
+    msp = doc.modelspace()
+    mimari(msp)                       # mimari altlık her paftada bulunur
+    for fn in fnlar:
+        globals()[fn](msp)
+    pafta_ekle(doc, no, NOTLAR.get(no, ""))
+    if "Layout1" in doc.layouts: doc.layouts.delete("Layout1")
+    doc.set_modelspace_vport(height=14000, center=(CX, CY))
+    return doc
+
+
+def tekil_paftalari_uret(klasor=None):
+    hedef = (klasor or CAD/"paftalar"); hedef.mkdir(parents=True, exist_ok=True)
+    uretilen = []
+    for no in TEKIL_PAFTA:
+        doc = pafta_belgesi(no)
+        ad = PAFTALAR[no][0].replace(" ", "_").replace("/", "-")
+        yol = hedef/f"{no}_{ad}.dxf"
+        doc.saveas(yol)
+        uretilen.append(yol)
+        print(f"  → cad/paftalar/{yol.name:52s} "
+              f"{len(list(doc.modelspace())):5d} nesne · {yol.stat().st_size/1e6:.2f} MB")
+    return uretilen
+
+
 def uret():
     setler = [
       ("GYM-MIM-Uygulama-R2010.dxf", False, False, ("A-01","A-02","A-03","A-04","A-05")),
       ("GYM-MEK-Uygulama-R2010.dxf", True,  False, ("M-01","M-02","M-03","M-04")),
-      ("GYM-ELK-Uygulama-R2010.dxf", False, True,  ("E-01","E-02","E-03","E-04")),
+      ("GYM-ELK-Uygulama-R2010.dxf", False, True,  ("E-01","E-02","E-03","E-04","E-05")),
       ("GYM-BIRLESIK-R2010.dxf",     True,  True,
        ("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
-        "E-01","E-02","E-03","E-04")),
+        "E-01","E-02","E-03","E-04","E-05")),
     ]
     uretilen = []
     for dosya, mek, elk, pf in setler:
@@ -435,6 +619,7 @@ def uret():
         print(f"  → cad/{dosya:32s} {n_ent:5d} nesne · {len(pf)} pafta · "
               f"{yol.stat().st_size/1e6:.2f} MB")
         uretilen.append(yol)
+    uretilen += tekil_paftalari_uret()
     return uretilen
 
 
@@ -446,34 +631,29 @@ def onizleme_pdf(cikti="output/Gym_CAD_Paftalar.pdf"):
     from matplotlib.backends.backend_pdf import PdfPages
     from ezdxf.addons.drawing import RenderContext, Frontend
     from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
-    doc = ezdxf.readfile(CAD/"GYM-BIRLESIK-R2010.dxf")
-    sira = ["A-01", "A-02", "A-03", "A-04", "A-05",
-            "M-01", "M-02", "M-03", "M-04", "E-01", "E-02", "E-03", "E-04"]
-    adlar = {n: f"{n} {PAFTALAR[n][0]}" for n in sira}
+    # Her pafta KENDİ bağımsız DXF dosyasından basılır — tek model uzayı üzerinde
+    # katman dondurma ile değil.
+    sira = list(TEKIL_PAFTA)
     with PdfPages(cikti) as pdf:
         for no in sira:
-            lay = doc.layouts.get(adlar[no])
-            # Önizleme motoru görünüm penceresi bazlı katman dondurmayı uygulamaz;
-            # aynı sonucu vermek için o paftanın donmuş katmanları geçici olarak kapatılır.
-            donmus = []
-            for vp in lay.query("VIEWPORT"):
-                donmus += list(vp.frozen_layers)
-            for k in set(donmus):
-                if k in doc.layers: doc.layers.get(k).off()
+            ad = PAFTALAR[no][0].replace(" ", "_").replace("/", "-")
+            f = CAD/"paftalar"/f"{no}_{ad}.dxf"
+            if not f.exists(): continue
+            doc = ezdxf.readfile(f)
+            lay = doc.layouts.get(f"{no} {PAFTALAR[no][0]}")
             fig = plt.figure(figsize=(16.54, 11.69))
             ax = fig.add_axes([0, 0, 1, 1]); ax.set_axis_off()
             Frontend(RenderContext(doc), MatplotlibBackend(ax)).draw_layout(lay, finalize=True)
             pdf.savefig(fig, facecolor="white"); plt.close(fig)
-            for k in set(donmus):
-                if k in doc.layers: doc.layers.get(k).on()
-    print(f"  → {cikti}  ·  {len(sira)} pafta")
+    print(f"  → {cikti}  ·  {len(sira)} pafta (her biri ayrı DXF dosyasından)")
 
 def paketle(cikti="output/Gym_CAD_Seti_DXF.zip"):
+    n = 0
     with zipfile.ZipFile(cikti, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(CAD.iterdir()):
-            if f.is_file(): z.write(f, f"Gym_CAD_Seti/{f.name}")
-    print(f"  → {cikti}  ·  {sum(1 for f in CAD.iterdir() if f.is_file())} dosya · "
-          f"{Path(cikti).stat().st_size/1e6:.2f} MB")
+        for f in sorted(CAD.rglob("*")):
+            if f.is_file():
+                z.write(f, f"Gym_CAD_Seti/{f.relative_to(CAD)}"); n += 1
+    print(f"  → {cikti}  ·  {n} dosya · {Path(cikti).stat().st_size/1e6:.2f} MB")
 
 # ══════════════════════ CAD OKUMA NOTU VE KATMAN LİSTESİ ═══════════════════════
 def belgeler():

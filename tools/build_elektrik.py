@@ -10,11 +10,28 @@ import proj as P, helpers as h, draw as D, draw_mep as M
 W, HH = 420*mm, 297*mm
 TOP, BOT, L, R = HH-24.6*mm, 14*mm, 12*mm, W-12*mm
 CW = R-L
-N = 7
+N = 8
 DISIPLIN = "ELEKTRİK PROJESİ"
 
 def sayfa(c, no, baslik, ust=None):
     h.band(c, W, HH, no, baslik, ust or DISIPLIN); h.footer(c, W, no, N)
+
+def _guzergah_metraj():
+    """Gerçek ortogonal güzergâh uzunlukları (data/yollar.json)."""
+    import linye_yollari as LY
+    d = LY.yukle() or {"linye": {}, "anahtar": []}
+    g = {"L": 0.0, "P": 0.0, "KV": 0.0, "W": 0.0, "Z": 0.0, "A": 0.0}
+    for kod, kayit in d["linye"].items():
+        u = kayit["uzunluk"]
+        if   kod[0] == "L": g["L"] += u
+        elif kod[0] == "P": g["P"] += u
+        elif kod[0] in "KV": g["KV"] += u
+        elif kod[0] == "W": g["W"] += u
+        elif kod[0] == "Z": g["Z"] += u
+    g["A"] = sum(k["uzunluk"] for k in d.get("anahtar", []))
+    g["TOPLAM"] = round(sum(g.values()), 1)
+    return {k: round(v, 1) for k, v in g.items()}
+
 
 def _linye(pre):
     return [l for l in P.LINYE if l[0].startswith(pre)]
@@ -101,6 +118,10 @@ def s2(c):
     pw = CW*0.585
     v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     M.altlik(v); M.ekipman_soluk(v)
+    # aydınlatma linyeleri — ortogonal güzergâh, üzerinde iletken çentiği ve
+    # kablo tanımı; anahtar kumanda hatları ince kesikli
+    M.anahtar_hatlari_ciz(v)
+    M.linyeleri_ciz(v, ["L1", "L2", "L3", "L4", "L5", "L6"])
     for px, py in D.aydinlatma_izgara(): M.sembol(v, px, py, "armatur")
     for ad, d in P.ISLAK.items():
         for n in ("soyunma", "dus", "wc"):
@@ -144,6 +165,8 @@ def s3(c):
     pw = CW*0.585
     v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     M.altlik(v); M.ekipman_soluk(v)
+    M.linyeleri_ciz(v, ["P1", "P2", "P6", "P3", "P4", "P5",
+                        "K1", "K2", "K3", "K4", "W1", "W2", "V1", "V2"])
     for kod, x, y, t, a in P.PRIZ:      M.sembol(v, x, y, "priz", kod, a)
     for kod, x, y, t, a in P.PRIZ_IP44: M.sembol(v, x, y, "priz_ip44", kod, a)
     for kod, zon, btu, (x, y), a in P.KLIMA:
@@ -178,11 +201,15 @@ def s3(c):
     yy = h.tablo(c, x2, yy-12*mm, [("Kalem", 0.42), ("Adet", 0.18), ("Not", 0.40)],
                  rows2, w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "c", "l"])
     h.txt(c, x2, yy-8*mm, "KABLO METRAJI", h.FB, 8, h.NAVY)
-    rows3 = [["Aydınlatma linyesi NHXMH 3×1,5", f"{h.tl(P.L_LINYE15,0)} m"],
-             ["Priz / kuvvet linyesi NHXMH 3×2,5", f"{h.tl(P.L_LINYE25,0)} m"],
-             ["Su ısıtıcı hattı NHXMH 3×4", "2 × ≈14 m"],
-             ["Kolon hattı NYY 5×10", "22 m"],
-             ["Zayıf akım kablolaması", f"{h.tl(P.L_ZAYIF,0)} m"]]
+    _y = _guzergah_metraj()
+    rows3 = [["Aydınlatma linyesi NHXMH 3×2,5 (L1–L6)", f"{h.tl(_y['L'],0)} m"],
+             ["Anahtar kumanda hattı NHXMH 3×1,5", f"{h.tl(_y['A'],0)} m"],
+             ["Priz linyesi NHXMH 3×2,5 (P1–P6)", f"{h.tl(_y['P'],0)} m"],
+             ["Klima / fan linyesi NHXMH 3×2,5 (K, V)", f"{h.tl(_y['KV'],0)} m"],
+             ["Boyler linyesi NHXMH 3×2,5 (W1, W2)", f"{h.tl(_y['W'],0)} m"],
+             [f"Kolon hattı {P.ANA_KABLO}", f"{P.ANA_L:.0f} m"],
+             ["Zayıf akım kablolaması (Z1, Z2)", f"{h.tl(_y['Z'],0)} m"],
+             ["TOPLAM tesisat hattı", f"{h.tl(_y['TOPLAM'],0)} m"]]
     yy = h.tablo(c, x2, yy-12*mm, [("Kablo", 0.66), ("Miktar", 0.34)], rows3,
                  w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "r"])
     h.notkutu(c, x2, yy-6*mm, w2, "Kardiyo prizleri neden ayrı",
@@ -196,15 +223,13 @@ def s4(c):
     pw = CW*0.585
     v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     M.altlik(v); M.ekipman_soluk(v)
+    # zayıf akım kablolaması ve yangın algılama A-B çevrimi — ortogonal
+    M.linyeleri_ciz(v, ["Z1", "Z2"])
     for kod, x, y, t in P.HOPARLOR: M.sembol(v, x, y, "hoparlor", kod)
     for kod, x, y, t, a in P.KAMERA: M.sembol(v, x, y, "kamera", kod, a)
     for kod, x, y, t in P.VERI:     M.sembol(v, x, y, "veri", kod)
     for kod, x, y, t in P.DEDEKTOR: M.sembol(v, x, y, "dedektor", kod)
     for kod, x, y, t, a in P.YANGIN:   M.sembol(v, x, y, "yangin", kod, a)
-    # yangın algılama çevrimi: panodan başlayıp dedektörleri dolaşan tek hat
-    _loop = [P.PANO] + [(d[1], d[2]) for d in P.DEDEKTOR] + [(P.YANGIN[2][1], P.YANGIN[2][2])]
-    for i in range(len(_loop)-1):
-        D.line(v, _loop[i], _loop[i+1], h.tint(M.C_YANGIN, 0.55), 0.6, (2.2, 1.6))
     M.sembol(v, *P.PANO, "pano", None, P.PANO_ACI)
     # soyunma bloklarına "kamera yok" notu
     for ad, d in P.ISLAK.items():
@@ -448,10 +473,94 @@ def s7(c):
       "A tipi kaçak akım koruması, ana girişte 300 mA S tipi seçici koruma kullanılacaktır.",
       fs=6.2, acc=h.RED)
 
+# ══ 8 · TOPRAKLAMA VE POTANSİYEL DENGELEME PLANI ══════════════════════════════
+def s8(c):
+    sayfa(c, 8, "Topraklama ve potansiyel dengeleme planı",
+          "Elektrot grubu · ana topraklama barası · ek potansiyel dengeleme")
+    pw = CW*0.545
+    v = D.View(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
+    M.altlik(v)
+    C_T = HexColor("#2E7D5B")
+    # — çevre şeridi: elektrotları birbirine ve ATB'ye bağlayan ortogonal hat
+    import yol as Y
+    serit = [(P.ELEKTROT[0][1], P.ELEKTROT[0][2])] + \
+            [(e[1], e[2]) for e in P.ELEKTROT[1:]]
+    for a, b in zip(serit, serit[1:]):
+        D.line(v, a, b, C_T, 1.5)
+    # elektrot → ATB ana topraklama iletkeni (yapı içinden ortogonal)
+    ana = Y.guzergah((P.ELEKTROT[1][1]-0.55, P.ELEKTROT[1][2]), P.ATB)
+    if ana:
+        for a, b in zip(ana, ana[1:]): D.line(v, a, b, C_T, 1.2, (3.2, 1.8))
+        D.line(v, (P.ELEKTROT[1][1], P.ELEKTROT[1][2]), ana[0], C_T, 1.2, (3.2, 1.8))
+    # ATB → EPDB dengeleme iletkenleri
+    for kod, x, y, aciklama in P.EPDB:
+        g = Y.guzergah(P.ATB, (x, y))
+        if g:
+            for a, b in zip(g, g[1:]): D.line(v, a, b, C_T, 0.7, (1.8, 1.4))
+    # — semboller
+    for kod, x, y in P.ELEKTROT:
+        px, py = v.p((x, y))
+        c.setStrokeColor(C_T); c.setFillColor(HexColor("#FFFFFF")); c.setLineWidth(1.0)
+        c.circle(px, py, 2.0*mm, 1, 1)
+        c.setStrokeColor(C_T); c.setLineWidth(0.8)
+        c.line(px, py-1.4*mm, px, py+1.4*mm)
+        c.line(px-1.1*mm, py-1.4*mm, px+1.1*mm, py-1.4*mm)
+        c.line(px-0.7*mm, py-2.1*mm, px+0.7*mm, py-2.1*mm)
+        h.txt(c, px+3.0*mm, py-0.9*mm, kod, h.FB, 4.4, C_T, "l")
+    for kod, x, y, aciklama in P.EPDB:
+        px, py = v.p((x, y))
+        c.setFillColor(HexColor("#FFFFFF")); c.setStrokeColor(C_T); c.setLineWidth(0.9)
+        c.rect(px-3.4*mm, py-1.6*mm, 6.8*mm, 3.2*mm, 1, 1)
+        h.txt(c, px, py-0.9*mm, kod, h.FB, 3.8, C_T, "c")
+    px, py = v.p(P.ATB)
+    c.setFillColor(C_T); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.8)
+    c.rect(px-4.6*mm, py-1.9*mm, 9.2*mm, 3.8*mm, 1, 1)
+    h.txt(c, px, py-1.1*mm, "ATB", h.FB, 4.6, HexColor("#FFFFFF"), "c")
+    M.sembol(v, *P.PANO, "pano", None, P.PANO_ACI)
+    D.kuzey_ok(v, L+pw-13*mm, TOP-13*mm); D.olcek_cubugu(v, L+5*mm, BOT+11*mm)
+    h.lejant(c, L+5*mm, BOT+2*mm,
+             [(C_T, "Çubuk elektrot TE"), (C_T, "ATB / EPDB bara"),
+              (C_T, "Topraklama iletkeni")], 6.0)
+
+    x2 = L+pw+7*mm; w2 = CW-pw-7*mm; yy = TOP
+    _v = lambda x, n=1: ("%.*f" % (n, x)).replace(".", ",")
+    h.txt(c, x2, yy-4*mm, "TOPRAKLAMA HESABI", h.FB, 8, h.NAVY)
+    rows = [
+      ["Sistem", P.TOPRAK_SISTEM, "sayaç sonrası N/PE ayrık"],
+      ["Toprak özdirenci ρ", f"{_v(P.TOPRAK_TOPRAK_R,0)} Ω·m", "VARSAYIM — ölçülecek"],
+      ["Elektrot", f"{len(P.ELEKTROT)} × Ø16 Cu kaplı çelik",
+       f"{_v(P.ELEKTROT_BOY,0)} m boy · 3 m aralık"],
+      ["Tek elektrot direnci", f"{_v(P.TOPRAK_R_TEK)} Ω", "R = ρ/(2πL)·ln(4L/d)"],
+      ["Grup direnci (hesap)", f"{_v(P.TOPRAK_R_HESAP)} Ω",
+       f"{len(P.ELEKTROT)} paralel + %25 karşılıklı etki"],
+      ["Yönetmelik sınırı", f"{_v(P.TOPRAK_HEDEF,0)} Ω", "RCD'li tesis"],
+      ["SONUÇ", "UYGUN" if P.TOPRAK_UYGUN else "GÖZDEN GEÇİR",
+       f"{_v(P.TOPRAK_R_HESAP)} ≤ {_v(P.TOPRAK_HEDEF,0)} Ω"],
+    ]
+    yy = h.tablo(c, x2, yy-7*mm, [("Kalem", 0.30), ("Değer", 0.30), ("Not", 0.40)],
+                 rows, w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "l", "l"])
+    h.txt(c, x2, yy-8*mm, "İLETKEN KESİTLERİ", h.FB, 8, h.NAVY)
+    rows2 = [["Elektrot bağlantı şeridi", P.SERIT_KESIT],
+             ["Ana topraklama iletkeni (elektrot → ATB)", P.ANA_KORUMA_ILET],
+             ["Ana potansiyel dengeleme (ATB → yabancı iletken)", P.DENGELEME_ILET],
+             ["Ek potansiyel dengeleme (EPDB → ıslak hacim)", "4 mm² Cu"],
+             ["Koruma iletkeni PE (linyelerde)", "faz kesiti ile aynı (≤16 mm²)"]]
+    yy = h.tablo(c, x2, yy-12*mm, [("Kalem", 0.60), ("Kesit", 0.40)], rows2,
+                 w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "l"])
+    h.txt(c, x2, yy-8*mm, "POTANSİYEL DENGELEMEYE BAĞLANACAK PARÇALAR", h.FB, 8, h.NAVY)
+    rows3 = [[d[0], d[1], d[2]] for d in P.DENGELEME]
+    yy = h.tablo(c, x2, yy-12*mm, [("Yabancı iletken parça", 0.52), ("Bara", 0.14),
+                                   ("Bağlantı", 0.34)], rows3,
+                 w2, satir_h=5.4*mm, fs=6.1, hizala=["l", "c", "l"])
+    x3 = x2; yy -= 6*mm
+    h.notkutu(c, x3, yy, w2, "Uygulama notları",
+              "  ".join(f"{i+1}) {t}" for i, t in enumerate(P.TOPRAK_NOTLAR)),
+              fs=6.1, acc=h.GREEN)
+
 def build(path="output/Gym_Elektrik_Proje_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
     c.setTitle(f"Maltepe / İdealtepe — Elektrik Projesi ({P.REV})")
-    for fn in (s1, s2, s3, s4, s5, s6, s7):
+    for fn in (s1, s2, s3, s4, s5, s6, s7, s8):
         fn(c); c.showPage()
     c.save(); print("→", path)
 

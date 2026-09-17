@@ -1,0 +1,718 @@
+{
+ "tarih": "2026-09-17 15:07",
+ "genel": "UYGUN",
+ "ajanlar": [
+  {
+   "ad": "mimari",
+   "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 54,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "alan",
+     "mesaj": "10 mahal · 103.31 m² net + 0.47 m² duvar = 103.78 m² iç alan",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kot",
+     "mesaj": "mevcut şap kotu -0.053 · ıslak hacim taban -0.020 · yapısal tavan +3.20 m",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T2: 450 mm boşluk · 5 servis katmanı · 30 mm serbestlik",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T2 yatay şerit dağılımı — *:1, A:1, B:1, C:1, D:1",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T4: 600 mm boşluk · 6 servis katmanı · 50 mm serbestlik",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T4 yatay şerit dağılımı — *:1, A:1, B:2, C:1, D:1",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T3: 800 mm boşluk · 7 servis katmanı · 30 mm serbestlik",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tavan",
+     "mesaj": "T3 yatay şerit dağılımı — *:1, A:2, B:2, C:1, D:1",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "doğrama",
+     "mesaj": "9 kapı · 2 doğrama kalemi listelendi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tahliye",
+     "mesaj": "2 çıkış · en uzun kaçış 13.4 m ≤ 45 m",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "karkas",
+     "mesaj": "8 bölme ekseni · 17.14 m · 49 adet C50×50×0,6 dikme @400 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ıslak",
+     "mesaj": "4 ıslak hacim · Z4 su yalıtımlı zemin · 2 ıslak duvar tipi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "2 kesit · 4 iç görünüş · 8 detay · 8 yıkım kalemi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "mekanik",
+   "baslik": "Mekanik tesisat — havalandırma, iklimlendirme, sıhhi tesisat denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 1,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kanal",
+     "mesaj": "besleme: 500×150 · 1000 m³/h · 3.7 m/s · güzergâh ortogonal",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kanal",
+     "mesaj": "egzoz: 400×150 · 760 m³/h · 3.5 m/s · güzergâh ortogonal",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kanal",
+     "mesaj": "islak: Ø160 · 240 m³/h · 3.3 m/s · güzergâh ortogonal",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kanal",
+     "mesaj": "besleme 16.8 m · egzoz 10.5 m · ıslak 15.0 m ana hat + 4.4 m branşman",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "taze hava: menfez 1000 m³/h ≈ fan 1000 m³/h (%0 sapma)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "egzoz: menfez 760 m³/h ≈ fan 760 m³/h (%0 sapma)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "ıslak hacim egzozu: menfez 240 m³/h ≈ fan 240 m³/h (%0 sapma)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "taze hava 1000 m³/h = 71 m³/h·kişi (14 kişi) — asgari 30",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "salon hava değişimi 3.01 1/h",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "debi",
+     "mesaj": "ıslak hacim egzozu 240 m³/h ≥ gerekli 180 m³/h (2 WC + 2 duş)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "menfez",
+     "mesaj": "4 besleme · 3 egzoz · 4 ıslak hacim valfi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "K1 ARENA · SERBEST AĞIRLIK: 24000 BTU → 220 W/m² (31.9 m²)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "K2 FONKSİYONEL · KARDİYO: 18000 BTU → 235 W/m² (22.4 m²)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "K3 GİRİŞ · BANKO · SİRKÜLASYON: 12000 BTU → 224 W/m² (15.7 m²)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "K4 DİNLENME SALONU: 12000 BTU → 202 W/m² (17.4 m²)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "dış ünite (11.9, 6.1) — yapı dışında, 1.00 m servis boşluğu paftada taranmalı",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "iklim",
+     "mesaj": "4 iç ünite · toplam 66.000 BTU · bakır hat 35.8 m · drenaj 34.2 m",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıhhi",
+     "mesaj": "pis su Ø100: 7.4 m · gerekli eğim %1 (Ø≤70 → %2, Ø≥100 → %1)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıhhi",
+     "mesaj": "pis su Ø70: 0.3 m · gerekli eğim %2 (Ø≤70 → %2, Ø≥100 → %1)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıhhi",
+     "mesaj": "pis su Ø50: 4.3 m · gerekli eğim %2 (Ø≤70 → %2, Ø≥100 → %1)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıhhi",
+     "mesaj": "temiz su Ø20 3.1 m · Ø25 6.9 m · sıcak su 4.2 m",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıcak su",
+     "mesaj": "SI-1: 100 L / 3 kW → 40 °C'de 167 L kullanılabilir (gerekli 128 L) · ısınma 116 dak",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sıcak su",
+     "mesaj": "SI-2: 100 L / 3 kW → 40 °C'de 167 L kullanılabilir (gerekli 128 L) · ısınma 116 dak",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "koordinasyon",
+     "mesaj": "tavan istifi şerit bazlı: A kanal · B mekanik boru · C kuvvet · D zayıf akım",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "elektrik",
+   "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 56,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kesit",
+     "mesaj": "tüm linye kesitleri yönetmelik asgarisinin üstünde (aydınlatma ve priz ≥ 2,5 mm², kolon 10 mm²)",
+     "dayanak": "Elektrik İç Tesisleri Yönetmeliği",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sorti",
+     "mesaj": "en yüklü linye Z1 — 15 sorti",
+     "dayanak": "Elektrik İç Tesisleri Yönetmeliği",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "gerilim",
+     "mesaj": "en yüksek son devre ΔU %1.97 (W2); ana besleme ile birlikte %2.49 — TS sınırı %5",
+     "dayanak": "TS HD 60364-5-52",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "faz",
+     "mesaj": "faz dengesizliği %1.0",
+     "dayanak": "Elektrik İç Tesisleri Yönetmeliği",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "güzergâh",
+     "mesaj": "22 linye · 432.6 m tesisat hattı — tüm segmentler ortogonal, çapraz hat yok",
+     "dayanak": "Uygulama projesi çizim kuralı",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tutarlılık",
+     "mesaj": "tek hat şeması ve yükleme cetveli 22 linyede birebir örtüşüyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yedek",
+     "mesaj": "4 yedek linye tanımlı",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "koruma",
+     "mesaj": "ıslak hacim linyeleri (L5, P5) ayrı kaçak akım rölesinde",
+     "dayanak": "TS HD 60364-7-701",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "koruma",
+     "mesaj": "yangın algılama paneli (Z2) kaçak akım rölesi arkasına alınmamış — doğru",
+     "dayanak": "BYKHY",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "standart",
+   "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 135,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "katman",
+     "mesaj": "61 katman · A 18 · E 24 · G 4 · M 15",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "katman",
+     "mesaj": "kullanılan kalem kalınlıkları: 0.13, 0.18, 0.25, 0.35, 0.50 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "ELEKTRİK: 5 pafta — E-01, E-02, E-03, E-04, E-05",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "MEKANİK TESİSAT: 4 pafta — M-01, M-02, M-03, M-04",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "MİMARİ: 5 pafta — A-01, A-02, A-03, A-04, A-05",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "14 pafta ayrı DXF dosyası olarak üretiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "5 yazı sınıfı tanımlı: olcu 2.5 mm, anotasyon 2.5 mm, etiket 3.5 mm, baslik 5.0 mm, pafta 7.0 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "antet",
+     "mesaj": "pafta boyutu A3 (420×297 mm)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "antet",
+     "mesaj": "antet 13 alan içeriyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "koordinasyon",
+   "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 285,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kontrol",
+     "mesaj": "kontrol.py: 6 bulgu (0 hata, 0 uyarı)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "açıklık",
+     "mesaj": "18 servis katmanı 3 bölgede denetlendi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "cihaz",
+     "mesaj": "15 armatür · 11 menfez · 6 dedektör — tavan cihazları arası asgari mesafeler sağlanıyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ıslak",
+     "mesaj": "2 IP44 priz · 2 duş hacmi — bölge kuralları TS HD 60364-7-701'e göre denetlendi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ekipman",
+     "mesaj": "6 ekipman salon içinde · sirkülasyon serbest alanı 96.9 m²",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "teslim",
+   "baslik": "Teslim paketi — dosya bütünlüğü ve sürüm denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 150,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Donusum_Dosyasi_A3.pdf · 0.13 MB · 12 pafta — Ana dosya — A3 yatay",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Mimari_Proje_A3.pdf · 0.53 MB · 14 pafta — Mimari uygulama seti",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Mekanik_Proje_A3.pdf · 0.15 MB · 9 pafta — Mekanik uygulama seti",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Elektrik_Proje_A3.pdf · 0.12 MB · 8 pafta — Elektrik uygulama seti",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_ADP_Tek_Hat_Semasi.pdf · 0.10 MB · 8 pafta — ADP tek hat şeması",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Insaat_Seti_A3.pdf · 0.86 MB · 33 pafta — İnşaat seti — plan/kesit/görünüş/detay",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_CAD_Paftalar.pdf · 2.93 MB · 14 pafta — CAD pafta önizleme",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Sunum_16x9.pdf · 2.73 MB · 12 pafta — Yönetim sunumu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Denetim_Raporu.pdf · 0.05 MB · 7 pafta — Ajan denetim raporu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Maliyet_BoQ.xlsx · 0.02 MB · 4 sayfa — Ana BoQ — canlı formüllü",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Kesif_Ozeti_BoQ.xlsx · 0.06 MB · 7 sayfa — Keşif özeti",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Hakedis_Sablonu.xlsx · 0.02 MB · 5 sayfa — Hakediş şablonu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Butce_Takip.xlsx · 0.01 MB · 2 sayfa — Bütçe takip ve nakit akışı",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Mekanik_BoQ.xlsx · 0.01 MB · 4 sayfa — Mekanik BoQ",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Elektrik_BoQ.xlsx · 0.01 MB · 4 sayfa — Elektrik BoQ",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Pano_Yukleme_Cetveli.xlsx · 0.01 MB · 2 sayfa — ADP yükleme cetveli",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.47 MB · 20 dosya — DXF seti",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Proje_Paketi.zip · 8.75 MB · 24 dosya — Teslim paketi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "Gym_Model.html · 2.19 MB — 3B model",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dxf",
+     "mesaj": "DXF setinde 18 dosya (18 tekil pafta)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "render",
+     "mesaj": "8 render görseli",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "sürüm",
+     "mesaj": "Rev F · 17 Eylül 2026",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "19 beklenen çıktının tamamı üretildi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  }
+ ]
+}

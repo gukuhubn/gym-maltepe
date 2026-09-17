@@ -1,6 +1,6 @@
 GYM MALTEPE / İDEALTEPE — PROJE VE BÜTÇE TESLİM PAKETİ
 MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU
-Rev E · 17 Eylül 2026
+Rev F · 17 Eylül 2026
 ================================================================================
 
 Bu paket, işverenin AQUA FLORYA / SALTBAE projesindeki teslim düzeni örnek
@@ -9,12 +9,13 @@ aynı keşif özeti / metraj cetveli / hakediş ve pano yükleme cetveli formatl
 
 1 · KLASÖR YAPISI
 --------------------------------------------------------------------------------
-  01_MİMARİ              Mimari uygulama seti (13 pafta) · DXF · mahal listesi · rapor
+  01_MİMARİ              Mimari uygulama seti (14 pafta) · DXF · mahal listesi · rapor
   02_MEKANİK             Mekanik tesisat projesi (7 pafta) · DXF
   03_ELEKTRİK            Elektrik tesisat projesi (7 pafta) · DXF · ADP tek hat şeması
                          · ADP yükleme cetveli (referans formatında)
   04_BÜTÇE VE HAKEDİŞ    Keşif özeti + metraj cetvelleri · bütçe takibi · hakediş şablonu
-  05_BİRLEŞİK SET        29 paftalık tek PDF · birleşik DXF · katman listesi
+  05_BİRLEŞİK SET        33 paftalık tek PDF · birleşik DXF · 14 tekil pafta DXF ·
+                         katman listesi · otomatik denetim raporu
   06_YATIRIM DOSYASI     Fizibilite dosyası · sunum · 3B model
 
 2 · DOSYA ADI KODLAMASI

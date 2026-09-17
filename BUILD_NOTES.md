@@ -593,3 +593,163 @@ QA, sapma %15'i aşarsa hata verir.
 - Moloz hacmi = kaplama sökümü + asma tavan sökümü + ıslak hacim şap kırımı kalınlıklarından
 
 Bu sayede bir mahal ölçüsü değiştiğinde metraj, keşif özeti, hakediş ve bütçe birlikte güncellenir.
+
+---
+
+## 16 · Rev F — teknik çizim tekniği, denetim ajanları ve pafta ayrıştırması
+
+İşveren geri bildirimi aynen: *"projeleri mimari, elektrik, mekanik teknik çizim
+teknikleri ile çizmen gerekiyor. projeleri kontrol eden sistem agentları kur.
+bunlar kabul edilebilir imalat çizimleri değil. alçıpan duvarda profil yok.
+çapraz elektrik kablosu gitmemeli hiç bir yerde. tek hat şeması çizimi yok...
+her biri ayrı pafta da olmalı ki anlayabilelim."*
+
+Sekiz maddeye ayrıştırıldı ve sekizi de kapatıldı.
+
+### 16.1 · Çapraz tesisat hattı — geometrik olarak imkânsız hâle getirildi
+
+Önceki sürümlerde linyeler ve yangın algılama çevrimi cihazdan cihaza düz
+(çapraz) çizgilerle bağlanıyordu. Bu bir çizim hatası değil, **uygulanamaz bir
+proje** demektir: gerçekte kablo duvar dibinden veya asma tavan kenarından,
+yalnız yatay ve düşey kollarla gider.
+
+Çözüm elle düzeltme değil, motor değişimi oldu:
+
+- `tools/yol.py` — yapı içini 10 cm ızgaraya böler (9.672 düğüm, 96,9 m² serbest
+  alan), **yalnız dört komşulu** (yatay/düşey) A\* ile yol bulur. Çapraz adım
+  komşu kümesinde yoktur; dolayısıyla çapraz segment üretilemez.
+  Duvar çeperine 55 cm bandında kalan düğümlerin maliyeti 0,35 katsayılıdır →
+  hat açık alanı kesmek yerine çeperden dolaşır. Dönüş cezası zikzakı engeller.
+- Kapı geçişleri artık elle girilmiyor: `_kapi_noktalari()` her ıslak hacmin
+  çeperi ile soyunma hacmi arasındaki **en yakın nokta çiftinden** kapı boşluğunu
+  türetir. Bu düzeltmeyle daha önce yol bulunamayan P5 / W1 / W2 linyeleri de
+  bağlandı.
+- `tools/linye_yollari.py` → 22 linye + 7 anahtar sortisi · **450,8 m · 0 çapraz segment**
+- `tools/kanal_yollari.py` → hava kanalları da aynı motora alındı:
+  besleme 16,8 m · egzoz 10,5 m · ıslak 15,0 m · **0 çapraz segment**.
+  `proj.KANAL` güzergâhları artık `data/kanallar.json`'dan okunur.
+
+Hatlar paftaya `draw_mep.linye()` ile basılır: iletken sayısı çentiği, kablo
+cinsi/kesiti ve boru çapı (`P3 · NHXMH 3×2,5 · Ø20`), etiket çakışmasını önleyen
+yerleştirme. DXF tarafında `build_dxf.linye_ciz()` aynı veriyi
+`E-AYD-LINYE` / `E-KUVVET-LINYE` / `E-ZAYIF-TAVA` / `E-ZAYIF-LINYE`
+katmanlarına yazar.
+
+### 16.2 · Alçıpan duvarda profil
+
+`tools/draw_duvar.py` gerçek C/U profil geometrisi üretir (TS EN 14195 /
+DIN 18182): C50×50×0,6 gövdesi boşluğu enine geçer, 50 mm kanatlar duvar
+doğrultusunda uzanır, açılış yönü şaşırtmalı, aralık 400 mm.
+
+- Uygulama planında (1/50) dikmeler basitleştirilmiş çizgi olarak görünür.
+- **A-14 paftası** D2 / D3 / D4 / D6 tiplerini **1/5 yatay kesitte** verir:
+  katman dolguları ve taramaları, C dikme kesiti, düşey katman ölçü zinciri,
+  yatay 400 mm dikme aralığı zinciri, iki sütunlu katman lejantı, karkas
+  metrajı (17,14 m · 49 dikme · 54,85 m²) ve 8 imalat kuralı.
+- `mimari` ajanı, bölme olarak kullanılan her duvar tipinin katman listesinde
+  taşıyıcı profil bulunmasını **zorunlu** kılar; bulunmazsa HATA verir.
+
+### 16.3 · Tek hat şeması
+
+`tools/build_tekhat.py` → `output/Gym_ADP_Tek_Hat_Semasi.pdf`, 8 pafta:
+kapak · pano karakteristik tablosu (IEC 61439-1/-2, 8 grup) · sembol listesi
+(IEC 60617, 13 sembol) · pano önden görünüş (3 sıra × 18 modül, 32 cihaz /
+46 modül) · EPLAN tarzı şematik diyagram (potansiyel rayları L1-L2-L3-N-PE,
+sayfalar arası referans, cihaz etiketleri −1F1 / −F1 / −ID1 / −X1, tel
+numaraları, klemens sırası, YEDEK linyeler).
+
+### 16.4 · Her çizim kendi paftasında
+
+Önceki CAD seti tek model uzayı üzerinde katman dondurarak (VP Freeze) pafta
+üretiyordu. İşveren bunu haklı olarak yetersiz buldu.
+
+`build_dxf.TEKIL_PAFTA` artık **pafta başına bağımsız DXF belgesi** üretir;
+model uzayında yalnız o paftanın geometrisi bulunur:
+
+```
+cad/paftalar/A-01 … A-05   (5 mimari)
+cad/paftalar/M-01 … M-04   (4 mekanik)
+cad/paftalar/E-01 … E-05   (5 elektrik, E-05 topraklama)
+```
+
+`Gym_CAD_Paftalar.pdf` önizlemesi de bu tekil dosyalardan basılır. Lejant,
+yalnız o paftada **fiilen kullanılan** katmanları listeler. Birleşik dosyalar
+(disiplin ve tüm proje) koordinasyon için korunmuştur.
+
+Aynı ilke PDF setlerinde de uygulandı:
+
+- Mekanik set 7 → **9 pafta**: havalandırma prensip şeması, sıhhi tesisat kolon
+  şeması ve iklimlendirme prensip şeması artık **ayrı paftalarda**.
+- Elektrik set 7 → **8 pafta**: topraklama ve potansiyel dengeleme planı eklendi.
+- Mimari set 13 → **14 pafta**: duvar tipleri yatay kesit paftası eklendi.
+- İnşaat seti 29 → **33 pafta**.
+
+### 16.5 · Teknik çizim tekniği — mekanik sembol kütüphanesi
+
+`tools/draw_tesisat.py`, TS 2164 §1.13 / ISO 14617 uyumlu sembol kütüphanesidir;
+tüm boyutlar `u = 4 mm` modülünün katıdır. Kesme/küresel/kelebek vana, çekvalf,
+balans vanası, emniyet ventili, pislik tutucu, pompa, aksiyel fan, susturucu,
+filtre, hacim kontrol damperi (HKD), motorlu damper (MD), yangın damperi (YD-90),
+termometre, manometre, boyler, yer süzgeci, temizleme kapağı (TK), havalık
+bacası, klima iç/dış ünite, kolektör, su sayacı.
+
+Şema kuralları koda gömüldü: ölçeksiz, **yalnız ortogonal**, akış soldan sağa,
+her hatta akış yönü oku + servis kodu + çap, aynı paftada zorunlu lejant.
+
+**Kolon şeması** gerçek bir düşey kesittir: düşey ölçüler ölçekli (1 m = 38 mm),
+yatay ölçüler ölçeksiz; döşeme iki paralel çizgiyle gösterilir; armatürler
+gerçek montaj kotlarındadır (lavabo 85, klozet çıkışı 20, duş başlığı 210,
+boyler 190 cm); kolon numarası her kolonun en üst noktasındadır; havalık çatı
+üstü +2,00 m'de şapkayla biter; her kolon dibinde temizleme kapağı vardır.
+
+### 16.6 · Denetim ajanları
+
+`tools/agents/` altında altı bağımsız ajan (`base.py` ortak altyapı,
+`denetim.py` koşucu). Her ajan kendi mevzuatına göre `HATA / UYARI / BİLGİ`
+üretir; bir hata genel sonucu **RED** yapar. Çıktılar: konsol,
+`data/denetim.json`, `output/Gym_Denetim_Raporu.pdf`.
+
+Ajanların ilk koşusunda bulup düzelttikleri **gerçek** tasarım hataları:
+
+| Bulgu | Düzeltme |
+|---|---|
+| Aydınlatma linyelerinde 3×1,5 mm² — yönetmelik linye için ≥ 2,5 mm² ister | L1–L6, V1, V2, Z2 → 3×2,5 mm² |
+| P1 ve P2 priz linyelerinde 8'er sorti — sınır 7 | 16 duvar prizi üç linyeye bölündü (P1/P2/**P6**), RCD-2 güncellendi |
+| Priz etiketleri P1…P16, linye kodlarıyla çakışıyordu | Duvar prizleri **PR1…PR16** olarak yeniden kodlandı |
+| 6 kW ani su ısıtıcı ΔT 30 K'de yalnız 2,9 l/dak verir — bir duş 8 l/dak ister | **100 L / 3 kW depolu boyler**; W1/W2 linyesi 1×32 A / 3×6 → 1×20 A / 3×2,5; poz 06.40 ve 05.24 güncellendi |
+| Hava kanalı güzergâhlarında 11 çapraz segment | Kanallar ortogonal yol bulucuya alındı |
+| Yangın algılama çevrimi çapraz çiziliyordu | Z2 ortogonal çevrim güzergâhına alındı |
+| D6 ayna duvarı katman toplamı 24 mm, tabloda 212 mm | D6, D1/D4 üzerine **24 mm giydirme** olarak tanımlandı |
+| Z4 / Z6 bitmiş kotları katman toplamıyla tutmuyordu | `ZEMIN_TABAN` sözlüğü eklendi; ıslak hacim tabanı −0,075 (şap traşı), ring platformu bitmiş Z1 üzerine |
+| A-BOLGE ve A-ZEMIN-DERZ katmanlarında 0,09 mm kalem — ISO 128 serisi dışında | 0,13 mm |
+| Yazı yüksekliği ve antet alanları programatik değildi | `dxf_lib.YAZI_YUKSEKLIK` (ISO 3098) ve `build_dxf.ANTET_ALANLARI` eklendi |
+| Tavan içi servisler düşey çakışıyor görünüyordu | `TAVAN_KATMAN` kayıtlarına **yatay şerit** alanı eklendi (A kanal · B mekanik boru · C kuvvet · D zayıf akım); çakışma yalnız aynı şeritte aranır |
+
+### 16.7 · Topraklama ve potansiyel dengeleme
+
+Araştırma, setin zorunlu bir parçasının eksik olduğunu gösterdi. Eklendi:
+
+- Sistem TN-S; sayaç sonrası N ve PE ayrık.
+- 4 adet Ø16 Cu kaplı çelik çubuk elektrot (2 m, 3 m aralık), 30×3,5 mm
+  galvanizli şeritle bağlı. Hesap: tek elektrot R = ρ/(2πL)·ln(4L/d) = 49,5 Ω;
+  4 paralel + %25 karşılıklı etki payı → **15,5 Ω ≤ 20 Ω**.
+- Ana topraklama barası (ATB) pano altında; her ıslak blokta ek potansiyel
+  dengeleme barası (EPDB).
+- 10 kalemlik yabancı iletken parça bağlantı listesi (su borusu, kanal gövdesi,
+  kablo tavası, klima şasisi, ring karkası, alçıpan profilleri…).
+- PDF pafta E-08 ve tekil DXF paftası E-05; `E-TOPRAK-*` katmanları.
+
+### 16.8 · Rev F sayısal özet
+
+| | Rev E | Rev F |
+|---|---|---|
+| Linye sayısı | 21 | **22** (+P6) |
+| Tesisat hattı | çapraz çizgiler | **450,8 m ortogonal · 0 çapraz** |
+| Hava kanalı | 11 çapraz segment | **42,3 m ortogonal · 0 çapraz** |
+| DXF katman | 50 | **61** |
+| DXF dosya | 4 birleşik | 4 birleşik + **14 tekil pafta** |
+| Mimari pafta | 13 | **14** |
+| Mekanik pafta | 7 | **9** |
+| Elektrik pafta | 7 | **8** |
+| İnşaat seti | 29 | **33** |
+| Denetim | `kontrol.py` + `qa.py` | + **6 denetim ajanı**, PDF rapor |

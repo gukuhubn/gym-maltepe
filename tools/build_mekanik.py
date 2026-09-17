@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""MEKANİK PROJE — A3 yatay, 6 pafta."""
+"""MEKANİK PROJE — A3 yatay, 9 pafta (her konu ayrı paftada)."""
 import sys, os, math
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.pdfgen import canvas
@@ -10,7 +10,7 @@ import proj as P, helpers as h, draw as D, draw_mep as M, draw_mim as MM
 W, HH = 420*mm, 297*mm
 TOP, BOT, L, R = HH-24.6*mm, 14*mm, 12*mm, W-12*mm
 CW = R-L
-N = 7
+N = 9
 DISIPLIN = "MEKANİK TESİSAT PROJESİ"
 
 def sayfa(c, no, baslik, ust=None):
@@ -301,91 +301,384 @@ def s4(c):
       "bitmez kot ölçülür; A/B kararı ikinci haftada verilmelidir. Bu karar, iş programındaki "
       "kritik yolun ilk halkasıdır.", fs=6.3, acc=h.COPPER)
 
-# ══ 5 · PRENSİP / KOLON ŞEMASI ═════════════════════════════════════════════════
+# ══ 5 · HAVALANDIRMA PRENSİP ŞEMASI ═══════════════════════════════════════════
 def s5(c):
-    sayfa(c, 5, "Prensip ve kolon şeması", "Havalandırma · sıhhi tesisat · iklimlendirme akış şemaları")
+    sayfa(c, 5, "Havalandırma prensip şeması",
+          "Taze hava · egzoz · ıslak hacim egzozu — ölçeksiz, ortogonal")
+    import draw_tesisat as T
     yy = TOP
-    # — havalandırma prensibi
-    h.txt(c, L, yy-4*mm, "HAVALANDIRMA PRENSİP ŞEMASI", h.FB, 8.5, h.NAVY)
-    bx, by, bw, bh = L, yy-8*mm-52*mm, CW, 52*mm
-    h.kutu(c, bx, by, bw, bh, HexColor("#F7F9FA"), h.GREY_L)
-    def blok(x, y, w, hh, t1, t2, col):
-        c.setFillColor(col); c.setStrokeColor(HexColor("#FFFFFF")); c.setLineWidth(0.8)
-        c.roundRect(x, y, w, hh, 1.2*mm, 1, 1)
-        h.txt(c, x+w/2, y+hh/2+0.6*mm, t1, h.FB, 5.8, HexColor("#FFFFFF"), "c")
-        if t2: h.txt(c, x+w/2, y+hh/2-4.0*mm, t2, h.F, 4.8, HexColor("#DCEBE3"), "c")
-    def ok(x1, y1, x2, y2, col, t=None):
-        c.setStrokeColor(col); c.setLineWidth(1.2); c.line(x1, y1, x2, y2)
-        a = math.atan2(y2-y1, x2-x1); c.setFillColor(col)
-        p = c.beginPath(); p.moveTo(x2, y2)
-        p.lineTo(x2-2.4*mm*math.cos(a-0.4), y2-2.4*mm*math.sin(a-0.4))
-        p.lineTo(x2-2.4*mm*math.cos(a+0.4), y2-2.4*mm*math.sin(a+0.4)); p.close()
-        c.drawPath(p, 0, 1)
-        if t: h.txt(c, (x1+x2)/2, (y1+y2)/2+1.6*mm, t, h.FB, 4.8, col, "c")
-    bw0 = 40*mm; yA = by+bh-20*mm; yB = by+12*mm
-    blok(bx+8*mm,  yA, bw0, 12*mm, "DIŞ HAVA", "panjur + kuş teli", HexColor("#4E6C8E"))
-    blok(bx+64*mm, yA, bw0, 12*mm, "SUSTURUCU", "1.000 mm", HexColor("#5A7C63"))
-    blok(bx+120*mm, yA, bw0, 12*mm, "TAZE HAVA FANI", "1.000 m³/h · 250 Pa", M.C_BESLEME)
-    blok(bx+176*mm, yA, bw0, 12*mm, "KANAL 500×150", "izoleli · damperli", M.C_BESLEME)
-    blok(bx+232*mm, yA, bw0, 12*mm, "MENFEZ M1–M4", "4 × 250 m³/h", M.C_BESLEME)
-    blok(bx+288*mm, yA-14*mm, bw0+18*mm, 26*mm, "SALON", "kullanım hacmi", HexColor("#2E4057"))
-    for i, x0 in enumerate([8, 64, 120, 176, 232]):
-        ok(bx+(x0+bw0)*mm, yA+6*mm, bx+(x0+56)*mm, yA+6*mm, M.C_BESLEME)
-    blok(bx+232*mm, yB, bw0, 12*mm, "MENFEZ E1–E3", "760 m³/h", M.C_EGZOZ)
-    blok(bx+176*mm, yB, bw0, 12*mm, "KANAL 400×150", "damperli", M.C_EGZOZ)
-    blok(bx+120*mm, yB, bw0, 12*mm, "EGZOZ FANI", "760 m³/h · 200 Pa", M.C_EGZOZ)
-    blok(bx+64*mm,  yB, bw0, 12*mm, "SUSTURUCU", "1.000 mm", HexColor("#8B4A46"))
-    blok(bx+8*mm,   yB, bw0, 12*mm, "EGZOZ PANJURU", "dışarı", HexColor("#4E6C8E"))
-    ok(bx+288*mm, yA-14*mm, bx+274*mm, yB+6*mm, M.C_EGZOZ)
-    for x0 in [232, 176, 120, 64]:
-        ok(bx+x0*mm, yB+6*mm, bx+(x0-16)*mm, yB+6*mm, M.C_EGZOZ)
-    blok(bx+288*mm, yB-4*mm, bw0+18*mm, 12*mm, "ISLAK HACİM", "V1–V4 · 240 m³/h", M.C_ISLAK)
-    h.txt(c, bx+8*mm, yB-10*mm,
-          "Islak hacim egzozu ayrı fan ve ayrı çıkışla doğrudan dışarı atılır; salon egzozuna bağlanmaz.",
-          h.F, 5.8, M.C_ISLAK)
-    yy = by-8*mm
-    # — sıhhi tesisat kolon şeması
-    h.txt(c, L, yy-4*mm, "SIHHİ TESİSAT KOLON ŞEMASI", h.FB, 8.5, h.NAVY)
-    sw = CW*0.49; sx = L
-    sh_ = yy-8*mm-BOT-2*mm
-    h.kutu(c, sx, BOT+2*mm, sw, sh_, HexColor("#F7F9FA"), h.GREY_L)
-    kot = [("Çatı — havalandırma bacası Ø70", 0.90, M.C_PIS),
-           ("Tavan — temiz su kolonu Ø25", 0.70, M.C_SOGUK),
-           ("Cihaz kotu — duş / WC / lavabo", 0.45, HexColor("#5A6470")),
-           ("Zemin — pis su toplama Ø100 (%2)", 0.22, M.C_PIS),
-           ("Mevcut bağlantı — kot ÖLÇÜLECEK", 0.07, h.RED)]
-    for t, f, col in kot:
-        yk = BOT+2*mm+sh_*f
-        c.setStrokeColor(col); c.setLineWidth(1.0); c.setDash(3, 2)
-        c.line(sx+6*mm, yk, sx+sw-6*mm, yk); c.setDash()
-        h.txt(c, sx+6*mm, yk+1.6*mm, t, h.FB, 5.6, col)
-    for i, (kod, xx, yyy, ad) in enumerate(P.VITRIFIYE):
-        px = sx+14*mm+i*((sw-28*mm)/3)
-        c.setFillColor(HexColor("#5A6470")); c.circle(px, BOT+2*mm+sh_*0.45, 2.2*mm, 0, 1)
-        h.txt(c, px, BOT+2*mm+sh_*0.45-1.0*mm, kod.split("-")[0], h.FB, 3.8, HexColor("#FFFFFF"), "c")
-        c.setStrokeColor(M.C_PIS); c.setLineWidth(1.0)
-        c.line(px, BOT+2*mm+sh_*0.45-2.2*mm, px, BOT+2*mm+sh_*0.22)
-        c.setStrokeColor(M.C_SOGUK); c.setLineWidth(0.9)
-        c.line(px, BOT+2*mm+sh_*0.45+2.2*mm, px, BOT+2*mm+sh_*0.70)
-    # — klima şeması
-    kx = L+sw+7*mm; kw = CW-sw-7*mm
-    h.txt(c, kx, yy-4*mm, "İKLİMLENDİRME AKIŞ ŞEMASI", h.FB, 8.5, h.NAVY)
-    h.kutu(c, kx, BOT+2*mm, kw, sh_, HexColor("#F7F9FA"), h.GREY_L)
-    dy0 = BOT+2*mm+sh_-14*mm
-    blok(kx+kw/2-24*mm, dy0, 48*mm, 11*mm, "DIŞ ÜNİTE PLATFORMU", "arka cephe · 4 adet", M.C_KLIMA)
-    for i, (kod, zon, btu, _, _a) in enumerate(P.KLIMA):
-        yk = dy0-16*mm-i*10.5*mm
-        blok(kx+10*mm, yk, 34*mm, 8*mm, f"{kod} · {h.tl(btu)} BTU", None, HexColor("#2E4057"))
-        h.txt(c, kx+48*mm, yk+2.6*mm, zon.split(" · ")[0].title(), h.F, 5.8, h.INK)
-        c.setStrokeColor(M.C_KLIMA); c.setLineWidth(1.0)
-        c.line(kx+kw/2, dy0, kx+kw/2, yk+4*mm); c.line(kx+kw/2, yk+4*mm, kx+44*mm, yk+4*mm)
-    h.txt(c, kx+6*mm, BOT+7*mm,
-          f"Bakır hat {h.tl(P.L_BAKIR,1)} m · drenaj {h.tl(P.L_DRENAJ,1)} m · "
-          f"kurulu {h.tl(P.KLIMA_BTU)} BTU (%{P.SOGUTMA_MARJ} marj)", h.F, 5.8, h.GREY)
+    h.txt(c, L, yy-4*mm, "TAZE HAVA VE EGZOZ SİSTEMİ", h.FB, 8.5, h.NAVY)
+    bx, by, bw, bh = L, BOT+4*mm, CW*0.66, TOP-14*mm-(BOT+4*mm)
+    h.kutu(c, bx, by, bw, bh, HexColor("#FBFCFD"), h.GREY_L)
+
+    def kanal_hat(pts, servis="HAVA", renk=None, kal=2.6*mm, etk=None):
+        r = renk or T.C_HAVA
+        c.saveState(); c.setStrokeColor(h.tint(r, 0.55)); c.setLineWidth(kal/mm*2.2)
+        for a, b in zip(pts, pts[1:]):
+            if abs(a[0]-b[0]) > 1e-9 and abs(a[1]-b[1]) > 1e-9: continue
+            c.line(a[0], a[1], b[0], b[1])
+        c.restoreState()
+        c.saveState(); c.setStrokeColor(r); c.setLineWidth(0.6)
+        for a, b in zip(pts, pts[1:]):
+            if abs(a[0]-b[0]) > 1e-9 and abs(a[1]-b[1]) > 1e-9: continue
+            c.line(a[0], a[1], b[0], b[1])
+        c.restoreState()
+        for a, b in zip(pts, pts[1:]):
+            Lh = math.hypot(b[0]-a[0], b[1]-a[1])
+            if Lh > 14*mm:
+                T._ok(c, (a[0]+b[0])/2, (a[1]+b[1])/2,
+                      math.atan2(b[1]-a[1], b[0]-a[0]), r, 3.0*mm, 1.1*mm)
+        if etk:
+            a, b = pts[0], pts[1]
+            T.etiket(c, (a[0]+b[0])/2, (a[1]+b[1])/2, etk, r, 4.4, "c", 2.4*mm)
+
+    # ── taze hava kolu (üst) ────────────────────────────────────────────────
+    yT = by+bh-26*mm
+    x0 = bx+16*mm
+    T.etiket(c, x0, yT+8*mm, "DIŞ HAVA", T.INK, 5.0, "c", 0)
+    c.setStrokeColor(T.INK); c.setLineWidth(0.7)
+    for i in range(4):                                  # panjur
+        c.line(x0-5*mm, yT-3*mm+i*2*mm, x0-1*mm, yT-1.2*mm+i*2*mm)
+    c.rect(x0-5.6*mm, yT-4*mm, 5.2*mm, 9*mm, 1, 0)
+    T.etiket(c, x0-3*mm, yT-7.5*mm, "TH panjur 500×300", T.GRI, 4.0, "c", 0)
+    duraklar = [x0+30*mm, x0+62*mm, x0+96*mm, x0+132*mm, x0+168*mm]
+    kanal_hat([(x0, yT), (duraklar[-1]+18*mm, yT)], etk="KANAL 500×150 · 1000 m³/h · AK +2,94")
+    T.filtre(c, duraklar[0], yT, 9*mm, 11*mm, T.C_HAVA, "G4")
+    T.susturucu(c, duraklar[1], yT, 13*mm, 11*mm, T.C_HAVA, "SUS 1000")
+    T.fan_aksiyel(c, duraklar[2], yT, 3.2*mm, T.C_HAVA, "F-TH", "1000 m³/h · 250 Pa")
+    T.damper(c, duraklar[3], yT, 3.0*mm, T.C_HAVA, "HKD")
+    T.yangin_damperi(c, duraklar[4], yT, 7*mm, 11*mm, T.C_SS, "YD-90")
+    # menfez kolları
+    mx = duraklar[-1]+18*mm
+    for i, m in enumerate([m for m in P.MENFEZ if m[4] == "besleme"]):
+        xx = mx + i*0.0
+        kanal_hat([(mx, yT), (mx, yT-10*mm-i*11*mm), (mx+22*mm, yT-10*mm-i*11*mm)], kal=1.6*mm)
+        c.setFillColor(HexColor("#FFFFFF")); c.setStrokeColor(T.C_HAVA); c.setLineWidth(0.6)
+        px = mx+22*mm; py = yT-10*mm-i*11*mm
+        c.rect(px, py-2.6*mm, 5.2*mm, 5.2*mm, 1, 1)
+        c.line(px, py-2.6*mm, px+5.2*mm, py+2.6*mm)
+        c.line(px, py+2.6*mm, px+5.2*mm, py-2.6*mm)
+        h.txt(c, px+7.2*mm, py-1.0*mm,
+              f"{m[0]}  595×595 (b.Ø250)  {m[3]} m³/h  (besleme)", h.F, 4.6, T.C_HAVA)
+
+    # ── egzoz kolu (alt) ────────────────────────────────────────────────────
+    yE = by+bh*0.40
+    C_EG = HexColor("#C8322B")
+    kanal_hat([(x0, yE), (duraklar[-1]+18*mm, yE)], renk=C_EG, kal=2.2*mm,
+              etk="KANAL 400×150 · 760 m³/h · AK +2,96")
+    T.fan_aksiyel(c, duraklar[2], yE, 3.2*mm, C_EG, "F-EG", "760 m³/h · 200 Pa")
+    T.damper(c, duraklar[3], yE, 3.0*mm, C_EG, "HKD")
+    T.susturucu(c, duraklar[1], yE, 13*mm, 11*mm, C_EG, "SUS 1000")
+    c.setStrokeColor(T.INK); c.setLineWidth(0.7)
+    c.rect(x0-5.6*mm, yE-4*mm, 5.2*mm, 9*mm, 1, 0)
+    for i in range(4): c.line(x0-5*mm, yE-3*mm+i*2*mm, x0-1*mm, yE-1.2*mm+i*2*mm)
+    T.etiket(c, x0-3*mm, yE-7.5*mm, "EG panjur 400×300", T.GRI, 4.0, "c", 0)
+    mxe = duraklar[-1]+18*mm
+    for i, m in enumerate([m for m in P.MENFEZ if m[4] == "egzoz"]):
+        kanal_hat([(mxe, yE), (mxe, yE-10*mm-i*11*mm), (mxe+22*mm, yE-10*mm-i*11*mm)],
+                  kal=1.4*mm, renk=C_EG)
+        px = mxe+22*mm; py = yE-10*mm-i*11*mm
+        c.setFillColor(h.tint(C_EG, 0.78)); c.setStrokeColor(C_EG)
+        c.setLineWidth(0.6); c.rect(px, py-2.6*mm, 5.2*mm, 5.2*mm, 1, 1)
+        for k in range(3):
+            c.line(px+0.6*mm, py-1.6*mm+k*1.6*mm, px+4.6*mm, py-1.6*mm+k*1.6*mm)
+        h.txt(c, px+7.2*mm, py-1.0*mm, f"{m[0]}  495×195  {m[3]} m³/h  (egzoz)", h.F, 4.6, C_EG)
+    # hacim kutusu
+    c.setStrokeColor(T.GRI); c.setLineWidth(0.5); c.setDash([2.4, 1.8], 0)
+    hx = mx+64*mm; hw = bw-(hx-bx)-6*mm
+    c.rect(hx, yE-46*mm, hw, yT-yE+40*mm, 0, 0); c.setDash()
+    h.txt(c, hx+hw/2, (yT+yE)/2, "SALON — kullanım hacmi", h.FB, 6.0, T.GRI, "c")
+
+    # ── ıslak hacim egzozu ──────────────────────────────────────────────────
+    yI = by+16*mm
+    kanal_hat([(bx+16*mm, yI), (bx+bw-16*mm, yI)], renk=HexColor("#8E3BB0"), kal=1.6*mm,
+              etk="Ø160 · 240 m³/h — ayrı fan, ayrı çıkış")
+    T.fan_aksiyel(c, duraklar[2], yI, 2.6*mm, HexColor("#8E3BB0"), "F-IS", "240 m³/h")
+    c.setStrokeColor(T.INK); c.setLineWidth(0.7)
+    c.rect(bx+bw-16*mm, yI-4*mm, 5.2*mm, 9*mm, 1, 0)
+    for i in range(4):
+        c.line(bx+bw-15.4*mm, yI-3*mm+i*2*mm, bx+bw-11.4*mm, yI-1.2*mm+i*2*mm)
+    T.etiket(c, bx+bw-13*mm, yI-7.5*mm, "EI çıkışı Ø160", T.GRI, 4.0, "c", 0)
+    for i, m in enumerate([m for m in P.MENFEZ if m[4] == "valf"]):
+        px = bx+30*mm+i*26*mm
+        kanal_hat([(px, yI), (px, yI-9*mm)], kal=1.2*mm, renk=HexColor("#8E3BB0"))
+        c.setFillColor(HexColor("#FFFFFF")); c.setStrokeColor(HexColor("#8E3BB0"))
+        c.setLineWidth(0.6); c.circle(px, yI-11*mm, 2.2*mm, 1, 1)
+        h.txt(c, px, yI-15.5*mm, f"{m[0]} {m[3]} m³/h", h.F, 4.2, HexColor("#8E3BB0"), "c")
+
+    # ── sağ sütun: tasarım verileri ve lejant ───────────────────────────────
+    x2 = bx+bw+7*mm; w2 = CW-bw-7*mm; ty = TOP
+    h.txt(c, x2, ty-4*mm, "TASARIM VERİLERİ", h.FB, 8, h.NAVY)
+    kisi = P.V["kisi_kapasite"][0]+P.V["personel"][0]
+    _v = lambda x, n=1: ("%.*f" % (n, x)).replace(".", ",")
+    rows = [["Tasarım kişi sayısı", f"{kisi} kişi", "12 üye + 2 personel"],
+            ["Kişi başı taze hava", f"{1000/kisi:.0f} m³/h", "TS EN 16798-1 · asgari 30"],
+            ["Salon hava değişimi", f"{_v(P.ACH,2)} 1/h", "asgari 2,0"],
+            ["Besleme / egzoz dengesi", "1000 / 760 m³/h", "hafif pozitif basınç"],
+            ["Islak hacim egzozu", f"{P.EGZOZ_ISLAK} m³/h", "2 WC + 2 duş · ayrı fan"],
+            ["Ana kanal hızı", f"{_v(float(P.KANAL['besleme']['hiz']))} m/s", "sınır 6,0 m/s"],
+            ["Kanal en/boy oranı", "500/150 = 1:3,3", "sınır 1:4 (TS 3419)"],
+            ["Kanal yalıtımı", "25 mm kauçuk köpük", "tavan içi tüm hatlar"]]
+    ty = h.tablo(c, x2, ty-7*mm, [("Kalem", 0.36), ("Değer", 0.26), ("Not", 0.38)],
+                 rows, w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "l", "l"])
+    kalemler = [
+      (lambda c_, x_, y_: T.filtre(c_, x_, y_, 7*mm, 6*mm, T.C_HAVA, ""), "Filtre (G4 / F7)"),
+      (lambda c_, x_, y_: T.fan_aksiyel(c_, x_, y_, 2.0*mm, T.C_HAVA), "Aksiyel / kanal tipi fan"),
+      (lambda c_, x_, y_: T.susturucu(c_, x_, y_, 8*mm, 6*mm, T.C_HAVA, ""), "Susturucu"),
+      (lambda c_, x_, y_: T.damper(c_, x_, y_, 2.2*mm, T.C_HAVA, "HKD"), "Hacim kontrol damperi"),
+      (lambda c_, x_, y_: T.yangin_damperi(c_, x_, y_, 6*mm, 6*mm, T.C_SS, ""), "Yangın damperi YD-90"),
+      (lambda c_, x_, y_: T.kesme_vana(c_, x_, y_, 2.4*mm, T.C_TS), "Kesme vanası"),
+      (lambda c_, x_, y_: T.kuresel_vana(c_, x_, y_, 2.4*mm, T.C_TS), "Küresel vana"),
+      (lambda c_, x_, y_: T.cekvalf(c_, x_, y_, 2.4*mm, T.C_TS), "Çekvalf"),
+      (lambda c_, x_, y_: T.pislik_tutucu(c_, x_, y_, 2.2*mm, T.C_TS, ""), "Pislik tutucu"),
+      (lambda c_, x_, y_: T.termometre(c_, x_, y_-2*mm, 2.2*mm), "Termometre"),
+      (lambda c_, x_, y_: T.manometre(c_, x_, y_-2*mm, 2.2*mm), "Manometre"),
+      (lambda c_, x_, y_: T.yer_suzgeci(c_, x_, y_, 2.2*mm, T.C_PS, ""), "Yer süzgeci"),
+    ]
+    ty = T.lejant(c, x2, ty-9*mm, w2, kalemler, sut=2)
+    h.notkutu(c, x2, ty, w2, "Şema okuma kuralı",
+      "Prensip şeması ölçekli değildir; hatlar yalnız yatay ve düşeydir. Her hat üzerinde "
+      "akış yönü oku, kesit ve debi yazılıdır. Islak hacim egzozu salon egzozuna "
+      "bağlanmaz — ayrı fan, ayrı kanal, ayrı çıkış. Kanalın yangın bölmesi geçtiği "
+      "her noktaya YD-90 yangın damperi konur (BYKHY).", fs=6.2, acc=h.NAVY2)
+
+
+# ══ 6 · SIHHİ TESİSAT KOLON ŞEMASI ════════════════════════════════════════════
+def s6(c):
+    sayfa(c, 6, "Sıhhi tesisat kolon şeması",
+          "Düşey ölçüler ölçekli (1/50) · yatay ölçüler ölçeksiz")
+    import draw_tesisat as T
+    yy = TOP
+    # düşey ölçek: 1/50 → 1 m = 20 mm kâğıt
+    OLC = 38*mm                       # 1 m = 38 mm kâğıt (≈1/26 düşey)
+    ZEM = BOT + 50*mm                 # ±0,00 bitmiş döşeme
+    def K(kot): return ZEM + kot*OLC   # metre kotundan kâğıt y'sine
+
+    bx, bw = L, CW*0.70
+    h.kutu(c, bx, ZEM-26*mm, bw, TOP-4*mm-(ZEM-26*mm), HexColor("#FBFCFD"), h.GREY_L)
+    # — döşeme: iki paralel çizgi (döşeme üstü ve altı)
+    c.setStrokeColor(T.INK); c.setLineWidth(1.0)
+    c.line(bx+6*mm, K(0.0), bx+bw-6*mm, K(0.0))
+    c.setLineWidth(0.6); c.line(bx+6*mm, K(-0.20), bx+bw-6*mm, K(-0.20))
+    c.setFillColor(HexColor("#E3E7EA"))
+    c.rect(bx+6*mm, K(-0.20), bw-12*mm, 0.20*OLC, 0, 1)
+    c.setStrokeColor(T.INK); c.setLineWidth(1.0)
+    c.line(bx+6*mm, K(0.0), bx+bw-6*mm, K(0.0))
+    h.txt(c, bx+7*mm, K(0.0)+1.4*mm, "ZEMİN KAT — BİTMİŞ DÖŞEME ±0,00", h.FB, 5.4, T.INK)
+    h.txt(c, bx+7*mm, K(-0.20)-3.4*mm, "Mevcut betonarme döşeme (200 mm) — VARSAYIM",
+          h.F, 4.6, T.GRI)
+    # — yapısal tavan ve çatı
+    c.setStrokeColor(T.GRI); c.setLineWidth(0.7); c.setDash([3, 2], 0)
+    c.line(bx+6*mm, K(P.KOT_YAPISAL_TAVAN), bx+bw-6*mm, K(P.KOT_YAPISAL_TAVAN))
+    c.setDash()
+    h.txt(c, bx+7*mm, K(P.KOT_YAPISAL_TAVAN)+1.2*mm,
+          f"YAPISAL TAVAN +{('%.2f' % P.KOT_YAPISAL_TAVAN).replace('.', ',')}",
+          h.F, 4.8, T.GRI)
+
+    # — kolon aksları (yatay ölçeksiz, eşit adım)
+    kolonlar = [
+      ("TK-1", "Temiz su kolonu — erkek bloğu", "TS", "Ø25"),
+      ("SK-1", "Sıcak su kolonu — erkek bloğu", "SS", "Ø20"),
+      ("PK-1", "Pis su kolonu — erkek bloğu",   "PS", "Ø100"),
+      ("HK-1", "Havalık — erkek bloğu",         "HV", "Ø70"),
+      ("TK-2", "Temiz su kolonu — kadın bloğu", "TS", "Ø25"),
+      ("SK-2", "Sıcak su kolonu — kadın bloğu", "SS", "Ø20"),
+      ("PK-2", "Pis su kolonu — kadın bloğu",   "PS", "Ø100"),
+      ("HK-2", "Havalık — kadın bloğu",         "HV", "Ø70"),
+    ]
+    x0 = bx + 48*mm; adim = (bw - 62*mm)/len(kolonlar)
+    # ana yatay hatlar
+    ANA_TS = K(2.60); ANA_PS = K(-0.12)
+    T.boru(c, [(bx+14*mm, ANA_TS), (x0+adim*(len(kolonlar)-1), ANA_TS)], "TS")
+    T.etiket(c, bx+30*mm, ANA_TS, "TS Ø25 — tavan içi ana dağıtım", T.C_TS, 4.4, "l", 1.8*mm)
+    T.boru(c, [(bx+14*mm, ANA_PS), (x0+adim*(len(kolonlar)-1), ANA_PS)], "PS")
+    T.etiket(c, bx+30*mm, ANA_PS, "PS Ø100 %1 ↓ — zemin içi toplama",
+             T.C_PS, 4.4, "l", -4.2*mm)
+    # su girişi ve sayaç
+    T.boru(c, [(bx+14*mm, K(0.90)), (bx+14*mm, ANA_TS)], "TS")
+    T.sayac(c, bx+14*mm, K(1.55), 2.6*mm, T.C_TS, None)
+    T.etiket(c, bx+14*mm, K(1.55), "SU SAYACI", T.C_TS, 4.0, "l", 0)
+    T.kuresel_vana(c, bx+14*mm, K(1.05), 2.4*mm, T.C_TS, True, None)
+    T.etiket(c, bx+14*mm+4*mm, K(1.05), "ANA KESME", T.C_TS, 4.0, "l", 0)
+    T.boru(c, [(bx+14*mm, K(0.55)), (bx+14*mm, K(0.90))], "TS")
+    T.etiket(c, bx+18*mm, K(0.55), "ŞEBEKE GİRİŞİ Ø25", T.C_TS, 4.2, "l", 0)
+    # rögar
+    c.setFillColor(HexColor("#FFFFFF")); c.setStrokeColor(T.C_PS); c.setLineWidth(0.8)
+    rx = x0+adim*(len(kolonlar)-1)+6*mm
+    c.rect(rx-5*mm, ANA_PS-7*mm, 10*mm, 10*mm, 1, 1)
+    T.etiket(c, rx, ANA_PS-10.5*mm, "RÖGAR 50×50", T.C_PS, 4.2, "c", 0)
+    T.boru(c, [(x0+adim*(len(kolonlar)-1), ANA_PS), (rx-5*mm, ANA_PS)], "PS")
+
+    # cihaz montaj kotları (m) — TS uygulama pratiği
+    CIHAZ = {"lavabo": 0.85, "klozet": 0.20, "rezervuar": 0.25, "dus": 2.10,
+             "suzgec": 0.00, "boyler": 1.90}
+    for i, (kod, ad, servis, cap) in enumerate(kolonlar):
+        x = x0 + i*adim
+        # kolon gövdesi
+        if servis == "PS":
+            T.boru(c, [(x, K(1.05)), (x, ANA_PS)], "PS")
+            T.temizleme_kapagi(c, x, K(0.25), 2.2*mm)
+            T.etiket(c, x, K(0.70), f"{cap} %1", T.C_PS, 4.0, "c", 0)
+            # klozet + lavabo bağlantısı
+            # klozet (çıkış 20 cm) ve lavabo (85 cm) bağlantıları
+            T.boru(c, [(x-20*mm, K(CIHAZ['klozet'])), (x-20*mm, K(1.05)), (x, K(1.05))], "PS")
+            T.boru(c, [(x-11*mm, K(CIHAZ['lavabo'])), (x-11*mm, K(1.05))], "PS")
+            c.setFillColor(HexColor("#FFFFFF")); c.setStrokeColor(T.C_PS); c.setLineWidth(0.7)
+            # klozet gövdesi
+            c.roundRect(x-23*mm, K(CIHAZ['klozet']), 6*mm, 9*mm, 1.2*mm, 1, 1)
+            c.rect(x-23*mm, K(CIHAZ['klozet'])+9*mm, 6*mm, 5*mm, 1, 1)
+            T.etiket(c, x-20*mm, K(CIHAZ['klozet'])+14*mm, "WC", T.C_PS, 4.0, "c", 0.6*mm)
+            # lavabo
+            c.ellipse(x-14.5*mm, K(CIHAZ['lavabo']), x-7.5*mm, K(CIHAZ['lavabo'])+3.4*mm, 1, 1)
+            T.etiket(c, x-11*mm, K(CIHAZ['lavabo'])+3.6*mm, "LV h=0,85", T.C_PS, 4.0, "c", 0.6*mm)
+            T.yer_suzgeci(c, x-4*mm, K(0.06), 2.2*mm, T.C_PS, "YS Ø100")
+        elif servis == "HV":
+            # havalık, komşu pis su kolonundan ayrılır (2×45° yerine ortogonal şema)
+            T.boru(c, [(x-adim, K(1.05)), (x, K(1.05)),
+                       (x, K(P.KOT_YAPISAL_TAVAN+0.45))], "HV")
+            T.havalik_bacasi(c, x, K(P.KOT_YAPISAL_TAVAN+0.45), 2.6*mm)
+            T.etiket(c, x, K(P.KOT_YAPISAL_TAVAN+0.45), "ÇATI ÜSTÜ +2,00 m",
+                     T.C_HV, 4.0, "c", 3.2*mm)
+        elif servis == "TS":
+            T.boru(c, [(x, ANA_TS), (x, K(CIHAZ['lavabo']))], "TS")
+            T.kuresel_vana(c, x, K(2.20), 2.2*mm, T.C_TS, True)
+            T.etiket(c, x, K(1.60), f"{cap} · 12 MB", T.C_TS, 4.0, "c", 0)
+            # boyler
+            if kod.endswith("1") or kod.endswith("2"):
+                pass
+        else:   # SS
+            T.boru(c, [(x, K(CIHAZ['boyler'])), (x, K(CIHAZ['dus']))], "SS")
+            T.boru(c, [(x, K(CIHAZ['dus'])), (x+12*mm, K(CIHAZ['dus']))], "SS")
+            T.boyler(c, x-13*mm, K(1.45), 11*mm, 20*mm, T.C_SS,
+                     "BOYLER 100 L / 3 kW")
+            T.emniyet_ventili(c, x-13*mm, K(2.10), 2.2*mm, T.C_SS, "EV 6 bar")
+            T.etiket(c, x, K(1.20), f"{cap}", T.C_SS, 4.0, "c", 0)
+            # duş başlığı
+            c.setStrokeColor(T.C_SS); c.setLineWidth(0.8)
+            c.line(x+12*mm, K(CIHAZ['dus']), x+12*mm, K(CIHAZ['dus'])-2*mm)
+            c.line(x+9*mm, K(CIHAZ['dus'])-2*mm, x+15*mm, K(CIHAZ['dus'])-2*mm)
+            T.etiket(c, x+12*mm, K(CIHAZ['dus'])-5.5*mm, "DUŞ h=2,10", T.C_SS, 4.0, "c", 0)
+        # kolon numarası — kolonun EN ÜST noktasında
+        ust = K(P.KOT_YAPISAL_TAVAN+0.62) if servis == "HV" else K(2.85)
+        c.setFillColor(HexColor("#FFFFFF"))
+        renk = T.CIZGI[servis][0]
+        c.setStrokeColor(renk); c.setLineWidth(0.7)
+        c.circle(x, ust+5*mm, 3.4*mm, 1, 1)
+        h.txt(c, x, ust+4.0*mm, kod, h.FB, 4.2, renk, "c")
+
+    # — düşey kot ölçü zinciri (solda)
+    ox = bx+7.5*mm
+    kotlar = [(-0.20, "kaba döşeme"), (0.00, "bitmiş döşeme"),
+              (0.85, "lavabo"), (1.90, "boyler"), (2.10, "duş başlığı"),
+              (2.60, "TS ana dağıtım"), (P.KOT_YAPISAL_TAVAN, "yapısal tavan")]
+    c.setStrokeColor(T.GRI); c.setLineWidth(0.4)
+    c.line(ox, K(-0.20), ox, K(P.KOT_YAPISAL_TAVAN))
+    for kot, ad in kotlar:
+        c.line(ox-1.4*mm, K(kot), ox+1.4*mm, K(kot))
+        h.txt(c, ox-2.2*mm, K(kot)-1.0*mm,
+              f"{'+' if kot >= 0 else '−'}{abs(kot):.2f}".replace(".", ","),
+              h.FB, 4.2, T.GRI, "r")
+        h.txt(c, ox+2.4*mm, K(kot)-1.0*mm, ad, h.F, 4.0, T.GRI)
+
+    # — sağ sütun ────────────────────────────────────────────────────────────
+    x2 = bx+bw+7*mm; w2 = CW-bw-7*mm; ty = TOP
+    _v = lambda x, n=1: ("%.*f" % (n, x)).replace(".", ",")
+    h.txt(c, x2, ty-4*mm, "KOLON LİSTESİ", h.FB, 8, h.NAVY)
+    rows = [[k[0], k[1], k[3]] for k in kolonlar]
+    ty = h.tablo(c, x2, ty-7*mm, [("Kolon", 0.16), ("Tanım", 0.62), ("Çap", 0.22)],
+                 rows, w2, satir_h=5.6*mm, fs=6.1, hizala=["c", "l", "c"])
+    h.txt(c, x2, ty-8*mm, "EĞİM VE ÇAP KURALI", h.FB, 8, h.NAVY)
+    rows2 = [["Ø50 (lavabo, duş)", "%2", "sifon birimi 1–2 SB"],
+             ["Ø70 (ara toplama)", "%2", "3–6 SB"],
+             ["Ø100 (klozet, ana hat)", "%1", "≥ 8 SB · rögara kadar"],
+             ["Havalık Ø70", "—", "çatı üstü +2,00 m, şapkalı"],
+             ["Temizleme kapağı TK", "—", "her kolon dibinde + her 15 m'de"],
+             ["Rögar", "—", "50×50 cm, düz hatta her 30 m"]]
+    ty = h.tablo(c, x2, ty-12*mm, [("Hat", 0.44), ("Eğim", 0.16), ("Not", 0.40)],
+                 rows2, w2, satir_h=5.6*mm, fs=6.1, hizala=["l", "c", "l"])
+    h.txt(c, x2, ty-8*mm, "MONTAJ KOTLARI (bitmiş döşemeden)", h.FB, 8, h.NAVY)
+    rows3 = [["Lavabo üst kenarı", "85 cm"], ["Lavabo bataryası", "100 cm"],
+             ["Klozet çıkışı", "15–20 cm"], ["Rezervuar bağlantısı", "25 cm"],
+             ["Duş bataryası", "100 cm"], ["Duş başlığı", "210 cm"],
+             ["Boyler alt kenarı", "190 cm"], ["Yer süzgeci", "±0,00 (−1,5 cm çukur)"]]
+    ty = h.tablo(c, x2, ty-12*mm, [("Cihaz", 0.62), ("Kot", 0.38)], rows3,
+                 w2, satir_h=5.4*mm, fs=6.1, hizala=["l", "r"])
+    h.notkutu(c, x2, ty-6*mm, w2, "Şemanın ölçek kuralı",
+      "Kolon şeması bir DÜŞEY KESİTTİR: düşey ölçüler 1/50 ölçeklidir ve kotlar "
+      "gerçektir; yatay ölçüler ölçeksizdir, kolonlar eşit adımla yan yana dizilir. "
+      "Pis su kolonu önce, temiz su kolonu sonra çizilir. Kolon numarası her kolonun "
+      "en üst noktasına yazılır. Yatay–düşey geçişler 2 × 45° dirsekle yapılır, "
+      "tek 90° dirsekle değil.", fs=6.1, acc=h.NAVY2)
+
+
+# ══ 7 · İKLİMLENDİRME PRENSİP ŞEMASI ══════════════════════════════════════════
+def s7(c):
+    sayfa(c, 7, "İklimlendirme prensip şeması",
+          "Split küme · soğutucu akışkan hatları · kondens drenajı")
+    import draw_tesisat as T
+    bx, bw = L, CW*0.62
+    h.kutu(c, bx, BOT+4*mm, bw, TOP-BOT-10*mm, HexColor("#FBFCFD"), h.GREY_L)
+    dx = bx+34*mm
+    dy = TOP-30*mm
+    T.klima_dis(c, dx, dy, 44*mm, 20*mm, T.C_SAG, "DIŞ ÜNİTE PLATFORMU — arka cephe")
+    T.etiket(c, dx, dy-13.5*mm, f"{P.ADET_KLIMA} adet · toplam {h.tl(P.KLIMA_BTU)} BTU",
+             T.GRI, 4.4)
+    kolon_x = dx
+    alt = dy-24*mm
+    T.boru(c, [(kolon_x, dy-10*mm), (kolon_x, alt)], "SA-G")
+    for i, (kod, zon, btu, pt, a) in enumerate(P.KLIMA):
+        yk = alt - 6*mm - i*24*mm
+        ic_x = bx+bw-52*mm
+        T.boru(c, [(kolon_x, yk+8*mm), (kolon_x, yk), (ic_x-16*mm, yk)], "SA-G")
+        T.boru(c, [(kolon_x+3*mm, yk+8*mm), (kolon_x+3*mm, yk-3*mm),
+                   (ic_x-16*mm, yk-3*mm)], "SA-S")
+        T.klima_ic(c, ic_x, yk, 26*mm, 9*mm, T.C_SAG, kod,
+                   f"{h.tl(btu)} BTU · {zon.split(' · ')[0].title()}")
+        L_b = __import__("shapely.geometry", fromlist=["LineString"]).LineString(
+            P.BAKIR_HAT[kod]).length
+        T.etiket(c, (kolon_x+ic_x)/2-8*mm, yk, f"Ø9,52 / Ø15,88 (S/G) · {L_b:.1f} m",
+                 T.C_SAG, 4.2, "c", 1.8*mm)
+        # kondens drenajı
+        T.boru(c, [(ic_x, yk-4.5*mm), (ic_x, yk-10*mm), (kolon_x-10*mm, yk-10*mm)], "DR")
+        T.etiket(c, ic_x-24*mm, yk-10*mm, "DR Ø25 %1 ↓", T.C_DR, 4.0, "c", -4.0*mm)
+    T.boru(c, [(kolon_x-10*mm, alt-6*mm-3*24*mm-10*mm), (kolon_x-10*mm, BOT+16*mm),
+               (bx+bw-16*mm, BOT+16*mm)], "DR")
+    T.etiket(c, bx+bw-40*mm, BOT+16*mm, "Kondens toplama → yer süzgeci", T.C_DR, 4.4,
+             "c", 2.0*mm)
+    T.yer_suzgeci(c, bx+bw-14*mm, BOT+16*mm, 2.6*mm, T.C_PS, "")
+
+    x2 = bx+bw+7*mm; w2 = CW-bw-7*mm; ty = TOP
+    _v = lambda x, n=1: ("%.*f" % (n, x)).replace(".", ",")
+    h.txt(c, x2, ty-4*mm, "İÇ ÜNİTE LİSTESİ", h.FB, 8, h.NAVY)
+    zon_alan = {z[0]: z[1].area for z in P.ZONES}
+    rows = []
+    for kod, zon, btu, pt, a in P.KLIMA:
+        alan = zon_alan.get(zon, 0)
+        rows.append([kod, zon.split(" · ")[0].title(), f"{h.tl(btu)} BTU",
+                     f"{_v(alan)} m²", f"{btu*0.293/alan:.0f} W/m²" if alan else "—"])
+    ty = h.tablo(c, x2, ty-7*mm, [("Kod", 0.12), ("Bölge", 0.34), ("Kapasite", 0.20),
+                                  ("Alan", 0.16), ("Yük", 0.18)],
+                 rows, w2, satir_h=5.8*mm, fs=6.2, hizala=["c", "l", "r", "r", "r"])
+    h.txt(c, x2, ty-8*mm, "HAT VE MONTAJ VERİLERİ", h.FB, 8, h.NAVY)
+    rows2 = [["Toplam bakır hat", f"{_v(P.L_BAKIR)} m", "gaz + sıvı, yalıtımlı"],
+             ["Toplam drenaj hattı", f"{_v(P.L_DRENAJ)} m", "%1 eğim, yalıtımlı"],
+             ["En uzun bakır hat", f"{max(__import__('shapely.geometry', fromlist=['LineString']).LineString(hh).length for hh in P.BAKIR_HAT.values()):.1f} m",
+              "sınır 50 m · 30 m üstü ilave şarj"],
+             ["İç ünite kotu", f"{_v(P.KLIMA_KOT,2)} m", "üst kot +2,72 m"],
+             ["Dış ünite servis boşluğu", "1,00 m", "ön yüz, taranmış alan"],
+             ["Soğutma marjı", f"%{P.SOGUTMA_MARJ}", "tepe yük üzerine"]]
+    ty = h.tablo(c, x2, ty-12*mm, [("Kalem", 0.40), ("Değer", 0.24), ("Not", 0.36)],
+                 rows2, w2, satir_h=5.8*mm, fs=6.2, hizala=["l", "r", "l"])
+    h.notkutu(c, x2, ty-6*mm, w2, "Kondens drenajı kritik",
+      "Her iç ünitenin kondens hattı kesintisiz %1 eğimle yer süzgecine iner; "
+      "eğim sağlanamayan noktada kondens pompası kullanılır. Drenaj hattı yalıtımlı "
+      "olacak, asma tavan içinde terleme yapmayacaktır. Hat, asma tavan kapatılmadan "
+      "önce su ile test edilip fotoğraflanacaktır.", fs=6.2, acc=h.COPPER)
+
 
 # ══ 6 · METRAJ ÖZETİ VE LEJANT ═════════════════════════════════════════════════
-def s6(c):
-    sayfa(c, 6, "Metraj özeti ve lejant", "Poz bazlı miktarlar · semboller · teslim kriterleri")
+def s8(c):
+    sayfa(c, 8, "Metraj özeti ve lejant", "Poz bazlı miktarlar · semboller · teslim kriterleri")
     mek = [r for r in P.B if r[1] == "MEKANİK"]
     tw_ = CW*0.62
     rows = [[r[0], r[2], r[3], f"{r[4]:.2f}".replace(".", ","),
@@ -451,8 +744,8 @@ def s6(c):
 # ══ 7 · TAVAN İÇİ TESİSAT KOORDİNASYON KESİTİ ═════════════════════════════════
 KAT_RENK = {"yapi":"#C9CCD1", "kanal":"#2E7D5B", "boru":"#1F8AA8", "kablo":"#1F6FB2",
             "zayif":"#7B3FA0", "su":"#2F6FB3", "tavan":"#B87333"}
-def s7(c):
-    sayfa(c, 7, "Tavan içi tesisat koordinasyon kesiti",
+def s9(c):
+    sayfa(c, 9, "Tavan içi tesisat koordinasyon kesiti",
           "Kanal · boru · kablo tavası kot dizilimi · çakışma kuralları")
     y = TOP
     y = h.para(c, L, y-1*mm,
@@ -530,7 +823,7 @@ def s7(c):
 def build(path="output/Gym_Mekanik_Proje_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
     c.setTitle(f"Maltepe / İdealtepe — Mekanik Tesisat Projesi ({P.REV})")
-    for fn in (s1, s2, s3, s4, s5, s6, s7):
+    for fn in (s1, s2, s3, s4, s5, s6, s7, s8, s9):
         fn(c); c.showPage()
     c.save(); print("→", path)
 

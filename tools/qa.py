@@ -15,9 +15,9 @@ def uyar(t): UYARI.append(t); print("  !", t)
 
 print("\n1 · PDF ÜRETİMİ VE SAYFA RENDER")
 for f,bek in (("output/Gym_Donusum_Dosyasi_A3.pdf",12),("output/Gym_Sunum_16x9.pdf",12),
-              ("output/Gym_Mimari_Proje_A3.pdf",13),
-              ("output/Gym_Mekanik_Proje_A3.pdf",7),("output/Gym_Elektrik_Proje_A3.pdf",7),
-              ("output/Gym_Insaat_Seti_A3.pdf",29)):
+              ("output/Gym_Mimari_Proje_A3.pdf",14),
+              ("output/Gym_Mekanik_Proje_A3.pdf",9),("output/Gym_Elektrik_Proje_A3.pdf",8),
+              ("output/Gym_Insaat_Seti_A3.pdf",33)):
     d=pdfium.PdfDocument(f); n=len(d)
     w,h=d[0].get_size()
     print(f"  {Path(f).name}: {n} sayfa · {w:.0f}×{h:.0f} pt")
@@ -200,7 +200,7 @@ for f in _cad:
        f"{len(d.layouts.names())-1} pafta · 0 hata")
 _b=_ez.readfile("cad/GYM-BIRLESIK-R2010.dxf")
 _PF=("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
-     "E-01","E-02","E-03","E-04")
+     "E-01","E-02","E-03","E-04","E-05")
 _eksik=[n for n in _PF if not any(l.startswith(n) for l in _b.layouts.names())]
 if _eksik: hata(f"birleşik dosyada eksik pafta: {_eksik}")
 else: ok(f"birleşik dosyada {len(_PF)} paftanın tamamı var")
@@ -210,6 +210,17 @@ for l in _b.layouts.names():
     vps=[vp for vp in _b.layouts.get(l).query("VIEWPORT") if len(vp.frozen_layers)>0]
     if not vps: _donmus_ok=False; hata(f"{l}: görüntü penceresinde donmuş katman yok")
 if _donmus_ok: ok("her paftada disiplin dışı katmanlar dondurulmuş (VP Freeze)")
+_tek = sorted(Path("cad/paftalar").glob("*.dxf")) if Path("cad/paftalar").exists() else []
+import build_dxf as _BD
+if len(_tek)!=len(_BD.TEKIL_PAFTA):
+    hata(f"tekil pafta dosyası {len(_tek)} (beklenen {len(_BD.TEKIL_PAFTA)})")
+else:
+    ok(f"{len(_tek)} pafta ayrı DXF dosyası olarak üretildi (tek model + dondurma değil)")
+for f in _tek:
+    d=_ez.readfile(f)
+    if len([l for l in d.layouts.names() if l!="Model"])!=1:
+        hata(f"{f.name}: tekil pafta dosyasında birden çok kâğıt alanı var")
+    if d.dxfversion!="AC1024": hata(f"{f.name}: sürüm {d.dxfversion}")
 _ms=_b.modelspace()
 if len(_ms.query("DIMENSION"))<5: hata("model uzayında ölçülendirme eksik")
 else: ok(f"{len(_ms.query('DIMENSION'))} ölçülendirme · {len(_ms.query('INSERT'))} blok yerleşimi")
@@ -223,11 +234,11 @@ if _h:
 else: ok(f"çizim kontrolü: 0 hata, {len(_u)} uyarı, {len(_bul)-len(_u)} bilgi")
 for b in _u: uyar(f"çizim kontrolü: {b[2]}")
 _mim=pdfium.PdfDocument("output/Gym_Mimari_Proje_A3.pdf")
-if len(_mim)!=13: hata(f"mimari set {len(_mim)} pafta (13 bekleniyor)")
-else: ok("mimari set 13 pafta")
+if len(_mim)!=14: hata(f"mimari set {len(_mim)} pafta (14 bekleniyor)")
+else: ok("mimari set 14 pafta")
 _seti=pdfium.PdfDocument("output/Gym_Insaat_Seti_A3.pdf")
-if len(_seti)!=2+13+7+7: hata(f"inşaat seti {len(_seti)} pafta (29 bekleniyor)")
-else: ok(f"inşaat seti {len(_seti)} pafta (kapak + indeks + 13 + 7 + 7)")
+if len(_seti)!=2+14+9+8: hata(f"inşaat seti {len(_seti)} pafta (33 bekleniyor)")
+else: ok(f"inşaat seti {len(_seti)} pafta (kapak + indeks + 14 mimari + 9 mekanik + 8 elektrik)")
 if abs(P.MAHAL_TOPLAM+P.MAHAL_DUVAR_PAYI-P.A["ic_toplam"])>0.01:
     hata("mahal listesi alanı net iç alanla kapanmıyor")
 else: ok(f"mahal listesi {P.MAHAL_TOPLAM} m² + duvar payı {P.MAHAL_DUVAR_PAYI} m² = {P.A['ic_toplam']} m²")

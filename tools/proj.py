@@ -9,7 +9,7 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev E"
+REV        = "Rev F"
 TARIH      = "17 Eylül 2026"
 FIYAT_TARIH= ("Eylül 2026 · Aqua Florya / Saltbae kesin hakedişi (Mayıs 2025) "
               "birim fiyatları ×1,40 eskalasyonla")
@@ -262,6 +262,20 @@ KANAL = {
  "islak":   {"kesit":"Ø160",    "debi":240,  "hiz":3.3, "renk":"#8E3BB0",
    "guzergah":[(9.55,8.05),(9.35,6.20),(9.10,4.60),(9.70,2.60),(10.60,2.10),(11.35,2.35)]},
 }
+# Ana kanal güzergâhları ORTOGONAL üretilir (tools/kanal_yollari.py) ve
+# data/kanallar.json içinde saklanır; burada yalnızca okunur. Dosya yoksa
+# yukarıdaki elle girilmiş güzergâh yedek olarak kalır.
+def _kanal_guzergah_yukle():
+    import json as _json
+    from pathlib import Path as _Path
+    f = _Path(__file__).resolve().parent.parent/"data"/"kanallar.json"
+    if not f.exists(): return
+    d = _json.loads(f.read_text(encoding="utf-8"))
+    for ad, g in d.items():
+        if ad in KANAL and len(g) > 1:
+            KANAL[ad]["guzergah"] = [(float(x), float(y)) for x, y in g]
+_kanal_guzergah_yukle()
+
 # menfez / valf: (kod, x, y, debi m³/h, tip)
 MENFEZ = [
  ("M1", 1.95, 4.75, 250, "besleme"), ("M2", 4.30, 5.15, 250, "besleme"),
@@ -330,8 +344,8 @@ L_PIS50   = round(sum(_LS(h).length for h in PIS_SU["Ø50"]), 1)
 def _isitici(k, x, y, t, poly):
     q = duvara_yapistir((x, y), 0.15, poly)
     return (k, q[0], q[1], t, cihaz_acisi(q, poly))
-ISITICI = [_isitici("SI-1", 9.70, 7.60, "Elektrikli ani su ısıtıcı 6 kW — erkek bloğu", ERKEK),
-           _isitici("SI-2",10.55, 2.15, "Elektrikli ani su ısıtıcı 6 kW — kadın bloğu", KADIN)]
+ISITICI = [_isitici("SI-1", 9.70, 7.60, "Depolu elektrikli boyler 100 L / 3 kW — erkek bloğu", ERKEK),
+           _isitici("SI-2",10.55, 2.15, "Depolu elektrikli boyler 100 L / 3 kW — kadın bloğu", KADIN)]
 ISITICI_KOT = 1.90
 VITRIFIYE = [("WC-1",10.35,8.10,"Klozet + lavabo"),("DU-1", 9.45,8.05,"Duş teknesi + kabin"),
              ("WC-2", 9.85,1.35,"Klozet + lavabo"),("DU-2",10.75,1.85,"Duş teknesi + kabin")]
@@ -364,7 +378,7 @@ def _duvara_oturt(liste, poly=None):
 
 # — duvara monte: konumlar duvara izdüşürülüp 1B ayrıştırma ile çakışmadan kurtarılır
 _DUVAR_CIHAZ = (
-  [("P%d" % (i+1), (x, y), "ikili topraklı priz", "PRIZ")
+  [("PR%d" % (i+1), (x, y), "ikili topraklı priz", "PRIZ")
    for i, (x, y) in enumerate(_duvar_boyunca(SALON, 16, 0.20, 0.03))]
 + [("PI1", (9.80, 7.45), "IP44 priz — erkek soyunma", "PRIZ44"),
    ("PI2", (10.45, 2.75), "IP44 priz — kadın soyunma", "PRIZ44"),
@@ -432,14 +446,15 @@ ACIL     = [(k, x, y, "acil aydınlatma", 0) for k, x, y, t in ACIL_TAVAN] + ACI
 # ── linye (devre) tablosu ─────────────────────────────────────────────────────
 # (kod, tanım, koruma, kesit, bağlı güç kW, eşzamanlılık katsayısı)
 _LINYE = [
- ("L1","Aydınlatma — arena / serbest ağırlık","1×10 A","3×1,5", 7*0.040, 1.00),
- ("L2","Aydınlatma — fonksiyonel / kardiyo","1×10 A","3×1,5", 3*0.040, 1.00),
- ("L3","Aydınlatma — dinlenme salonu","1×10 A","3×1,5", 3*0.040, 1.00),
- ("L4","Aydınlatma — giriş / banko","1×10 A","3×1,5", 2*0.040, 1.00),
- ("L5","Aydınlatma — ıslak hacim (IP44)","1×10 A","3×1,5", 6*0.018, 0.60),
- ("L6","Acil aydınlatma ve yönlendirme","1×6 A","3×1,5", 8*0.008, 1.00),
- ("P1","Priz — salon kuzey ve batı","1×16 A","3×2,5", 1.20, 0.50),
- ("P2","Priz — salon güney ve doğu","1×16 A","3×2,5", 1.20, 0.50),
+ ("L1","Aydınlatma — arena / serbest ağırlık","1×10 A","3×2,5", 7*0.040, 1.00),
+ ("L2","Aydınlatma — fonksiyonel / kardiyo","1×10 A","3×2,5", 3*0.040, 1.00),
+ ("L3","Aydınlatma — dinlenme salonu","1×10 A","3×2,5", 3*0.040, 1.00),
+ ("L4","Aydınlatma — giriş / banko","1×10 A","3×2,5", 2*0.040, 1.00),
+ ("L5","Aydınlatma — ıslak hacim (IP44)","1×10 A","3×2,5", 6*0.018, 0.60),
+ ("L6","Acil aydınlatma ve yönlendirme","1×6 A","3×2,5", 8*0.008, 1.00),
+ ("P1","Priz — salon kuzey (PR12–PR16, PR1)","1×16 A","3×2,5", 0.90, 0.50),
+ ("P2","Priz — salon güney (PR5–PR9)","1×16 A","3×2,5", 0.75, 0.50),
+ ("P6","Priz — salon batı ve doğu (PR2–PR4, PR10, PR11)","1×16 A","3×2,5", 0.75, 0.50),
  ("P3","Priz — banko, POS, veri","1×16 A","3×2,5", 1.00, 0.70),
  ("P4","Priz — kardiyo ekipmanı (ayrı linye)","1×16 A","3×2,5", 2.40, 0.80),
  ("P5","Priz — ıslak hacim IP44 (ayrı kaçak akım)","1×16 A","3×2,5", 0.50, 0.30),
@@ -447,12 +462,12 @@ _LINYE = [
  ("K2","Klima — fonksiyonel 18.000 BTU","1×16 A","3×2,5", 1.70, 0.85),
  ("K3","Klima — giriş 12.000 BTU","1×16 A","3×2,5", 1.15, 0.85),
  ("K4","Klima — dinlenme 12.000 BTU","1×16 A","3×2,5", 1.15, 0.70),
- ("W1","Su ısıtıcı — erkek bloğu 6 kW","1×32 A","3×6", 6.00, 0.50),
- ("W2","Su ısıtıcı — kadın bloğu 6 kW","1×32 A","3×6", 6.00, 0.50),
- ("V1","Havalandırma — taze hava + egzoz fanı","1×10 A","3×1,5", 0.45, 1.00),
- ("V2","Islak hacim egzoz fanı","1×6 A","3×1,5", 0.12, 0.80),
+ ("W1","Su ısıtıcı — erkek bloğu, boyler 3 kW","1×20 A","3×2,5", 3.00, 0.60),
+ ("W2","Su ısıtıcı — kadın bloğu, boyler 3 kW","1×20 A","3×2,5", 3.00, 0.60),
+ ("V1","Havalandırma — taze hava + egzoz fanı","1×10 A","3×2,5", 0.45, 1.00),
+ ("V2","Islak hacim egzoz fanı","1×6 A","3×2,5", 0.12, 0.80),
  ("Z1","Zayıf akım — rack, CCTV, ses, geçiş kontrol","1×10 A","3×2,5", 0.60, 0.90),
- ("Z2","Yangın algılama paneli (kesintisiz)","1×6 A","3×1,5", 0.15, 1.00),
+ ("Z2","Yangın algılama paneli (kesintisiz)","1×6 A","3×2,5", 0.15, 1.00),
 ]
 # faz dağıtımı: talep gücü büyükten küçüğe, her linye o an EN AZ yüklü faza verilir
 def _fazlari_dagit(ls):
@@ -502,8 +517,8 @@ HAT_DUSEY   = 6.0         # m — panodan tavana ve cihaza iniş payı
 _LINYE_NOKTA = {
  "L1": (5.30, 3.20), "L2": (6.40, 7.45), "L3": (8.05, 11.10), "L4": (1.55, 3.60),
  "L5": (9.90, 5.20), "L6": (3.60, 5.40),
- "P1": (3.00, 8.20), "P2": (6.60, 1.10), "P3": (1.92, 6.20), "P4": (7.90, 1.40),
- "P5": (10.10, 6.60),
+ "P1": (3.00, 9.60), "P2": (6.60, 1.10), "P3": (1.92, 6.20), "P4": (7.90, 1.40),
+ "P5": (10.10, 6.60), "P6": (0.60, 5.20),
  "K1": (6.85, 0.18), "K2": (7.60, 8.10), "K3": (0.90, 3.60), "K4": (8.50, 11.60),
  "W1": (10.47, 7.71), "W2": (10.90, 2.05),
  "V1": (2.40, 2.10), "V2": (9.90, 4.90),
@@ -552,7 +567,7 @@ TOPLAM_DU_MAX = round(ANA_DU_P + DU_MAX, 2)
 # ── kaçak akım koruma grupları ────────────────────────────────────────────────
 KACAK_AKIM = [
  ("RCD-1","4×40 A / 30 mA, A tipi","Aydınlatma grubu — L1 · L2 · L3 · L4 · L6"),
- ("RCD-2","4×40 A / 30 mA, A tipi","Priz grubu — P1 · P2 · P3 · P4"),
+ ("RCD-2","4×40 A / 30 mA, A tipi","Priz grubu — P1 · P2 · P3 · P4 · P6"),
  ("RCD-3","2×40 A / 30 mA, A tipi","Islak hacim — L5 · P5 (ayrı, TS HD 60364-7-701)"),
  ("RCD-4","2×40 A / 30 mA, A tipi","Su ısıtıcıları — W1 · W2 (her biri ayrı bloklu)"),
  ("RCD-5","4×40 A / 30 mA, A tipi","Klima ve havalandırma — K1–K4 · V1 · V2"),
@@ -561,33 +576,100 @@ KACAK_AKIM = [
 ]
 ANA_KACAK = "4×63 A / 300 mA, S tipi (seçicilik) — ana giriş"
 
+# ── TOPRAKLAMA VE POTANSİYEL DENGELEME ───────────────────────────────────────
+# Dayanak: Elektrik Tesislerinde Topraklamalar Yönetmeliği (RG 21.08.2001/24500),
+# TS HD 60364-4-41, TS HD 60364-5-54, TS EN 62305 (yıldırım).
+# Mevcut yapıda temel topraklaması bulunmadığı kabul edilmiştir (VARSAYIM —
+# yerinde ölçülecek); bu nedenle çubuk elektrot grubu + çevre şeridi öngörülür.
+TOPRAK_SISTEM   = "TN-S"            # sayaç sonrası N ve PE ayrılır
+TOPRAK_HEDEF    = 20.0              # Ω — yönetmelik üst sınırı (RCD'li tesis)
+TOPRAK_TOPRAK_R = 100.0             # Ω·m — toprak özdirenci VARSAYIM (killi-kumlu)
+ELEKTROT_BOY    = 2.0               # m — çubuk elektrot (Cu kaplı çelik Ø16)
+ELEKTROT_CAP    = 0.016             # m
+SERIT_KESIT     = "30×3,5 mm galvanizli çelik şerit"
+ANA_KORUMA_ILET = "16 mm² Cu (sarı-yeşil)"     # ana topraklama iletkeni
+DENGELEME_ILET  = "6 mm² Cu"                    # ek potansiyel dengeleme
+
+# Elektrot konumları — yapı dışı, arka bahçe çeperinde, 3 m aralıkla
+ELEKTROT = [("TE-1", 11.95, 10.30), ("TE-2", 11.95, 7.30),
+            ("TE-3", 11.95, 4.30),  ("TE-4", 11.95, 1.30)]
+# Ana topraklama barası (ATB) panonun hemen altında
+ATB = (2.95, 7.70)
+# Ek potansiyel dengeleme baraları — her ıslak blokta bir adet
+EPDB = [("EPDB-1", 9.60, 6.95, "Erkek bloğu — duş/WC metal boru ve süzgeç bağları"),
+        ("EPDB-2", 10.05, 2.35, "Kadın bloğu — duş/WC metal boru ve süzgeç bağları")]
+
+def _elektrot_direnci(n=len(ELEKTROT)):
+    """Tek çubuk: R = ρ/(2πL)·ln(4L/d).  n çubuk paralel + %25 karşılıklı etki payı."""
+    tek = TOPRAK_TOPRAK_R/(2*math.pi*ELEKTROT_BOY)*math.log(4*ELEKTROT_BOY/ELEKTROT_CAP)
+    return round(tek/n*1.25, 1)
+TOPRAK_R_TEK  = round(TOPRAK_TOPRAK_R/(2*math.pi*ELEKTROT_BOY)*
+                      math.log(4*ELEKTROT_BOY/ELEKTROT_CAP), 1)
+TOPRAK_R_HESAP = _elektrot_direnci()
+TOPRAK_UYGUN  = TOPRAK_R_HESAP <= TOPRAK_HEDEF
+
+# Potansiyel dengelemeye bağlanacak yabancı iletken parçalar
+DENGELEME = [
+ ("Temiz su ana giriş borusu (metal kısım)", "ATB", "6 mm² Cu, kelepçeli"),
+ ("Pis su ana hattı (metal parça varsa)",    "ATB", "6 mm² Cu, kelepçeli"),
+ ("Hava kanalı gövdesi — besleme ve egzoz",  "ATB", "6 mm² Cu, iki uçtan"),
+ ("Kablo tavası — kuvvet ve zayıf akım",     "ATB", "6 mm² Cu, her 10 m'de bir"),
+ ("Klima dış ünite şasisi",                  "ATB", "6 mm² Cu"),
+ ("Ring platformu çelik karkası",            "ATB", "6 mm² Cu"),
+ ("Duş ve WC metal boru uçları",             "EPDB", "4 mm² Cu"),
+ ("Yer süzgeci gövdesi (metal)",             "EPDB", "4 mm² Cu"),
+ ("Ayna duvarı metal taşıyıcı profilleri",   "ATB",  "6 mm² Cu"),
+ ("Alçıpan karkas (C/U profil) — ıslak hacim", "EPDB", "4 mm² Cu, blok başına 1 nokta"),
+]
+
+TOPRAK_NOTLAR = [
+ "Sistem TN-S'dir; sayaç panosundan itibaren N ve PE iletkenleri ayrı çekilir, "
+ "gym panosunda hiçbir noktada birleştirilmez.",
+ "Ana topraklama barası (ATB) panonun altında, 500×50×5 mm bakır bara olarak "
+ "tesis edilir; her bağlantı ayrı cıvatalı klemensten yapılır, seri bağlantı yasaktır.",
+ f"Elektrot grubu: {len(ELEKTROT)} adet {ELEKTROT_BOY:.0f} m bakır kaplı çelik çubuk, "
+ f"3 m aralıkla, {SERIT_KESIT} ile birbirine bağlı.",
+ f"Hesaplanan yayılma direnci {TOPRAK_R_HESAP} Ω ≤ {TOPRAK_HEDEF:.0f} Ω. "
+ f"Ölçüm yerinde yapılacak; {TOPRAK_HEDEF:.0f} Ω aşılırsa elektrot eklenecektir.",
+ "Her ıslak blokta ek potansiyel dengeleme barası (EPDB) bulunur; duş ve WC "
+ "içindeki tüm yabancı iletken parçalar buraya bağlanır (TS HD 60364-7-701).",
+ "Topraklama ölçüm raporu (yayılma direnci + süreklilik) işletme ruhsatı "
+ "dosyasına konur; yılda bir yenilenir.",
+ "Zayıf akım sistemleri (veri, CCTV, yangın) ayrı bir fonksiyonel topraklama "
+ "barasından beslenir; bu bara ATB'ye tek noktadan bağlanır (yıldız topraklama).",
+]
+
+
+
 # ── tavan tesisat koordinasyon kotları (M-07) ────────────────────────────────
 # Asma tavan boşluğu bölgeden bölgeye farklıdır; her bölge için ayrı kot dizilimi.
-# (no, kot_alt, kot_ust, ad, renk_anahtari)
+# (no, kot_alt, kot_ust, ad, renk_anahtari, yatay_serit)
+# Yatay şerit: aynı kotta ilerleyen servisler farklı şeritlere ayrılır —
+# A kanal · B mekanik boru · C kuvvet kablo tavası · D zayıf akım · * tüm genişlik
 TAVAN_KATMAN = {
  "T2": [   # giriş · dinlenme — boşluk 450 mm (2,75 → 3,20).  Temiz su bu bölgeden geçmez.
-  (1, 3.00, 3.17, "Kol hava kanalı 300×150 mm + 25 mm izolasyon", "kanal"),
-  (2, 2.93, 2.99, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
-  (3, 2.86, 2.92, "Kablo tavası 100×60 mm — kuvvet ve aydınlatma", "kablo"),
-  (4, 2.86, 2.92, "Zayıf akım kanalı 50×50 mm — tavadan ≥ 200 mm yatay ayrık", "zayif"),
-  (5, 2.7625, 2.83, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+  (1, 3.00, 3.17, "Kol hava kanalı 300×150 mm + 25 mm izolasyon", "kanal", "A"),
+  (2, 2.93, 2.99, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru", "B"),
+  (3, 2.86, 2.92, "Kablo tavası 100×60 mm — kuvvet ve aydınlatma", "kablo", "C"),
+  (4, 2.86, 2.92, "Zayıf akım kanalı 50×50 mm — tavadan ≥ 200 mm yatay ayrık", "zayif", "D"),
+  (5, 2.7625, 2.83, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan", "*"),
  ],
  "T4": [   # soyunma — boşluk 600 mm (2,60 → 3,20).  Islak hacim egzozu bu bölgeden geçmez.
-  (6, 2.99, 3.17, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal"),
-  (7, 2.91, 2.97, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
-  (8, 2.84, 2.90, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo"),
-  (9, 2.78, 2.83, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif"),
-  (10, 2.72, 2.77, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su"),
-  (11, 2.6125, 2.67, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+  (6, 2.99, 3.17, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal", "A"),
+  (7, 2.91, 2.97, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru", "B"),
+  (8, 2.84, 2.90, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo", "C"),
+  (9, 2.78, 2.83, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif", "D"),
+  (10, 2.72, 2.77, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su", "B"),
+  (11, 2.6125, 2.67, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan", "*"),
  ],
  "T3": [   # duş · WC — boşluk 800 mm (2,40 → 3,20)
-  (12, 2.94, 3.14, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal"),
-  (13, 2.86, 2.92, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru"),
-  (14, 2.79, 2.85, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo"),
-  (15, 2.73, 2.78, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif"),
-  (16, 2.67, 2.72, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su"),
-  (17, 2.50, 2.66, "Islak hacim egzoz kanalı Ø160 mm + izolasyon", "kanal"),
-  (18, 2.4125, 2.47, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan"),
+  (12, 2.94, 3.14, "Ana hava kanalı 400×200 mm + 25 mm izolasyon", "kanal", "A"),
+  (13, 2.86, 2.92, "Soğutucu akışkan bakır hattı + klima drenajı (%1 eğim)", "boru", "B"),
+  (14, 2.79, 2.85, "Kablo tavası 200×60 mm — kuvvet ve aydınlatma", "kablo", "C"),
+  (15, 2.73, 2.78, "Zayıf akım kanalı 100×50 mm — tavadan ≥ 200 mm ayrık", "zayif", "D"),
+  (16, 2.67, 2.72, "Temiz su PPRC Ø25 (yalıtımlı) — pis su ZEMİNDE, tavanda değil", "su", "B"),
+  (17, 2.50, 2.66, "Islak hacim egzoz kanalı Ø160 mm + izolasyon", "kanal", "A"),
+  (18, 2.4125, 2.47, "Asma tavan askı + TC47 / TU27 taşıyıcı bölgesi", "tavan", "*"),
  ],
 }
 TAVAN_BOSLUK = {"T2": 0.45, "T3": 0.80, "T4": 0.60}   # v("tavan_h") = 3,20 kabulüne göre
@@ -652,7 +734,7 @@ B_MEK = [
 ("06.37","MEKANİK","Paslanmaz sifonlu yer süzgeci 15×15","adet",4, 1450, 2400,"M"),
 ("06.38","MEKANİK","Küresel vana Ø25 / Ø20 (kolon ve branşman kesme)","adet",8, 780, 1300,"M"),
 ("06.39","MEKANİK","Sayaç sonrası ana kesme vanası + pislik tutucu filtre","takım",1, 6500, 11000,"M"),
-("06.40","MEKANİK","Elektrikli ani su ısıtıcı 6 kW (blok başına)","adet",2, 9800, 17000,"M"),
+("06.40","MEKANİK","Depolu elektrikli boyler 100 L / 3 kW, emaye kaplı, magnezyum anotlu (blok başına)","adet",2, 11500, 19500,"M"),
 ("06.41","MEKANİK","Tesisat basınç testi, dezenfeksiyon ve teslim raporu","götürü",1, 9500, 17000,"M"),
 ]
 
@@ -676,7 +758,7 @@ B_ELK = [
 ("05.21","ELEKTRİK","IP44 priz — ıslak hacim","adet", len(PRIZ_IP44), 950, 1600,"M"),
 ("05.22","ELEKTRİK","Priz linyesi NHXMH 3×2,5 mm² — spiral boru ve işçilik dâhil","m", L_LINYE25, 140, 230,"M"),
 ("05.23","ELEKTRİK","Klima besleme hattı 3×2,5 mm² + hat sonu kesici","adet", len(KLIMA), 3400, 5700,"M"),
-("05.24","ELEKTRİK","Su ısıtıcı besleme hattı 3×6 mm² + 32 A kesici + 30 mA kaçak akım","adet",2, 6400, 10800,"M"),
+("05.24","ELEKTRİK","Boyler besleme hattı 3×2,5 mm² + 20 A kesici + 30 mA kaçak akım","adet",2, 4200, 7300,"M"),
 ("05.25","ELEKTRİK","Havalandırma fanı besleme ve hız kontrol hattı","adet",3, 2400, 4000,"M"),
 ("05.26","ELEKTRİK","Banko kuvvet + veri kutusu (gömme)","adet",1, 7500, 12500,"M"),
 ("05.30","ELEKTRİK","Cat6 veri prizi + kablolama","adet",6, 1450, 2450,"M"),
@@ -862,7 +944,7 @@ UYGUNLUK = [
  "İmalat BoQ 03.05 / 03.06 ile karşılanıyor", "Y"),
 ("Çalışma boyunca sürekli sıcak su",
  "Kaynak bilinmiyor (doğalgaz / elektrik?)",
- "2 × 6 kW elektrikli ani ısıtıcı — poz 06.40. Doğalgaz varsa kombi daha ekonomik", "S"),
+ "2 × 100 L / 3 kW depolu boyler — poz 06.40. Ani ısıtıcı 6 kW yalnız 2,9 l/dak verir, iki duşu karşılamaz. Doğalgaz varsa kombi daha ekonomik", "S"),
 ("Dinlenme salonu ≥15 m², zemini halıfleks/parke vb.",
  "Kuzey kol → 17,33 m², LVT/laminat parke", "Sağlanıyor — plan sabitlenmeli", "Y"),
 ("Sporcu sayısı kadar soyunma dolabı / askılık",
@@ -1059,6 +1141,11 @@ ZEMIN_TIPLERI = [
    ("Kenarda 100 mm kauçuk kenar bandı + sarı-siyah ikaz şeridi", 14, "kaucuk")],
   0.300, "Ekipman üreticisi montaj talimatına tabi · platform kenarı zeminden 30 cm"),
 ]
+# Her zemin tipinin altında kalan taban kotu. Islak hacimde mevcut şabın üst
+# 22 mm'si traşlanır (eşik düşümü), ring platformu bitmiş Z1 üzerine oturur.
+KOT_ISLAK_TABAN = -0.075     # VARSAYIM — yerinde doğrulanacak
+ZEMIN_TABAN = {"Z1": KOT_MEVCUT_SAP, "Z2": KOT_MEVCUT_SAP, "Z3": KOT_MEVCUT_SAP,
+               "Z4": KOT_ISLAK_TABAN, "Z5": KOT_MEVCUT_SAP, "Z6": 0.000}
 ZEMIN_KALINLIK = {z[0]: sum(k[1] for k in z[2]) for z in ZEMIN_TIPLERI}
 
 # ── DUVAR TİPLERİ ──────────────────────────────────────────────────────────────
@@ -1095,7 +1182,7 @@ DUVAR_TIPLERI = [
    ("C2TE S1 yapıştırıcı", 5),
    ("Porselen seramik 300×600 mm, rektifiye", 9)],
   "EN 14891 · duş kabininde tavana kadar, WC'de h=1,60 m, üstü küf önleyici banyo boyası"),
- ("D6", "Ayna duvarı — arena güney çeperi", 212,
+ ("D6", "Ayna duvarı — arena güney çeperi (D1/D4 üzerine giydirme)", 24,
   [("D1 veya D4 üzerine 18 mm su kontraplağı taşıyıcı altlık", 18),
    ("6 mm güvenlik filmli ayna, yapıştırma + mekanik emniyet profili", 6)],
   "Ayna alt kotu +0,30 · üst kotu +2,30 · kırılmaya karşı arka yüz güvenlik filmi (EN 12600)"),

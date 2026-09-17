@@ -39,7 +39,9 @@ DOSYALAR = [
   "output/Gym_Elektrik_Proje_A3.pdf"),
  ("03_ELEKTRİK", "E_00_00_GF_00_1_01 (Elektrik Uygulama).dxf",
   "cad/GYM-ELK-Uygulama-R2010.dxf"),
- ("03_ELEKTRİK", "ADP.pdf", None),                                   # tek hat şeması
+ ("03_ELEKTRİK", "ADP TEK HAT ŞEMASI (8 pafta).pdf", "output/Gym_ADP_Tek_Hat_Semasi.pdf"),
+ ("03_ELEKTRİK", "E_00_00_GF_00_1_02 (Topraklama Planı).dxf",
+  "cad/paftalar/E-05_TOPRAKLAMA_VE_POTANSİYEL_DENGELEME_PLANI.dxf"),
  ("03_ELEKTRİK", "ADP Yükleme Cetveli R00.xlsx",
   "output/Gym_Pano_Yukleme_Cetveli.xlsx"),
  # ── 04 BÜTÇE VE HAKEDİŞ ──────────────────────────────────────────────────────
@@ -50,12 +52,14 @@ DOSYALAR = [
  ("04_BÜTÇE VE HAKEDİŞ", "Gym_Maltepe_HAKEDİŞ ŞABLONU.xlsx",
   "output/Gym_Hakedis_Sablonu.xlsx"),
  # ── 05 BİRLEŞİK SET ──────────────────────────────────────────────────────────
- ("05_BİRLEŞİK SET", "GYM MALTEPE — İNŞAAT UYGULAMA SETİ (29 pafta).pdf",
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — İNŞAAT UYGULAMA SETİ (33 pafta).pdf",
   "output/Gym_Insaat_Seti_A3.pdf"),
- ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (13 pafta).pdf",
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (14 pafta).pdf",
   "output/Gym_CAD_Paftalar.pdf"),
  ("05_BİRLEŞİK SET", "GYM-BIRLESIK-R2010.dxf", "cad/GYM-BIRLESIK-R2010.dxf"),
  ("05_BİRLEŞİK SET", "KATMAN-LISTESI.csv", "cad/KATMAN-LISTESI.csv"),
+ ("05_BİRLEŞİK SET", "TEKİL PAFTALAR (14 × DXF).zip", None),
+ ("05_BİRLEŞİK SET", "OTOMATİK DENETİM RAPORU.pdf", "output/Gym_Denetim_Raporu.pdf"),
  # ── 06 YATIRIM DOSYASI ───────────────────────────────────────────────────────
  ("06_YATIRIM DOSYASI", "GYM MALTEPE — DÖNÜŞÜM VE FİZİBİLİTE DOSYASI.pdf",
   "output/Gym_Donusum_Dosyasi_A3.pdf"),
@@ -85,12 +89,13 @@ aynı keşif özeti / metraj cetveli / hakediş ve pano yükleme cetveli formatl
 
 1 · KLASÖR YAPISI
 --------------------------------------------------------------------------------
-  01_MİMARİ              Mimari uygulama seti (13 pafta) · DXF · mahal listesi · rapor
+  01_MİMARİ              Mimari uygulama seti (14 pafta) · DXF · mahal listesi · rapor
   02_MEKANİK             Mekanik tesisat projesi (7 pafta) · DXF
   03_ELEKTRİK            Elektrik tesisat projesi (7 pafta) · DXF · ADP tek hat şeması
                          · ADP yükleme cetveli (referans formatında)
   04_BÜTÇE VE HAKEDİŞ    Keşif özeti + metraj cetvelleri · bütçe takibi · hakediş şablonu
-  05_BİRLEŞİK SET        29 paftalık tek PDF · birleşik DXF · katman listesi
+  05_BİRLEŞİK SET        33 paftalık tek PDF · birleşik DXF · 14 tekil pafta DXF ·
+                         katman listesi · otomatik denetim raporu
   06_YATIRIM DOSYASI     Fizibilite dosyası · sunum · 3B model
 
 2 · DOSYA ADI KODLAMASI
@@ -158,12 +163,17 @@ def build(cikti="output/Gym_Proje_Paketi.zip"):
     # ── türetilen dosyalar
     _pdf_sayfa(OUT/"Gym_Mimari_Proje_A3.pdf", [8],
                PKT/"__mahal.pdf")
-    _pdf_sayfa(OUT/"Gym_Elektrik_Proje_A3.pdf", [4, 6],
-               PKT/"__adp.pdf")
     _pdf_sayfa(OUT/"Gym_Mimari_Proje_A3.pdf", [0],
                PKT/"__rapor.pdf")
+    # tekil pafta DXF'leri ayrı bir zip olarak pakete girer
+    _tek = ROOT/"cad"/"paftalar"
+    _tekzip = PKT/"__tekil.zip"
+    if _tek.exists():
+        with zipfile.ZipFile(_tekzip, "w", zipfile.ZIP_DEFLATED) as _z:
+            for f in sorted(_tek.glob("*.dxf")):
+                _z.write(f, f"PAFTALAR/{f.name}")
     tureti = {"MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf": PKT/"__mahal.pdf",
-              "ADP.pdf": PKT/"__adp.pdf",
+              "TEKİL PAFTALAR (14 × DXF).zip": _tekzip,
               "PROJE RAPORU.pdf": PKT/"__rapor.pdf"}
     n = 0
     for klasor, ad, kaynak in DOSYALAR:

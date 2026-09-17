@@ -8,11 +8,12 @@ from reportlab.lib.colors import HexColor
 from shapely.geometry import LineString, Point, box
 from shapely.ops import unary_union
 import proj as P, helpers as h, draw as D, draw_mep as MP, draw_mim as M
+import draw_duvar as DD
 
 W, HH = 420*mm, 297*mm
 TOP, BOT, L, R = HH-24.6*mm, 14*mm, 12*mm, W-12*mm
 CW = R-L
-N = 13
+N = 14
 DISIPLIN = "MİMARİ UYGULAMA PROJESİ"
 
 PAFTA_ADI = {
@@ -29,6 +30,7 @@ PAFTA_ADI = {
 11:("A-11","İmalat detayları I — zemin ve kot geçişi"),
 12:("A-12","İmalat detayları II — ıslak hacim, tavan, ayna"),
 13:("A-13","Yangın ve tahliye planı"),
+14:("A-14","Duvar tipleri — yatay kesit 1/10"),
 }
 
 def sayfa(c, no, baslik, ust=None):
@@ -161,7 +163,7 @@ def s3(c):
     pw = CW*0.615
     v = plan_altlik(c, L, BOT+8*mm, pw, TOP-BOT-10*mm)
     D.zeminler(v, alpha=0.35)
-    D.ic_bolme(v, col=HexColor("#C8322B"))
+    DD.plan_bolme(v, dikme=True)          # gerçek C50 dikme @400 mm
     D.cephe(v); D.kapilar(v)
     D.mobilya(v, etiketli=True)
     # kapı kodları
@@ -960,11 +962,64 @@ def s13(c):
       "altına düşmeyecek; ekipman ve mobilya bu koridora taşırılmayacaktır.",
       fs=6.3, acc=h.GREEN)
 
+# ══ 14 · DUVAR TİPLERİ — YATAY KESİT 1/10 ═════════════════════════════════════
+def s14(c):
+    sayfa(c, 14, "Duvar tipleri — yatay kesit 1/10",
+          "Gerçek profil geometrisi · C50×50×0,6 dikme @400 mm · levha katmanları · taşyünü dolgu")
+    w1 = CW*0.49; w2 = CW-w1-8*mm
+    y = TOP-10*mm
+    for i, tip in enumerate(("D2", "D3")):
+        y, tot = DD.yatay_kesit(c, L, y, w1, tip, olcek=0.20, adet=2)
+        y -= 14*mm
+    y2 = TOP-10*mm
+    for tip in ("D4", "D6"):
+        y2, tot = DD.yatay_kesit(c, L+w1+8*mm, y2, w2, tip, olcek=0.20, adet=2)
+        y2 -= 14*mm
+    # karkas metrajı ve kurallar
+    yy = min(y, y2)-4*mm
+    h.txt(c, L, yy, h.TR_UP("Karkas metrajı — geometriden türetilmiştir"), h.FB, 8.0, h.NAVY)
+    rows = []
+    import math as _m
+    for a, b, tip, t in DD.BOLME:
+        rows.append([tip, f"({a[0]:.2f}, {a[1]:.2f}) → ({b[0]:.2f}, {b[1]:.2f})".replace(".", ","),
+                     f"{_m.dist(a, b):.2f}".replace(".", ","),
+                     str(len(DD.dikme_noktalari(a, b))),
+                     f"{_m.dist(a, b)*P.KOT_YAPISAL_TAVAN:.2f}".replace(".", ",")])
+    rows.append(["", h.TR_UP("TOPLAM"), f"{DD.BOLME_UZUNLUK:.2f}".replace(".", ","),
+                 str(DD.DIKME_ADEDI),
+                 f"{DD.BOLME_UZUNLUK*P.KOT_YAPISAL_TAVAN:.2f}".replace(".", ",")])
+    yy = h.tablo(c, L, yy-5*mm, [("Tip",0.08),("Eksen (m)",0.40),("Uzunluk (m)",0.16),
+                                 ("C50 dikme",0.16),("Alan (m²)",0.20)], rows, w1,
+                 satir_h=5.2*mm, bas_h=6.2*mm, fs=6.0, hfs=6.0,
+                 hizala=["c","l","r","c","r"])
+    x2 = L+w1+8*mm
+    h.txt(c, x2, min(y, y2)-2*mm, h.TR_UP("İmalat kuralları"), h.FB, 8.0, h.NAVY)
+    yy2 = min(y, y2)-8*mm
+    for n in [
+      "Taban ve tavan kanalı U50×40×0,6; taban kanalı altına butil ses bandı serilir, "
+      "dübel aralığı en fazla 600 mm.",
+      "C50×50×0,6 dikmeler @400 mm; dikme boyu, kat yüksekliğinden 10 mm kısa kesilir "
+      "(yapısal hareket payı). Dikme kanalın içine oturtulur, kanala vidalanmaz.",
+      "Kapı kenarlarında ve 3,00 m'den uzun duvarlarda iki C profil sırt sırtta kutu profil "
+      "olarak birleştirilir; kapı lentosu U profilden teşkil edilir.",
+      "Alçıpan derzleri iki yüzde şaşırtmalı; ikinci kat, ilk kata göre 600 mm kaydırılır. "
+      "Vida aralığı kenarda 200 mm, ortada 300 mm.",
+      "Ağır asma yük (ayna, dolap, TV) için karkas içine 18 mm su kontraplağı takviye gömülür.",
+      "Taşyünü dolgu 40 mm / 50 kg/m³, dikmeler arasına sıkıştırılarak yerleştirilir; "
+      "boşluk bırakılmaz.",
+      "Islak hacim yüzünde 12,5 mm H2 (yeşil) alçıpan kullanılır; alt kenarı bitmiş zeminden "
+      "10 mm yukarıda bırakılır ve su yalıtımı levha üzerine uygulanır.",
+      "Tüm bölmeler asma tavan üstünden geçerek yapısal döşemeye (+3,20) kadar yükselir.",
+    ]:
+        for ln in h.wrap(c, "— "+n, h.F, 6.2, w2):
+            h.txt(c, x2, yy2, ln, h.F, 6.2, h.INK); yy2 -= 3.4*mm
+        yy2 -= 1.4*mm
+
 # ══ BUILD ══════════════════════════════════════════════════════════════════════
 def build(path="output/Gym_Mimari_Proje_A3.pdf"):
     c = canvas.Canvas(path, pagesize=(W, HH))
     c.setTitle(f"Maltepe / İdealtepe — Mimari Uygulama Projesi ({P.REV})")
-    for fn in (s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13):
+    for fn in (s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14):
         fn(c); c.showPage()
     c.save(); print("→", path)
 

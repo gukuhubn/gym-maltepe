@@ -16,6 +16,16 @@ def ML(pts): return [M(p) for p in pts]
 
 # ── KATMAN STANDARDI ──────────────────────────────────────────────────────────
 # (ad, ACI renk, çizgi tipi, kalem kalınlığı 1/100 mm, açıklama)
+# ── YAZI YÜKSEKLİĞİ STANDARDI (ISO 3098 / TS 88) ─────────────────────────────
+# ad: (plot yüksekliği mm, ana çizim ölçeği) — model uzayı yüksekliği = plot × ölçek
+YAZI_YUKSEKLIK = {
+ "olcu":      (2.5,  50),   # ölçü yazısı, yoğun anotasyon
+ "anotasyon": (2.5,  50),   # kanal ölçüsü, boru çapı, debi, kot
+ "etiket":    (3.5,  50),   # ekipman etiketi, mahal adı, linye kodu
+ "baslik":    (5.0,  50),   # pafta içi alt başlık, kesit işareti
+ "pafta":     (7.0,  50),   # pafta başlığı
+}
+
 KATMANLAR = [
  ("A-DUVAR-MEVCUT",  8, "Continuous", 35, "Mimari — mevcut duvar (korunuyor)"),
  ("A-DUVAR-YENI",    1, "Continuous", 35, "Mimari — yeni alçıpan bölme"),
@@ -23,13 +33,13 @@ KATMANLAR = [
  ("A-KAPI",          8, "Continuous", 18, "Mimari — kapı ve açılım"),
  ("A-EKIPMAN",       9, "Continuous", 18, "Mimari — spor ekipmanı (işverence temin)"),
  ("A-MOBILYA",       9, "Continuous", 18, "Mimari — sabit mobilya"),
- ("A-BOLGE",       254, "Continuous",  9, "Mimari — zemin bölge taraması"),
+ ("A-BOLGE",       254, "Continuous", 13, "Mimari — zemin bölge taraması"),
  ("A-YAZI",          8, "Continuous", 13, "Mimari — mahal adı ve alan"),
  ("A-MAHAL",         6, "Continuous", 18, "Mimari — mahal numarası ve kapı kodu balonu"),
  ("A-KESIT-HAT",     1, "DASHDOT",    35, "Mimari — kesit ve görünüş hattı"),
  ("A-ZEMIN-SINIR",  30, "Continuous", 25, "Mimari — zemin kaplama tipi sınırı"),
  ("A-ZEMIN-YAZI",   30, "Continuous", 13, "Mimari — zemin kaplama tipi ve kotu"),
- ("A-ZEMIN-DERZ",  253, "Continuous",  9, "Mimari — kauçuk karo derz ızgarası"),
+ ("A-ZEMIN-DERZ",  253, "Continuous", 13, "Mimari — kauçuk karo derz ızgarası"),
  ("A-TAVAN-SINIR", 150, "Continuous", 25, "Mimari — asma tavan tipi sınırı"),
  ("A-TAVAN-YAZI",  150, "Continuous", 13, "Mimari — asma tavan tipi ve kotu"),
  ("A-TAVAN-KAPAK", 150, "Continuous", 18, "Mimari — revizyon kapağı 300×300"),
@@ -61,6 +71,17 @@ KATMANLAR = [
  ("E-ZAYIF-VERI",    6, "Continuous", 25, "Elektrik — veri prizi ve rack"),
  ("E-ZAYIF-YANGIN",  1, "Continuous", 25, "Elektrik — dedektör, buton, siren"),
  ("E-ZAYIF-LINYE",   6, "DASHED",     13, "Elektrik — yangın algılama çevrimi"),
+ ("E-AYD-LINYE",     2, "Continuous", 25, "Elektrik — aydınlatma linyesi (ortogonal)"),
+ ("E-AYD-SORTI",     2, "DASHED",     18, "Elektrik — anahtar kumanda sortisi"),
+ ("E-KUVVET-LINYE",  5, "Continuous", 25, "Elektrik — priz ve kuvvet linyesi"),
+ ("E-KUVVET-KOLON",  5, "Continuous", 50, "Elektrik — kolon (ana besleme) hattı"),
+ ("E-KUVVET-BUAT",   5, "Continuous", 18, "Elektrik — buat ve geçiş kutusu"),
+ ("E-ZAYIF-TAVA",    6, "Continuous", 18, "Elektrik — zayıf akım kablo kanalı"),
+ ("E-TOPRAK-ELEKTROT", 3, "Continuous", 50, "Elektrik — çubuk elektrot"),
+ ("E-TOPRAK-SERIT",  3, "Continuous", 50, "Elektrik — elektrot bağlantı şeridi"),
+ ("E-TOPRAK-ILETKEN",3, "DASHDOT",    35, "Elektrik — topraklama iletkeni"),
+ ("E-TOPRAK-BARA",   3, "Continuous", 50, "Elektrik — ATB / EPDB barası"),
+ ("E-TOPRAK-YAZI",   3, "Continuous", 13, "Elektrik — topraklama etiketi"),
  ("E-PANO",          7, "Continuous", 50, "Elektrik — ana dağıtım panosu"),
  ("E-YAZI",          7, "Continuous", 13, "Elektrik — etiket ve not"),
  ("G-OLCU",          7, "Continuous", 13, "Genel — ölçülendirme"),
