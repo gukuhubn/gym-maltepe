@@ -34,8 +34,8 @@ KATMANLAR = [
  ("A-EKIPMAN",       9, "Continuous", 18, "Mimari — spor ekipmanı (işverence temin)"),
  ("A-MOBILYA",       9, "Continuous", 18, "Mimari — sabit mobilya"),
  ("A-BOLGE",       254, "Continuous", 13, "Mimari — zemin bölge taraması"),
- ("A-YAZI",          8, "Continuous", 13, "Mimari — mahal adı ve alan"),
- ("A-MAHAL",         6, "Continuous", 18, "Mimari — mahal numarası ve kapı kodu balonu"),
+ ("A-YAZI",          7, "Continuous", 13, "Mimari — mahal adı ve alan"),
+ ("A-MAHAL",       250, "Continuous", 18, "Mimari — mahal numarası ve kapı kodu balonu"),
  ("A-KESIT-HAT",     1, "DASHDOT",    35, "Mimari — kesit ve görünüş hattı"),
  ("A-ZEMIN-SINIR",  30, "Continuous", 25, "Mimari — zemin kaplama tipi sınırı"),
  ("A-ZEMIN-YAZI",   30, "Continuous", 13, "Mimari — zemin kaplama tipi ve kotu"),
@@ -82,11 +82,26 @@ KATMANLAR = [
  ("E-TOPRAK-ILETKEN",3, "DASHDOT",    35, "Elektrik — topraklama iletkeni"),
  ("E-TOPRAK-BARA",   3, "Continuous", 50, "Elektrik — ATB / EPDB barası"),
  ("E-TOPRAK-YAZI",   3, "Continuous", 13, "Elektrik — topraklama etiketi"),
+ ("E-TEKHAT-TEL",    7, "Continuous", 35, "Tek hat — iletken"),
+ ("E-TEKHAT-SEMBOL", 7, "Continuous", 35, "Tek hat — IEC 60617 sembolü"),
+ ("E-TEKHAT-BARA",   7, "Continuous", 70, "Tek hat — bara"),
+ ("E-TEKHAT-SINIR",  8, "DASHDOT",    35, "Tek hat — pano sınırı"),
+ ("E-TEKHAT-GRUP",   8, "Continuous", 25, "Tek hat — kaçak akım grubu parantezi"),
+ ("E-TEKHAT-TABLO",  7, "Continuous", 18, "Tek hat — veri matrisi"),
+ ("E-TEKHAT-YAZI",   7, "Continuous", 18, "Tek hat — etiket ve not"),
+ ("E-TEKHAT-YEDEK",  8, "DASHED",     25, "Tek hat — yedek / boş modül"),
  ("E-PANO",          7, "Continuous", 50, "Elektrik — ana dağıtım panosu"),
  ("E-YAZI",          7, "Continuous", 13, "Elektrik — etiket ve not"),
  ("G-OLCU",          7, "Continuous", 13, "Genel — ölçülendirme"),
  ("G-YAZI",          7, "Continuous", 18, "Genel — başlık ve açıklama"),
- ("G-ANTET",         7, "Continuous", 25, "Genel — antet ve pafta çerçevesi"),
+ ("G-ANTET",         7, "Continuous", 25, "Genel — antet ve revizyon tablosu"),
+ ("G-CERCEVE",       7, "Continuous", 70, "Genel — pafta çizim çerçevesi (ISO 5457)"),
+ ("G-PAFTA-ZON",     8, "Continuous", 13, "Genel — kenar ızgarası / bölge referansı"),
+ ("G-VIEWPORT",    251, "Continuous", 13, "Genel — görüntü penceresi (basılmaz)"),
+ ("G-AKS-HAT",       8, "DASHDOT",    18, "Genel — aks çizgisi"),
+ ("G-AKS-BALON",     8, "Continuous", 25, "Genel — aks balonu"),
+ ("G-OLCU-ZINCIR",   7, "Continuous", 13, "Genel — zincir ölçü"),
+ ("G-KESIT-ISARET",  1, "Continuous", 50, "Genel — kesit ve detay işareti"),
  ("G-KUZEY",         7, "Continuous", 25, "Genel — kuzey oku ve ölçek"),
 ]
 
@@ -101,16 +116,36 @@ def yeni_belge(aciklama):
         ly = doc.layers.add(ad, color=renk, linetype=lt)
         ly.dxf.lineweight = lw
         ly.description = ack
+        if ad in ("G-VIEWPORT",):
+            ly.dxf.plot = 0          # görüntü penceresi çerçevesi basılmaz
     # Türkçe karakter için gerçek TTF
     for st, font, h in (("GYM", "arial.ttf", 0), ("GYM-B", "arialbd.ttf", 0)):
         if st not in doc.styles:
             doc.styles.add(st, font=font)
-    ds = doc.dimstyles.add("GYM-75")
-    ds.dxf.dimscale = 75.0; ds.dxf.dimtxt = 2.5; ds.dxf.dimasz = 2.0
-    ds.dxf.dimexe = 1.25;   ds.dxf.dimexo = 2.0; ds.dxf.dimgap = 0.8
-    ds.dxf.dimtxsty = "GYM"; ds.dxf.dimclrt = 7; ds.dxf.dimdec = 0
-    ds.dxf.dimlunit = 2;    ds.dxf.dimtad = 1;  ds.dxf.dimblk = "ARCHTICK"
-    doc.header["$DIMSTYLE"] = "GYM-75"
+    # ── ÖLÇÜLENDİRME STİLLERİ — her çizim ölçeği için ayrı (ISO 129-1)
+    # dimscale = çizim ölçeği; böylece yazı kâğıtta her zaman 2,5 mm çıkar.
+    for olc in (5, 10, 20, 25, 50, 75, 100):
+        ad = f"GYM-{olc}"
+        if ad in doc.dimstyles: continue
+        ds = doc.dimstyles.add(ad)
+        ds.dxf.dimscale = float(olc)     # ölçek katsayısı
+        ds.dxf.dimtxt   = 2.5            # yazı yüksekliği (kâğıt mm) — ISO 3098
+        ds.dxf.dimasz   = 2.5            # ok/çentik boyu
+        ds.dxf.dimexe   = 1.25           # uzatma çizgisi taşması
+        ds.dxf.dimexo   = 1.5            # uzatma çizgisi boşluğu
+        ds.dxf.dimgap   = 0.9            # yazı ile ölçü çizgisi boşluğu
+        ds.dxf.dimdli   = 7.0            # zincir ölçü satır aralığı
+        ds.dxf.dimtxsty = "GYM"
+        ds.dxf.dimclrd  = 7; ds.dxf.dimclre = 7; ds.dxf.dimclrt = 7
+        ds.dxf.dimdec   = 0              # milimetre, ondalıksız
+        ds.dxf.dimlunit = 2              # ondalık
+        ds.dxf.dimzin   = 8              # sondaki sıfırları at
+        ds.dxf.dimtad   = 1              # yazı ölçü çizgisinin üstünde
+        ds.dxf.dimtih   = 0; ds.dxf.dimtoh = 0     # yazı ölçü çizgisine paralel
+        ds.dxf.dimblk   = "ARCHTICK"     # mimari çentik
+        ds.dxf.dimlwd   = 18; ds.dxf.dimlwe = 13
+    doc.header["$DIMSTYLE"] = "GYM-50"
+    doc.header["$LWDISPLAY"] = 1
     return doc
 
 # ── YAZI YARDIMCILARI ─────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 GYM MALTEPE / İDEALTEPE — PROJE VE BÜTÇE TESLİM PAKETİ
 MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU
-Rev F · 17 Eylül 2026
+Rev G · 17 Eylül 2026
 ================================================================================
 
 Bu paket, işverenin AQUA FLORYA / SALTBAE projesindeki teslim düzeni örnek

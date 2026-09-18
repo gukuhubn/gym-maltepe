@@ -1,12 +1,12 @@
 {
- "tarih": "2026-09-17 15:07",
+ "tarih": "2026-09-18 09:20",
  "genel": "UYGUN",
  "ajanlar": [
   {
    "ad": "mimari",
    "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 54,
+   "sure_ms": 55,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -318,7 +318,7 @@
    "ad": "elektrik",
    "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
    "durum": "UYGUN",
-   "sure_ms": 56,
+   "sure_ms": 65,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -398,12 +398,12 @@
    "ad": "standart",
    "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
    "durum": "UYGUN",
-   "sure_ms": 135,
+   "sure_ms": 138,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "katman",
-     "mesaj": "61 katman · A 18 · E 24 · G 4 · M 15",
+     "mesaj": "76 katman · A 18 · E 32 · G 11 · M 15",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -411,7 +411,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "katman",
-     "mesaj": "kullanılan kalem kalınlıkları: 0.13, 0.18, 0.25, 0.35, 0.50 mm",
+     "mesaj": "kullanılan kalem kalınlıkları: 0.13, 0.18, 0.25, 0.35, 0.50, 0.70 mm",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -419,7 +419,15 @@
     {
      "seviye": "BİLGİ",
      "kategori": "pafta",
-     "mesaj": "ELEKTRİK: 5 pafta — E-01, E-02, E-03, E-04, E-05",
+     "mesaj": "E-06 ADP TEK HAT ŞEMASI: ölçeksiz şema paftası — tümü kâğıt alanında, görüntü penceresi yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "ELEKTRİK: 6 pafta — E-01, E-02, E-03, E-04, E-05, E-06",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -443,7 +451,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "pafta",
-     "mesaj": "14 pafta ayrı DXF dosyası olarak üretiliyor",
+     "mesaj": "15 pafta ayrı DXF dosyası olarak üretiliyor",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -459,7 +467,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "antet",
-     "mesaj": "pafta boyutu A3 (420×297 mm)",
+     "mesaj": "pafta boyutu A1 (841×594 mm)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -478,7 +486,7 @@
    "ad": "koordinasyon",
    "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
    "durum": "UYGUN",
-   "sure_ms": 285,
+   "sure_ms": 323,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -526,7 +534,7 @@
    "ad": "teslim",
    "baslik": "Teslim paketi — dosya bütünlüğü ve sürüm denetimi",
    "durum": "UYGUN",
-   "sure_ms": 150,
+   "sure_ms": 152,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -579,7 +587,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Paftalar.pdf · 2.93 MB · 14 pafta — CAD pafta önizleme",
+     "mesaj": "Gym_CAD_Paftalar.pdf · 6.26 MB · 15 pafta — CAD pafta önizleme (A1)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -659,7 +667,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.47 MB · 20 dosya — DXF seti",
+     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.84 MB · 21 dosya — DXF seti",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -667,7 +675,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_Proje_Paketi.zip · 8.75 MB · 24 dosya — Teslim paketi",
+     "mesaj": "Gym_Proje_Paketi.zip · 23.51 MB · 39 dosya — TEK TESLİM DOSYASI — tüm set",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -683,7 +691,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dxf",
-     "mesaj": "DXF setinde 18 dosya (18 tekil pafta)",
+     "mesaj": "DXF setinde 19 dosya (19 tekil pafta)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -699,7 +707,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "sürüm",
-     "mesaj": "Rev F · 17 Eylül 2026",
+     "mesaj": "Rev G · 17 Eylül 2026",
      "dayanak": "",
      "konum": "",
      "oneri": ""

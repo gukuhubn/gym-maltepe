@@ -9,7 +9,7 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev F"
+REV        = "Rev G"
 TARIH      = "17 Eylül 2026"
 FIYAT_TARIH= ("Eylül 2026 · Aqua Florya / Saltbae kesin hakedişi (Mayıs 2025) "
               "birim fiyatları ×1,40 eskalasyonla")
@@ -567,7 +567,7 @@ TOPLAM_DU_MAX = round(ANA_DU_P + DU_MAX, 2)
 # ── kaçak akım koruma grupları ────────────────────────────────────────────────
 KACAK_AKIM = [
  ("RCD-1","4×40 A / 30 mA, A tipi","Aydınlatma grubu — L1 · L2 · L3 · L4 · L6"),
- ("RCD-2","4×40 A / 30 mA, A tipi","Priz grubu — P1 · P2 · P3 · P4 · P6"),
+ ("RCD-2","4×40 A / 30 mA, A tipi","Priz grubu ve zayıf akım — P1 · P2 · P3 · P4 · P6 · Z1"),
  ("RCD-3","2×40 A / 30 mA, A tipi","Islak hacim — L5 · P5 (ayrı, TS HD 60364-7-701)"),
  ("RCD-4","2×40 A / 30 mA, A tipi","Su ısıtıcıları — W1 · W2 (her biri ayrı bloklu)"),
  ("RCD-5","4×40 A / 30 mA, A tipi","Klima ve havalandırma — K1–K4 · V1 · V2"),

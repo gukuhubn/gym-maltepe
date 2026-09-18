@@ -17,7 +17,7 @@ BEKLENEN = [
  ("Gym_Elektrik_Proje_A3.pdf",     60,  8, "Elektrik uygulama seti"),
  ("Gym_ADP_Tek_Hat_Semasi.pdf",    40,  8, "ADP tek hat şeması"),
  ("Gym_Insaat_Seti_A3.pdf",       150, 33, "İnşaat seti — plan/kesit/görünüş/detay"),
- ("Gym_CAD_Paftalar.pdf",         150, 14, "CAD pafta önizleme"),
+ ("Gym_CAD_Paftalar.pdf",         150, 15, "CAD pafta önizleme (A1)"),
  ("Gym_Sunum_16x9.pdf",            60, 12, "Yönetim sunumu"),
  ("Gym_Denetim_Raporu.pdf",        20,  7, "Ajan denetim raporu"),
  ("Gym_Maliyet_BoQ.xlsx",          15,  4, "Ana BoQ — canlı formüllü"),
@@ -27,8 +27,8 @@ BEKLENEN = [
  ("Gym_Mekanik_BoQ.xlsx",           8,  4, "Mekanik BoQ"),
  ("Gym_Elektrik_BoQ.xlsx",          8,  4, "Elektrik BoQ"),
  ("Gym_Pano_Yukleme_Cetveli.xlsx",  8,  2, "ADP yükleme cetveli"),
- ("Gym_CAD_Seti_DXF.zip",         200, 18, "DXF seti"),
- ("Gym_Proje_Paketi.zip",         800, 24, "Teslim paketi"),
+ ("Gym_CAD_Seti_DXF.zip",         200, 19, "DXF seti"),
+ ("Gym_Proje_Paketi.zip",        4000, 39, "TEK TESLİM DOSYASI — tüm set"),
  ("Gym_Model.html",               100,  0, "3B model"),
 ]
 

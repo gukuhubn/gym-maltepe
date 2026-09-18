@@ -40,6 +40,8 @@ DOSYALAR = [
  ("03_ELEKTRİK", "E_00_00_GF_00_1_01 (Elektrik Uygulama).dxf",
   "cad/GYM-ELK-Uygulama-R2010.dxf"),
  ("03_ELEKTRİK", "ADP TEK HAT ŞEMASI (8 pafta).pdf", "output/Gym_ADP_Tek_Hat_Semasi.pdf"),
+ ("03_ELEKTRİK", "E_00_00_GF_00_1_03 (ADP Tek Hat Şeması).dxf",
+  "cad/paftalar/E-06_ADP_TEK_HAT_ŞEMASI.dxf"),
  ("03_ELEKTRİK", "E_00_00_GF_00_1_02 (Topraklama Planı).dxf",
   "cad/paftalar/E-05_TOPRAKLAMA_VE_POTANSİYEL_DENGELEME_PLANI.dxf"),
  ("03_ELEKTRİK", "ADP Yükleme Cetveli R00.xlsx",
@@ -54,11 +56,11 @@ DOSYALAR = [
  # ── 05 BİRLEŞİK SET ──────────────────────────────────────────────────────────
  ("05_BİRLEŞİK SET", "GYM MALTEPE — İNŞAAT UYGULAMA SETİ (33 pafta).pdf",
   "output/Gym_Insaat_Seti_A3.pdf"),
- ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (14 pafta).pdf",
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (15 pafta · A1).pdf",
   "output/Gym_CAD_Paftalar.pdf"),
  ("05_BİRLEŞİK SET", "GYM-BIRLESIK-R2010.dxf", "cad/GYM-BIRLESIK-R2010.dxf"),
  ("05_BİRLEŞİK SET", "KATMAN-LISTESI.csv", "cad/KATMAN-LISTESI.csv"),
- ("05_BİRLEŞİK SET", "TEKİL PAFTALAR (14 × DXF).zip", None),
+ ("05_BİRLEŞİK SET", "TEKİL PAFTALAR (15 × DXF).zip", None),
  ("05_BİRLEŞİK SET", "OTOMATİK DENETİM RAPORU.pdf", "output/Gym_Denetim_Raporu.pdf"),
  # ── 06 YATIRIM DOSYASI ───────────────────────────────────────────────────────
  ("06_YATIRIM DOSYASI", "GYM MALTEPE — DÖNÜŞÜM VE FİZİBİLİTE DOSYASI.pdf",
@@ -66,6 +68,13 @@ DOSYALAR = [
  ("06_YATIRIM DOSYASI", "GYM MALTEPE — SUNUM (16x9).pdf", "output/Gym_Sunum_16x9.pdf"),
  ("06_YATIRIM DOSYASI", "GYM MALTEPE — 3B MODEL VE RENDER GALERİSİ.html",
   "output/Gym_Model.html"),
+ ("06_YATIRIM DOSYASI", "GYM MALTEPE — ANA BoQ (111 poz).xlsx",
+  "output/Gym_Maliyet_BoQ.xlsx"),
+ ("02_MEKANİK", "Gym_Mekanik_BoQ.xlsx", "output/Gym_Mekanik_BoQ.xlsx"),
+ ("03_ELEKTRİK", "Gym_Elektrik_BoQ.xlsx", "output/Gym_Elektrik_BoQ.xlsx"),
+ ("05_BİRLEŞİK SET", "OKUBENI — CAD SETİ.txt", "cad/OKUBENI-CAD.txt"),
+ ("00_OKUMA", "PROJE NOTLARI — VARSAYIMLAR VE DOĞRULANACAKLAR.md", "BUILD_NOTES.md"),
+ ("00_OKUMA", "DEPO REHBERİ.md", "README.md"),
 ]
 
 def _pdf_sayfa(kaynak, sayfalar, hedef):
@@ -173,7 +182,7 @@ def build(cikti="output/Gym_Proje_Paketi.zip"):
             for f in sorted(_tek.glob("*.dxf")):
                 _z.write(f, f"PAFTALAR/{f.name}")
     tureti = {"MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf": PKT/"__mahal.pdf",
-              "TEKİL PAFTALAR (14 × DXF).zip": _tekzip,
+              "TEKİL PAFTALAR (15 × DXF).zip": _tekzip,
               "PROJE RAPORU.pdf": PKT/"__rapor.pdf"}
     n = 0
     for klasor, ad, kaynak in DOSYALAR:
@@ -185,6 +194,12 @@ def build(cikti="output/Gym_Proje_Paketi.zip"):
     for t in tureti.values():
         if Path(t).exists(): Path(t).unlink()
     (PKT/"OKUBENI.txt").write_text(OKUBENI, encoding="utf-8")
+    # renderlar
+    rk = PKT/"06_YATIRIM DOSYASI"/"RENDER"
+    rn = sorted((OUT/"render").glob("*.png")) if (OUT/"render").exists() else []
+    if rn:
+        rk.mkdir(parents=True, exist_ok=True)
+        for f in rn: shutil.copy2(f, rk/f.name)
     with zipfile.ZipFile(cikti, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(PKT.rglob("*")):
             if f.is_file():

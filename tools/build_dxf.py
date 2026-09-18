@@ -7,7 +7,7 @@
   GYM-ELK-Uygulama-R2010.dxf    elektrik — 4 pafta
   GYM-BIRLESIK-R2010.dxf        tümü — 13 pafta
 
-Birim: milimetre ($INSUNITS=4) · Paftalar: A3 (420×297) · Ölçek: 1/75
+Birim: milimetre ($INSUNITS=4) · Paftalar: A1 (841×594, ISO 5457) · Ölçek: 1/50
 """
 import sys, os, math, zipfile
 sys.path.insert(0, os.path.dirname(__file__))
@@ -58,12 +58,13 @@ def mimari(msp, bolge_tarama=True):
     # ekipman ve mobilya
     for kod, ad, g in P.ekipman_poligonlari():
         sekil(msp, g, "A-EKIPMAN")
-        yazi(msp, M((g.centroid.x, g.centroid.y)), kod, 170, "A-EKIPMAN", stil="GYM-B")
+        b_ = g.bounds
+        yazi(msp, ((b_[0]+b_[2])/2*K, b_[3]*K-120), kod, 150, "A-EKIPMAN", stil="GYM-B")
     for ad, g, tip in P.MOBILYA: sekil(msp, g, "A-MOBILYA")
     blok(msp, "G_KUZEY", (12.55, 12.10), "G-KUZEY")
 
-def olculer(msp):
-    ds = "GYM-75"
+def olculer(msp, olcek=50):
+    ds = f"GYM-{olcek}"
     ol = [((3.24, 0.0), (8.92, 0.0), -1.1, 0),      # güney cephe
           ((0.0, 6.84), (0.58, 1.25), -1.1, 90),    # batı cephe
           ((11.56, 1.10), (11.01, 4.96), 1.1, 90),  # doğu — kadın blok
@@ -75,6 +76,89 @@ def olculer(msp):
                                p1=M(p1), p2=M(p2), angle=aci, dimstyle=ds,
                                dxfattribs={"layer": "G-OLCU"})
         d.render()
+    # aks sistemi zincir ölçüleri (yapının kendi doğrultusunda)
+    import aks as AKS
+    AKS.olculendir(msp, olcek)
+
+
+def aks_ciz(msp, olcek=50):
+    import aks as AKS
+    return AKS.ciz(msp, olcek)
+
+
+# ── kesit / detay işaretleri ─────────────────────────────────────────────────
+def kesit_isareti(msp, a, b, ad, bakis=+1, pafta_ref="", olcek=50,
+                  uc_boy=1.30, balon_r=0.44):
+    """Profesyonel kesit işareti: hat boyunca yalnız UÇLARDA ağır çizgi,
+    bakış yönünde ok ve pafta referanslı balon. Kesit hattı plan boyunca
+    kesintisiz çizilmez."""
+    import dxf_lib as X
+    ax, ay = a; bx, by = b
+    L = math.dist(a, b)
+    ux, uy = (bx-ax)/L, (by-ay)/L
+    nx, ny = -uy*bakis, ux*bakis           # bakış yönü normali
+    for ucp, yon in (((ax, ay), +1), ((bx, by), -1)):
+        p2 = (ucp[0]+ux*uc_boy*yon, ucp[1]+uy*uc_boy*yon)
+        X.cizgi(msp, ucp, p2, "A-KESIT-HAT")
+        # bakış oku
+        ok0 = (p2[0], p2[1])
+        ok1 = (p2[0]+nx*0.62, p2[1]+ny*0.62)
+        X.cizgi(msp, ok0, ok1, "A-KESIT-HAT")
+        for s_ in (+1, -1):
+            X.cizgi(msp, ok1,
+                    (ok1[0]-nx*0.20 + s_*ux*0.12, ok1[1]-ny*0.20 + s_*uy*0.12),
+                    "A-KESIT-HAT")
+        # balon: üstte kesit adı, altta pafta referansı
+        cx = ucp[0]-ux*balon_r*yon*-1
+        cx, cy = ucp[0]-ux*balon_r*yon, ucp[1]-uy*balon_r*yon
+        msp.add_circle((cx*K, cy*K), balon_r*K,
+                       dxfattribs={"layer": "A-KESIT-HAT"})
+        if pafta_ref:
+            X.cizgi(msp, (cx-balon_r, cy), (cx+balon_r, cy), "A-KESIT-HAT")
+            X.yazi(msp, (cx*K, cy*K+balon_r*K*0.45), ad.split("-")[0],
+                   balon_r*K*0.72, "A-KESIT-HAT", stil="GYM-B")
+            X.yazi(msp, (cx*K, cy*K-balon_r*K*0.45), pafta_ref,
+                   balon_r*K*0.52, "A-KESIT-HAT")
+        else:
+            X.yazi(msp, (cx*K, cy*K), ad.split("-")[0], balon_r*K*0.82,
+                   "A-KESIT-HAT", stil="GYM-B")
+
+
+# ── balon çakışma önleyici ───────────────────────────────────────────────────
+_BALON_KONUM = []
+
+def balon_sifirla():
+    _BALON_KONUM.clear()
+
+def _bos_balon(x, y, asgari=0.82):
+    for qx, qy in _BALON_KONUM:
+        if math.hypot(x-qx, y-qy) < asgari: return False
+    return True
+
+
+def _halkalar(baslangic=0.0, adim=0.55, halka=5, n=12):
+    """Merkezden dışa doğru genişleyen aday konum halkaları."""
+    yield (0.0, 0.0)
+    r = baslangic
+    for _ in range(halka):
+        r += adim
+        for i in range(n):
+            a = 2*math.pi*i/n
+            yield (math.cos(a)*r, math.sin(a)*r)
+
+
+def balon_yerlestir(p, tercih=None, sinirla=None):
+    """Çakışmayan balon konumu. `sinirla` verilirse (shapely poligon) balon
+    yalnız o poligonun içinde/yakınında aranır."""
+    adaylar = tercih if tercih else _halkalar()
+    for dx, dy in adaylar:
+        q = (p[0]+dx, p[1]+dy)
+        if sinirla is not None and not sinirla.contains(Point(*q)):
+            continue
+        if _bos_balon(*q):
+            _BALON_KONUM.append(q); return q
+    q = (p[0], p[1]+0.9)
+    _BALON_KONUM.append(q); return q
 
 # ══════════════════════ MEKANİK ════════════════════════════════════════════════
 def mekanik(msp):
@@ -95,23 +179,54 @@ def _balon(msp, p, metin, r_mm=340, katman="A-MAHAL"):
     msp.add_circle(M(p), r_mm, dxfattribs={"layer": katman})
     yazi(msp, M(p), metin, r_mm*0.80, katman, stil="GYM-B")
 
-def mimari_mahal(msp):
-    """Mahal numaraları, kapı kodları, duvar tipi etiketleri, kesit hatları."""
+def mimari_mahal(msp, olcek=50, pafta_ref="A-06"):
+    """Mahal numaraları, kapı kodları, duvar tipi etiketleri, kesit işaretleri.
+
+    Balonlar çakışma önleyiciden geçirilir; kesit hattı plan boyunca
+    kesintisiz çizilmez, yalnız uçlarda işaretlenir."""
+    balon_sifirla()
+    # önce kesit işaretleri (sabit konumlu) — balon rezervasyonu yapar
+    for ad, (a, b, _ack) in P.KESIT_HATLARI.items():
+        kesit_isareti(msp, a, b, ad, P.KESIT_BAKIS.get(ad, 1), pafta_ref, olcek)
+        for uc in (a, b): _BALON_KONUM.append(uc)
+    # mahal adı / alan yazıları önce rezerve edilir ki balon üstlerine binmesin
+    for z in P.ZONES:
+        _BALON_KONUM.append(tuple(z[5]))
+        _BALON_KONUM.append((z[5][0], z[5][1]-0.30))
+    for ad, d in P.ISLAK.items():
+        for n in ("soyunma", "dus", "wc"):
+            q = d[n].representative_point()
+            _BALON_KONUM.append((q.x, q.y)); _BALON_KONUM.append((q.x, q.y-0.23))
+    for kod, ad_, g in P.ekipman_poligonlari():
+        _BALON_KONUM.append((g.centroid.x, g.centroid.y))
+    # mahal balonları — kendi mahalinin içinde ve yazıların altında kalır
+    _mahal_geom = {mno: g for ad, mno, g in P._MAHAL_GEOM}
     for no, pt in P.MAHAL_NOKTA.items():
-        _balon(msp, (pt[0], pt[1]+0.95), no)
+        g = _mahal_geom.get(no)
+        sinir = g.buffer(-0.38) if g is not None and g.buffer(-0.38).area > 0.05 else None
+        q = balon_yerlestir((pt[0], pt[1]-0.72), _halkalar(0.0, 0.40, 6),
+                            sinirla=sinir)
+        _balon(msp, q, no, 320)
+        if math.dist(q, (pt[0], pt[1]-0.72)) > 0.45:
+            cizgi(msp, pt, q, "A-MAHAL")
+    # kapı balonları — kapı kanadının dışına, çakışmadan
     KP = {0: "K01", 1: "K03", 2: "K04", 3: "K02"}
     for i, ((x, y), gen, aci, lbl) in enumerate(P.KAPILAR):
-        _balon(msp, (x-0.45, y+0.45), KP[i], 300)
+        q = balon_yerlestir((x, y), _halkalar(0.30, 0.42, 5))
+        _balon(msp, q, KP[i], 290)
+        cizgi(msp, (x, y), q, "A-MAHAL")
     for kod, pt in (("K05",(10.05,8.35)), ("K06",(9.62,0.92)), ("K07",(8.62,7.45)),
                     ("K08",(11.05,1.78)), ("K09",(2.55,7.05))):
-        _balon(msp, pt, kod, 300)
+        q = balon_yerlestir(pt, _halkalar(0.30, 0.42, 5))
+        _balon(msp, q, kod, 290)
+        cizgi(msp, pt, q, "A-MAHAL")
+    # duvar tipi etiketleri — kutulu, çakışma kontrollü
     for tip, pt in (("D2",(8.35,6.30)), ("D3",(9.72,6.30)), ("D4",(7.35,0.42)),
                     ("D1",(5.90,11.30)), ("D6",(5.05,0.42)), ("D5",(10.30,2.30))):
-        yazi(msp, M(pt), tip, 210, "A-MAHAL", stil="GYM-B")
-    for ad, (a, b, _ack) in P.KESIT_HATLARI.items():
-        cizgi(msp, a, b, "A-KESIT-HAT")
-        for uc in (a, b):
-            _balon(msp, uc, ad.split("-")[0], 380, "A-KESIT-HAT")
+        q = balon_yerlestir(pt, _halkalar(0.0, 0.42, 4))
+        poli(msp, [(q[0]-0.24, q[1]-0.15), (q[0]+0.24, q[1]-0.15),
+                   (q[0]+0.24, q[1]+0.15), (q[0]-0.24, q[1]+0.15)], "A-MAHAL")
+        yazi(msp, M(q), tip, 200, "A-MAHAL", stil="GYM-B")
 
 def mimari_zemin(msp):
     """Zemin kaplama planı: tip sınırı, kod, kot, kauçuk karo derzi, eğim."""
@@ -444,6 +559,7 @@ PAFTALAR = {
  "E-04": ("ELEKTRİK GENEL YERLEŞİM", "ELEKTRİK", ["M-"]),
  "E-05": ("TOPRAKLAMA VE POTANSİYEL DENGELEME PLANI", "ELEKTRİK",
           ["M-", "E-AYD-", "E-KUVVET-", "E-ZAYIF-"]),
+ "E-06": ("ADP TEK HAT ŞEMASI", "ELEKTRİK", []),
  "A-01": ("MİMARİ ALTLIK", "MİMARİ",
           ["M-", "E-", "A-ZEMIN-", "A-TAVAN-", "A-YANGIN-"]),
  "A-02": ("MİMARİ UYGULAMA PLANI", "MİMARİ",
@@ -459,52 +575,105 @@ PAFTALAR = {
            "E-PANO", "E-YAZI", "A-ZEMIN-", "A-TAVAN-", "A-KESIT-HAT", "A-EKIPMAN"]),
 }
 
+# Pafta üst başlığı (supplementary title) ve sıradaki pafta (ISO 7200)
+PAFTA_USTBASLIK = {
+ "A-01": "Mevcut durum · ölçü ve aks sistemi",
+ "A-02": "Bölme duvarlar · kapılar · mahal numaraları",
+ "A-03": "Kaplama tipleri · kot · derz yönü",
+ "A-04": "Asma tavan tipleri · kot · MEP koordinasyonu",
+ "A-05": "Kaçış yolları · çıkışlar · söndürücü",
+ "M-01": "Kanal güzergâhı · menfez debileri",
+ "M-02": "Split küme · bakır hat · drenaj",
+ "M-03": "Temiz su · sıcak su · pis su",
+ "M-04": "Mekanik disiplin genel yerleşimi",
+ "E-01": "Armatür · anahtar · aydınlatma linyeleri",
+ "E-02": "Priz · kuvvet linyeleri · cihaz beslemeleri",
+ "E-03": "Veri · CCTV · ses · yangın algılama",
+ "E-04": "Elektrik disiplin genel yerleşimi",
+ "E-05": "Elektrot grubu · ATB · EPDB",
+ "E-06": "ADP tek hat şeması",
+}
+PAFTA_SONRAKI = {
+ "A-01": "A-02", "A-02": "A-03", "A-03": "A-04", "A-04": "A-05", "A-05": "M-01",
+ "M-01": "M-02", "M-02": "M-03", "M-03": "M-04", "M-04": "E-01",
+ "E-01": "E-02", "E-02": "E-03", "E-03": "E-04", "E-04": "E-05", "E-05": "E-06",
+}
+
+PROJE_BILGI = {
+ "isveren": "ÖZEL — MALTEPE / İDEALTEPE",
+ "ad": "MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU",
+ "yapi": "İdealtepe Mah. · zemin kat dükkân · 103,78 m² iç alan",
+ "no": "GYM-25-001",
+}
+MUELLIF  = "—"                     # imza/onay aşamasında doldurulur
+SICIL    = "Oda sicil no: —"
+PAFTA_BOY = "A1"                   # tüm set tek kâğıt boyunda — TS EN ISO 216
+PAFTA_BOYUT = KAGIT_A1 = (841, 594)
+OLCEK_PLAN = 50                    # 1:50 uygulama ölçeği (MEB/MMO uygulama projesi)
+
+REVIZYONLAR = [
+ ("A", "17.09.2026", "İlk yayın — ön tasarım", "CC", "—", "—"),
+ ("B", "18.09.2026", "Aks sistemi, zincir ölçü, ISO 5457/7200 pafta", "CC", "—", "—"),
+ ("C", "18.09.2026", "A1 pafta, tekil DXF, ADP tek hat şeması CAD'de", "CC", "—", "—"),
+]
+
+
+def _anahtar_plan_ciz(psp, x, y, w, h):
+    """Antet üstündeki küçük anahtar plan — yapı çeperi + kuzey."""
+    b = IC.bounds
+    gw, gh = b[2]-b[0], b[3]-b[1]
+    s_ = min((w-8)/gw, (h-8)/gh)
+    ox, oy = x+(w-gw*s_)/2-b[0]*s_, y+(h-gh*s_)/2-b[1]*s_
+    pts = [(ox+px*s_, oy+py*s_) for px, py in IC.exterior.coords]
+    psp.add_lwpolyline(pts, close=True,
+                       dxfattribs={"layer": "G-ANTET", "lineweight": 35})
+    for g in (P.ERKEK, P.KADIN):
+        psp.add_lwpolyline([(ox+px*s_, oy+py*s_) for px, py in g.exterior.coords],
+                           close=True, dxfattribs={"layer": "G-ANTET",
+                                                   "lineweight": 13})
+
+
+SEMA_PAFTA = {"E-06"}          # ölçeksiz şema paftaları (görüntü penceresi yok)
+
+
 def pafta_ekle(doc, no, notlar=""):
+    """ISO 5457 çerçeveli, ISO 7200 antetli pafta kurar."""
+    import pafta as PF
+    from pafta import Pafta, ANTET_H as ANTET_H_
     ad, disiplin, donan = PAFTALAR[no]
-    lay = doc.layouts.new(f"{no} {ad}")
-    lay.page_setup(size=(420, 297), margins=(0, 0, 0, 0), units="mm")
-    psp = lay
-    psp.add_lwpolyline([(10,10),(410,10),(410,287),(10,287)], close=True,
-                       dxfattribs={"layer": "G-ANTET"})
-    ref = psp.add_blockref("ANTET_A3", (236, 12), dxfattribs={"layer": "G-ANTET"})
-    ref.add_auto_attribs({
-        "PROJE": "MALTEPE / İDEALTEPE — GYM DÖNÜŞÜMÜ",
-        "DISIPLIN": disiplin, "PAFTA_ADI": ad, "PAFTA_NO": no,
-        "OLCEK": "1 / 75", "TARIH": P.TARIH, "REV": P.REV,
-        "BIRIM": "milimetre (mm)", "DURUM": "ÖN TASARIM",
-        "NOT": "Yerinde doğrulanmadan ve ruhsat alınmadan uygulama yapılamaz."})
-    vp = psp.add_viewport(center=(122, 150), size=(216, 268),
-                          view_center_point=(CX, CY), view_height=20100)
-    vp.dxf.layer = "G-ANTET"
+    ust = PAFTA_USTBASLIK.get(no, "")
+    pf = Pafta(doc, no, ad, disiplin, boy=PAFTA_BOY, proje=PROJE_BILGI, ust_ad=ust)
+    pf.cerceve()
+    pf.antet(olcek="ÖLÇEKSİZ" if no in SEMA_PAFTA else f"1:{OLCEK_PLAN}",
+             tarih=P.TARIH, rev=P.REV.split()[-1],
+             durum="ÖN TASARIM", muellif=MUELLIF, sicil=SICIL,
+             cizen="CC", kontrol="—", onay="—",
+             birim="milimetre (mm)", revizyonlar=REVIZYONLAR,
+             sonraki=PAFTA_SONRAKI.get(no, ""))
+    if no in SEMA_PAFTA:
+        import tekhat_dxf as TH
+        alt = TH.ciz(pf)
+        TH.alt_bloklar(pf, alt)
+        pf.durum_damgasi(x=pf.ax-76, y=pf.ay+ANTET_H_+2)
+        return pf.lay
     don = [l[0] for l in X.KATMANLAR if any(l[0].startswith(d) for d in donan)]
-    if don: vp.frozen_layers = don
-    # sağ sütun: lejant ve notlar
-    y = 280
-    psp.add_text("LEJANT", height=4.0, dxfattribs={"layer": "G-ANTET", "style": "GYM-B"}
-                 ).set_placement((236, y), align=TextEntityAlignment.MIDDLE_LEFT)
-    y -= 8
-    # Lejant YALNIZ bu paftada fiilen kullanılan katmanları listeler.
+    pf.gorunum(merkez=(CX, CY), olcek=OLCEK_PLAN, donuk=don)
+    pf.kuzey(); pf.olcek_cubugu(OLCEK_PLAN)
+    pf.durum_damgasi()
+    pf.dikkat_notu()
+    # sağ sütun: anahtar plan → lejant → notlar
+    sx, sy, sw = pf.sag()
+    y = pf.anahtar_plan(_anahtar_plan_ciz, y=sy)
     kullanilan = {e.dxf.layer for e in doc.modelspace()}
-    gorunur = [l for l in X.KATMANLAR
+    gorunur = [(l[0], l[4]) for l in X.KATMANLAR
                if l[0] in kullanilan
                and not any(l[0].startswith(d) for d in donan)
-               and (l[0].startswith(("M-", "E-")) or l[0].startswith("A-DUVAR"))]
-    for kat, renk, lt, lw, ack in gorunur[:26]:
-        psp.add_line((236, y), (246, y), dxfattribs={"layer": "G-ANTET", "color": renk,
-                                                     "linetype": lt})
-        psp.add_text(ack, height=2.4, dxfattribs={"layer": "G-ANTET", "style": "GYM"}
-                     ).set_placement((249, y), align=TextEntityAlignment.MIDDLE_LEFT)
-        y -= 5.2
+               and (l[0].startswith(("M-", "E-")) or l[0].startswith("A-"))]
+    y = pf.lejant(gorunur[:30], y=y)
     if notlar:
-        y -= 4
-        psp.add_text("NOTLAR", height=3.4, dxfattribs={"layer": "G-ANTET", "style": "GYM-B"}
-                     ).set_placement((236, y), align=TextEntityAlignment.MIDDLE_LEFT)
-        y -= 6
-        for satir in notlar.split("\n"):
-            psp.add_text(satir, height=2.4, dxfattribs={"layer": "G-ANTET", "style": "GYM"}
-                         ).set_placement((236, y), align=TextEntityAlignment.MIDDLE_LEFT)
-            y -= 4.6
-    return lay
+        satirlar = [t.strip() for t in notlar.split("\n") if t.strip()]
+        pf.notlar(satirlar, y=y-2)
+    return pf.lay
 
 NOTLAR = {
  "M-01": "Kanallar galvaniz sac, TS EN 1507 sinif B.\nBesleme ve egzoz hatti 19 mm izoleli.\n"
@@ -542,14 +711,15 @@ NOTLAR = {
 def belge_uret(ad, mek=True, elk=True, paftalar=(), mim_detay=True):
     doc = X.yeni_belge(ad); X.bloklari_kur(doc); antet_blogu(doc)
     msp = doc.modelspace()
-    mimari(msp); olculer(msp)
+    mimari(msp); aks_ciz(msp, OLCEK_PLAN); olculer(msp, OLCEK_PLAN)
     if mim_detay:
-        mimari_mahal(msp); mimari_zemin(msp); mimari_tavan(msp); mimari_yangin(msp)
+        mimari_mahal(msp, OLCEK_PLAN); mimari_zemin(msp); mimari_tavan(msp)
+        mimari_yangin(msp)
     if mek: mekanik(msp)
     if elk: elektrik(msp)
     for no in paftalar: pafta_ekle(doc, no, NOTLAR.get(no, ""))
     if "Layout1" in doc.layouts: doc.layouts.delete("Layout1")
-    doc.set_modelspace_vport(height=14000, center=(CX, CY))
+    doc.set_modelspace_vport(height=16000, center=(CX, CY))
     return doc
 
 # ── TEKİL PAFTA: her pafta kendi DXF dosyası, model uzayında YALNIZ o paftanın
@@ -570,6 +740,7 @@ TEKIL_PAFTA = {
  "E-03": (False, ["elektrik_zayif"]),
  "E-04": (False, ["elektrik_aydinlatma", "elektrik_kuvvet", "elektrik_zayif"]),
  "E-05": (False, ["elektrik_toprak"]),
+ "E-06": (None,  []),          # şema — model uzayı ve görüntü penceresi yok
 }
 
 
@@ -579,12 +750,16 @@ def pafta_belgesi(no):
     mim_detay, fnlar = TEKIL_PAFTA[no]
     doc = X.yeni_belge(f"{no}.dxf"); X.bloklari_kur(doc); antet_blogu(doc)
     msp = doc.modelspace()
-    mimari(msp)                       # mimari altlık her paftada bulunur
+    if mim_detay is not None:
+        mimari(msp)                   # mimari altlık her plan paftasında bulunur
+        aks_ciz(msp, OLCEK_PLAN)      # aks sistemi her plan paftasında ortaktır
     for fn in fnlar:
-        globals()[fn](msp)
+        if fn == "olculer": olculer(msp, OLCEK_PLAN)
+        elif fn == "mimari_mahal": mimari_mahal(msp, OLCEK_PLAN)
+        else: globals()[fn](msp)
     pafta_ekle(doc, no, NOTLAR.get(no, ""))
     if "Layout1" in doc.layouts: doc.layouts.delete("Layout1")
-    doc.set_modelspace_vport(height=14000, center=(CX, CY))
+    doc.set_modelspace_vport(height=16000, center=(CX, CY))
     return doc
 
 
@@ -606,10 +781,11 @@ def uret():
     setler = [
       ("GYM-MIM-Uygulama-R2010.dxf", False, False, ("A-01","A-02","A-03","A-04","A-05")),
       ("GYM-MEK-Uygulama-R2010.dxf", True,  False, ("M-01","M-02","M-03","M-04")),
-      ("GYM-ELK-Uygulama-R2010.dxf", False, True,  ("E-01","E-02","E-03","E-04","E-05")),
+      ("GYM-ELK-Uygulama-R2010.dxf", False, True,
+       ("E-01","E-02","E-03","E-04","E-05","E-06")),
       ("GYM-BIRLESIK-R2010.dxf",     True,  True,
        ("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
-        "E-01","E-02","E-03","E-04","E-05")),
+        "E-01","E-02","E-03","E-04","E-05","E-06")),
     ]
     uretilen = []
     for dosya, mek, elk, pf in setler:
@@ -631,6 +807,17 @@ def onizleme_pdf(cikti="output/Gym_CAD_Paftalar.pdf"):
     from matplotlib.backends.backend_pdf import PdfPages
     from ezdxf.addons.drawing import RenderContext, Frontend
     from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
+    from ezdxf.addons.drawing import config as _C
+    import ezdxf.bbox as _bbox
+    # Baskı ayarı. NOT: ABSOLUTE kalem politikası, model uzayı içeriği görüntü
+    # penceresinden geçerken kalınlıkları ölçekle çarptığı için önizlemede
+    # kullanılamaz (0,35 mm → 17 mm). Gerçek kalem kalınlıkları DXF içinde
+    # katman ve varlık düzeyinde saklıdır; CAD'de doğru basılır. Önizleme için
+    # ezdxf'in göreli politikası kullanılır.
+    cfg = _C.Configuration(
+        background_policy=_C.BackgroundPolicy.WHITE,
+        color_policy=_C.ColorPolicy.COLOR,
+        circle_approximation_count=160, hatching_timeout=90.0)
     # Her pafta KENDİ bağımsız DXF dosyasından basılır — tek model uzayı üzerinde
     # katman dondurma ile değil.
     sira = list(TEKIL_PAFTA)
@@ -641,9 +828,14 @@ def onizleme_pdf(cikti="output/Gym_CAD_Paftalar.pdf"):
             if not f.exists(): continue
             doc = ezdxf.readfile(f)
             lay = doc.layouts.get(f"{no} {PAFTALAR[no][0]}")
-            fig = plt.figure(figsize=(16.54, 11.69))
+            fig = plt.figure(figsize=(PAFTA_BOYUT[0]/25.4, PAFTA_BOYUT[1]/25.4))
             ax = fig.add_axes([0, 0, 1, 1]); ax.set_axis_off()
-            Frontend(RenderContext(doc), MatplotlibBackend(ax)).draw_layout(lay, finalize=True)
+            Frontend(RenderContext(doc), MatplotlibBackend(ax), config=cfg,
+                     bbox_cache=_bbox.Cache()).draw_layout(lay, finalize=True)
+            # finalize() figürü içeriğe göre yeniden boyutlar; kâğıdı geri koy
+            ax.set_xlim(0, PAFTA_BOYUT[0]); ax.set_ylim(0, PAFTA_BOYUT[1])
+            ax.set_aspect("equal", adjustable="box")
+            fig.set_size_inches(PAFTA_BOYUT[0]/25.4, PAFTA_BOYUT[1]/25.4)
             pdf.savefig(fig, facecolor="white"); plt.close(fig)
     print(f"  → {cikti}  ·  {len(sira)} pafta (her biri ayrı DXF dosyasından)")
 

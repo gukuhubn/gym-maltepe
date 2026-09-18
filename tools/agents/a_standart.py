@@ -70,9 +70,13 @@ class StandartAjani(Ajan):
             r.hata("pafta", f"build_dxf yüklenemedi: {e}"); return
         pf = BD.PAFTALAR
         disiplinler = {}
+        sema = getattr(BD, "SEMA_PAFTA", set())
         for no, (ad, dis, donan) in pf.items():
             disiplinler.setdefault(dis, []).append(no)
-            if not donan:
+            if no in sema:
+                r.bilgi("pafta", f"{no} {ad}: ölçeksiz şema paftası — "
+                                 f"tümü kâğıt alanında, görüntü penceresi yok")
+            elif not donan:
                 r.uyari("pafta", f"{no} {ad}: donduruluan katman listesi boş — "
                                  f"pafta tüm disiplinleri üst üste gösteriyor",
                         konum=no)
