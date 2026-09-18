@@ -11,6 +11,8 @@ MIN_KESIT = {"aydinlatma_linye": 2.5, "aydinlatma_sorti": 1.5,
 MAX_SORTI = {"aydinlatma": 9, "priz": 7}
 DU_SINIR  = {"aydinlatma": 1.5, "priz": 1.5, "motor": 3.0}
 ANAHTAR_A = {6, 10}
+# Kesici eğrisi: aydınlatmada B, priz/motor/ısıtıcıda C (uygulama pratiği)
+BEKLENEN_EGRI = {"L": "B", "P": "C", "K": "C", "W": "C", "V": "C", "Z": "C"}
 
 def _kesit(metin): return float(metin.split("×")[1].replace(",", "."))
 def _akim(metin):  return int(metin.split("×")[1].split()[0])
@@ -19,7 +21,56 @@ class ElektrikAjani(Ajan):
     ad = "elektrik"
     baslik = "Elektrik tesisatı — yönetmelik ve çizim denetimi"
 
+    # ── kesici eğrisi ────────────────────────────────────────────────────
+    def _egri(self, r):
+        hatali = []
+        for l in P.LINYE:
+            bek = BEKLENEN_EGRI.get(l[0][0], "C")
+            if P.kesici_egrisi(l[0]) != bek:
+                hatali.append(f"{l[0]} → {P.kesici_egrisi(l[0])} "
+                              f"(beklenen {bek})")
+        if hatali:
+            r.hata("eğri", "kesici eğrisi yanlış: " + ", ".join(hatali),
+                   dayanak="Aydınlatma linyesinde B eğrisi (3–5·In), priz ve "
+                           "motor linyesinde C eğrisi (5–10·In)")
+        else:
+            n_b = sum(1 for l in P.LINYE if P.kesici_egrisi(l[0]) == "B")
+            r.bilgi("eğri", f"{n_b} aydınlatma linyesi B eğrili, "
+                            f"{len(P.LINYE)-n_b} linye C eğrili · tümü "
+                            f"{P.KESME_KAP} kesme kapasiteli")
+
+    # ── ana kaçak akım ana şalterle orantılı mı ──────────────────────────
+    def _ana_kacak(self, r):
+        ana = P.ANA_KESICI//3
+        rcd = P.ANA_KACAK_A
+        if rcd < ana:
+            r.hata("ana koruma", f"ana kaçak akım gövdesi {rcd} A < ana şalter "
+                                 f"{ana} A — röle şalterden küçük olamaz")
+        elif rcd > ana*1.6:
+            r.uyari("ana koruma", f"ana kaçak akım gövdesi {rcd} A, ana şalter "
+                                  f"{ana} A için gereğinden büyük "
+                                  f"(bir üst kademe yeterlidir)")
+        else:
+            r.bilgi("ana koruma", f"ana şalter {ana} A → ana kaçak akım "
+                                  f"{rcd} A / {P.ANA_KACAK_MA} mA S tipi — "
+                                  f"orantılı ve seçici")
+        if P.ANA_KACAK_MA < 100:
+            r.hata("ana koruma", f"ana noktada {P.ANA_KACAK_MA} mA — yangın "
+                                 f"koruması için 300 mA olmalı, seçicilik bozulur",
+                   dayanak="Elektrik İç Tesisleri Yönetmeliği md.18")
+
+    # ── yedek linyeler kaçak akım arkasında mı ───────────────────────────
+    def _yedek_kacak(self, r):
+        kapsam = " ".join(k[2] for k in P.KACAK_AKIM if k[0] != "—")
+        if not all(f"Y{i}" in kapsam for i in range(1, 5)):
+            r.hata("yedek", "yedek linyeler kaçak akım rölesi arkasında değil — "
+                            "ileride yük bağlandığında koruma olmaz")
+        else:
+            r.bilgi("yedek", "4 yedek linyenin tamamı kaçak akım rölesi "
+                             "arkasındadır (ileride yük bağlanmaya hazır)")
+
     def denetle(self, r):
+        self._egri(r); self._ana_kacak(r); self._yedek_kacak(r)
         YON = "Elektrik İç Tesisleri Yönetmeliği"
         TS  = "TS HD 60364-5-52"
 

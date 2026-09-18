@@ -896,3 +896,96 @@ bırakılmamıştır.
 | DXF katman | 61 | **70** |
 | CAD pafta | 14 | **15** |
 | Teslim | 10 ayrı dosya | **tek zip · 7 klasör · 39 dosya** |
+
+---
+
+## 18 · Rev H — çok hatlı şema, mühendis geri bildirimi ve tek dosya teslim
+
+### 18.1 · Metodun nerede yanlış olduğu — dürüst teşhis
+
+İşverenin elektrik mühendisi arkadaşı beş madde yazdı. Bunları tek tek
+düzeltmek yetmezdi; **hangi kaynağa bakmam gerektiğini yanlış seçmiştim.**
+
+İşveren Google Drive klasöründe **gerçek bir pano projesi** vardı:
+`AS BUILT PROJESİ-ELEKTRİK (MAKSER ELEKTRİK)/ADP.pdf` — 34 sayfalık,
+EPLAN ile üretilmiş, A3 pano dokümantasyonu. Bu dosya baştan beri
+elimin altındaydı. Ben ise "tek hat şeması" ifadesini literal alıp
+uluslararası **single-line diagram** literatürünü araştırdım ve o türü
+ürettim.
+
+**Asıl hata:** referans modeli optimize ettim, müşterinin gerçek teslim
+biçimini kopyalamadım. Bir sonraki projede kural şu: **önce elimizdeki
+gerçek çıktıya bak, sonra literatüre.**
+
+Buradan çıkan beş somut fark:
+
+| # | Mühendis geri bildirimi | Kök neden | Düzeltme |
+|---|---|---|---|
+| 1 | "Semboller yanlış, fazları ayrı göster" | Tek hat (single-line) türü üretilmişti; Türkiye pratiği **çok hatlı (multi-line)** şemadır | `tools/sema.py` — L1·L2·L3·N ayrı potansiyel rayları, her linye kendi fazından dolu bağlantı noktasıyla ayrılır |
+| 2 | "Yükleme cetvelinde grup kaçak akımları ve hangi linyelerin bağlı olduğu görünsün" | Cetvelde linye başına RCD vardı ama **grup** gösterimi yoktu | ADP-11 paftasında ayrı "KAÇAK AKIM (GRUP)" sütunu + grubu kapsayan köşeli parantez |
+| 3 | "Aydınlatmada C değil **B tipi** sigorta" | Tüm kesicilere C eğrisi atanmıştı | `proj.EGRI` — aydınlatma B, priz/klima/ısıtıcı C; referans projede de `6A 1P B 6kA` |
+| 4 | "Giriş şalterinin altına kaçak akımı göster, orantılı seç" | Ana RCD 4×63 A idi (şalter 4×32 A), ayrıca şemada şalterin altında çizilmiyordu | **4×40 A / 300 mA S tipi**, ana şalterin hemen altında (ADP-04) |
+| 5 | "Yedek linyeler için kaçak akım kullan" | Yedekler doğrudan baradan besleniyordu | **RCD-6** grubu açıldı; 4 yedeğin tamamı 30 mA arkasında |
+
+Beş maddenin tamamı artık `elektrik` denetim ajanında **kural** olarak
+kodludur (`_egri`, `_ana_kacak`, `_yedek_kacak`); bir daha geri gitmez.
+
+### 18.2 · Çok hatlı şema motoru — `tools/sema.py`
+
+Referans projenin sayfa düzeni birebir alındı:
+
+* A3 (420×297), çizim çerçevesi (20,10)–(410,287), üstte 0–7 sütun, iki yanda
+  A–F satır harfleri
+* Üstte **L1 · L2 · L3 · N** potansiyel rayları, altta **PE** rayı
+  (noktalı-kesik); solda ve sağda `sayfa.sütun` biçiminde sayfalar arası
+  referans okları
+* Kaçak akım rölesi grubun ilk sütununda; kutup sayısı özellikten gelir
+  (4× → 4 kutup). Rölenin altında **grup alt rayları** vardır:
+  4 kutuplu rölede L1/L2/L3/N. Her linye kendi fazından dallanır.
+* Koruma cihazı terminal numaralı (1 üstte, 2 altta), yanında dört satır:
+  `-F1 / 10 A / 1P B / 6kA` — referans yazım biçimi
+* İletken üzerinde **tel numarası** (90° döndürülmüş, EN 60204-1)
+* `-X1` klemens sırası, klemens numaraları ve potansiyel adları (N1, N2…)
+* Kablo etiketi `3×2,5 NHXMH`, altında kesikli **saha cihazı bloğu**
+  (L/N/PE damar klemensleri) ve Türkçe yük tanımı
+* Antet EPLAN düzeninde, **çift dilli**: Drawn By/Çizen · Checked By/Kontrol
+  Eden · Approved By/Onaylayan · Project Date/Proje Tarihi · Customer Name ·
+  Project Description · Panel Name · Page Description · Project Number ·
+  Revision · Sheet / Next sheet / Total sheets / Sheet size
+
+**12 sayfalık set:** kapak · pano karakteristik tablosu · sembol listesi ·
+ana besleme · 4 şematik diyagram sayfası · klemens planı · pano önden görünüş ·
+yükleme cetveli · malzeme listesi.
+
+Eski tek hat şeması paftaları (`build_tekhat.py`, CAD paftası E-06)
+**setten kaldırıldı** — yerini bu set aldı.
+
+### 18.3 · Tek dosya teslim — `tools/build_tek_dosya.py`
+
+İşveren: *"artık sürekli bir sürü çizim atıyorsun, tek çizim ayrıca paftalar
+olarak üret, her şey olsun orada."*
+
+`output/GYM_MALTEPE_UYGULAMA_PROJESI.pdf` — **27 pafta, tek dosya**:
+
+```
+00        Kapak ve pafta indeksi                        A1
+A-01…A-05 Mimari uygulama paftaları                     A1  1:50
+M-01…M-04 Mekanik tesisat paftaları                     A1  1:50
+E-01…E-05 Elektrik paftaları (topraklama dâhil)         A1  1:50
+ADP-01…12 ADP çok hatlı şematik diyagram seti           A3  ölçeksiz
+```
+
+Kâğıt boyutunun set içinde değişmesi (A1 planlar + A3 şemalar) gerçek proje
+setlerinin standart pratiğidir.
+
+### 18.4 · Ortam ve araçlar
+
+* **PyMuPDF 1.28.2 kuruldu.** ezdxf'in vektör PDF arka ucu artık kullanılabilir.
+* Google Drive bağlayıcısı üzerinden referans proje çekildi
+  (`input/referans/ADP_REFERANS.pdf`, `ADP_Yukleme_Cetveli_REF.xlsx`).
+* `input/ESAT-FINAL.dwg` **AC1032 (DWG 2018)** formatındadır; ezdxf DWG
+  okuyamaz ve ortamda dönüştürücü (ODA File Converter / LibreDWG) yoktur.
+  Bu dosya hâlâ okunamıyor.
+* Ağ: `generativelanguage.googleapis.com` erişilebilir (HTTP 404 = bağlantı
+  var); `webdosya.csb.gov.tr`, `megep.meb.gov.tr`, `emo.org.tr` hâlâ
+  engellidir (bağlantı kurulamıyor).

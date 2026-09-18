@@ -1,12 +1,12 @@
 {
- "tarih": "2026-09-18 09:20",
+ "tarih": "2026-09-18 11:30",
  "genel": "UYGUN",
  "ajanlar": [
   {
    "ad": "mimari",
    "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 55,
+   "sure_ms": 56,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -318,8 +318,32 @@
    "ad": "elektrik",
    "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
    "durum": "UYGUN",
-   "sure_ms": 65,
+   "sure_ms": 55,
    "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "eğri",
+     "mesaj": "6 aydınlatma linyesi B eğrili, 16 linye C eğrili · tümü 6 kA kesme kapasiteli",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ana koruma",
+     "mesaj": "ana şalter 32 A → ana kaçak akım 40 A / 300 mA S tipi — orantılı ve seçici",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yedek",
+     "mesaj": "4 yedek linyenin tamamı kaçak akım rölesi arkasındadır (ileride yük bağlanmaya hazır)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
     {
      "seviye": "BİLGİ",
      "kategori": "kesit",
@@ -398,12 +422,12 @@
    "ad": "standart",
    "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
    "durum": "UYGUN",
-   "sure_ms": 138,
+   "sure_ms": 141,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "katman",
-     "mesaj": "76 katman · A 18 · E 32 · G 11 · M 15",
+     "mesaj": "85 katman · A 18 · E 41 · G 11 · M 15",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -419,15 +443,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "pafta",
-     "mesaj": "E-06 ADP TEK HAT ŞEMASI: ölçeksiz şema paftası — tümü kâğıt alanında, görüntü penceresi yok",
-     "dayanak": "",
-     "konum": "",
-     "oneri": ""
-    },
-    {
-     "seviye": "BİLGİ",
-     "kategori": "pafta",
-     "mesaj": "ELEKTRİK: 6 pafta — E-01, E-02, E-03, E-04, E-05, E-06",
+     "mesaj": "ELEKTRİK: 5 pafta — E-01, E-02, E-03, E-04, E-05",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -451,7 +467,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "pafta",
-     "mesaj": "15 pafta ayrı DXF dosyası olarak üretiliyor",
+     "mesaj": "14 pafta ayrı DXF dosyası olarak üretiliyor",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -486,7 +502,7 @@
    "ad": "koordinasyon",
    "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
    "durum": "UYGUN",
-   "sure_ms": 323,
+   "sure_ms": 294,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -534,8 +550,16 @@
    "ad": "teslim",
    "baslik": "Teslim paketi — dosya bütünlüğü ve sürüm denetimi",
    "durum": "UYGUN",
-   "sure_ms": 152,
+   "sure_ms": 150,
    "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "dosya",
+     "mesaj": "GYM_MALTEPE_UYGULAMA_PROJESI.pdf · 10.55 MB · 27 pafta — TEK DOSYA — tüm paftalar (mimari · mekanik · elektrik · ADP şema)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
@@ -571,7 +595,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_ADP_Tek_Hat_Semasi.pdf · 0.10 MB · 8 pafta — ADP tek hat şeması",
+     "mesaj": "Gym_ADP_Sema_A3.pdf · 4.52 MB · 12 pafta — ADP çok hatlı şema seti",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -587,7 +611,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Paftalar.pdf · 6.26 MB · 15 pafta — CAD pafta önizleme (A1)",
+     "mesaj": "Gym_CAD_Paftalar.pdf · 5.36 MB · 14 pafta — CAD pafta önizleme (A1)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -667,7 +691,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.84 MB · 21 dosya — DXF seti",
+     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.86 MB · 21 dosya — DXF seti",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -675,7 +699,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_Proje_Paketi.zip · 23.51 MB · 39 dosya — TEK TESLİM DOSYASI — tüm set",
+     "mesaj": "Gym_Proje_Paketi.zip · 37.57 MB · 40 dosya — TEK TESLİM DOSYASI — tüm set",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -707,7 +731,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "sürüm",
-     "mesaj": "Rev G · 17 Eylül 2026",
+     "mesaj": "Rev H · 17 Eylül 2026",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -715,7 +739,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "19 beklenen çıktının tamamı üretildi",
+     "mesaj": "20 beklenen çıktının tamamı üretildi",
      "dayanak": "",
      "konum": "",
      "oneri": ""

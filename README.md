@@ -1,8 +1,13 @@
 # Maltepe / İdealtepe — Mobilya Mağazası → Fonksiyonel Antrenman Stüdyosu
 
-Ön tasarım, uygulama projesi ve bütçe paketi · **Rev G** · 18 Eylül 2026
+Ön tasarım, uygulama projesi ve bütçe paketi · **Rev H** · 18 Eylül 2026
 
 ## Teslimatlar (`output/`)
+
+> **Tek dosya teslim:** `GYM_MALTEPE_UYGULAMA_PROJESI.pdf` — 27 pafta.
+> Mimari (A-01…05) · mekanik (M-01…04) · elektrik (E-01…05) A1 1:50 planlar
+> + ADP çok hatlı şema seti (ADP-01…12) A3. Diğer dosyalar bu setin
+> parçaları ve yardımcı tablolarıdır.
 
 | Dosya | İçerik |
 |---|---|
@@ -10,7 +15,7 @@
 | `Gym_Mimari_Proje_A3.pdf` | Mimari uygulama projesi — A3 yatay, 14 pafta (A-14 duvar tipleri 1/5 yatay kesit) |
 | `Gym_Mekanik_Proje_A3.pdf` | Mekanik tesisat projesi — A3 yatay, 9 pafta (havalandırma prensip, sıhhi kolon şeması ve iklimlendirme prensip şemaları **ayrı paftalarda**) |
 | `Gym_Elektrik_Proje_A3.pdf` | Elektrik projesi — A3 yatay, 8 pafta (E-08 topraklama ve potansiyel dengeleme planı dâhil) |
-| `Gym_ADP_Tek_Hat_Semasi.pdf` | **ADP tek hat şeması** — 8 pafta: kapak, pano karakteristiği (IEC 61439), sembol listesi, pano önden görünüş, EPLAN tarzı şematik diyagram |
+| `Gym_ADP_Sema_A3.pdf` | **ADP çok hatlı şema seti** — 12 pafta A3: kapak, pano karakteristiği (IEC 61439), sembol listesi, ana besleme, 4 şematik diyagram, klemens planı, pano önden görünüş, yükleme cetveli, malzeme listesi |
 | `Gym_Denetim_Raporu.pdf` | **Otomatik denetim raporu** — 6 kontrol ajanının bulguları, dayanak standartlarıyla |
 | `Gym_Donusum_Dosyasi_A3.pdf` | Yatırım / fizibilite dosyası — A3 yatay, 12 sayfa |
 | `Gym_Sunum_16x9.pdf` | Sunum — 16:9, 12 slayt |
@@ -139,7 +144,27 @@ ağırlıklı bulur, paralel/dik hatları 0,40 m toleransla kümeler ve 1,60 m'y
 aşan kümeleri aks kabul eder → **4 rakam aksı (1–4) + 5 harf aksı (A–E)**.
 Akslar arası ve toplam zincir ölçüler gerçek `DIMENSION` varlığı olarak basılır.
 
-## Tek hat şeması CAD'de — `tools/tekhat_dxf.py` (pafta E-06)
+## Çok hatlı şema CAD'de — `tools/sema.py` + `tools/build_sema.py`
+
+Türkiye'de pano dokümantasyonunun fiilî standardı tek hat şeması değil,
+**çok hatlı şematik diyagramdır**: **L1 · L2 · L3 · N** potansiyel rayları
+sayfanın üstünde ayrı ayrı çizilir ve her linye kendi fazından bir bağlantı
+noktasıyla ayrılır — hangi linyenin hangi fazda olduğu çizimden okunur.
+
+* A3 sayfa, 0–7 sütun / A–F satır ızgarası, sayfalar arası `sayfa.sütun`
+  referansı
+* Kaçak akım rölesi grubun ilk sütununda, altında **grup alt rayları**
+  (4 kutuplu rölede L1/L2/L3/N)
+* Terminal numaralı koruma cihazı + `-F1 / 10 A / 1P B / 6kA` yazımı
+* Tel numarası (EN 60204-1), `-X1` klemens sırası, kablo etiketi,
+  kesikli saha cihazı bloğu, Türkçe yük tanımı
+* EPLAN düzeninde çift dilli antet
+* **Kesici eğrisi:** aydınlatmada B, priz/klima/ısıtıcıda C — tümü 6 kA
+* **Ana kaçak akım** ana şalterle orantılıdır: 4×32 A → **4×40 A / 300 mA
+  S tipi**, ana şalterin hemen altında
+* **Yedek linyeler dâhil** tüm son devreler 30 mA röle arkasındadır
+
+### Eski tek hat şeması (kaldırıldı)
 
 Şema ölçeksiz olduğu için **kâğıt alanına 1:1 milimetre** çizilir. Semboller
 **IEC 60617 modülü M = 2,5 mm** üzerine kurulur; her güç sembolü tek kutup

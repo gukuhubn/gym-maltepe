@@ -185,8 +185,8 @@ else:
 print("\n6b · CAD SETİ (DXF R2010)")
 import ezdxf as _ez
 _cad = sorted(Path("cad").glob("*.dxf"))
-if len(_cad)!=4: hata(f"CAD setinde {len(_cad)} dxf var (beklenen 4)")
-else: ok("4 DXF dosyası üretildi")
+if len(_cad)!=5: hata(f"CAD setinde {len(_cad)} dxf var (beklenen 5)")
+else: ok("5 DXF dosyası üretildi (mimari · mekanik · elektrik · birleşik · ADP şema)")
 for f in _cad:
     d=_ez.readfile(f); a=d.audit()
     if a.errors: hata(f"{f.name}: {len(a.errors)} DXF hatası")
@@ -200,7 +200,7 @@ for f in _cad:
        f"{len(d.layouts.names())-1} pafta · 0 hata")
 _b=_ez.readfile("cad/GYM-BIRLESIK-R2010.dxf")
 _PF=("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
-     "E-01","E-02","E-03","E-04","E-05","E-06")
+     "E-01","E-02","E-03","E-04","E-05")
 _eksik=[n for n in _PF if not any(l.startswith(n) for l in _b.layouts.names())]
 if _eksik: hata(f"birleşik dosyada eksik pafta: {_eksik}")
 else: ok(f"birleşik dosyada {len(_PF)} paftanın tamamı var")
@@ -208,7 +208,6 @@ _donmus_ok=True
 for l in _b.layouts.names():
     if l in ("Model",): continue
     # ölçeksiz şema paftalarının görüntü penceresi yoktur — tümü kâğıt alanındadır
-    if l.startswith(("E-06",)): continue
     vps=[vp for vp in _b.layouts.get(l).query("VIEWPORT") if len(vp.frozen_layers)>0]
     if not vps: _donmus_ok=False; hata(f"{l}: görüntü penceresinde donmuş katman yok")
 if _donmus_ok: ok("her paftada disiplin dışı katmanlar dondurulmuş (VP Freeze)")

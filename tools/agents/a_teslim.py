@@ -11,13 +11,15 @@ OUT  = ROOT/"output"
 # (dosya, asgari KB, asgari birim [pdf sayfa / xlsx sayfa / zip dosya], açıklama)
 # Boyut yalnız "tamamen boş mu" testidir; içerik ölçüsü PAFTA/SAYFA SAYISIDIR.
 BEKLENEN = [
+ ("GYM_MALTEPE_UYGULAMA_PROJESI.pdf", 4000, 27,
+  "TEK DOSYA — tüm paftalar (mimari · mekanik · elektrik · ADP şema)"),
  ("Gym_Donusum_Dosyasi_A3.pdf",    60, 12, "Ana dosya — A3 yatay"),
  ("Gym_Mimari_Proje_A3.pdf",       60, 14, "Mimari uygulama seti"),
  ("Gym_Mekanik_Proje_A3.pdf",      60,  9, "Mekanik uygulama seti"),
  ("Gym_Elektrik_Proje_A3.pdf",     60,  8, "Elektrik uygulama seti"),
- ("Gym_ADP_Tek_Hat_Semasi.pdf",    40,  8, "ADP tek hat şeması"),
+ ("Gym_ADP_Sema_A3.pdf",           40, 12, "ADP çok hatlı şema seti"),
  ("Gym_Insaat_Seti_A3.pdf",       150, 33, "İnşaat seti — plan/kesit/görünüş/detay"),
- ("Gym_CAD_Paftalar.pdf",         150, 15, "CAD pafta önizleme (A1)"),
+ ("Gym_CAD_Paftalar.pdf",         150, 14, "CAD pafta önizleme (A1)"),
  ("Gym_Sunum_16x9.pdf",            60, 12, "Yönetim sunumu"),
  ("Gym_Denetim_Raporu.pdf",        20,  7, "Ajan denetim raporu"),
  ("Gym_Maliyet_BoQ.xlsx",          15,  4, "Ana BoQ — canlı formüllü"),
@@ -28,7 +30,7 @@ BEKLENEN = [
  ("Gym_Elektrik_BoQ.xlsx",          8,  4, "Elektrik BoQ"),
  ("Gym_Pano_Yukleme_Cetveli.xlsx",  8,  2, "ADP yükleme cetveli"),
  ("Gym_CAD_Seti_DXF.zip",         200, 19, "DXF seti"),
- ("Gym_Proje_Paketi.zip",        4000, 39, "TEK TESLİM DOSYASI — tüm set"),
+ ("Gym_Proje_Paketi.zip",        4000, 38, "TEK TESLİM DOSYASI — tüm set"),
  ("Gym_Model.html",               100,  0, "3B model"),
 ]
 

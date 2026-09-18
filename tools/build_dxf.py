@@ -559,7 +559,6 @@ PAFTALAR = {
  "E-04": ("ELEKTRİK GENEL YERLEŞİM", "ELEKTRİK", ["M-"]),
  "E-05": ("TOPRAKLAMA VE POTANSİYEL DENGELEME PLANI", "ELEKTRİK",
           ["M-", "E-AYD-", "E-KUVVET-", "E-ZAYIF-"]),
- "E-06": ("ADP TEK HAT ŞEMASI", "ELEKTRİK", []),
  "A-01": ("MİMARİ ALTLIK", "MİMARİ",
           ["M-", "E-", "A-ZEMIN-", "A-TAVAN-", "A-YANGIN-"]),
  "A-02": ("MİMARİ UYGULAMA PLANI", "MİMARİ",
@@ -596,7 +595,7 @@ PAFTA_USTBASLIK = {
 PAFTA_SONRAKI = {
  "A-01": "A-02", "A-02": "A-03", "A-03": "A-04", "A-04": "A-05", "A-05": "M-01",
  "M-01": "M-02", "M-02": "M-03", "M-03": "M-04", "M-04": "E-01",
- "E-01": "E-02", "E-02": "E-03", "E-03": "E-04", "E-04": "E-05", "E-05": "E-06",
+ "E-01": "E-02", "E-02": "E-03", "E-03": "E-04", "E-04": "E-05", "E-05": "ADP-01",
 }
 
 PROJE_BILGI = {
@@ -614,7 +613,9 @@ OLCEK_PLAN = 50                    # 1:50 uygulama ölçeği (MEB/MMO uygulama p
 REVIZYONLAR = [
  ("A", "17.09.2026", "İlk yayın — ön tasarım", "CC", "—", "—"),
  ("B", "18.09.2026", "Aks sistemi, zincir ölçü, ISO 5457/7200 pafta", "CC", "—", "—"),
- ("C", "18.09.2026", "A1 pafta, tekil DXF, ADP tek hat şeması CAD'de", "CC", "—", "—"),
+ ("C", "18.09.2026", "A1 pafta, tekil DXF, ADP şeması CAD'de", "CC", "—", "—"),
+ ("D", "18.09.2026", "ADP çok hatlı şema (faz ayrımı), B eğrisi, ana RCD",
+  "CC", "—", "—"),
 ]
 
 
@@ -633,7 +634,7 @@ def _anahtar_plan_ciz(psp, x, y, w, h):
                                                    "lineweight": 13})
 
 
-SEMA_PAFTA = {"E-06"}          # ölçeksiz şema paftaları (görüntü penceresi yok)
+SEMA_PAFTA = set()   # ölçeksiz şema paftaları artık ayrı sette (build_sema.py)
 
 
 def pafta_ekle(doc, no, notlar=""):
@@ -740,7 +741,6 @@ TEKIL_PAFTA = {
  "E-03": (False, ["elektrik_zayif"]),
  "E-04": (False, ["elektrik_aydinlatma", "elektrik_kuvvet", "elektrik_zayif"]),
  "E-05": (False, ["elektrik_toprak"]),
- "E-06": (None,  []),          # şema — model uzayı ve görüntü penceresi yok
 }
 
 
@@ -782,10 +782,10 @@ def uret():
       ("GYM-MIM-Uygulama-R2010.dxf", False, False, ("A-01","A-02","A-03","A-04","A-05")),
       ("GYM-MEK-Uygulama-R2010.dxf", True,  False, ("M-01","M-02","M-03","M-04")),
       ("GYM-ELK-Uygulama-R2010.dxf", False, True,
-       ("E-01","E-02","E-03","E-04","E-05","E-06")),
+       ("E-01","E-02","E-03","E-04","E-05")),
       ("GYM-BIRLESIK-R2010.dxf",     True,  True,
        ("A-01","A-02","A-03","A-04","A-05","M-01","M-02","M-03","M-04",
-        "E-01","E-02","E-03","E-04","E-05","E-06")),
+        "E-01","E-02","E-03","E-04","E-05")),
     ]
     uretilen = []
     for dosya, mek, elk, pf in setler:

@@ -39,9 +39,10 @@ DOSYALAR = [
   "output/Gym_Elektrik_Proje_A3.pdf"),
  ("03_ELEKTRİK", "E_00_00_GF_00_1_01 (Elektrik Uygulama).dxf",
   "cad/GYM-ELK-Uygulama-R2010.dxf"),
- ("03_ELEKTRİK", "ADP TEK HAT ŞEMASI (8 pafta).pdf", "output/Gym_ADP_Tek_Hat_Semasi.pdf"),
- ("03_ELEKTRİK", "E_00_00_GF_00_1_03 (ADP Tek Hat Şeması).dxf",
-  "cad/paftalar/E-06_ADP_TEK_HAT_ŞEMASI.dxf"),
+ ("03_ELEKTRİK", "ADP ÇOK HATLI ŞEMA SETİ (12 pafta).pdf",
+  "output/Gym_ADP_Sema_A3.pdf"),
+ ("03_ELEKTRİK", "E_00_00_GF_00_1_04 (ADP Çok Hatlı Şema).dxf",
+  "cad/GYM-ADP-SEMA-R2010.dxf"),
  ("03_ELEKTRİK", "E_00_00_GF_00_1_02 (Topraklama Planı).dxf",
   "cad/paftalar/E-05_TOPRAKLAMA_VE_POTANSİYEL_DENGELEME_PLANI.dxf"),
  ("03_ELEKTRİK", "ADP Yükleme Cetveli R00.xlsx",
@@ -56,11 +57,13 @@ DOSYALAR = [
  # ── 05 BİRLEŞİK SET ──────────────────────────────────────────────────────────
  ("05_BİRLEŞİK SET", "GYM MALTEPE — İNŞAAT UYGULAMA SETİ (33 pafta).pdf",
   "output/Gym_Insaat_Seti_A3.pdf"),
- ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (15 pafta · A1).pdf",
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — CAD PAFTA ÖNİZLEMESİ (14 pafta · A1).pdf",
   "output/Gym_CAD_Paftalar.pdf"),
  ("05_BİRLEŞİK SET", "GYM-BIRLESIK-R2010.dxf", "cad/GYM-BIRLESIK-R2010.dxf"),
  ("05_BİRLEŞİK SET", "KATMAN-LISTESI.csv", "cad/KATMAN-LISTESI.csv"),
- ("05_BİRLEŞİK SET", "TEKİL PAFTALAR (15 × DXF).zip", None),
+ ("05_BİRLEŞİK SET", "TEKİL PAFTALAR (14 × DXF).zip", None),
+ ("05_BİRLEŞİK SET", "GYM MALTEPE — TÜM PAFTALAR TEK DOSYA (27 pafta).pdf",
+  "output/GYM_MALTEPE_UYGULAMA_PROJESI.pdf"),
  ("05_BİRLEŞİK SET", "OTOMATİK DENETİM RAPORU.pdf", "output/Gym_Denetim_Raporu.pdf"),
  # ── 06 YATIRIM DOSYASI ───────────────────────────────────────────────────────
  ("06_YATIRIM DOSYASI", "GYM MALTEPE — DÖNÜŞÜM VE FİZİBİLİTE DOSYASI.pdf",
@@ -182,7 +185,7 @@ def build(cikti="output/Gym_Proje_Paketi.zip"):
             for f in sorted(_tek.glob("*.dxf")):
                 _z.write(f, f"PAFTALAR/{f.name}")
     tureti = {"MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf": PKT/"__mahal.pdf",
-              "TEKİL PAFTALAR (15 × DXF).zip": _tekzip,
+              "TEKİL PAFTALAR (14 × DXF).zip": _tekzip,
               "PROJE RAPORU.pdf": PKT/"__rapor.pdf"}
     n = 0
     for klasor, ad, kaynak in DOSYALAR:

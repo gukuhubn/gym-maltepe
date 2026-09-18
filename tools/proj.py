@@ -9,7 +9,7 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parent.parent
 G    = json.loads((ROOT/"data/geometry.json").read_text())
 
-REV        = "Rev G"
+REV        = "Rev H"
 TARIH      = "17 Eylül 2026"
 FIYAT_TARIH= ("Eylül 2026 · Aqua Florya / Saltbae kesin hakedişi (Mayıs 2025) "
               "birim fiyatları ×1,40 eskalasyonla")
@@ -445,6 +445,21 @@ ACIL     = [(k, x, y, "acil aydınlatma", 0) for k, x, y, t in ACIL_TAVAN] + ACI
 
 # ── linye (devre) tablosu ─────────────────────────────────────────────────────
 # (kod, tanım, koruma, kesit, bağlı güç kW, eşzamanlılık katsayısı)
+# KESİCİ EĞRİSİ: aydınlatma linyelerinde B eğrisi kullanılır (LED sürücü yol
+# alma akımı düşüktür; B eğrisi 3–5·In'de açar ve uzun linyede dokunma
+# gerilimi korumasını sağlar). Priz, klima, motor ve ısıtıcı linyelerinde C
+# eğrisi kullanılır (5–10·In). Kesme kapasitesi tüm cihazlarda 6 kA.
+EGRI = {"L": "B", "P": "C", "K": "C", "W": "C", "V": "C", "Z": "C"}
+KESME_KAP = "6 kA"
+
+
+def kesici_egrisi(kod):
+    return EGRI.get(kod[0], "C")
+
+
+def koruma_metni(kod, koruma):
+    """'1×10 A' → '1×10 A B 6 kA' — referans proje yazım biçimi."""
+    return f"{koruma} {kesici_egrisi(kod)} {KESME_KAP}"
 _LINYE = [
  ("L1","Aydınlatma — arena / serbest ağırlık","1×10 A","3×2,5", 7*0.040, 1.00),
  ("L2","Aydınlatma — fonksiyonel / kardiyo","1×10 A","3×2,5", 3*0.040, 1.00),
@@ -571,10 +586,19 @@ KACAK_AKIM = [
  ("RCD-3","2×40 A / 30 mA, A tipi","Islak hacim — L5 · P5 (ayrı, TS HD 60364-7-701)"),
  ("RCD-4","2×40 A / 30 mA, A tipi","Su ısıtıcıları — W1 · W2 (her biri ayrı bloklu)"),
  ("RCD-5","4×40 A / 30 mA, A tipi","Klima ve havalandırma — K1–K4 · V1 · V2"),
+ ("RCD-6","4×40 A / 30 mA, A tipi","Yedek linyeler — Y1 · Y2 · Y3 · Y4 "
+                                   "(ileride yük bağlanacağı için baştan korumalı)"),
  ("—",    "Korumasız (izlenir)",   "Z2 yangın algılama paneli — kesintisiz beslenir, "
                                    "kaçak akım rölesi arkasına alınmaz"),
 ]
-ANA_KACAK = "4×63 A / 300 mA, S tipi (seçicilik) — ana giriş"
+# Ana kaçak akım rölesi ana şalterle ORANTILI seçilir: 4×32 A ana şalter için
+# bir üst standart kademe olan 4×40 A gövde yeterlidir. Duyarlılık 300 mA'dir
+# (yangın koruması); son devrelerdeki 30 mA röleler ile seçicilik S tipi
+# (zaman gecikmeli) gövde sayesinde sağlanır.
+ANA_KACAK_A  = 40
+ANA_KACAK_MA = 300
+ANA_KACAK = (f"4×{ANA_KACAK_A} A / {ANA_KACAK_MA} mA, S tipi (seçicilik) — "
+             f"ana şalterin ({ANA_KESICI//3} A) hemen altında")
 
 # ── TOPRAKLAMA VE POTANSİYEL DENGELEME ───────────────────────────────────────
 # Dayanak: Elektrik Tesislerinde Topraklamalar Yönetmeliği (RG 21.08.2001/24500),

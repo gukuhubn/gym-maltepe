@@ -7,7 +7,7 @@ python3 tools/kanal_yollari.py
 python3 tools/linye_yollari.py | head -2
 echo "── PDF paftalar ────────────────────────────────────────────────────"
 for m in build_a3 build_slides build_mimari build_mekanik build_elektrik \
-         build_tekhat build_insaat_seti; do
+         build_insaat_seti; do
   python3 tools/$m.py
 done
 echo "── tablolar ────────────────────────────────────────────────────────"
@@ -17,6 +17,9 @@ for m in build_boq build_boq_mep build_kesif build_hakedis build_butce \
 done
 echo "── CAD ─────────────────────────────────────────────────────────────"
 python3 tools/build_dxf.py | tail -4
+python3 tools/build_sema.py
+echo "── TEK DOSYA TESLİM ────────────────────────────────────────────────"
+python3 tools/build_tek_dosya.py
 echo "── model ve paket ──────────────────────────────────────────────────"
 python3 tools/build_single_html.py
 python3 tools/build_paket.py | tail -3

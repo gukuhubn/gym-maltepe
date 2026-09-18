@@ -62,6 +62,15 @@ E-TEKHAT-GRUP;8;Continuous;25;Tek hat — kaçak akım grubu parantezi
 E-TEKHAT-TABLO;7;Continuous;18;Tek hat — veri matrisi
 E-TEKHAT-YAZI;7;Continuous;18;Tek hat — etiket ve not
 E-TEKHAT-YEDEK;8;DASHED;25;Tek hat — yedek / boş modül
+E-SEMA-TEL;7;Continuous;25;Şema — iletken
+E-SEMA-SEMBOL;7;Continuous;35;Şema — IEC 60617 sembolü
+E-SEMA-RAY;7;Continuous;35;Şema — potansiyel rayı (L1/L2/L3/N)
+E-SEMA-PE;7;DASHDOT;35;Şema — PE rayı ve koruma iletkeni
+E-SEMA-KLEMENS;7;Continuous;25;Şema — klemens
+E-SEMA-YUK;8;DASHED;18;Şema — saha cihazı
+E-SEMA-ZON;8;Continuous;18;Şema — kenar ızgarası
+E-SEMA-ANTET;7;Continuous;50;Şema — antet ve çerçeve
+E-SEMA-YAZI;7;Continuous;18;Şema — etiket ve tel numarası
 E-PANO;7;Continuous;50;Elektrik — ana dağıtım panosu
 E-YAZI;7;Continuous;13;Elektrik — etiket ve not
 G-OLCU;7;Continuous;13;Genel — ölçülendirme
