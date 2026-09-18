@@ -1,0 +1,41 @@
+; GYM MALTEPE — AUTOCAD DENETIM BETIGI
+; Kullanim: AutoCAD'de paftayi ac, komut satirina yaz:  _SCRIPT  ve bu dosyayi sec.
+; Bu betik HICBIR SEYI DEGISTIRMEZ; yalnizca rapor uretir.
+FILEDIA
+0
+CMDDIA
+0
+; 1) dosya butunlugu
+_AUDIT
+_Y
+; 2) birim ve olcek kontrolu
+_-UNITS
+2
+4
+1
+4
+0
+N
+; 3) katman raporu
+_-LAYER
+?
+*
+
+; 4) yazi stili raporu
+_-STYLE
+?
+*
+
+; 5) olcu stili raporu
+_-DIMSTYLE
+_R
+?
+*
+
+; 6) tarama desenleri paftada var mi (hata verirse acad.pat eksik demektir)
+_REGENALL
+FILEDIA
+1
+CMDDIA
+1
+; Rapor metin penceresindedir: F2 ile acip tamamini kopyalayin.

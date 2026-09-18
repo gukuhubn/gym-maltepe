@@ -65,43 +65,6 @@ KABILIYET = [
   "denendi; salon ve cephe için genellenmedi.", "ORTA"),
 ]
 
-KAYNAK = [
- ("ERİŞİLDİ", "ESAT-FINAL.dwg — TRIMODE mağaza projesi (4 pafta)", "İşveren",
-  "DWG AC1032 · cm · alan etiketiyle doğrulandı", "Geometrinin tek kaynağı"),
- ("ERİŞİLDİ", "TRIMODE-Alan_Dagilimi.pdf / Duvar_Plani.pdf", "İşveren",
-  "Raster", "Artık yalnız çapraz kontrol"),
- ("ERİŞİLDİ", "ADP_REFERANS.pdf — 34 sayfa EPLAN pano dosyası", "MAKSER Elektrik",
-  "İşveren klasörü", "Şema düzeni ve antet referansı"),
- ("ERİŞİLDİ", "TS 2164 tesisat sembolleri", "TSE türevi kamu kaynağı",
-  "PDF", "Sembol karşılıkları"),
- ("ERİŞİLDİ", "MEGEP — Sıhhi tesisat projesi", "MEB",
-  "Açık kaynak", "Çizim tekniği"),
- ("ERİŞİLDİ", "Elektrik İç Tesisleri Yönetmeliği · BYKHY · Planlı Alanlar İmar Y.",
-  "mevzuat.gov.tr", "Kamuya açık", "Kural kontrollerinin dayanağı"),
- ("İZİN GEREKİR", "ASHRAE 55 / 62.1 / 90.1 / 154", "ASHRAE",
-  "Salt okunur; AI'a aktarım açıkça kısıtlı",
-  "İNDİRİLMEDİ, İNDEKSLENMEDİ — yalnız bibliyografik kayıt"),
- ("İZİN GEREKİR", "SMACNA kanal yapım standartları · BESA DW/144 · DW/172",
-  "SMACNA / BESA", "Ücretli", "Satın alma gerekir"),
- ("İZİN GEREKİR", "TS EN 12464-1 · TS 825 · TS 9111 tam metinleri", "TSE",
-  "Ücretli", "Madde alıntısı yapılmadı; yalnız bilinen eşik değerler"),
- ("İZİN GEREKİR", "NFPA 13/72/96 salt okunur erişim", "NFPA",
-  "Kayıt gerektirir", "Bu projede kapsam dışı"),
- ("ERİŞİLEMEDİ", "Nusr-Et / Saltbae marka kitabı ve mutfak standardı", "İşveren",
-  "Elimizde yok", "İSTENECEK — uydurulmadı"),
- ("ERİŞİLEMEDİ", "Uygulanmış restoran projesi (DWG/RVT + as-built)", "—",
-  "Yetkili örnek bulunamadı",
-  "nusret-expansion-os içindeki ornek_restoran_250m2.dxf 6 poliçizgilik şematik "
-  "bir blok diyagramdır, proje değildir"),
- ("ERİŞİLEMEDİ", "Google Cloud Secret Manager'daki API anahtarları", "İşveren hesabı",
-  "GitHub Actions secret'ı geri okunamaz (tasarım gereği)",
-  "Anahtar değeri hiç talep edilmedi; ortam değişkeni olarak verilmesi gerekir"),
- ("UYGULANMAZ", "IBC / IPC / IMC / NEC (NFPA 70)", "ICC / NFPA",
-  "ABD kodları", "Proje Türkiye'dedir; idare bu seti istemez"),
- ("UYGULANMAZ", "Türkiye Bina Deprem Yönetmeliği hesapları", "AFAD",
-  "Taşıyıcıya müdahale yok", "Yalnız yapısal olmayan eleman bağlantıları"),
-]
-
 GIRDI = [
  ("Mevcut betonarme döşeme kalınlığı", "180 mm VARSAYIM",
   "Söküm sonrası ölçüm", "Kesit, kot ve pis su eğimi buna bağlı"),
@@ -318,14 +281,27 @@ def uret(cikti=CIK):
 
     # 2
     r.h1("2", "KAYNAK ENVANTERİ")
-    r.p("Talimat §3: indirme, erişim ve AI kullanım hakları ayrı değerlendirilir. "
-        "Ücretli veya salt okunur standartlar izinsiz indirilmedi; erişim engeli "
-        "aşılmadı. ASHRAE'nin AI kullanım kısıtı nedeniyle içeriği indekslenmedi.")
-    r.tablo(["DURUM", "BELGE", "KAYNAK", "ERİŞİM", "PROJEDE KULLANIM"],
-            [list(k) for k in KAYNAK],
-            [21*mm, 45*mm, 24*mm, 35*mm, 45*mm],
-            renkli={"ERİŞİLDİ": H.GREEN, "İZİN GEREKİR": H.AMBER,
+    r.p("Talimat §3: indirme, erişim ve AI kullanım hakları AYRI değerlendirilir. "
+        "Bu turda açık erişimli kaynaklar tarandı ve indirildi; ücretli metinler "
+        "satın alınmadı, erişim engeli aşılmadı. ASHRAE kendi AI kullanım yasağını "
+        "açıkça yazdığı için içeriği alınmadı — yerine TS EN ve MMO kaynakları "
+        "kullanıldı. SMACNA kanal standardının 1995 baskısı, SMACNA'nın şartname "
+        "makamlarına verdiği telifsiz çoğaltma izni ve Public.Resource.Org'un "
+        "yayını üzerinden alındı; ESKİ BASKI olduğu ve Türkiye'de bağlayıcı "
+        "olmadığı kayıtta işaretlidir.")
+    import kaynak as KY
+    r.tablo(["DURUM", "KİMLİK", "BELGE", "YAYINCI", "İZİN", "PROJEDE KULLANIM"],
+            [[k["durum"], k["kimlik"], k["baslik"], k["yayinci"],
+              k["izin"], k["gerekce"]] for k in KY.KAYNAKLAR],
+            [20*mm, 13*mm, 40*mm, 24*mm, 33*mm, 40*mm],
+            renkli={"ERİŞİLDİ": H.GREEN, "ÜCRETLİ": H.AMBER,
+                    "BİBLİYOGRAFİK": H.AMBER, "İZİN YOK": H.RED,
                     "ERİŞİLEMEDİ": H.RED, "UYGULANMAZ": H.GREY})
+    r.p("DOĞRULAMA DURUMU — kontrol edilmemiş kaynak 'geçti' sayılmaz", H.FB, 8.5)
+    r.tablo(["KİMLİK", "DOĞRULAMA", "NOT"],
+            [[k["kimlik"], k["dogrulama"], k["not_"]] for k in KY.KAYNAKLAR
+             if k["dogrulama"].split()[0] not in ("DOĞRULANDI",) or k["not_"]],
+            [14*mm, 66*mm, 90*mm])
 
     # 3
     r.h1("3", "EKSİK PROJE GİRDİLERİ VE AÇIK TASARIM KARARLARI")

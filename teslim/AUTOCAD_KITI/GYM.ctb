@@ -1,0 +1,13 @@
+;; GYM MALTEPE — KALEM TABLOSU (referans)
+;; AutoCAD'de kalem kalinligi KATMAN duzeyinde tanimlidir.
+;; Plot ayarinda 'Plot style table' = acad.ctb ve
+;; 'Plot with plot styles' KAPALI, 'Plot object lineweights' ACIK olmali.
+;;
+;; Beklenen kalinlik serisi (ISO 128):
+;;   0.13 mm   Tarama · katman ayrým çizgisi
+;;   0.18 mm   Arkada kalan / ikincil eleman
+;;   0.25 mm   Ölçü · kot · anotasyon
+;;   0.35 mm   Kesit düzlemi arkasýnda görünen
+;;   0.50 mm   Bakýlan yüzey sýnýrý (görünüþ)
+;;   0.70 mm   Kesilen eleman çeperi
+;;   1.00 mm   Pafta çerçevesi

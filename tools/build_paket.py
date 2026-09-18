@@ -44,6 +44,7 @@ DOSYALAR = [
   "cad/pilot/P-05_BİRLEŞİM_DETAYI_D-02.dxf"),
  ("01_MİMARİ/PİLOT", "PİLOT ÇALIŞMA RAPORU.pdf",
   "output/Gym_Pilot_Raporu.pdf"),
+ ("00_AUTOCAD", "AUTOCAD DOGRULAMA KITI.zip", "output/Gym_AutoCAD_Kiti.zip"),
  # ── 02 MEKANİK ───────────────────────────────────────────────────────────────
  ("02_MEKANİK", "M_00_00_GF_00_1_00 (Mekanik Tesisat Projesi).pdf",
   "output/Gym_Mekanik_Proje_A3.pdf"),

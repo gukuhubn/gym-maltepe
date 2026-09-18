@@ -23,6 +23,10 @@ python3 tools/build_dxf.py | tail -4
 python3 tools/build_sema.py
 echo "── PİLOT BÖLGE (ölçülü plan · tavan · kesit · görünüş · detay) ─────"
 python3 tools/pilot.py
+echo "── KAYNAK ENVANTERİ (talimat §3) ───────────────────────────────────"
+python3 tools/kaynak.py | head -9
+echo "── AUTOCAD DOĞRULAMA KİTİ ──────────────────────────────────────────"
+python3 tools/autocad_kit.py | tail -3
 echo "── PİLOT RAPORU (talimat §13) ──────────────────────────────────────"
 python3 tools/build_pilot_raporu.py
 echo "── REVİZYON DENEYİ ─────────────────────────────────────────────────"

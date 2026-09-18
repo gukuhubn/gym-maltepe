@@ -1,12 +1,12 @@
 {
- "tarih": "2026-09-18 13:28",
+ "tarih": "2026-09-18 14:18",
  "genel": "UYGUN",
  "ajanlar": [
   {
    "ad": "mimari",
    "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 57,
+   "sure_ms": 55,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -126,7 +126,7 @@
    "ad": "mekanik",
    "baslik": "Mekanik tesisat — havalandırma, iklimlendirme, sıhhi tesisat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 1,
+   "sure_ms": 0,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -326,7 +326,7 @@
    "ad": "elektrik",
    "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
    "durum": "UYGUN",
-   "sure_ms": 64,
+   "sure_ms": 299,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -430,7 +430,7 @@
    "ad": "standart",
    "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
    "durum": "UYGUN",
-   "sure_ms": 138,
+   "sure_ms": 142,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -510,7 +510,7 @@
    "ad": "koordinasyon",
    "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
    "durum": "UYGUN",
-   "sure_ms": 318,
+   "sure_ms": 328,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -558,7 +558,7 @@
    "ad": "pilot",
    "baslik": "Pilot paftalar — üretilen DXF dosyalarının denetimi",
    "durum": "UYGUN",
-   "sure_ms": 262,
+   "sure_ms": 306,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -763,7 +763,15 @@
     {
      "seviye": "BİLGİ",
      "kategori": "alan",
-     "mesaj": "net 7.830 m² + bölme payı 0.417 m² = brüt 8.247 m²",
+     "mesaj": "brüt 8.247 = kaba 7.830 + bölme 0.417 m²",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "alan",
+     "mesaj": "kaba 7.830 − kaplama 0.217 = bitmiş 7.613 m²",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -846,7 +854,7 @@
    "ad": "teslim",
    "baslik": "Teslim paketi — dosya bütünlüğü ve sürüm denetimi",
    "durum": "UYGUN",
-   "sure_ms": 150,
+   "sure_ms": 156,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -995,7 +1003,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_Proje_Paketi.zip · 37.57 MB · 40 dosya — TEK TESLİM DOSYASI — tüm set",
+     "mesaj": "Gym_Proje_Paketi.zip · 44.88 MB · 48 dosya — TEK TESLİM DOSYASI — tüm set",
      "dayanak": "",
      "konum": "",
      "oneri": ""

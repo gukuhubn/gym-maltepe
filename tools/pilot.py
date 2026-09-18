@@ -32,6 +32,7 @@ from shapely.geometry import Polygon, Point, LineString
 
 import proj as P
 import dxf_lib as X
+import malzeme as MZ
 from dxf_lib import M, ML, yazi, poli, cizgi, tarama, sekil, K
 import pafta as PF
 from pafta import Pafta
@@ -138,32 +139,8 @@ def _tx(msp, p, t, h_mm, kat, hiza="ORTA", aci=0, stil="GYM", olcek=OLCEK,
 
 
 def _tara_olcek(kagit_mm, olcek=OLCEK):
-    """ANSI desenlerinin temel aralığı 0,125 birimdir; kâğıtta istenen aralığı
-    (mm) model ölçeğine çevirir. Bu hesap yazılmazsa tarama ya kapanır ya kaybolur."""
-    return kagit_mm*olcek/0.125
-
-
-def _hatch(msp, g, kat, desen="ANSI31", sik=1.0, aci=45, olcek=OLCEK, renk=None):
-    """Shapely geometrisini (Polygon veya MultiPolygon) güvenle tarar.
-
-    Her parça KENDİ hatch nesnesini alır; tek hatch içine birden çok dış halka
-    konursa NESTED stil onları birbirinden çıkarır ve tarama paftaya taşar.
-    """
-    ad = 0
-    for q in (g.geoms if hasattr(g, "geoms") else [g]):
-        if q.is_empty or q.area < 1e-6: continue
-        h = msp.add_hatch(dxfattribs={"layer": kat, **({"color": renk} if renk else {})})
-        if desen == "SOLID":
-            h.set_solid_fill(color=renk or 7)
-        else:
-            h.set_pattern_fill(desen, scale=_desen_olcek(desen, sik, olcek), angle=aci)
-        h.paths.add_polyline_path([(x*K, y*K) for x, y in q.exterior.coords[:-1]],
-                                  is_closed=True, flags=1)
-        for r in q.interiors:
-            h.paths.add_polyline_path([(x*K, y*K) for x, y in r.coords[:-1]],
-                                      is_closed=True, flags=0)
-        ad += 1
-    return ad
+    """Geriye dönük sarmalayıcı — gerçek hesap malzeme kütüphanesindedir."""
+    return MZ.desen_olcek("ANSI31", kagit_mm, olcek)
 
 
 def _tara(msp, pts, kat, desen="ANSI31", olc=1.0, aci=45):
@@ -232,28 +209,70 @@ def _lider(msp, uc, kirilma, metin, olcek=OLCEK, kat="A-YAZI", sag=True, h=2.5):
 # yani bunlar bölme DUVAR EKSENLERİdir, bitmiş yüz değil. Bitmiş mahal =
 # poligondan, komşu alt mekânla PAYLAŞILAN kenarlarda yarım bölme kadar
 # aşındırılmış hâli. Bu ayrım yazılmazsa mahal alanı 47 dm² fazla çıkar.
-# Alt mekân poligonları artık proj.py içinde İÇ BÖLME PAYI düşülmüş hâlde
-# gelir (ISLAK_BOLME_T = 100 mm; rölövede salon/blok boşluğu 98 mm ölçüldü).
+# ══════════════════════ DUVAR KURGUSU ═════════════════════════════════════════
+# proj.py'deki ISLAK poligonları KABA YAPI (karkas) yüzleridir: ölçülmüş
+# rölövede salon ile ıslak blok arası 98 mm ölçüldü — bu, mimarın çizdiği
+# D3 bölme karkasıdır, bitmiş yüz değil. Bitmiş mahal, karkas yüzünden
+# KAPLAMA KALINLIĞI kadar içeridedir. İki alan ayrı ayrı raporlanır:
+# kaba yapı (imalat/karkas metrajı) ve bitmiş (mahal listesi, seramik metrajı).
 BOLME_T = P.ISLAK_BOLME_T
 CEPER_T = P.V["duvar_kalinlik"][0]
 
 from shapely.ops import unary_union
 _IC = unary_union([P.SALON, P.ERKEK, P.KADIN])
-NET = {n: P.ISLAK[BLOK][n] for n in MAHAL}
-NET_M2 = {n: round(g.area, 3) for n, g in NET.items()}
+
+
+def _tip(kod):
+    return next(d for d in P.DUVAR_TIPLERI if d[0] == kod)
+
+
+def _kat(kod):
+    return MZ.katmanlari_coz(_tip(kod)[3])
+
+
+# D5 kaplama paketi = seramik + yapıştırıcı + su yalıtımı (altlık ayıklanmış),
+# mahal yüzünden DIŞA doğru sıralı.
+KAPLAMA_ISLAK = list(reversed(MZ.altlik_ayikla(_kat("D5"))))
+# Kuru yüz kaplaması: saten + boya (D1'in ince katmanları)
+KAPLAMA_KURU = [k for k in _kat("D1") if k["malzeme"] == "siva"]
+# Karkaslar
+KARKAS_BOLME = _kat("D3")                      # H2 alçıpan · C dikme · alçıpan
+KARKAS_MEVCUT = [k for k in _kat("D1") if k["malzeme"] in ("betonarme", "tugla")]
+
+KAPLAMA_T = {"islak": sum(k["m"] for k in KAPLAMA_ISLAK),   # 0,016 m
+             "kuru":  sum(k["m"] for k in KAPLAMA_KURU)}    # 0,006 m
+
+# Hangi mahal ıslak? (kaplama kalınlığı ve seramik bundan çıkar)
+ISLAK_MAHAL = {"soyunma": False, "dus": True, "wc": True}
+
+
+def duvar_kurgusu(mevcut: bool, islak: bool):
+    """Bir duvarın, MAHAL YÜZÜNDEN DIŞA doğru tam katman dizisi."""
+    kaplama = KAPLAMA_ISLAK if islak else KAPLAMA_KURU
+    karkas = KARKAS_MEVCUT if mevcut else KARKAS_BOLME
+    return kaplama + karkas
+
+
+def kaplama_t(ad):
+    return KAPLAMA_T["islak" if ISLAK_MAHAL.get(ad) else "kuru"]
+
+
+# Bitmiş mahal = karkas poligonu eksi kaplama kalınlığı
+BITMIS = {n: P.ISLAK[BLOK][n].buffer(-kaplama_t(n), join_style=2)
+          for n in MAHAL}
+BITMIS = {n: (max(g.geoms, key=lambda q: q.area) if hasattr(g, "geoms") else g)
+          for n, g in BITMIS.items()}
+NET = BITMIS                                   # çizim ve etiketler bitmiş yüzü kullanır
+NET_M2 = {n: round(g.area, 3) for n, g in BITMIS.items()}
+KABA_M2 = {n: round(P.ISLAK[BLOK][n].area, 3) for n in MAHAL}
 BOLME = P.ISLAK[BLOK].get("bolme")
 
 
 def ceper_govdesi():
-    """Bloğun çeper duvar gövdeleri — her kenardan DIŞA doğru temiz dörtgen.
+    """Bloğun çeper duvarları — her kenar için (kenar, mevcut mu, katmanlar).
 
-    Ölçülmüş rölövede salon ile ıslak blok arasında 98 mm boşluk vardır —
-    mimarın bölme duvarı. Bloğun mevcut bina çeperine oturan kenarları ise
-    mevcut 200 mm duvardır. Ayrım, kenarın binanın DIŞ kabuğuna uzaklığından
-    türetilir; elle işaretlenmez.
-
-    Not: buffer().difference() kullanılmaz — köşelerde artık parça bırakır ve
-    taramanın sınırı bozulur.
+    Mevcut bina çeperine oturan kenar ile salona bakan bölme, kenarın binanın
+    DIŞ kabuğuna uzaklığından ayrılır; elle işaretlenmez.
     """
     tum = P.ISLAK[BLOK]["tum"]
     kab = _IC.buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
@@ -261,20 +280,17 @@ def ceper_govdesi():
                              (kab.geoms if hasattr(kab, "geoms") else [kab])])
     parcalar = []
     c = list(tum.exterior.coords)
-    ic = tum.representative_point()
     for a, b in zip(c, c[1:]):
         L = math.dist(a, b)
         if L < 0.05: continue
         ux, uy = (b[0]-a[0])/L, (b[1]-a[1])/L
         nx, ny = -uy, ux
-        # dışa bakan normal
         if tum.contains(Point((a[0]+b[0])/2 + nx*0.02, (a[1]+b[1])/2 + ny*0.02)):
             nx, ny = -nx, -ny
         seg = LineString([a, b])
         mevcut = seg.interpolate(0.5, normalized=True).distance(dis_kabuk) < 0.06
-        t = CEPER_T if mevcut else BOLME_T
-        g = Polygon([a, b, (b[0]+nx*t, b[1]+ny*t), (a[0]+nx*t, a[1]+ny*t)])
-        parcalar.append((g, mevcut, t, L, seg))
+        parcalar.append({"a": a, "b": b, "L": L, "mevcut": mevcut,
+                         "n": (nx, ny), "seg": seg})
     return parcalar
 
 
@@ -351,22 +367,132 @@ def _egim_oku(msp, u0, v0, u1, v1, metin="%1,5"):
     _tx(msp, (m[0], m[1]+0.06), metin, 2.5, "A-ZEMIN-YAZI", hiza="ORTA", aci=ang)
 
 
+DIKME_ARA = 0.40      # m — C profil aks aralığı (Knauf DC50 · MEGEP Tablo 1.2)
+
+
+def _ic_bolme_eksenleri():
+    """Alt mekânlar arasındaki bölme duvarlarının EKSEN doğruları.
+
+    Her bölme BİR KEZ çizilmeli: iki komşu mahal de kendi yüzünü bildirirse
+    karkas iki kez çizilir ve çizgiler üst üste biner.
+    """
+    adlar = list(MAHAL)
+    out = []
+    for i in range(len(adlar)):
+        for j in range(i+1, len(adlar)):
+            a, b = P.ISLAK[BLOK][adlar[i]], P.ISLAK[BLOK][adlar[j]]
+            if a.distance(b) > BOLME_T*1.6: continue
+            ort = a.exterior.intersection(b.buffer(BOLME_T*1.2))
+            for g in (ort.geoms if hasattr(ort, "geoms") else [ort]):
+                if getattr(g, "length", 0) < 0.15: continue
+                c = list(g.coords)
+                out.append({"a": c[0], "b": c[-1], "ic": adlar[i], "dis": adlar[j]})
+    return out
+
+
+IC_BOLME = _ic_bolme_eksenleri()
+
+
+def _taraf(a, b, disa_normal):
+    """duvar_kesiti'nin `taraf` işareti: +1 sol normal (-uy, ux)."""
+    ux, uy = b[0]-a[0], b[1]-a[1]
+    L = math.hypot(ux, uy) or 1.0
+    return 1 if (-uy/L*disa_normal[0] + ux/L*disa_normal[1]) > 0 else -1
+
+
+def duvarlari_ciz(msp, olcek):
+    """Bütün duvarları KATMAN KATMAN çizer — üç aşama:
+
+      1) çeper karkası — blok çeperinden DIŞA (mevcut 200 mm ya da D3 100 mm)
+      2) iç bölme karkası — iki mahal arasında, bir kez
+      3) her mahalin KAPLAMASI — mahal yüzünden İÇERİ
+
+    Böylece planda duvarın içindeki levha, C dikme, karkas boşluğu ve taşyünü
+    görünür; su yalıtımı ince katman kuralı gereği kendi kaleminde sürekli tek
+    çizgi olarak okunur. Önceki hâlinde duvar tek bant + tek taramaydı.
+    """
+    nd = ndk = 0
+    govde = []
+    for c in CEPER:
+        karkas = KARKAS_MEVCUT if c["mevcut"] else KARKAS_BOLME
+        kal = sum(x["m"] for x in karkas)
+        tr = _taraf(c["a"], c["b"], c["n"])
+        # Köşelerin kapanması için kenar iki uçtan duvar kalınlığı kadar uzatılır;
+        # uzatma yalnız GÖVDE sınırını kapatmak içindir, katman çizgileri
+        # kendi kenarında kalır.
+        t, k = MZ.duvar_kesiti(msp, c["a"], c["b"], karkas, olcek,
+                               taraf=tr, dikme_ara=DIKME_ARA)
+        nd += k
+        govde.append(_bant(c["a"], c["b"], kal, tr, uzat=kal))
+        if not c["mevcut"] and olcek <= 25: ndk += 1
+    for b in IC_BOLME:
+        ic = P.ISLAK[BLOK][b["ic"]]
+        ux, uy = b["b"][0]-b["a"][0], b["b"][1]-b["a"][1]
+        L = math.hypot(ux, uy) or 1.0
+        nx, ny = -uy/L, ux/L
+        m = ((b["a"][0]+b["b"][0])/2, (b["a"][1]+b["b"][1])/2)
+        disa = -1 if ic.contains(Point(m[0]+nx*0.02, m[1]+ny*0.02)) else 1
+        t, k = MZ.duvar_kesiti(msp, b["a"], b["b"], KARKAS_BOLME, olcek,
+                               taraf=disa, dikme_ara=DIKME_ARA)
+        nd += k
+        govde.append(_bant(b["a"], b["b"], sum(x["m"] for x in KARKAS_BOLME),
+                           disa, uzat=0.0))
+        if olcek <= 25: ndk += 1
+    for ad in MAHAL:
+        g = P.ISLAK[BLOK][ad]
+        kap = list(reversed(KAPLAMA_ISLAK if ISLAK_MAHAL[ad] else KAPLAMA_KURU))
+        c = list(g.exterior.coords)
+        for a, b in zip(c, c[1:]):
+            L = math.dist(a, b)
+            if L < 0.05: continue
+            nx, ny = -(b[1]-a[1])/L, (b[0]-a[0])/L
+            ice = 1 if g.contains(Point((a[0]+b[0])/2 + nx*0.02,
+                                        (a[1]+b[1])/2 + ny*0.02)) else -1
+            MZ.duvar_kesiti(msp, a, b, kap, olcek, taraf=ice)
+            nd += len(kap)
+    # DIŞ ÇEPER: bütün duvar gövdelerinin birleşimi, kesilen eleman kaleminde
+    # tek sürekli çizgi. Kenarlar tek tek çizildiği için köşeler aksi hâlde
+    # açık kalır ve duvar "bitmemiş" görünür.
+    if govde:
+        # köşe kapatma uzatması bloğun dışına taşmasın
+        sinir = P.ISLAK[BLOK]["tum"].buffer(
+            max(sum(x["m"] for x in KARKAS_MEVCUT),
+                sum(x["m"] for x in KARKAS_BOLME)) + 0.004, join_style=2)
+        u = unary_union(govde).intersection(sinir)
+        for g in (u.geoms if hasattr(u, "geoms") else [u]):
+            # Birleşim köşelerde 0,1 mm'lik kırıntı düğümler bırakır; çizime
+            # girmeden önce temizlenir (sıfır uzunluklu parça kalmaz).
+            _pl(msp, _sadelestir(list(g.exterior.coords)[:-1]), MZ.KAT_CEPER)
+            for r in g.interiors:
+                _pl(msp, _sadelestir(list(r.coords)[:-1]), MZ.KAT_CEPER)
+    return nd, ndk
+
+
+def _sadelestir(pts, esik=0.0015):
+    """Ardışık iki düğüm `esik`ten yakınsa birini atar (m)."""
+    out = []
+    for q in pts:
+        if not out or math.dist(q, out[-1]) > esik: out.append(q)
+    while len(out) > 3 and math.dist(out[0], out[-1]) <= esik: out.pop()
+    return out
+
+
+def _bant(a, b, kal, taraf, uzat=0.0):
+    """a→b kenarının `taraf` yönünde `kal` kalınlığında bandı (gövde sınırı)."""
+    L = math.dist(a, b) or 1.0
+    ux, uy = (b[0]-a[0])/L, (b[1]-a[1])/L
+    nx, ny = -uy*taraf, ux*taraf
+    a2 = (a[0]-ux*uzat, a[1]-uy*uzat); b2 = (b[0]+ux*uzat, b[1]+uy*uzat)
+    return Polygon([a2, b2, (b2[0]+nx*kal, b2[1]+ny*kal), (a2[0]+nx*kal, a2[1]+ny*kal)])
+
+
 def plan(msp):
-    n = {"duvar": 0, "kapi": 0, "olcu": 0}
-    # 1) duvar gövdeleri — mevcut / yeni ayrımı geometriden gelir
-    for g, mevcut, t, L, seg in CEPER:
-        kat = "A-DUVAR-MEVCUT" if mevcut else "A-DUVAR-YENI"
-        sekil(msp, g, kat)
-        _hatch(msp, g, "A-KESIT-TARAMA", "ANSI31" if mevcut else "ANSI37",
-               1.2 if mevcut else 1.0, 0 if mevcut else 45)
-        n["duvar"] += 1
-    if BOLME is not None:
-        for g in (BOLME.geoms if hasattr(BOLME, "geoms") else [BOLME]):
-            sekil(msp, g, "A-DUVAR-YENI")
-            _hatch(msp, g, "A-KESIT-TARAMA", "ANSI37", 1.0, 45)
-            n["duvar"] += 1
-    # 2) bitmiş mahaller
-    for ad, g in NET.items():
+    n = {"duvar": 0, "kapi": 0, "olcu": 0, "dikme": 0}
+    # 1) DUVARLAR — tek bant değil, KATMAN KATMAN (levha · dikme · boşluk ·
+    #    yalıtım · kaplama); ayrıntı için duvarlari_ciz()
+    n["duvar"], n["dikme"] = duvarlari_ciz(msp, OLCEK)
+    # 2) bitmiş mahal yüzü
+    for ad, g in BITMIS.items():
         sekil(msp, g, "A-ZEMIN-SINIR")
     # 3) kapılar — kod, kanat ve açılım
     for kod, (pt, gen, aci) in P.KAPI_GEOM.items():
@@ -522,12 +648,42 @@ REVIZYONLAR = (
 
 PAFTA_SONRAKI = {a: b for a, b in zip(SIRA, SIRA[1:])}
 
+# Paftada fiilen kullanılan malzemelerin gösterim anahtarı — okuyucu hangi
+# dokunun ne olduğunu paftadan öğrenir, tahmin etmez.
+def _malzeme_lejanti(*anahtarlar):
+    return [[MZ.bilgi(a)["ad"], _gosterim_metni(a)] for a in anahtarlar]
+
+
+def _gosterim_metni(a):
+    m = MZ.bilgi(a)
+    if m["yontem"] == "desen":
+        return f"{m['desen']} taraması · kâğıtta {m['kagit']:.1f} mm aralık".replace(".", ",")
+    if m["yontem"] == "ozel":
+        return {"su_yalitimi": "dolu/boş değişen blok (MEGEP Şekil 2.44)",
+                "c_profil": "gerçek C kesiti, aks aralığı 400 mm",
+                "seramik": "gerçek karo boyunda derz çizgisi",
+                "yalitim_isi": "sürekli zikzak (MEGEP Şekil 2.43)",
+                "tugla_sira": "gerçek sıra yüksekliği 85 mm + derz"}.get(m["ozel"], "özel")
+    return "tarama yok — yalnız katman çizgisi"
+
+
+MALZEME_LEJANTI = {
+ "P-01": _malzeme_lejanti("tugla", "alcipan", "dikme", "yalitim_isi",
+                          "yalitim_su", "seramik"),
+ "P-02": [],
+ "P-03": _malzeme_lejanti("betonarme", "sap", "yalitim_su", "seramik"),
+ "P-04": _malzeme_lejanti("seramik", "yalitim_su"),
+ "P-05": _malzeme_lejanti("tugla", "sap", "yalitim_su", "bant", "seramik", "harc"),
+}
+
 NOTLAR = {
  "P-01": [
   "Geometri ölçülmüş rölöveden alınmıştır (ESAT-FINAL.dwg, TRIMODE).",
-  "Mahal alanları BİTMİŞ YÜZ net alanıdır; iç bölme payı düşülmüştür.",
+  "Mahal alanları BİTMİŞ YÜZ net alanıdır: karkas yüzünden kaplama\n  kalınlığı (ıslakta 16 mm, kuruda 6 mm) düşülmüştür. Kaba yapı\n  (karkas) alanları malzeme listesindedir.",
   "Ölçüler bloğun kendi doğrultusundadır (dünya eksenine izdüşüm değil).",
   "Duş ve WC zemininde süzgeğe doğru %1,5 eğim verilecektir.",
+  "Duvarlar KATMAN KATMAN çizilmiştir: alçı levha · C dikme @400 mm ·\n"
+  "  karkas boşluğu + taşyünü · su yalıtımı · yapıştırıcı · seramik.",
   "Kapı kodları kapı cetveliyle (K03·K05·K07) aynı kaynaktan üretilir.",
  ],
  "P-02": [
@@ -590,7 +746,11 @@ def _pafta(doc, no, olcek, merkez, tablo_fn=None):
     kullanilan = {e.dxf.layer for e in doc.modelspace()}
     gorunur = [(l[0], l[4]) for l in X.KATMANLAR if l[0] in kullanilan
                and not l[0].startswith(("G-CERCEVE", "G-ANTET", "G-PAFTA", "G-VIEWPORT"))]
-    sy2 = pf.lejant(gorunur[:22], y=sy)
+    sy2 = pf.kalem_lejanti(y=sy)
+    sy2 = pf.lejant(gorunur[:18], y=sy2-2)
+    if MALZEME_LEJANTI.get(no):
+        sy2 = pf.tablo(["MALZEME", "GÖSTERİM"], MALZEME_LEJANTI[no],
+                       [52, 74], x=sx, y=sy2-4, baslik="MALZEME GÖSTERİMİ")
     pf.notlar(NOTLAR[no], y=sy2-2)
     return pf
 
@@ -604,9 +764,10 @@ def _liste_plan(pf, x, y, gen):
     sat = []
     for ad in ("soyunma", "dus", "wc"):
         no = MAHAL[ad]; b = P._MAHAL_BILGI[no]
-        sat.append([no, b[1], f"{NET_M2[ad]:.2f}".replace(".", ","), b[3], b[5], b[6]])
-    y = pf.tablo(["NO", "MAHAL", "m²", "ZEMİN", "DUVAR", "TAVAN"], sat,
-                 [12, 46, 16, 18, 30, 18], x=x, y=y, baslik="MAHAL LİSTESİ")
+        sat.append([no, b[1], f"{NET_M2[ad]:.2f}".replace(".", ","),
+                    f"{KABA_M2[ad]:.2f}".replace(".", ","), b[3], b[6]])
+    y = pf.tablo(["NO", "MAHAL", "BİTMİŞ m²", "KABA m²", "ZEMİN", "TAVAN"], sat,
+                 [11, 41, 22, 20, 16, 16], x=x, y=y, baslik="MAHAL LİSTESİ")
     kap = []
     for kod in ("K03", "K05", "K07"):
         k = next(t for t in P.KAPI_LISTESI if t[0] == kod)
@@ -738,12 +899,22 @@ def _valf(msp, u, v, cap_mm, kod):
 
 def tavan(msp):
     n = {"tasiyici": 0, "armatur": 0, "kapak": 0}
-    # duvar gövdeleri (tavan planında da görünür, ince)
-    for g, mevcut, t, L, seg in CEPER:
-        sekil(msp, g, "A-KESIT-ARKA")
-    if BOLME is not None:
-        for g in (BOLME.geoms if hasattr(BOLME, "geoms") else [BOLME]):
-            sekil(msp, g, "A-KESIT-ARKA")
+    # Tavan planında duvarlar ARKADA KALAN elemandır: doku ve dikme çizilmez,
+    # yalnız gövde sınırı ince çizgiyle gösterilir (ISO 128-2 çizgi hiyerarşisi).
+    for c in CEPER:
+        karkas = KARKAS_MEVCUT if c["mevcut"] else KARKAS_BOLME
+        kal = sum(x["m"] for x in karkas)
+        sekil(msp, _bant(c["a"], c["b"], kal,
+                         _taraf(c["a"], c["b"], c["n"]), uzat=kal),
+              "A-KESIT-ARKA")
+    for b in IC_BOLME:
+        ic = P.ISLAK[BLOK][b["ic"]]
+        L = math.dist(b["a"], b["b"]) or 1.0
+        nx, ny = -(b["b"][1]-b["a"][1])/L, (b["b"][0]-b["a"][0])/L
+        m = ((b["a"][0]+b["b"][0])/2, (b["a"][1]+b["b"][1])/2)
+        disa = -1 if ic.contains(Point(m[0]+nx*0.02, m[1]+ny*0.02)) else 1
+        sekil(msp, _bant(b["a"], b["b"], sum(x["m"] for x in KARKAS_BOLME), disa),
+              "A-KESIT-ARKA")
     for ad in ("soyunma", "dus", "wc"):
         g = NET[ad]
         sekil(msp, g, "A-TAVAN-SINIR")
@@ -840,32 +1011,28 @@ def _zemin_katmanlari(zt):
     return taban, kat, alt
 
 
+# Zemin tip tablosundaki tür kodları → malzeme kütüphanesi sınıfı
+TUR_MALZEME = {"beton": "betonarme", "sap": "sap", "yalitim": "yalitim_su",
+               "seramik": "seramik"}
 TUR_KATMAN = {"beton": "A-KESIT-YAPISAL", "sap": "A-KATMAN-CIZGI",
               "yalitim": "A-KATMAN-YALITIM", "seramik": "A-KESIT-KESILEN"}
 # ANSI serisi 0,125 birim aralıklıdır; AR-CONC çok daha geniş adımlıdır
 # (yaklaşık 12 birim). Ortak ölçek kullanılırsa beton taraması tek bir uzun
 # çizgiye dönüşüp paftayı boydan boya keser — bu yüzden desen başına katsayı.
-DESEN_TABAN = {"AR-CONC": 12.0, "AR-SAND": 6.0}
-
-
-def _desen_olcek(desen, kagit_mm, olcek=OLCEK):
-    taban = DESEN_TABAN.get(desen, 0.125)
-    return kagit_mm*olcek/(taban*8.0) if desen in DESEN_TABAN else kagit_mm*olcek/taban
-
-
 TUR_DESEN = {"beton": ("AR-CONC", 2.4), "sap": ("ANSI31", 1.0),
              "yalitim": ("SOLID", 0), "seramik": ("ANSI37", 0.8)}
 
 
-def _katman_bandi(msp, v0, v1, z0, z1, tur, kat=None):
-    kat = kat or TUR_KATMAN.get(tur, "A-KATMAN-CIZGI")
-    pts = [(v0, z0), (v1, z0), (v1, z1), (v0, z1)]
-    _pl(msp, pts, kat)
-    desen, sik = TUR_DESEN.get(tur, ("ANSI31", 1.0))
-    if desen == "SOLID":
-        _hatch(msp, Polygon(pts), "A-KATMAN-YALITIM", "SOLID", renk=6)
-    elif sik:
-        _hatch(msp, Polygon(pts), "A-KESIT-TARAMA", desen, sik, 45)
+def _katman_bandi(msp, v0, v1, z0, z1, tur, kat=None, olcek=OLCEK, malzeme=None):
+    """Kesitte yatay bir katman bandı — gösterimi malzeme kütüphanesi seçer.
+
+    Kalınlığı kâğıtta 0,45 mm'nin altında kalan katman (su yalıtımı gibi)
+    ekseninde tek çizgiye iner; tarama sıklığı desen tanımından hesaplanır.
+    """
+    m = malzeme or TUR_MALZEME.get(tur, "bosalan")
+    q = Polygon([(v0, z0), (v1, z0), (v1, z1), (v0, z1)])
+    return MZ.katman_ciz(msp, q, m, olcek, u_yon=(1.0, 0.0),
+                         ceper=(kat == "A-KESIT-KESILEN"))
 
 
 def kesit(msp):
@@ -1124,36 +1291,25 @@ def detay(msp):
         t = mm/1000.0
         duvar_kat.append((ad, x-t, x, t))
         x -= t
+    # Malzeme sınıfı serbest metinden ÇIKARILIR (MZ.sinifla); detayda her
+    # katman kendi gösterimiyle çizilir — 1:5'te seramik derzi, dikme kesiti
+    # ve tuğla sırası da görünür hâle gelir.
     for ad, xa, xb, t in duvar_kat:
-        tur = ("seramik" if "seramik" in ad.lower() else
-               "yalitim" if "yalıtım" in ad.lower() else
-               "beton" if "Mevcut" in ad else "sap")
-        pts = [(xa, taban-0.06), (xb, taban-0.06),
-               (xb, taban+DETAY_DUVAR_BOY), (xa, taban+DETAY_DUVAR_BOY)]
-        _pl(msp, pts, TUR_KATMAN.get(tur, "A-KATMAN-CIZGI"))
-        desen, sik = TUR_DESEN.get(tur, ("ANSI31", 1.0))
-        if desen == "SOLID":
-            _hatch(msp, Polygon(pts), "A-KATMAN-YALITIM", "SOLID", renk=6)
-        elif sik:
-            _hatch(msp, Polygon(pts), "A-KESIT-TARAMA", desen, sik, 45, O)
+        q = Polygon([(xa, taban-0.06), (xb, taban-0.06),
+                     (xb, taban+DETAY_DUVAR_BOY), (xa, taban+DETAY_DUVAR_BOY)])
+        MZ.katman_ciz(msp, q, MZ.sinifla(ad), O, u_yon=(0.0, 1.0))
         n["katman"] += 1
     # 2) zemin katmanları
     for ad, z0, z1, tur in kat:
-        pts = [(x_ic, z0), (DETAY_ZEMIN_BOY, z0), (DETAY_ZEMIN_BOY, z1), (x_ic, z1)]
-        _pl(msp, pts, TUR_KATMAN.get(tur, "A-KATMAN-CIZGI"))
-        desen, sik = TUR_DESEN.get(tur, ("ANSI31", 1.0))
-        if desen == "SOLID":
-            _hatch(msp, Polygon(pts), "A-KATMAN-YALITIM", "SOLID", renk=6)
-        elif sik:
-            _hatch(msp, Polygon(pts), "A-KESIT-TARAMA", desen, sik, 45, O)
+        q = Polygon([(x_ic, z0), (DETAY_ZEMIN_BOY, z0),
+                     (DETAY_ZEMIN_BOY, z1), (x_ic, z1)])
+        MZ.katman_ciz(msp, q, MZ.sinifla(ad), O, u_yon=(1.0, 0.0))
         n["katman"] += 1
     # 3) mevcut döşeme
-    _pl(msp, [(x_duv, taban-DOSEME_KALINLIK), (DETAY_ZEMIN_BOY, taban-DOSEME_KALINLIK),
-              (DETAY_ZEMIN_BOY, taban), (x_duv, taban)], "A-KESIT-YAPISAL")
-    _hatch(msp, Polygon([(x_duv, taban-DOSEME_KALINLIK),
-                         (DETAY_ZEMIN_BOY, taban-DOSEME_KALINLIK),
-                         (DETAY_ZEMIN_BOY, taban), (x_duv, taban)]),
-           "A-KESIT-TARAMA", "AR-CONC", 1.6, 0, O)
+    q = Polygon([(x_duv, taban-DOSEME_KALINLIK),
+                 (DETAY_ZEMIN_BOY, taban-DOSEME_KALINLIK),
+                 (DETAY_ZEMIN_BOY, taban), (x_duv, taban)])
+    MZ.katman_ciz(msp, q, "betonarme", O, u_yon=(1.0, 0.0), ceper=True)
     # 4) KÖŞE SU YALITIM BANDI — detayın asıl konusu
     yal_z = next(z for ad, z, _, t in kat if t == "yalitim")
     yal_ust = next(z1 for ad, z0, z1, t in kat if t == "yalitim")
@@ -1164,7 +1320,7 @@ def detay(msp):
             (yx[1]-0.0015, yal_z + BANT_G), (yx[1]-0.0015, yal_z+0.0015),
             (BANT_G, yal_z+0.0015)]
     _pl(msp, bant, "A-KATMAN-YALITIM")
-    _hatch(msp, Polygon(bant), "A-KATMAN-YALITIM", "SOLID", renk=6, olcek=O)
+    MZ._hatch(msp, Polygon(bant), MZ.KAT_YALITIM, "SOLID", 0, 0, O, renk=6)
     bp = _balon(msp, (BANT_G*1.9, yal_z+0.10), "A", 0.026, "A-KATMAN-YALITIM", O)
     _ln(msp, (BANT_G*0.6, yal_z), (bp[0], bp[1]-0.026), "A-KATMAN-YALITIM")
     DETAY_ANAHTAR_EK.clear()

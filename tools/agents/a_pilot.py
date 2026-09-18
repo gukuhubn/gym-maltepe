@@ -142,18 +142,31 @@ class PilotAjani(Ajan):
     def _model(self, r):
         PL = self.PL
         # mahal alanı: net alan toplamı brüt bloğu aşamaz
+        # Üç alan kademesi: blok brütü ⊃ kaba yapı (karkas) ⊃ bitmiş yüz.
         brut = P.ISLAK[PL.BLOK]["tum"].area
-        net = sum(PL.NET_M2.values())
-        pay = brut - net
-        bek = (2.200*PL.BOLME_T) + (1.620*PL.BOLME_T)
-        if net > brut:
-            r.hata("alan", f"net mahal toplamı {net:.3f} m² > blok brütü {brut:.3f} m²")
-        elif abs(pay - bek) > 0.06:
-            r.uyari("alan", f"iç bölme payı {pay:.3f} m², beklenen {bek:.3f} m² "
-                            f"(fark {pay-bek:+.3f} m² — alt mekân bölünmesinden)")
+        kaba = sum(PL.KABA_M2.values())
+        bitmis = sum(PL.NET_M2.values())
+        bolme_pay = brut - kaba
+        kaplama_pay = kaba - bitmis
+        bek_bolme = (2.200 + 1.620) * PL.BOLME_T
+        if bitmis > kaba or kaba > brut:
+            r.hata("alan", f"alan kademeleri tutarsız: bitmiş {bitmis:.3f} · "
+                           f"kaba {kaba:.3f} · brüt {brut:.3f} m²")
+        elif abs(bolme_pay - bek_bolme) > 0.08:
+            r.uyari("alan", f"iç bölme payı {bolme_pay:.3f} m², beklenen "
+                            f"{bek_bolme:.3f} m² (fark {bolme_pay-bek_bolme:+.3f})")
         else:
-            r.bilgi("alan", f"net {net:.3f} m² + bölme payı {pay:.3f} m² = "
-                            f"brüt {brut:.3f} m²")
+            r.bilgi("alan", f"brüt {brut:.3f} = kaba {kaba:.3f} + bölme "
+                            f"{bolme_pay:.3f} m²")
+        # kaplama payı, ıslak/kuru kaplama kalınlıklarıyla tutarlı mı?
+        bek_kaplama = sum(P.ISLAK[PL.BLOK][n].exterior.length * PL.kaplama_t(n)
+                          for n in PL.MAHAL)
+        if abs(kaplama_pay - bek_kaplama) > 0.06:
+            r.uyari("alan", f"kaplama payı {kaplama_pay:.3f} m², çeper × kalınlık "
+                            f"{bek_kaplama:.3f} m²")
+        else:
+            r.bilgi("alan", f"kaba {kaba:.3f} − kaplama {kaplama_pay:.3f} = "
+                            f"bitmiş {bitmis:.3f} m²")
         # mahal numaraları benzersiz
         nolar = list(PL.MAHAL.values())
         if len(set(nolar)) != len(nolar):

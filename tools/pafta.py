@@ -412,6 +412,35 @@ class Pafta:
         return alt-3
 
     # ── grafik elemanlar ─────────────────────────────────────────────────────
+    def kalem_lejanti(self, x=None, y=None, baslik="ÇİZGİ HİYERARŞİSİ",
+                      kalemler=None, uzunluk=22.0):
+        """ISO 128-2 kalem serisi — hangi kalınlık neyi anlatıyor.
+
+        Paftanın "ifade" anahtarıdır: kesilen · görünen · arkada kalan ·
+        tarama ayrımı burada gösterilmezse okuyucu çizgi kalınlığını yorumlamaz.
+        Çizgiler GERÇEK kalınlıklarıyla basılır; lejant baskıda doğrulanabilir.
+        """
+        p = self.psp
+        kalemler = kalemler or [
+            (70, "Kesilen eleman çeperi"),
+            (50, "Bakılan yüzey sınırı (görünüş)"),
+            (35, "Kesit düzlemi arkasında görünen"),
+            (25, "Ölçü · kot · anotasyon"),
+            (18, "Arkada kalan / ikincil eleman"),
+            (13, "Tarama · katman ayrım çizgisi"),
+        ]
+        sx, sy, sw = self.sag()
+        x = sx if x is None else x
+        y = sy if y is None else y
+        y = self.baslik(x, y, baslik)
+        for lw, aciklama in kalemler:
+            _l(p, (x, y), (x+uzunluk, y), KAT_ANTET, lw)
+            _t(p, f"{lw/100:.2f} mm".replace(".", ","), (x+uzunluk+3, y),
+               YZ["mikro"], KAT_ANTET)
+            _t(p, aciklama, (x+uzunluk+19, y), YZ["mikro"], KAT_ANTET)
+            y -= 4.6
+        return y-2
+
     def kuzey(self, x=None, y=None, r=9.0, aci=0.0):
         """aci: kuzey okunun saat yönünün TERSİNE dönme açısı (derece).
         Görüntü penceresi döndürülmüşse (enlarged plan), ok da aynı kadar döner;

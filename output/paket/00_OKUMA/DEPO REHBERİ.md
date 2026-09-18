@@ -2,6 +2,11 @@
 
 Ön tasarım, uygulama projesi ve bütçe paketi · **Rev H** · 18 Eylül 2026
 
+> **Geometri artık ölçülmüştür.** Proje bugüne kadar `TRIMODE-Alan_Dagilimi.pdf`
+> (raster) üzerinden ±%3 doğrulukla türetiliyordu. Aynı çizimin ölçülü vektör
+> kaynağı `input/ESAT-FINAL.dwg` içinde duruyordu; açıldı ve modelin tek kaynağı
+> yapıldı. Raster türetmeye göre en büyük kenar sapması **21,7 cm** idi.
+
 ## Teslimatlar (`output/`)
 
 > **Tek dosya teslim:** `GYM_MALTEPE_UYGULAMA_PROJESI.pdf` — 27 pafta.
@@ -16,7 +21,9 @@
 | `Gym_Mekanik_Proje_A3.pdf` | Mekanik tesisat projesi — A3 yatay, 9 pafta (havalandırma prensip, sıhhi kolon şeması ve iklimlendirme prensip şemaları **ayrı paftalarda**) |
 | `Gym_Elektrik_Proje_A3.pdf` | Elektrik projesi — A3 yatay, 8 pafta (E-08 topraklama ve potansiyel dengeleme planı dâhil) |
 | `Gym_ADP_Sema_A3.pdf` | **ADP çok hatlı şema seti** — 12 pafta A3: kapak, pano karakteristiği (IEC 61439), sembol listesi, ana besleme, 4 şematik diyagram, klemens planı, pano önden görünüş, yükleme cetveli, malzeme listesi |
-| `Gym_Denetim_Raporu.pdf` | **Otomatik denetim raporu** — 6 kontrol ajanının bulguları, dayanak standartlarıyla |
+| `Gym_Pilot_Paftalar.pdf` | **PİLOT BÖLGE — 5 pafta A2**: ölçülü plan 1:20 · tavan planı 1:20 · koordinasyon kesiti 1:20 · iç görünüş 1:20 · birleşim detayı 1:5 (ERKEK ıslak blok 105·106·107) |
+| `Gym_Pilot_Raporu.pdf` | **Pilot çalışma raporu** — kabiliyet/eksik envanteri, kaynak envanteri (erişilen · izin gereken · erişilemeyen · uygulanmayan), eksik girdiler, düzeltilen hatalar, kontrol sonuçları |
+| `Gym_Denetim_Raporu.pdf` | **Otomatik denetim raporu** — 7 kontrol ajanının bulguları, dayanak standartlarıyla; dört sonuçlu (geçti · kaldı · veri eksik · uygulanmaz) |
 | `Gym_Donusum_Dosyasi_A3.pdf` | Yatırım / fizibilite dosyası — A3 yatay, 12 sayfa |
 | `Gym_Sunum_16x9.pdf` | Sunum — 16:9, 12 slayt |
 | `Gym_Proje_Paketi.zip` | **TEK TESLİM DOSYASI** — 7 klasör, 39 dosya, 24,4 MB. Tüm paftalar, CAD seti, tablolar, model, renderlar ve denetim raporu içindedir. |
@@ -41,7 +48,8 @@ Varsayımlar, doğrulanacaklar ve işverenden istenecekler: **`BUILD_NOTES.md`**
 pip install reportlab openpyxl pillow pypdfium2 opencv-python-headless shapely numpy ezdxf matplotlib
 bash tools/uret_hepsi.sh              # TÜM çıktıları sıfırdan üretir (aşağıdaki sıra)
 
-python3 tools/build_geometry.py       # raster pafta → ölçekli geometri
+python3 tools/roleve.py               # ÖLÇÜLMÜŞ rölöve (ESAT-FINAL.dwg) → data/roleve.json
+python3 tools/build_geometry.py       # (yedek) raster pafta → ölçekli geometri
 python3 tools/kanal_yollari.py        # hava kanalı ortogonal güzergâhları → data/kanallar.json
 python3 tools/linye_yollari.py        # elektrik linye ortogonal güzergâhları → data/yollar.json
 python3 tools/build_a3.py             # ana dosya
@@ -63,7 +71,11 @@ python3 tools/build_butce.py          # bütçe takibi + nakit akışı .xlsx
 python3 tools/build_pano_cetveli.py   # ADP pano yükleme cetveli .xlsx
 python3 tools/build_paket.py          # disiplin klasörlü teslim paketi .zip
 python3 tools/kontrol.py              # çizim kontrolü (çakışma, kot, yük, kaçış)
-python3 tools/agents/denetim.py       # DENETİM AJANLARI — 6 ajan, konsol + JSON + PDF rapor
+python3 tools/pilot.py                # PİLOT BÖLGE — 5 pafta A2 (plan·tavan·kesit·görünüş·detay)
+python3 tools/revizyon.py --bolme 125 # ilişkilendirme deneyi: bir girdi → kaç türev?
+python3 tools/build_pilot_raporu.py   # pilot çalışma raporu (talimat §13)
+python3 tools/dwg.py <dosya.dwg>      # DWG ↔ DXF dönüştürücü (ODA File Converter)
+python3 tools/agents/denetim.py       # DENETİM AJANLARI — 7 ajan, konsol + JSON + PDF rapor
 python3 tools/export_dimensions.py    # 3B model verisi
 node     tools/shoot.js . work/model  # Three.js → PNG (Playwright)
 python3 tools/render_gemini.py        # image-to-image render
