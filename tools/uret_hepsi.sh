@@ -2,6 +2,9 @@
 # TÜM ÇIKTILARI SIFIRDAN ÜRET — tek kaynak (tools/proj.py) → tüm paftalar ve tablolar.
 set -e
 cd "$(dirname "$0")/.."
+echo "── ölçülmüş rölöve → geometri ──────────────────────────────────────"
+python3 tools/roleve.py | tail -6
+python3 -c "import sys;sys.path.insert(0,'tools');import roleve;d,y=roleve.geometri_dosyasi();print('  → data/geometry_roleve.json  uyum %'+str(d['kayit']['uyum_yuzde']))"
 echo "── güzergâh motorları ──────────────────────────────────────────────"
 python3 tools/kanal_yollari.py
 python3 tools/linye_yollari.py | head -2
@@ -18,6 +21,10 @@ done
 echo "── CAD ─────────────────────────────────────────────────────────────"
 python3 tools/build_dxf.py | tail -4
 python3 tools/build_sema.py
+echo "── PİLOT BÖLGE (ölçülü plan · tavan · kesit · görünüş · detay) ─────"
+python3 tools/pilot.py
+echo "── REVİZYON DENEYİ ─────────────────────────────────────────────────"
+python3 tools/revizyon.py --bolme 125 | tail -6
 echo "── TEK DOSYA TESLİM ────────────────────────────────────────────────"
 python3 tools/build_tek_dosya.py
 echo "── model ve paket ──────────────────────────────────────────────────"

@@ -77,7 +77,10 @@ class Pafta:
         self.doc = doc
         self.no, self.ad, self.disiplin, self.boy = no, ad, disiplin, boy
         self.W, self.H = KAGIT[boy]
-        self.lay = doc.layouts.new(f"{no} {ad}"[:60])
+        # Layout adında /, \, <, >, ", :, ;, ?, *, |, ', ` kullanılamaz
+        _ad = f"{no} {ad}"[:60]
+        for _c in '/\\<>":;?*|\'`,=': _ad = _ad.replace(_c, "-")
+        self.lay = doc.layouts.new(_ad)
         self.lay.page_setup(size=(self.W, self.H), margins=(0, 0, 0, 0), units="mm")
         self.psp = self.lay
         self.proje = proje or {}
@@ -207,7 +210,18 @@ class Pafta:
         _l(p, (ax+118, s4), (ax+118, s5), KAT_ANTET, 35)
         # pafta adı
         _t(p, "PAFTA ADI", (ax+1.6, s3+8.0), YZ["mikro"], KAT_ANTET)
-        _t(p, self.ad, (ax+1.6, s3+2.8), YZ["etiket"], KAT_ANTET)
+        # Ad 118 mm'lik alana sığmalı; ISO 3098 3,5 mm yazıda ~0,62 mm/karakter.
+        # Sığmıyorsa yazı bir seri küçültülür, hâlâ sığmıyorsa iki satıra kırılır.
+        _ad_t, _h = self.ad, YZ["etiket"]
+        if len(_ad_t)*0.62*_h/3.5 > 116:
+            _h = YZ["metin"]
+        if len(_ad_t)*0.62*_h/3.5 > 116:
+            _p = _sar(_ad_t, int(116/(0.62*_h/3.5)))
+            _t(p, _p[0], (ax+1.6, s3+5.2), _h, KAT_ANTET)
+            if len(_p) > 1:
+                _t(p, " ".join(_p[1:]), (ax+1.6, s3+1.4), _h, KAT_ANTET)
+        else:
+            _t(p, _ad_t, (ax+1.6, s3+2.8), _h, KAT_ANTET)
         if self.ust_ad:
             _t(p, self.ust_ad, (ax+120.4, s3+2.8), YZ["mikro"], KAT_ANTET)
         # müellif / sicil
@@ -262,7 +276,7 @@ class Pafta:
 
     # ── ölçekli görüntü penceresi ────────────────────────────────────────────
     def gorunum(self, merkez, olcek=50, x=None, y=None, w=None, h=None,
-                donuk=(), cerceve=True):
+                donuk=(), cerceve=True, donme=0.0):
         """Model uzayını TAM ÖLÇEKTE kâğıda basar.
 
         merkez : model uzayı merkezi (mm)
@@ -277,6 +291,8 @@ class Pafta:
         vp = self.psp.add_viewport(
             center=(x+w/2, y+h/2), size=(w, h),
             view_center_point=merkez, view_height=h*olcek)
+        if donme:
+            vp.dxf.view_twist_angle = float(donme)
         vp.dxf.status = 1
         vp.dxf.layer = "G-VIEWPORT"   # plot=0 — çerçevesi basılmaz
         if donuk:
@@ -396,22 +412,27 @@ class Pafta:
         return alt-3
 
     # ── grafik elemanlar ─────────────────────────────────────────────────────
-    def kuzey(self, x=None, y=None, r=9.0):
+    def kuzey(self, x=None, y=None, r=9.0, aci=0.0):
+        """aci: kuzey okunun saat yönünün TERSİNE dönme açısı (derece).
+        Görüntü penceresi döndürülmüşse (enlarged plan), ok da aynı kadar döner;
+        aksi hâlde pafta kuzeyi yalan söyler."""
         p = self.psp
         vx, vy, vw, vh = getattr(self, "vp_kutu", (self.x0, self.y0, 100, 100))
         x = vx+vw-r-8 if x is None else x
         y = vy+vh-r-8 if y is None else y
+        ca, sa = math.cos(math.radians(aci)), math.sin(math.radians(aci))
+        def d(dx, dy): return (x + dx*ca - dy*sa, y + dx*sa + dy*ca)
         p.add_circle((x, y), r, dxfattribs={"layer": KAT_ANTET, "lineweight": 35})
-        pl = p.add_lwpolyline([(x, y+r*0.86), (x-r*0.34, y-r*0.52), (x, y-r*0.18),
-                               (x+r*0.34, y-r*0.52)], close=True,
+        ok = [d(0, r*0.86), d(-r*0.34, -r*0.52), d(0, -r*0.18), d(r*0.34, -r*0.52)]
+        pl = p.add_lwpolyline(ok, close=True,
                               dxfattribs={"layer": KAT_ANTET, "lineweight": 50})
         try:
             h = p.add_hatch(color=7, dxfattribs={"layer": KAT_ANTET})
-            h.paths.add_polyline_path([(x, y+r*0.86), (x-r*0.34, y-r*0.52),
-                                       (x, y-r*0.18)], is_closed=True)
+            h.paths.add_polyline_path(ok[:3], is_closed=True)
         except Exception:
             pass
-        _t(p, "K", (x, y-r-4), YZ["etiket"], KAT_ANTET, hiza=TA.MIDDLE_CENTER)
+        kx, ky = d(0, -r-4)
+        _t(p, "K", (kx, ky), YZ["etiket"], KAT_ANTET, hiza=TA.MIDDLE_CENTER)
         return pl
 
     def olcek_cubugu(self, olcek=50, x=None, y=None, uzunluk_m=5, bolum=5):
@@ -434,8 +455,9 @@ class Pafta:
                 pass
             _r(p, x+i*db, y, db, 2.2, KAT_ANTET, lw=18)
         for i in range(bolum+1):
-            _t(p, f"{int(i*uzunluk_m/bolum)}", (x+i*db, y-3.2), YZ["mikro"],
-               KAT_ANTET, hiza=TA.MIDDLE_CENTER)
+            v = i*uzunluk_m/bolum
+            et = f"{v:.0f}" if abs(v - round(v)) < 1e-9 else f"{v:.2f}".replace(".", ",")
+            _t(p, et, (x+i*db, y-3.2), YZ["mikro"], KAT_ANTET, hiza=TA.MIDDLE_CENTER)
         _t(p, "m", (x+boy+3, y+1.1), YZ["mikro"], KAT_ANTET)
         _t(p, f"ÖLÇEK 1:{olcek}", (x, y+4.0), YZ["mikro"], KAT_ANTET)
         return x+boy

@@ -4,8 +4,12 @@ import sys, os, time
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dataclasses import dataclass, field
 
+# Talimat §3: kural kontrolünde EN AZ DÖRT SONUÇ olmalı — geçti, kaldı,
+# veri eksik, uygulanmaz. "Kontrol edilmemiş bir alanı geçti olarak gösterme."
+# HATA = kaldı · BİLGİ = geçti · VERİ EKSİK ve UYGULANMAZ ayrı raporlanır.
 HATA, UYARI, BILGI = "HATA", "UYARI", "BİLGİ"
-SIRA = {HATA: 0, UYARI: 1, BILGI: 2}
+VERI_EKSIK, UYGULANMAZ = "VERİ EKSİK", "UYGULANMAZ"
+SIRA = {HATA: 0, UYARI: 1, VERI_EKSIK: 2, UYGULANMAZ: 3, BILGI: 4}
 
 @dataclass
 class Bulgu:
@@ -27,12 +31,18 @@ class Rapor:
     def hata(self, *a, **k):  self.ekle(HATA, *a, **k)
     def uyari(self, *a, **k): self.ekle(UYARI, *a, **k)
     def bilgi(self, *a, **k): self.ekle(BILGI, *a, **k)
+    def eksik(self, *a, **k): self.ekle(VERI_EKSIK, *a, **k)
+    def disi(self, *a, **k):  self.ekle(UYGULANMAZ, *a, **k)
     @property
     def n_hata(self):  return sum(1 for b in self.bulgular if b.seviye == HATA)
     @property
     def n_uyari(self): return sum(1 for b in self.bulgular if b.seviye == UYARI)
     @property
     def n_bilgi(self): return sum(1 for b in self.bulgular if b.seviye == BILGI)
+    @property
+    def n_eksik(self): return sum(1 for b in self.bulgular if b.seviye == VERI_EKSIK)
+    @property
+    def n_disi(self):  return sum(1 for b in self.bulgular if b.seviye == UYGULANMAZ)
     @property
     def durum(self):
         return "RED" if self.n_hata else ("ŞARTLI" if self.n_uyari else "UYGUN")

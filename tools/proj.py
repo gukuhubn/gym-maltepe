@@ -3,7 +3,7 @@
 Bir sayiyi degistirmek icin SADECE bu dosyayi duzenleyin."""
 import json, math
 from pathlib import Path
-from shapely.geometry import Polygon, Point, box
+from shapely.geometry import Polygon, Point, box, LineString
 from shapely import affinity
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -123,11 +123,21 @@ EK_ALAN = round(sum(p.area for _,_,p in ekipman_poligonlari()),2)
 
 # ───────────────────────── KAPI / PENCERE / CEPHE ───────────────────────────────
 CEPHE = [((0.58,1.25),(0.00,6.84)), ((1.96,1.56),(3.24,0.00))]   # mavi doğrama (batı+GB)
+# ── KAPI BOYUTLARI — TEK KAYNAK ───────────────────────────────────────────────
+# Plan geometrisi de kapı cetveli de bu sözlükten okur. İkisi ayrı yerde
+# yazılırsa cetveldeki 700 mm ile planda çizilen 900 mm sessizce ayrışır
+# (talimat §8 ve §11: "listeler çizimle uyuşuyor mu").
+KAPI_EN_MM  = {"K01": 1600, "K02": 1000, "K03": 900, "K04": 900,
+               "K05": 700,  "K06": 700,  "K07": 700, "K08": 700, "K09": 700}
+KAPI_YUK_MM = {"K01": 2400, "K02": 2100, "K03": 2100, "K04": 2100,
+               "K05": 2000, "K06": 2000, "K07": 1950, "K08": 1950, "K09": 2000}
+def kapi_en(kod): return KAPI_EN_MM[kod]/1000.0
+
 KAPILAR = [ # (x,y) m, genislik, aci, etiket
- ((0.24, 4.30), 1.60, 90,  "ANA GİRİŞ  2×80 cm"),
- ((8.85, 7.10), 0.90, 82,  "ERKEK SOYUNMA"),
- ((9.10, 3.40), 0.90, 82,  "KADIN SOYUNMA"),
- ((3.35, 0.10), 1.00, 0,   "ACİL ÇIKIŞ (GB cephe)"),
+ ((0.24, 4.30), KAPI_EN_MM["K01"]/1000.0, 90,  "ANA GİRİŞ  2×80 cm"),
+ ((8.85, 7.10), KAPI_EN_MM["K03"]/1000.0, 82,  "ERKEK SOYUNMA"),
+ ((9.10, 3.40), KAPI_EN_MM["K04"]/1000.0, 82,  "KADIN SOYUNMA"),
+ ((3.35, 0.10), KAPI_EN_MM["K02"]/1000.0, 0,   "ACİL ÇIKIŞ (GB cephe)"),
 ]
 
 # ───────────────────────── MEKANİK / ELEKTRİK HESAP ─────────────────────────────
@@ -962,7 +972,129 @@ def islak_alt_mekanlar():
         out[ad]=dict(soyunma=_temiz(soyunma), dus=_temiz(dus), wc=_temiz(wc), tum=p)
     return out
 ISLAK = islak_alt_mekanlar()
-ISLAK_M2_DETAY = {k:{n:round(g.area,2) for n,g in d.items()} for k,d in ISLAK.items()}
+# Alt mekân bölünmesinden gelen yinelenen köşeleri ayıkla (ISO/çizim kontrolü:
+# "sıfır uzunluklu / tekrarlı geometri olmamalı").
+def _kose_temizle(g, esik=0.004):
+    pts = list(g.exterior.coords)[:-1]
+    out = []
+    for q in pts:
+        if not out or math.dist(q, out[-1]) > esik: out.append(q)
+    if len(out) > 2 and math.dist(out[0], out[-1]) <= esik: out.pop()
+    return Polygon(out) if len(out) >= 3 else g
+ISLAK = {k: {n: _kose_temizle(g) for n, g in d.items()} for k, d in ISLAK.items()}
+
+# ── İÇ BÖLME PAYI ─────────────────────────────────────────────────────────────
+# islak_alt_mekanlar() bloğun NET alanını üçe böler; iki alt mekân arasındaki
+# BÖLME DUVARI için pay ayırmaz. Ölçülmüş rölövede salon ile ıslak blok arası
+# boşluk 98 mm ölçüldü — mimarın çizdiği bölme kalınlığı budur (beyan edilen
+# D3 = 100 mm ile birebir). Aynı bölme alt mekânlar arasında da vardır;
+# ayrılmazsa mahal alanı, seramik metrajı ve BoQ 0,38 m² fazla çıkar.
+ISLAK_BOLME_T = 0.10                    # m — D3 alçıpan ıslak bölme
+ISLAK_BOLME_OLCULEN = 0.098             # m — rölövede salon/blok boşluğu (kanıt)
+
+def _bolme_payi(alt):
+    """Alt mekânlardan, aralarındaki bölme duvarının yarısını düşer."""
+    from shapely.ops import unary_union as _bir
+    adlar = [n for n in alt if n != "tum"]
+    bant = []
+    for i in range(len(adlar)):
+        for j in range(i+1, len(adlar)):
+            a, b = alt[adlar[i]], alt[adlar[j]]
+            if a.distance(b) > 0.02: continue
+            # ortak kenar: a'nın çeperinden b'ye 5 mm'den yakın parçalar
+            ort = a.exterior.intersection(b.buffer(0.005))
+            parca = [g for g in (list(ort.geoms) if hasattr(ort, "geoms") else [ort])
+                     if getattr(g, "length", 0) > 0.05]
+            for g in parca:
+                bant.append(g.buffer(ISLAK_BOLME_T/2, cap_style=2, join_style=2))
+    if not bant: return alt
+    b = _bir(bant)
+    out = {}
+    for n, g in alt.items():
+        if n == "tum": out[n] = g; continue
+        q = g.difference(b)
+        out[n] = max(q.geoms, key=lambda z: z.area) if hasattr(q, "geoms") else q
+    # bölme bandı da temizlenir; unary_union köşelerde yinelenen düğüm bırakır
+    out["bolme"] = _bir([_kose_temizle(q) for q in
+                                (b.geoms if hasattr(b, "geoms") else [b])])
+    return out
+
+# difference() işlemi köşelerde yinelenen düğüm bırakabiliyor; bölme payı
+# düşüldükten sonra tekrar temizlenir (sıfır uzunluklu parça kalmaz).
+ISLAK = {k: {n: (g if n == "bolme" else _kose_temizle(g))
+             for n, g in _bolme_payi(d).items()} for k, d in ISLAK.items()}
+ISLAK_M2_DETAY = {k:{n:round(g.area,2) for n,g in d.items() if n != "bolme"}
+                  for k,d in ISLAK.items()}
+ISLAK_NET_M2 = round(sum(g.area for d in ISLAK.values()
+                         for n, g in d.items() if n not in ("tum", "bolme")), 3)
+
+# ── ALT MEKÂN KAPILARI ────────────────────────────────────────────────────────
+# Duş ve WC kapıları kapı listesinde (K05–K08) vardı ama PLANDA ÇİZİLİ DEĞİLDİ.
+# Kapı konumu artık elle yazılmaz: alt mekânın soyunma ile PAYLAŞTIĞI kenardan
+# türetilir; geometri değişince kapı da birlikte gider (talimat §7).
+def _ortak_kenar_kapi(alt, soyunma, gen, tol=None):
+    """(x,y), açı — alt mekânı soyunmaya bağlayan BÖLME DUVARININ ekseni üstünde,
+    kapı boşluğunun ortası. İki mahal arasında artık bölme payı bulunduğu için
+    (ISLAK_BOLME_T) temas toleransla aranır ve kapı duvar ekseninde durur."""
+    tol = ISLAK_BOLME_T + 0.02 if tol is None else tol
+    ort = alt.exterior.intersection(soyunma.buffer(tol))
+    parcalar = [g for g in (list(ort.geoms) if hasattr(ort, "geoms") else [ort])
+                if getattr(g, "length", 0) >= gen + 0.05]
+    if not parcalar: return None
+    en = max(parcalar, key=lambda g: g.length)
+    m = en.interpolate(0.5, normalized=True)
+    (ax, ay), (bx, by) = en.coords[0], en.coords[-1]
+    # kapıyı bölme duvarının ekseninde konumla (alt mekân yüzünden yarım bölme içeri)
+    n = math.hypot(bx-ax, by-ay) or 1.0
+    nx, ny = -(by-ay)/n, (bx-ax)/n
+    q = Point(m.x + nx*0.01, m.y + ny*0.01)
+    yon = 1 if soyunma.distance(q) < soyunma.distance(Point(m.x-nx*0.01, m.y-ny*0.01)) else -1
+    mx = m.x + yon*nx*ISLAK_BOLME_T/2
+    my = m.y + yon*ny*ISLAK_BOLME_T/2
+    return (round(mx, 3), round(my, 3)), round(math.degrees(math.atan2(by-ay, bx-ax)) % 180, 1)
+
+_ALT_KAPI = {("ERKEK", "wc"): ("K05", kapi_en("K05")),
+             ("KADIN", "wc"): ("K06", kapi_en("K06")),
+             ("ERKEK", "dus"): ("K07", kapi_en("K07")),
+             ("KADIN", "dus"): ("K08", kapi_en("K08"))}
+KAPI_GEOM = {"K01": (KAPILAR[0][0], KAPILAR[0][1], KAPILAR[0][2]),
+             "K02": (KAPILAR[3][0], KAPILAR[3][1], KAPILAR[3][2]),
+             "K03": (KAPILAR[1][0], KAPILAR[1][1], KAPILAR[1][2]),
+             "K04": (KAPILAR[2][0], KAPILAR[2][1], KAPILAR[2][2])}
+for (_blok, _alt), (_kod, _g) in _ALT_KAPI.items():
+    _r = _ortak_kenar_kapi(ISLAK[_blok][_alt], ISLAK[_blok]["soyunma"], _g)
+    if _r is None: continue
+    _p, _a = _r
+    KAPI_GEOM[_kod] = (_p, _g, _a)
+    KAPILAR.append((_p, _g, _a, f"{_kod} · {_blok} {'WC' if _alt=='wc' else 'DUŞ'}"))
+# K09 bir mahal kapısı değil, banko arkası teknik dolap kapağıdır; planda
+# mobilya olarak görünür, KAPI_GEOM'a girmez.
+KAPI_GEOM_HARIC = {"K09": "banko arkası teknik dolap kapağı — mobilya imalatı"}
+
+
+# ───────────────────────── KAPI AÇILIM ALANLARI ───────────────────────────────
+# TASARIM KARARI — kapı açılış yönü
+# 105/108 soyunma odaları 4,5–5,7 m²'dir ve her birine ÜÇ kapı açılır
+# (soyunma girişi + WC + duş). Üçü de içeri açılırsa dolap ve bank için temiz
+# alan kalmaz; denetim ajanı bunu çakışma olarak yakaladı. Soyunma giriş kapısı
+# (K03/K04) bir kaçış kapısı değildir (BYKHY md.32 kapsamı dışı), bu yüzden
+# SALONA doğru açılır. WC ve duş kapıları küçük kabin kuralı gereği zaten
+# soyunmaya doğru açılır.
+KAPI_DISA = {"K03", "K04"}
+
+
+def kapi_yayi(kod):
+    """Kapının süpürdüğü çeyrek daire — mobilya ve ekipman bu alana giremez.
+    (BYKHY md.32 kaçış kapıları ve genel erişilebilirlik gereği.)"""
+    if kod not in KAPI_GEOM: return None
+    (x, y), gen, aci = KAPI_GEOM[kod]
+    a = math.radians(aci) + (math.pi if kod in KAPI_DISA else 0.0)
+    p1 = (x - math.cos(a)*gen/2, y - math.sin(a)*gen/2)
+    pts = [p1] + [(p1[0] + math.cos(a - math.pi/2*t/16)*gen,
+                   p1[1] + math.sin(a - math.pi/2*t/16)*gen) for t in range(17)]
+    return Polygon(pts)
+
+KAPI_YAY = {k: kapi_yayi(k) for k in KAPI_GEOM}
 
 
 # ───────────────────────── SABİT MOBİLYA (marangoz imalatı) ────────────────────
@@ -970,16 +1102,57 @@ def _mob(cx, cy, w, d, aci, ad, tip):
     g = affinity.rotate(box(cx-w/2, cy-d/2, cx+w/2, cy+d/2), aci, origin=(cx,cy))
     return (ad, g, tip)
 
+def _kacin(cx, cy, w, d, aci, yon, mahal, yasak, adim=0.06, tur=14):
+    """Dikdörtgen mobilyayı `yon` doğrultusunda kaydırarak yasak alanlardan
+    (kapı açılımı) çıkarır ve mahal içinde tutar. Konum elle değil, geometriden
+    bulunur; kapı yeri değişirse mobilya da kendiliğinden yer değiştirir."""
+    en_iyi = None
+    for i in range(-tur, tur+1):
+        x, y = cx + yon[0]*i*adim, cy + yon[1]*i*adim
+        g = affinity.rotate(box(x-w/2, y-d/2, x+w/2, y+d/2), aci, origin=(x, y))
+        if not mahal.buffer(-0.02).contains(g): continue
+        cak = sum(g.intersection(q).area for q in yasak if q is not None)
+        if en_iyi is None or cak < en_iyi[0] - 1e-9 or \
+           (abs(cak - en_iyi[0]) < 1e-9 and abs(i) < en_iyi[1]):
+            en_iyi = (cak, abs(i), x, y, g)
+        if cak <= 1e-9 and i == 0: break
+    return en_iyi
+
 def mobilyalar():
     out=[_mob(1.78, 6.05, 2.40, 0.65, 96, "RESEPSİYON BANKOSU", "banko")]
     for ad, d in ISLAK.items():
         g=d["soyunma"]; u,_=_uzun_eksen(g); c=g.centroid
         v_=(-u[1],u[0])
-        out.append(_mob(c.x+v_[0]*0.62, c.y+v_[1]*0.62, 1.70, 0.35,
-                        math.degrees(math.atan2(*u[::-1])), f"DOLAP {ad[0]}", "dolap"))
-        out.append(_mob(c.x-v_[0]*0.55, c.y-v_[1]*0.55, 1.25, 0.32,
-                        math.degrees(math.atan2(*u[::-1])), f"BANK {ad[0]}", "bank"))
+        aci = math.degrees(math.atan2(*u[::-1]))
+        # bu soyunmaya açılan tüm kapıların yayları yasak alandır
+        yasak = [y for k, y in KAPI_YAY.items()
+                 if y is not None and y.intersects(g.buffer(0.10))]
+        for isim, ofset, w, dd in ((f"DOLAP {ad[0]}", +0.62, 1.70, 0.35),
+                                   (f"BANK {ad[0]}", -0.55, 1.25, 0.32)):
+            cx, cy = c.x + v_[0]*ofset, c.y + v_[1]*ofset
+            # Önce kaydırarak, olmazsa BOYU KISALTARAK kapı açılımından çıkar.
+            # 4,53 m²'lik soyunmaya üç kapı açılıyor; tam boy dolap+bank ile
+            # temiz açılım sağlanamıyor — bu bir tasarım kısıtıdır, çizim hilesi
+            # değil. Küçültülen boy MOBILYA_BOY'a yazılır ve metraja o girer.
+            son = None
+            for k in (1.0, 0.85, 0.70, 0.55):
+                r = _kacin(cx, cy, w*k, dd, aci, u, g, yasak)
+                if r is None: continue
+                son = (r, w*k)
+                if r[0] <= 1e-9: break
+            tip = "dolap" if "DOLAP" in isim else "bank"
+            if son is None:
+                out.append(_mob(cx, cy, w, dd, aci, isim, tip))
+                MOBILYA_BOY[isim] = (w, dd, "yerleştirilemedi")
+            else:
+                (cak, _, _, _, gg), wk = son
+                out.append((isim, gg, tip))
+                MOBILYA_BOY[isim] = (round(wk, 3), dd,
+                                     "tam boy" if abs(wk-w) < 1e-6 else
+                                     f"kapı açılımı için {w:.2f} m'den kısaltıldı")
     return out
+
+MOBILYA_BOY = {}
 MOBILYA = mobilyalar()
 
 # ───────────────────────── UYGUNLUK KONTROL LİSTESİ ────────────────────────────
@@ -1338,39 +1511,39 @@ for _ad, _d in ISLAK.items():
 # ── KAPI VE PENCERE LİSTESİ ────────────────────────────────────────────────────
 # kod, adet, mahal, en_mm, yuk_mm, tip, kasa/kanat, donanım, yangın/özel
 KAPI_LISTESI = [
- ("K01",1,"101 Giriş",1600,2400,"Çift kanat cam kapı (2×800)",
+ ("K01",1,"101 Giriş",KAPI_EN_MM["K01"],KAPI_YUK_MM["K01"],"Çift kanat cam kapı (2×800)",
   "Mevcut alüminyum doğrama + 8 mm temperli cam",
   "Panik kolu (EN 1125), hidrolik kapı kapatıcı, eşiksiz alt profil",
   "Açılış yönü DIŞARI çevrilecek — mevcut doğrama revize"),
- ("K02",1,"101 → GB cephe",1000,2100,"Tek kanat acil çıkış",
+ ("K02",1,"101 → GB cephe",KAPI_EN_MM["K02"],KAPI_YUK_MM["K02"],"Tek kanat acil çıkış",
   "Alüminyum + 8 mm temperli cam",
   "Panik bar (EN 1125), kapı kapatıcı, dışa açılır",
   "Acil çıkış levhası + acil aydınlatma AY3 üstünde"),
- ("K03",1,"105 Erkek soyunma",900,2100,"Tek kanat panel kapı",
+ ("K03",1,"105 Erkek soyunma",KAPI_EN_MM["K03"],KAPI_YUK_MM["K03"],"Tek kanat panel kapı",
   "MDF laminat kaplı kanat, WPC kasa ve pervaz",
   "Paslanmaz kol, silindirli kilit, 3 adet menteşe",
-  "Alt kısmında 150 cm² net hava geçiş menfezi"),
- ("K04",1,"108 Kadın soyunma",900,2100,"Tek kanat panel kapı",
+  "Alt menfez 150 cm² · SALONA açılır — soyunmada üç kapı açılımı çakışıyordu; kaçış kapısı değildir"),
+ ("K04",1,"108 Kadın soyunma",KAPI_EN_MM["K04"],KAPI_YUK_MM["K04"],"Tek kanat panel kapı",
   "MDF laminat kaplı kanat, WPC kasa ve pervaz",
   "Paslanmaz kol, silindirli kilit, 3 adet menteşe",
-  "Alt kısmında 150 cm² net hava geçiş menfezi"),
- ("K05",1,"107 Erkek WC",700,2000,"Tek kanat WC kapısı",
+  "Alt menfez 150 cm² · SALONA açılır — soyunmada üç kapı açılımı çakışıyordu; kaçış kapısı değildir"),
+ ("K05",1,"107 Erkek WC",KAPI_EN_MM["K05"],KAPI_YUK_MM["K05"],"Tek kanat WC kapısı",
   "Tam WPC (su geçirmez) kanat ve kasa",
   "Kilit göstergeli WC kolu, paslanmaz menteşe",
   "Alt menfez 150 cm² — egzoz telafi havası"),
- ("K06",1,"110 Kadın WC",700,2000,"Tek kanat WC kapısı",
+ ("K06",1,"110 Kadın WC",KAPI_EN_MM["K06"],KAPI_YUK_MM["K06"],"Tek kanat WC kapısı",
   "Tam WPC (su geçirmez) kanat ve kasa",
   "Kilit göstergeli WC kolu, paslanmaz menteşe",
   "Alt menfez 150 cm² — egzoz telafi havası"),
- ("K07",1,"106 Erkek duş",700,1950,"Duş kapağı",
+ ("K07",1,"106 Erkek duş",KAPI_EN_MM["K07"],KAPI_YUK_MM["K07"],"Duş kapağı",
   "6 mm temperli cam, alüminyum profil",
   "Paslanmaz menteşe, manyetik fitil",
   "Alt kenar zeminden 15 mm yukarıda"),
- ("K08",1,"109 Kadın duş",700,1950,"Duş kapağı",
+ ("K08",1,"109 Kadın duş",KAPI_EN_MM["K08"],KAPI_YUK_MM["K08"],"Duş kapağı",
   "6 mm temperli cam, alüminyum profil",
   "Paslanmaz menteşe, manyetik fitil",
   "Alt kenar zeminden 15 mm yukarıda"),
- ("K09",1,"101 Depo / teknik dolap",700,2000,"Tek kanat dolap kapağı",
+ ("K09",1,"101 Depo / teknik dolap",KAPI_EN_MM["K09"],KAPI_YUK_MM["K09"],"Tek kanat dolap kapağı",
   "MDF laminat, banko arkası niş",
   "Bas-aç mandal, kilitli",
   "Havalandırma menfezli — NVR ve router ısısı için"),

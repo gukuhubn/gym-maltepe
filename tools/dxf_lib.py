@@ -43,6 +43,22 @@ KATMANLAR = [
  ("A-TAVAN-SINIR", 150, "Continuous", 25, "Mimari — asma tavan tipi sınırı"),
  ("A-TAVAN-YAZI",  150, "Continuous", 13, "Mimari — asma tavan tipi ve kotu"),
  ("A-TAVAN-KAPAK", 150, "Continuous", 18, "Mimari — revizyon kapağı 300×300"),
+ # ── KESİT · GÖRÜNÜŞ · DETAY (ISO 128-2 çizgi hiyerarşisi) ────────────────────
+ # Kesilen eleman en kalın, görünen orta, arkada kalan ince; tarama ve katman
+ # ayrım çizgileri en ince seride. Kalemler ISO 128 serisindendir.
+ ("A-KESIT-KESILEN",  7, "Continuous", 70, "Kesit — kesilen eleman çeperi"),
+ ("A-KESIT-GORUNEN",  7, "Continuous", 35, "Kesit — kesit düzlemi arkasında görünen"),
+ ("A-KESIT-ARKA",     8, "Continuous", 18, "Kesit — arkada kalan / ikincil eleman"),
+ ("A-KESIT-TARAMA", 253, "Continuous", 13, "Kesit — malzeme taraması"),
+ ("A-KESIT-YAPISAL", 8, "Continuous",  50, "Kesit — mevcut betonarme döşeme ve duvar"),
+ ("A-KATMAN-CIZGI", 251, "Continuous", 13, "Detay — katman ayrım çizgisi"),
+ ("A-KATMAN-YALITIM", 6, "Continuous", 35, "Detay — su yalıtımı ve bandı"),
+ ("A-KOT-ISARET",   250, "Continuous", 25, "Kot işareti ve değeri"),
+ ("A-GORUNUS-SINIR", 7, "Continuous", 50, "İç görünüş — eleman dış sınırı"),
+ ("A-GORUNUS-IC",    8, "Continuous", 25, "İç görünüş — iç bölüntü ve donatı"),
+ ("A-GORUNUS-DERZ", 254, "Continuous", 13, "İç görünüş — seramik derz ızgarası"),
+ ("A-DETAY-CAGRI",   1, "Continuous", 25, "Detay çağrı balonu ve kopuş çizgisi"),
+ ("A-TESISAT-KESIT", 4, "Continuous", 35, "Kesit — tavan içi tesisat gövdesi"),
  ("A-YANGIN-KACIS", 3, "Continuous", 50, "Mimari — kaçış yolu ve çıkış"),
  ("A-YANGIN-EKIP",  1, "Continuous", 35, "Mimari — söndürücü, dolap, ihbar"),
  ("M-HAVA-BESLEME",  3, "Continuous", 35, "Mekanik — taze hava kanalı"),

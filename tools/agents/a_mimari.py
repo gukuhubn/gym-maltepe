@@ -118,7 +118,31 @@ class MimariAjani(Ajan):
                                   f"{KAPI_WC_MIN} mm")
             if yuk < 1900:
                 r.uyari("doğrama", f"{kod} {ad}: kapı yüksekliği {yuk} mm — 1900 mm altı")
-        r.bilgi("doğrama", f"{len(P.KAPI_LISTESI)} kapı · {len(P.PENCERE_LISTESI)} "
+        # kapı listesi ↔ plan geometrisi eşleşmesi (talimat §11: "listeler
+        # çizimle uyuşuyor mu"). Liste ile plan arasındaki sessiz kopukluk
+        # K05–K08'de fiilen yaşandı: kapılar cetvelde vardı, planda yoktu.
+        haric = getattr(P, "KAPI_GEOM_HARIC", {})
+        geom = getattr(P, "KAPI_GEOM", {})
+        for k in P.KAPI_LISTESI:
+            kod = k[0]
+            if kod in geom or kod in haric: continue
+            r.hata("doğrama", f"{kod} {k[2]}: kapı cetvelinde var, planda geometrisi yok",
+                   dayanak="liste ↔ çizim tutarlılığı")
+        fazla = [g for g in geom if g not in {k[0] for k in P.KAPI_LISTESI}]
+        for g in fazla:
+            r.hata("doğrama", f"{g}: planda çizili, kapı cetvelinde yok")
+        # planda çizilen kapı, bağlı olduğu mahallin çeperinde mi?
+        from shapely.geometry import Point as _Pt
+        for kod, (pt, gen, aci) in geom.items():
+            if kod in ("K01", "K02"): continue
+            q = _Pt(*pt)
+            if all(g.exterior.distance(q) > 0.25 for _, _, g in P._MAHAL_GEOM):
+                r.uyari("doğrama", f"{kod}: kapı hiçbir mahal çeperine oturmuyor "
+                                   f"({pt[0]:.2f}, {pt[1]:.2f})")
+        for kod, gerekce in haric.items():
+            r.bilgi("doğrama", f"{kod}: plan geometrisi aranmaz — {gerekce}")
+        r.bilgi("doğrama", f"{len(P.KAPI_LISTESI)} kapı ({len(geom)} planda çizili · "
+                           f"{len(haric)} mobilya) · {len(P.PENCERE_LISTESI)} "
                            f"doğrama kalemi listelendi")
 
     # 5 ── tahliye

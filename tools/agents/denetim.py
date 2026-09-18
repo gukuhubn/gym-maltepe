@@ -19,11 +19,13 @@ from agents.a_elektrik    import ElektrikAjani
 from agents.a_standart    import StandartAjani
 from agents.a_koordinasyon import KoordinasyonAjani
 from agents.a_teslim      import TeslimAjani
+from agents.a_pilot       import PilotAjani
 
 AJANLAR = [MimariAjani, MekanikAjani, ElektrikAjani,
-           StandartAjani, KoordinasyonAjani, TeslimAjani]
+           StandartAjani, KoordinasyonAjani, PilotAjani, TeslimAjani]
 
-RENK = {"HATA": "\033[31m", "UYARI": "\033[33m", "BİLGİ": "\033[90m"}
+RENK = {"HATA": "\033[31m", "UYARI": "\033[33m", "BİLGİ": "\033[90m",
+        "VERİ EKSİK": "\033[36m", "UYGULANMAZ": "\033[35m"}
 SIFIRLA = "\033[0m"
 DURUM_RENK = {"RED": "\033[31m", "ŞARTLI": "\033[33m", "UYGUN": "\033[32m"}
 
@@ -45,10 +47,13 @@ def yaz(raporlar):
         d = DURUM_RENK.get(r.durum, "")
         print(f"\n▸ {r.baslik}")
         print(f"  {d}{r.durum}{SIFIRLA}  ·  {r.n_hata} hata · {r.n_uyari} uyarı · "
-              f"{r.n_bilgi} bilgi  ·  {r.sure*1000:.0f} ms")
-        for b in sorted(r.bulgular, key=lambda b: {"HATA":0,"UYARI":1,"BİLGİ":2}[b.seviye]):
+              f"{r.n_bilgi} geçti · {r.n_eksik} veri eksik · {r.n_disi} uygulanmaz"
+              f"  ·  {r.sure*1000:.0f} ms")
+        _S = {"HATA":0,"UYARI":1,"VERİ EKSİK":2,"UYGULANMAZ":3,"BİLGİ":4}
+        for b in sorted(r.bulgular, key=lambda b: _S[b.seviye]):
             c = RENK.get(b.seviye, "")
-            im = {"HATA": "✗", "UYARI": "!", "BİLGİ": "·"}[b.seviye]
+            im = {"HATA": "✗", "UYARI": "!", "BİLGİ": "·",
+                  "VERİ EKSİK": "?", "UYGULANMAZ": "—"}[b.seviye]
             print(f"    {c}{im} [{b.kategori}] {b.mesaj}{SIFIRLA}")
             if b.dayanak: print(f"        dayanak: {b.dayanak}")
             if b.oneri:   print(f"        öneri  : {b.oneri}")
