@@ -23,6 +23,8 @@ python3 tools/build_dxf.py | tail -4
 python3 tools/build_sema.py
 echo "── PİLOT BÖLGE (ölçülü plan · tavan · kesit · görünüş · detay) ─────"
 python3 tools/pilot.py
+echo "── PİLOT RAPORU (talimat §13) ──────────────────────────────────────"
+python3 tools/build_pilot_raporu.py
 echo "── REVİZYON DENEYİ ─────────────────────────────────────────────────"
 python3 tools/revizyon.py --bolme 125 | tail -6
 echo "── TEK DOSYA TESLİM ────────────────────────────────────────────────"

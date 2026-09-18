@@ -1,17 +1,17 @@
 {
- "tarih": "2026-09-18 11:30",
+ "tarih": "2026-09-18 13:28",
  "genel": "UYGUN",
  "ajanlar": [
   {
    "ad": "mimari",
    "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 56,
+   "sure_ms": 57,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "alan",
-     "mesaj": "10 mahal · 103.31 m² net + 0.47 m² duvar = 103.78 m² iç alan",
+     "mesaj": "10 mahal · 103.10 m² net + 0.68 m² duvar = 103.78 m² iç alan",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -75,7 +75,15 @@
     {
      "seviye": "BİLGİ",
      "kategori": "doğrama",
-     "mesaj": "9 kapı · 2 doğrama kalemi listelendi",
+     "mesaj": "K09: plan geometrisi aranmaz — banko arkası teknik dolap kapağı — mobilya imalatı",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "doğrama",
+     "mesaj": "9 kapı (8 planda çizili · 1 mobilya) · 2 doğrama kalemi listelendi",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -91,7 +99,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "karkas",
-     "mesaj": "8 bölme ekseni · 17.14 m · 49 adet C50×50×0,6 dikme @400 mm",
+     "mesaj": "3 bölme ekseni · 10.22 m · 27 adet C50×50×0,6 dikme @400 mm",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -147,7 +155,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "kanal",
-     "mesaj": "besleme 16.8 m · egzoz 10.5 m · ıslak 15.0 m ana hat + 4.4 m branşman",
+     "mesaj": "besleme 16.8 m · egzoz 10.6 m · ıslak 16.7 m ana hat + 5.1 m branşman",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -219,7 +227,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "iklim",
-     "mesaj": "K2 FONKSİYONEL · KARDİYO: 18000 BTU → 235 W/m² (22.4 m²)",
+     "mesaj": "K2 FONKSİYONEL · KARDİYO: 18000 BTU → 236 W/m² (22.3 m²)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -227,7 +235,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "iklim",
-     "mesaj": "K3 GİRİŞ · BANKO · SİRKÜLASYON: 12000 BTU → 224 W/m² (15.7 m²)",
+     "mesaj": "K3 GİRİŞ · BANKO · SİRKÜLASYON: 12000 BTU → 228 W/m² (15.4 m²)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -235,7 +243,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "iklim",
-     "mesaj": "K4 DİNLENME SALONU: 12000 BTU → 202 W/m² (17.4 m²)",
+     "mesaj": "K4 DİNLENME SALONU: 12000 BTU → 203 W/m² (17.3 m²)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -251,7 +259,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "iklim",
-     "mesaj": "4 iç ünite · toplam 66.000 BTU · bakır hat 35.8 m · drenaj 34.2 m",
+     "mesaj": "4 iç ünite · toplam 66.000 BTU · bakır hat 34.0 m · drenaj 31.9 m",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -318,7 +326,7 @@
    "ad": "elektrik",
    "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
    "durum": "UYGUN",
-   "sure_ms": 55,
+   "sure_ms": 64,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -379,7 +387,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "güzergâh",
-     "mesaj": "22 linye · 432.6 m tesisat hattı — tüm segmentler ortogonal, çapraz hat yok",
+     "mesaj": "22 linye · 426.3 m tesisat hattı — tüm segmentler ortogonal, çapraz hat yok",
      "dayanak": "Uygulama projesi çizim kuralı",
      "konum": "",
      "oneri": ""
@@ -422,12 +430,12 @@
    "ad": "standart",
    "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
    "durum": "UYGUN",
-   "sure_ms": 141,
+   "sure_ms": 138,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "katman",
-     "mesaj": "85 katman · A 18 · E 41 · G 11 · M 15",
+     "mesaj": "98 katman · A 31 · E 41 · G 11 · M 15",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -502,12 +510,12 @@
    "ad": "koordinasyon",
    "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
    "durum": "UYGUN",
-   "sure_ms": 294,
+   "sure_ms": 318,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "kontrol",
-     "mesaj": "kontrol.py: 6 bulgu (0 hata, 0 uyarı)",
+     "mesaj": "kontrol.py: 8 bulgu (0 hata, 0 uyarı)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -539,7 +547,295 @@
     {
      "seviye": "BİLGİ",
      "kategori": "ekipman",
-     "mesaj": "6 ekipman salon içinde · sirkülasyon serbest alanı 96.9 m²",
+     "mesaj": "6 ekipman salon içinde · sirkülasyon serbest alanı 98.1 m²",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    }
+   ]
+  },
+  {
+   "ad": "pilot",
+   "baslik": "Pilot paftalar — üretilen DXF dosyalarının denetimi",
+   "durum": "UYGUN",
+   "sure_ms": 262,
+   "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-01: görüntü penceresi ölçeği 1:20 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-01: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-01: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçü",
+     "mesaj": "P-01: 13 gerçek DIMENSION · ölçü metni geometriden türetiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-01: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-02: görüntü penceresi ölçeği 1:20 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-02: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-02: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçü",
+     "mesaj": "P-02: 10 gerçek DIMENSION · ölçü metni geometriden türetiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-02: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-03: görüntü penceresi ölçeği 1:20 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-03: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-03: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçü",
+     "mesaj": "P-03: 11 gerçek DIMENSION · ölçü metni geometriden türetiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-03: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-04: görüntü penceresi ölçeği 1:20 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-04: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-04: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçü",
+     "mesaj": "P-04: 12 gerçek DIMENSION · ölçü metni geometriden türetiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-04: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-05: görüntü penceresi ölçeği 1:5 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-05: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-05: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçü",
+     "mesaj": "P-05: 5 gerçek DIMENSION · ölçü metni geometriden türetiliyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-05: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "alan",
+     "mesaj": "net 7.830 m² + bölme payı 0.417 m² = brüt 8.247 m²",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "mahal",
+     "mesaj": "mahal numaraları benzersiz: 105, 106, 107",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kot",
+     "mesaj": "plan mahal listesi ile kesit zemin tipleri aynı kaynaktan",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "çağrı",
+     "mesaj": "kesit ve detay çağrıları set içindeki paftalara gidiyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "VERİ EKSİK",
+     "kategori": "girdi",
+     "mesaj": "mevcut betonarme döşeme kalınlığı (180 mm) VARSAYIMDIR — söküm sonrası ölçülecek",
+     "dayanak": "",
+     "konum": "",
+     "oneri": "Rölövede döşeme kalınlığı yok; yerinde tespit gerekir."
+    },
+    {
+     "seviye": "VERİ EKSİK",
+     "kategori": "girdi",
+     "mesaj": "yapısal tavan kotu 3,20 m VARSAYIMDIR — rölöve yalnız plan düzleminde ölçüm içeriyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "VERİ EKSİK",
+     "kategori": "girdi",
+     "mesaj": "mevcut pis su bağlantı kotu ölçülmedi — duş eğim şapı kalınlığı buna bağlı",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "UYGULANMAZ",
+     "kategori": "yangın",
+     "mesaj": "bu bölgede yangın bölmesi geçişi yok — bölmeler mahal ayırıcıdır, yangın kompartımanı değildir",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "UYGULANMAZ",
+     "kategori": "taşıyıcı",
+     "mesaj": "pilot bölgede taşıyıcı sisteme müdahale yok — deprem yönetmeliği kapsamı dışında",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "açılım",
+     "mesaj": "pilot bölgedeki kapı açılımları sabit mobilyayla çakışmıyor",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -627,7 +923,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_Denetim_Raporu.pdf · 0.05 MB · 7 pafta — Ajan denetim raporu",
+     "mesaj": "Gym_Denetim_Raporu.pdf · 0.06 MB · 8 pafta — Ajan denetim raporu",
      "dayanak": "",
      "konum": "",
      "oneri": ""

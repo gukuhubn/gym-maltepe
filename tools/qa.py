@@ -57,9 +57,15 @@ else: ok(f"bölge toplamı = salon = {P.A['salon']} m²")
 it=round(P.A["salon"]+P.A["erkek_blok"]+P.A["kadin_blok"],2)
 if abs(it-P.A["ic_toplam"])>0.01: hata("iç toplam tutarsız")
 else: ok(f"salon + 2 blok = net iç alan = {P.A['ic_toplam']} m²")
+# Alt mekân NET alanları, blok brütünden İÇ BÖLME PAYI kadar küçüktür.
+# (Bölme duvarı payı ayrılmasaydı metraj ve BoQ 0,70 m² fazla çıkardı.)
 for k,d in P.ISLAK_M2_DETAY.items():
     s=round(d["soyunma"]+d["dus"]+d["wc"],2)
-    if abs(s-d["tum"])>0.06: hata(f"{k}: alt mekân toplamı {s} ≠ blok {d['tum']}")
+    pay=round(d["tum"]-s,3)
+    bek=round(P.ISLAK[k]["bolme"].area,3) if "bolme" in P.ISLAK[k] else 0.0
+    if s>d["tum"]: hata(f"{k}: net toplam {s} > blok brütü {d['tum']}")
+    elif abs(pay-bek)>0.08:
+        hata(f"{k}: bölme payı {pay} m², bölme bandı alanı {bek} m² — tutarsız")
     else: ok(f"{k}: soyunma+duş+WC ≈ blok ({s} / {d['tum']} m²)")
 g=json.load(open("data/geometry.json"))
 if abs(sum(g["alan_kontrol"].values())-P.A["ic_toplam"])>0.02: hata("geometry.json alanları tutmuyor")

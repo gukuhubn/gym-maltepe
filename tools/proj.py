@@ -455,7 +455,26 @@ def _al(tip):
 PRIZ_DUVAR = _al("PRIZ")
 PRIZ_IP44  = _al("PRIZ44")
 ANAHTAR    = _al("ANAHTAR")
-KAMERA     = [(k, x, y, t, round((cihaz_acisi((x, y)) + 90) % 360, 1)) for k, x, y, t, a in _al("KAMERA")]
+def _kamera_sabit(x, y):
+    """Kamera soyunma/WC içinde kalamaz (KVKK ve işletme kuralı; BoQ tanımı da
+    'soyunma ve WC HARİÇ' der). Ölçülmüş rölöveye geçişte ıslak blok kaydığı
+    için C3 soyunmanın içinde kalmıştı — denetim ajanı yakaladı. Konum artık
+    geometriden düzeltilir: nokta ıslak hacimdeyse SALON içine en yakın
+    güvenli noktaya çekilir."""
+    from shapely.geometry import Point as _Pt
+    from shapely.ops import nearest_points as _np
+    q = _Pt(x, y)
+    for g in (ERKEK, KADIN):
+        if not g.buffer(0.12).contains(q): continue
+        hedef = SALON.buffer(-0.25)
+        if hedef.is_empty: hedef = SALON
+        a, b = _np(q, hedef)
+        return (round(b.x, 3), round(b.y, 3))
+    return (x, y)
+
+KAMERA = [(k,) + _kamera_sabit(x, y) +
+          (t, round((cihaz_acisi(_kamera_sabit(x, y)) + 90) % 360, 1))
+          for k, x, y, t, a in _al("KAMERA")]
 YANGIN     = _al("YANGIN")
 ACIL_YON   = _al("ACILY")
 PANO       = (_YERLESIM["AP"][0], _YERLESIM["AP"][1])

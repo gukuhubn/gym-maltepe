@@ -29,6 +29,21 @@ DOSYALAR = [
   "cad/GYM-MIM-Uygulama-R2010.dxf"),
  ("01_MİMARİ", "MAHAL LİSTESİ VE İMALAT ŞARTNAMESİ.pdf", None),     # A-09 sayfası
  ("01_MİMARİ", "PROJE RAPORU.pdf", None),                            # üretilir
+ # ── 01 MİMARİ · PİLOT BÖLGE (1:20 ve 1:5) ────────────────────────────────────
+ ("01_MİMARİ/PİLOT", "A_00_00_GF_20_1_00 (Pilot Bölge — 5 pafta A2).pdf",
+  "output/Gym_Pilot_Paftalar.pdf"),
+ ("01_MİMARİ/PİLOT", "P-01 ÖLÇÜLÜ PLAN 1-20.dxf",
+  "cad/pilot/P-01_ÖLÇÜLÜ_PLAN.dxf"),
+ ("01_MİMARİ/PİLOT", "P-02 TAVAN PLANI 1-20.dxf",
+  "cad/pilot/P-02_TAVAN_PLANI_(RCP).dxf"),
+ ("01_MİMARİ/PİLOT", "P-03 KOORDİNASYON KESİTİ 1-20.dxf",
+  "cad/pilot/P-03_KOORDİNASYON_KESİTİ_K1-K1.dxf"),
+ ("01_MİMARİ/PİLOT", "P-04 İÇ GÖRÜNÜŞ 1-20.dxf",
+  "cad/pilot/P-04_İÇ_GÖRÜNÜŞ_G-05.dxf"),
+ ("01_MİMARİ/PİLOT", "P-05 BİRLEŞİM DETAYI 1-5.dxf",
+  "cad/pilot/P-05_BİRLEŞİM_DETAYI_D-02.dxf"),
+ ("01_MİMARİ/PİLOT", "PİLOT ÇALIŞMA RAPORU.pdf",
+  "output/Gym_Pilot_Raporu.pdf"),
  # ── 02 MEKANİK ───────────────────────────────────────────────────────────────
  ("02_MEKANİK", "M_00_00_GF_00_1_00 (Mekanik Tesisat Projesi).pdf",
   "output/Gym_Mekanik_Proje_A3.pdf"),

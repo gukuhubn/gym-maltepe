@@ -91,8 +91,10 @@ def pdf_yaz(raporlar, dosya=None):
     W, H = landscape(A3)
     c = canvas.Canvas(str(dosya), pagesize=(W, H))
     SOL, SAG, UST, ALT = 18*mm, 18*mm, H-20*mm, 18*mm
-    ikon = {"HATA": "■", "UYARI": "▲", "BİLGİ": "·"}
-    renk = {"HATA": (0.78, 0.16, 0.13), "UYARI": (0.83, 0.58, 0.05),
+    ikon = {"HATA": "■", "UYARI": "▲", "BİLGİ": "·",
+            "VERİ EKSİK": "?", "UYGULANMAZ": "—"}
+    renk = {"VERİ EKSİK": (0.10, 0.45, 0.55), "UYGULANMAZ": (0.45, 0.35, 0.60),
+            "HATA": (0.78, 0.16, 0.13), "UYARI": (0.83, 0.58, 0.05),
             "BİLGİ": (0.42, 0.45, 0.48)}
     say = [1]
 
@@ -152,7 +154,8 @@ def pdf_yaz(raporlar, dosya=None):
         y = antet(f"{r.baslik}  —  {r.durum}")
         c.setFont("DJ", 7.5)
         for b in sorted(r.bulgular,
-                        key=lambda b: {"HATA":0,"UYARI":1,"BİLGİ":2}[b.seviye]):
+                        key=lambda b: {"HATA":0,"UYARI":1,"VERİ EKSİK":2,
+                                       "UYGULANMAZ":3,"BİLGİ":4}[b.seviye]):
             satirlar = [f"{ikon[b.seviye]}  [{b.kategori}]  {b.mesaj}"]
             if b.dayanak: satirlar.append(f"      dayanak: {b.dayanak}")
             if b.konum:   satirlar.append(f"      konum  : {b.konum}")

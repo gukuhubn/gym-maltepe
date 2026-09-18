@@ -33,27 +33,29 @@ KAPI_GEN   = 0.95      # m — bölme duvarında açılan geçiş genişliği
 def _kapi_noktalari():
     """Kapı geçişleri — mimari kapı listesine karşılık gelen fiziksel boşluklar.
 
-    Dış/ana kapılar P.KAPILAR'dan; iç kapılar (duş kapağı, WC kapısı) ilgili
-    hacmin çeperi ile soyunma hacmi arasındaki en yakın nokta çiftinden
-    türetilir — böylece kapı konumu geometriden gelir, elle girilmez.
+    Konumlar tek kaynaktan, P.KAPI_GEOM'dan gelir; elle girilmez ve plandaki
+    kapıyla ayrışamaz. (Önceden iç kapılar 'en yakın nokta' ile tahmin
+    ediliyordu; ölçülmüş rölöveye geçince bu tahmin kaydı.)
     """
     pts = []
-    for (x, y), gen, aci, lbl in P.KAPILAR:
-        pts.append(((x, y), max(gen, KAPI_GEN)/2 + 0.14))
-    for ad, d in P.ISLAK.items():
-        soy = d["soyunma"]
-        for n in ("dus", "wc"):
-            a, b = nearest_points(d[n].exterior, soy.exterior)
-            pts.append((((a.x+b.x)/2, (a.y+b.y)/2), 0.70/2 + 0.20))
-        # soyunma kapısı: soyunma çeperinin salona en yakın noktası
-        a, b = nearest_points(soy.exterior, P.SALON.difference(d["tum"]).buffer(-0.35))
-        pts.append((((a.x+b.x)/2, (a.y+b.y)/2), 0.90/2 + 0.20))
+    for kod, (pt, gen, aci) in P.KAPI_GEOM.items():
+        pts.append((pt, max(gen, KAPI_GEN)/2 + 0.16))
     return pts
 
 KAPI_GECIS = _kapi_noktalari()
 
 def _serbest_alan():
-    ic = unary_union([P.SALON, P.ERKEK, P.KADIN]).buffer(-KENAR_PAY)
+    """Yapı içi serbest alan.
+
+    Ölçülmüş rölövede salon ile ıslak bloklar arasında 98 mm bölme duvarı
+    boşluğu vardır; üç poligon birbirine DEĞMEZ. Kapat–aç işlemiyle bu
+    boşluk önce kapatılır, sonra duvar çeperleri engel olarak çıkarılır ve
+    kapı geçişleri delinir. Bu yapılmazsa serbest alan üç ayrı parçaya
+    bölünür ve ıslak hacimdeki linyeler (P5 · V2 · W1 · W2) hiç yol bulamaz.
+    """
+    ham = unary_union([P.SALON, P.ERKEK, P.KADIN])
+    kapali = ham.buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
+    ic = kapali.buffer(-KENAR_PAY)
     engel = []
     for g in (P.ERKEK, P.KADIN):
         engel.append(g.exterior.buffer(0.09, cap_style=2))

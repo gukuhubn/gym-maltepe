@@ -166,15 +166,19 @@ def s3(c):
     DD.plan_bolme(v, dikme=True)          # gerçek C50 dikme @400 mm
     D.cephe(v); D.kapilar(v)
     D.mobilya(v, etiketli=True)
-    # kapı kodları
-    KP = {0:("K01",-5.2,0.0), 1:("K03",-5.8,2.6), 2:("K04",-5.8,-2.8), 3:("K02",0.0,-5.4)}
-    for i, ((x_, y_), gen, aci, lbl) in enumerate(P.KAPILAR):
-        kod, dx_, dy_ = KP[i]; px, py = v.p((x_, y_))
+    # Kapı kodu balonları — konum KAPI_GEOM'dan gelir, elle yazılmaz.
+    # (K05–K08 önceden elle konumlandırılmıştı ve plandaki kapılarla
+    #  ilişkisizdi; kapı yeri değişince balon yerinde kalıyordu.)
+    LIDER = {"K01": (-5.2, 0.0), "K02": (0.0, -5.4), "K03": (-5.8, 2.6),
+             "K04": (-5.8, -2.8), "K05": (3.6, 2.4), "K06": (-3.4, -2.6),
+             "K07": (-3.8, 2.4), "K08": (3.8, -2.4)}
+    for kod, (pt, gen, aci) in sorted(P.KAPI_GEOM.items()):
+        dx_, dy_ = LIDER.get(kod, (0.0, -4.0))
+        px, py = v.p(pt)
         c.saveState(); c.setStrokeColor(HexColor("#B87333")); c.setLineWidth(0.4)
         c.line(px, py, px+dx_*mm, py+dy_*mm); c.restoreState()
         M.balon(c, px+dx_*mm, py+dy_*mm, kod, r=2.5*mm, dolgu="#FFF3E3", kontur="#B87333")
-    for kod, pt in (("K05",(10.30,8.55)), ("K06",(9.35,0.80)), ("K07",(8.30,6.62)),
-                    ("K08",(11.30,1.55)), ("K09",(2.55,7.05))):
+    for kod, pt in (("K09", (2.55, 7.05)),):        # mobilya kapağı — mahal kapısı değil
         px, py = v.p(pt); M.balon(c, px, py, kod, r=2.5*mm, dolgu="#FFF3E3", kontur="#B87333")
     mahal_balonlari(c, v)
     # duvar tipi etiketleri
