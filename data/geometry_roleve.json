@@ -1,0 +1,185 @@
+{
+ "kaynak": "ESAT-FINAL.dwg (TRIMODE, AC1032) — ÖLÇÜLMÜŞ vektör kaynak",
+ "yontem": "ODA File Converter ile DXF'e çevrildi; MAĞAZA ALAN DAĞILIM paftasındaki mahal poligonları alındı; birim cm→m; mevcut model koordinatına rijit (ölçeksiz) kayıt yapıldı",
+ "dogruluk": "ölçülmüş — alan etiketi ile ±0,01 m² doğrulandı",
+ "olcek_m_per_px": null,
+ "rotasyon_derece": 1.25,
+ "kayit": {
+  "donme_derece": 1.25,
+  "oteleme_m": [
+   0.0598,
+   -1.0216
+  ],
+  "simetrik_fark_m2": 2.199,
+  "uyum_yuzde": 97.49
+ },
+ "baskin_aci_derece": 7.09,
+ "poligonlar": {
+  "salon": [
+   [
+    9.5139,
+    0.3991
+   ],
+   [
+    9.0464,
+    0.0154
+   ],
+   [
+    3.3781,
+    -0.0535
+   ],
+   [
+    2.1417,
+    0.9913
+   ],
+   [
+    2.0599,
+    1.4783
+   ],
+   [
+    1.7472,
+    1.4714
+   ],
+   [
+    1.8242,
+    1.0125
+   ],
+   [
+    0.6889,
+    1.1665
+   ],
+   [
+    0.0323,
+    6.768
+   ],
+   [
+    0.7559,
+    6.8396
+   ],
+   [
+    0.7601,
+    6.814
+   ],
+   [
+    1.1776,
+    6.8726
+   ],
+   [
+    1.133,
+    7.1978
+   ],
+   [
+    1.0321,
+    7.1848
+   ],
+   [
+    0.8636,
+    8.3104
+   ],
+   [
+    4.8553,
+    8.908
+   ],
+   [
+    4.8584,
+    8.7672
+   ],
+   [
+    6.4491,
+    8.9884
+   ],
+   [
+    5.826,
+    12.5264
+   ],
+   [
+    9.8758,
+    13.0664
+   ],
+   [
+    10.5151,
+    8.937
+   ],
+   [
+    8.2429,
+    8.5823
+   ]
+  ],
+  "erkek": [
+   [
+    8.9305,
+    4.7956
+   ],
+   [
+    11.1044,
+    5.1323
+   ],
+   [
+    10.5307,
+    8.8382
+   ],
+   [
+    8.357,
+    8.4989
+   ]
+  ],
+  "kadin": [
+   [
+    9.6036,
+    0.4727
+   ],
+   [
+    10.3034,
+    1.0468
+   ],
+   [
+    10.2388,
+    1.5517
+   ],
+   [
+    10.524,
+    1.5772
+   ],
+   [
+    10.5886,
+    1.0723
+   ],
+   [
+    11.7221,
+    1.1438
+   ],
+   [
+    11.1199,
+    5.0323
+   ],
+   [
+    8.9463,
+    4.6953
+   ]
+  ]
+ },
+ "alan_kontrol": {
+  "salon": {
+   "olculen_m2": 87.059,
+   "raster_m2": 87.461,
+   "sapma_m2": -0.402,
+   "sapma_yuzde": -0.46,
+   "hausdorff_m": 0.217
+  },
+  "erkek": {
+   "olculen_m2": 8.247,
+   "raster_m2": 8.036,
+   "sapma_m2": 0.211,
+   "sapma_yuzde": 2.62,
+   "hausdorff_m": 0.115
+  },
+  "kadin": {
+   "olculen_m2": 8.498,
+   "raster_m2": 8.278,
+   "sapma_m2": 0.22,
+   "sapma_yuzde": 2.66,
+   "hausdorff_m": 0.163
+  }
+ },
+ "onceki_kaynak": "TRIMODE-Alan_Dagilimi.pdf (JPEG raster) - renk maskesi ile vektorlestirildi"
+}

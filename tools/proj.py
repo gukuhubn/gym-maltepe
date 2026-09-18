@@ -7,7 +7,15 @@ from shapely.geometry import Polygon, Point, box
 from shapely import affinity
 
 ROOT = Path(__file__).resolve().parent.parent
-G    = json.loads((ROOT/"data/geometry.json").read_text())
+# GEOMETRİ KAYNAĞI — ölçülmüş rölöve varsa o kullanılır (talimat §2:
+# "Fotoğraftan tahmin edilen boyutu ölçülmüş bilgi gibi kullanma").
+# data/geometry_roleve.json  : ESAT-FINAL.dwg (TRIMODE, ölçülmüş vektör)
+# data/geometry.json         : TRIMODE raster paftasından türetilmiş (±%3) — yedek
+_GEO_OLCULEN = ROOT/"data/geometry_roleve.json"
+_GEO_RASTER  = ROOT/"data/geometry.json"
+GEO_YOL = _GEO_OLCULEN if _GEO_OLCULEN.exists() else _GEO_RASTER
+G    = json.loads(GEO_YOL.read_text())
+GEO_OLCULEN = GEO_YOL is _GEO_OLCULEN
 
 REV        = "Rev H"
 TARIH      = "17 Eylül 2026"
@@ -16,7 +24,9 @@ FIYAT_TARIH= ("Eylül 2026 · Aqua Florya / Saltbae kesin hakedişi (Mayıs 2025
 PROJE      = "MALTEPE / İDEALTEPE — MOBİLYA MAĞAZASI → FONKSİYONEL ANTRENMAN STÜDYOSU"
 KISA       = "Gym Dönüşüm Dosyası"
 ALTBILGI   = ("Ön tasarım — yerinde doğrulanmadan ve ruhsat alınmadan uygulama yapılamaz.  "
-              "Tüm ölçüler raster paftadan ölçeklendirilmiştir (±%3).")
+              + ("Geometri ESAT-FINAL.dwg ölçülü rölövesinden alınmıştır."
+                 if GEO_OLCULEN else
+                 "Tüm ölçüler raster paftadan ölçeklendirilmiştir (±%3)."))
 
 # ───────────────────────── PARAMETRELER (varsayimlar tek yerde) ─────────────────
 V = {  # deger, birim, kaynak/varsayim notu
@@ -201,18 +211,29 @@ def duvar_yonu(p, poly=None):
             return round(ac % 360, 1), round(n_ac % 360, 1), round(d, 3)
     return round(ac % 360, 1), round((ac+90) % 360, 1), round(d, 3)
 
-def duvara_yapistir(p, ofset=0.16, poly=None):
-    """Noktayı en yakın duvar segmentine dik izdüşürür ve içeri ofset kadar çeker."""
+def duvara_yapistir(p, ofset=0.16, poly=None, yasak=None):
+    """Noktayı en yakın duvar segmentine dik izdüşürür ve içeri ofset kadar çeker.
+
+    `yasak`: cihazın düşmemesi gereken poligon(lar). Ölçülmüş rölöveye
+    geçildiğinde çeper kayabildiği için, ıslak hacim gibi komşu mahallerin
+    duvarına yapışmayı bu eleme engeller (talimat §11 'tesisatlarda fiziksel
+    çakışma ve erişim engeli' kontrolü).
+    """
     from shapely.geometry import LineString as _L, Point as _Pt
-    pt = _Pt(p); en = None
+    yasakli = []
+    if yasak is not None:
+        yasakli = list(yasak) if isinstance(yasak, (list, tuple)) else [yasak]
+    pt = _Pt(p); adaylar = []
     for a, b in _segler(poly):
-        ls = _L([a, b]); d = ls.distance(pt)
-        if en is None or d < en[0]: en = (d, ls, a, b)
-    _, ls, a, b = en
-    q = ls.interpolate(ls.project(pt))
-    _, n_ac, _ = duvar_yonu((q.x, q.y), poly)
-    return (round(q.x + math.cos(math.radians(n_ac))*ofset, 3),
-            round(q.y + math.sin(math.radians(n_ac))*ofset, 3))
+        ls = _L([a, b])
+        q = ls.interpolate(ls.project(pt))
+        _, n_ac, _ = duvar_yonu((q.x, q.y), poly)
+        son = (round(q.x + math.cos(math.radians(n_ac))*ofset, 3),
+               round(q.y + math.sin(math.radians(n_ac))*ofset, 3))
+        red = any(g.buffer(0.05).contains(_Pt(son)) for g in yasakli)
+        adaylar.append((ls.distance(pt), red, son))
+    temiz = [a for a in adaylar if not a[1]]
+    return min(temiz or adaylar, key=lambda a: a[0])[2]
 
 def _ayir_duvar_uzeri(cihazlar, asgari=0.42):
     """Duvar üzerindeki cihazları çevre boyunca 1B olarak ayırır (çakışma çözer).
@@ -297,13 +318,14 @@ FAN = [(k, x, y, t, round(duvar_yonu((x, y))[0] % 180, 1)) for k, x, y, t in
 def _btu(m2, w=180): return int(round(m2*w*3.412/1000)*1000)
 _KLIMA0 = [
  ("K1","ARENA · SERBEST AĞIRLIK", 24000, (6.85, 0.28)),
- ("K2","FONKSİYONEL · KARDİYO",   18000, (7.95, 6.95)),
+ ("K2","FONKSİYONEL · KARDİYO",   18000, (8.55, 4.73)),
  ("K3","GİRİŞ · BANKO · SİRKÜLASYON", 12000, (1.30, 7.35)),
  ("K4","DİNLENME SALONU",         12000, (7.05,11.90)),
 ]
 # iç üniteler SALON çeperine yapışır — komşu ıslak hacmin duvarına kaymamalı
-KLIMA = [(k, z, b, duvara_yapistir(p, 0.18, SALON),
-          cihaz_acisi(duvara_yapistir(p, 0.18, SALON), SALON))
+_KLIMA_P = {k: duvara_yapistir(p, 0.18, SALON, yasak=(ERKEK, KADIN))
+            for k, z, b, p in _KLIMA0}
+KLIMA = [(k, z, b, _KLIMA_P[k], cihaz_acisi(_KLIMA_P[k], SALON))
          for k, z, b, p in _KLIMA0]
 KLIMA_KOT = 2.40                      # iç ünite alt kotu (m)
 KLIMA_BTU  = sum(k[2] for k in KLIMA)
@@ -314,16 +336,29 @@ DIS_UNITE = (11.90, 6.10)     # arka cephe duvarı — kapalı alana dâhil değ
 _CIKIS = [(11.20, 6.30), DIS_UNITE]                       # erkek blok tavanından dış duvara
 BAKIR_HAT = {
  "K1": [(5.95,0.28),(9.05,0.62),(9.52,3.90),(10.05,5.55),(10.80,6.05)] + [DIS_UNITE],
- "K2": [(7.95,6.95),(7.95,7.92),(9.45,7.62)] + _CIKIS,
+ "K2": [(8.659,4.733),(9.52,4.90),(10.05,5.55),(10.80,6.05), DIS_UNITE],
  "K3": [(1.30,7.35),(1.30,7.92),(5.95,7.92),(7.95,7.92),(9.45,7.62)] + _CIKIS,
  "K4": [(7.05,11.90),(7.05,9.10),(8.05,8.58),(9.45,7.62)] + _CIKIS,
 }
 DRENAJ = {                                                # %1 eğimli, dış duvara
  "K1": [(5.95,0.28),(9.05,0.62),(9.52,3.90),(10.60,5.30),(11.60,5.55)],
- "K2": [(7.95,6.95),(7.95,7.86),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
+ "K2": [(8.659,4.733),(9.52,4.90),(10.60,5.30),(11.60,5.55)],
  "K3": [(1.30,7.35),(1.30,7.86),(5.95,7.86),(7.95,7.86),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
  "K4": [(7.05,11.90),(7.05,9.10),(8.05,8.52),(9.40,7.56),(11.10,6.20),(11.60,5.90)],
 }
+# Rota başlangıçları iç ünitenin GERÇEK konumundan türetilir; elle yazılmış
+# başlangıç noktası ile cihaz konumu birbirinden ayrışamaz (talimat §8:
+# "hesaplanan ölçüyü farklı gösterecek elle yazılmış metin kullanma" ilkesinin
+# geometri karşılığı).
+def _rota_basla(d):
+    for k, h in d.items():
+        p0 = _KLIMA_P[k]
+        if math.hypot(h[0][0]-p0[0], h[0][1]-p0[1]) > 0.02:
+            h[0] = p0
+    return d
+BAKIR_HAT = _rota_basla(BAKIR_HAT)
+DRENAJ    = _rota_basla(DRENAJ)
+
 L_BAKIR   = round(sum(_LS(h).length for h in BAKIR_HAT.values()), 1)
 L_DRENAJ  = round(sum(_LS(h).length for h in DRENAJ.values()), 1)
 
