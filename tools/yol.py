@@ -53,9 +53,7 @@ def _serbest_alan():
     kapı geçişleri delinir. Bu yapılmazsa serbest alan üç ayrı parçaya
     bölünür ve ıslak hacimdeki linyeler (P5 · V2 · W1 · W2) hiç yol bulamaz.
     """
-    ham = unary_union([P.SALON, P.ERKEK, P.KADIN])
-    kapali = ham.buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
-    ic = kapali.buffer(-KENAR_PAY)
+    ic = P.IC_KABUK.buffer(-KENAR_PAY)
     engel = []
     for g in (P.ERKEK, P.KADIN):
         engel.append(g.exterior.buffer(0.09, cap_style=2))

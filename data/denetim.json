@@ -1,12 +1,12 @@
 {
- "tarih": "2026-09-18 14:18",
+ "tarih": "2026-09-19 20:32",
  "genel": "UYGUN",
  "ajanlar": [
   {
    "ad": "mimari",
    "baslik": "Mimari proje — mahal, kot, katman ve imalat denetimi",
    "durum": "UYGUN",
-   "sure_ms": 55,
+   "sure_ms": 48,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -155,7 +155,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "kanal",
-     "mesaj": "besleme 16.8 m · egzoz 10.6 m · ıslak 16.7 m ana hat + 5.1 m branşman",
+     "mesaj": "besleme 16.8 m · egzoz 10.6 m · ıslak 13.9 m ana hat + 5.1 m branşman",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -326,7 +326,7 @@
    "ad": "elektrik",
    "baslik": "Elektrik tesisatı — yönetmelik ve çizim denetimi",
    "durum": "UYGUN",
-   "sure_ms": 299,
+   "sure_ms": 53,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -387,7 +387,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "güzergâh",
-     "mesaj": "22 linye · 426.3 m tesisat hattı — tüm segmentler ortogonal, çapraz hat yok",
+     "mesaj": "22 linye · 426.0 m tesisat hattı — tüm segmentler ortogonal, çapraz hat yok",
      "dayanak": "Uygulama projesi çizim kuralı",
      "konum": "",
      "oneri": ""
@@ -430,7 +430,7 @@
    "ad": "standart",
    "baslik": "Çizim standardı — katman, kalem, yazı ve pafta düzeni denetimi",
    "durum": "UYGUN",
-   "sure_ms": 142,
+   "sure_ms": 198,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -503,6 +503,30 @@
      "dayanak": "",
      "konum": "",
      "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "standart",
+     "mesaj": "yazılı standart ile kod sabitleri uyumlu (7 kalem · 6 yazı boyu)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "kapı",
+     "mesaj": "pilot bölgedeki kapı boşluklarının içinden duvar katmanı geçmiyor",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "mahal",
+     "mesaj": "10 mahal kodu §12 biçiminde (Z-01…)",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
     }
    ]
   },
@@ -510,7 +534,7 @@
    "ad": "koordinasyon",
    "baslik": "Disiplinler arası koordinasyon ve çakışma denetimi",
    "durum": "UYGUN",
-   "sure_ms": 328,
+   "sure_ms": 257,
    "bulgular": [
     {
      "seviye": "BİLGİ",
@@ -547,7 +571,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "ekipman",
-     "mesaj": "6 ekipman salon içinde · sirkülasyon serbest alanı 98.1 m²",
+     "mesaj": "6 ekipman salon içinde · sirkülasyon serbest alanı 98.2 m²",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -558,8 +582,40 @@
    "ad": "pilot",
    "baslik": "Pilot paftalar — üretilen DXF dosyalarının denetimi",
    "durum": "UYGUN",
-   "sure_ms": 306,
+   "sure_ms": 353,
    "bulgular": [
+    {
+     "seviye": "BİLGİ",
+     "kategori": "ölçek",
+     "mesaj": "P-00: görüntü penceresi ölçeği 1:20 — antetle uyumlu",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "geometri",
+     "mesaj": "P-00: sıfır uzunluklu veya yinelenen geometri yok",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "yazı",
+     "mesaj": "P-00: tüm yazılar basılı ölçekte ≥ 1.8 mm",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "pafta",
+     "mesaj": "P-00: kâğıt alanı içeriği A2 sınırları içinde",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
     {
      "seviye": "BİLGİ",
      "kategori": "ölçek",
@@ -779,7 +835,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "mahal",
-     "mesaj": "mahal numaraları benzersiz: 105, 106, 107",
+     "mesaj": "mahal numaraları benzersiz: Z-05, Z-06, Z-07",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -854,12 +910,12 @@
    "ad": "teslim",
    "baslik": "Teslim paketi — dosya bütünlüğü ve sürüm denetimi",
    "durum": "UYGUN",
-   "sure_ms": 156,
+   "sure_ms": 120,
    "bulgular": [
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "GYM_MALTEPE_UYGULAMA_PROJESI.pdf · 10.55 MB · 27 pafta — TEK DOSYA — tüm paftalar (mimari · mekanik · elektrik · ADP şema)",
+     "mesaj": "GYM_MALTEPE_UYGULAMA_PROJESI.pdf · 10.52 MB · 27 pafta — TEK DOSYA — tüm paftalar (mimari · mekanik · elektrik · ADP şema)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -915,7 +971,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Paftalar.pdf · 5.36 MB · 14 pafta — CAD pafta önizleme (A1)",
+     "mesaj": "Gym_CAD_Paftalar.pdf · 5.33 MB · 14 pafta — CAD pafta önizleme (A1)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -995,7 +1051,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_CAD_Seti_DXF.zip · 0.86 MB · 21 dosya — DXF seti",
+     "mesaj": "Gym_CAD_Seti_DXF.zip · 1.04 MB · 27 dosya — DXF seti",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -1003,7 +1059,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dosya",
-     "mesaj": "Gym_Proje_Paketi.zip · 44.88 MB · 48 dosya — TEK TESLİM DOSYASI — tüm set",
+     "mesaj": "Gym_Proje_Paketi.zip · 44.72 MB · 48 dosya — TEK TESLİM DOSYASI — tüm set",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -1019,7 +1075,7 @@
     {
      "seviye": "BİLGİ",
      "kategori": "dxf",
-     "mesaj": "DXF setinde 19 dosya (19 tekil pafta)",
+     "mesaj": "DXF setinde 25 dosya (22 tekil pafta)",
      "dayanak": "",
      "konum": "",
      "oneri": ""
@@ -1044,6 +1100,14 @@
      "seviye": "BİLGİ",
      "kategori": "dosya",
      "mesaj": "20 beklenen çıktının tamamı üretildi",
+     "dayanak": "",
+     "konum": "",
+     "oneri": ""
+    },
+    {
+     "seviye": "BİLGİ",
+     "kategori": "tazelik",
+     "mesaj": "28 çizim dosyası veri modelinden yeni — bayat teslim yok",
      "dayanak": "",
      "konum": "",
      "oneri": ""

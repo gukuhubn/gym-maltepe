@@ -95,3 +95,30 @@ class TeslimAjani(Ajan):
                 if isinstance(P.PROJE, dict) else f"{P.REV} · {P.TARIH}")
         if not eksik:
             r.bilgi("dosya", f"{len(BEKLENEN)} beklenen çıktının tamamı üretildi")
+        self._tazelik(r)
+
+
+    # ── TAZELİK: çizim dosyaları veri modelinden eski olamaz ──────────────────
+    def _tazelik(self, r):
+        """Ölçülmüş geometriye geçişte A1 CAD seti sessizce yeniden üretilememişti
+        (build_dxf çöküyor, boru maskeliyordu) ve eski geometriyle teslim
+        edilmek üzereydi. Bu kural: cad/ altındaki her DXF ve output/ altındaki
+        her pafta PDF'i, tools/proj.py ve data/geometry_roleve.json'dan YENİ
+        olmak zorunda; değilse bayat sayılır ve teslim RED alır."""
+        from pathlib import Path
+        kok = Path(__file__).resolve().parents[2]
+        kaynaklar = [kok/"tools"/"proj.py", kok/"data"/"geometry_roleve.json",
+                     kok/"tools"/"malzeme.py", kok/"tools"/"pilot.py"]
+        t_kaynak = max(f.stat().st_mtime for f in kaynaklar if f.exists())
+        hedefler = sorted((kok/"cad").rglob("*.dxf")) + \
+                   [kok/"output"/n for n in ("Gym_CAD_Paftalar.pdf", "Gym_Pilot_Paftalar.pdf",
+                                             "GYM_MALTEPE_UYGULAMA_PROJESI.pdf")]
+        bayat = [h for h in hedefler if h.exists() and h.stat().st_mtime < t_kaynak - 1]
+        if bayat:
+            r.hata("tazelik", f"{len(bayat)} çizim dosyası veri modelinden ESKİ: "
+                              + ", ".join(b.name for b in bayat[:5])
+                              + (" …" if len(bayat) > 5 else ""),
+                   oneri="bash tools/uret_hepsi.sh — set yeniden üretilmeli")
+        else:
+            r.bilgi("tazelik", f"{len([h for h in hedefler if h.exists()])} çizim dosyası "
+                               "veri modelinden yeni — bayat teslim yok")

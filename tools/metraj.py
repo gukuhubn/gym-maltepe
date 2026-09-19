@@ -170,8 +170,8 @@ for poz, zt in (("D.1.1", "Z1"), ("D.1.2", "Z2"), ("D.1.3", "Z3"),
         c.satir.append((f"{m[0]} {m[1]}", 1, None, None, None, m[2], "+"))
 
 c = yeni("D.1.6", "Kauçuk titreşim yalıtım matı 10 mm (SBR granül 700 kg/m³) — "
-                  "duvara 50 mm yukarı dönüşlü yüzer döşeme", "m²", "102")
-c.satir.append(("102 ARENA · SERBEST AĞIRLIK", 1, None, None, None, ALAN["102"], "+"))
+                  "duvara 50 mm yukarı dönüşlü yüzer döşeme", "m²", "Z-02")
+c.satir.append(("102 ARENA · SERBEST AĞIRLIK", 1, None, None, None, ALAN["Z-02"], "+"))
 
 # süpürgelik — mahal çevresi eksi kapı genişlikleri
 _SUP = {"S1": [], "S2": [], "S3": [], "S4": []}
@@ -245,7 +245,7 @@ for m in P.MAHAL_LISTESI:
 c = yeni("F.1.5", "Asma tavan revizyon kapağı 300×300 mm, menteşeli", "ad", "106·107·109·110")
 c.ekle("Her ıslak hacimde 1 adet", 4)
 
-c = yeni("F.1.6", "Akustik taşyünü asma baffle 1200×600×50 mm (αw ≈ 0,90)", "ad", "102")
+c = yeni("F.1.6", "Akustik taşyünü asma baffle 1200×600×50 mm (αw ≈ 0,90)", "ad", "Z-02")
 c.ekle("Arena üzerinde", 12)
 
 # duvar boyası — mahal çevresi × tavan kotu, ıslak seramik alanları minha
@@ -281,13 +281,13 @@ for i, k in enumerate(P.KAPI_LISTESI):
     c.ekle(f"{k[7]} · {k[8]}", k[1])
 
 c = yeni("G.2.1", "D6 ayna duvarı — 18 mm su kontraplağı altlık + 6 mm güvenlik filmli ayna, "
-                  "alt/üst alüminyum mekanik emniyet profilli", "m²", "102")
+                  "alt/üst alüminyum mekanik emniyet profilli", "m²", "Z-02")
 c.ekle("Arena güney duvarı — alt kot +0,30 / üst kot +2,30", 1, 4.80, None, 2.00)
 
 c = yeni("G.2.2", "Boy aynası 60×110 cm, güvenlik filmli", "ad", "105 · 108")
 c.ekle("Soyunma mahalleri", 2)
 
-c = yeni("G.2.3", "Cephe vitrininde buzlu folyo (alt 1,20 m) + güneş kontrol filmi", "m²", "101")
+c = yeni("G.2.3", "Cephe vitrininde buzlu folyo (alt 1,20 m) + güneş kontrol filmi", "m²", "Z-01")
 c.ekle("P01 batı cephe vitrini — buzlu bant", 1, 5.62, None, 1.20)
 c.ekle("P02 GB cephe vitrini — buzlu bant", 1, 2.02, None, 1.20)
 c.ekle("P01 + P02 üst bant güneş kontrol filmi", 1, 7.64, None, 1.20)
@@ -296,7 +296,7 @@ c.ekle("P01 + P02 üst bant güneş kontrol filmi", 1, 7.64, None, 1.20)
 #  H · SABİT MOBİLYA VE DONANIM
 # ═══════════════════════════════════════════════════════════════════════════════
 c = yeni("H.1.1", "Resepsiyon bankosu 120×60×110 cm — lake MDF gövde + kompakt lamine tezgâh, "
-                  "gömme kuvvet ve veri kutulu", "ad", "101")
+                  "gömme kuvvet ve veri kutulu", "ad", "Z-01")
 c.ekle("Giriş bankosu", 1)
 c = yeni("H.1.2", "8 gözlü soyunma dolabı 160×45×180 cm — laminat, havalandırma delikli, kilitli",
          "ad", "105 · 108")
@@ -305,7 +305,7 @@ c = yeni("H.1.3", "Soyunma bankı 160×35 cm — ahşap latalı, duvara konsol b
 c.ekle("Erkek ve kadın soyunma", 2)
 c = yeni("H.1.4", "Paslanmaz askılık, 5 kancalı", "ad", "105 · 108")
 c.ekle("Erkek ve kadın soyunma", 2)
-c = yeni("H.1.5", "Depo / teknik dolap — banko arkası niş, havalandırma menfezli", "ad", "101")
+c = yeni("H.1.5", "Depo / teknik dolap — banko arkası niş, havalandırma menfezli", "ad", "Z-01")
 c.ekle("NVR ve router dolabı (K09)", 1)
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -315,7 +315,7 @@ c = yeni("I.1.1", "6 kg ABC kuru kimyevi tozlu yangın söndürücü — askı a
          "ad", "101 · 102 · 104")
 c.ekle("Çıkış yanı, dinlenme/soyunma yakını, acil çıkış yanı", 3)
 c = yeni("I.1.2", "Yangın dolabı — 30 m hortum, TS EN 671-2 (GSİM talebine bağlı opsiyon)",
-         "ad", "101")
+         "ad", "Z-01")
 c.ekle("Ana çıkış yanı", 1)
 c = yeni("I.1.3", "Fotolüminesan yönlendirme ve yasak levhaları", "ad", "Tüm mahaller")
 c.ekle("Çıkış yönlendirme", 3); c.ekle("Piktogram (erkek/kadın)", 2)

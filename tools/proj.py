@@ -990,6 +990,17 @@ def islak_alt_mekanlar():
             return g.buffer(0)
         out[ad]=dict(soyunma=_temiz(soyunma), dus=_temiz(dus), wc=_temiz(wc), tum=p)
     return out
+# ── BİNA İÇ KABUĞU — TEK TANIM ───────────────────────────────────────────────
+# Ölçülmüş rölövede salon ile ıslak bloklar arasında 98 mm bölme boşluğu vardır;
+# üç poligon birbirine DEĞMEZ ve düz birleşimleri MultiPolygon olur. Kabuğa
+# ihtiyaç duyan her modül (aks, güzergâh, CAD altlık, pilot) BURADAN okur;
+# her biri kendi birleşimini yaparsa biri mutlaka .exterior'da çöker (çöktü).
+def _ic_kabuk():
+    from shapely.ops import unary_union as _bir
+    k = _bir([SALON, ERKEK, KADIN]).buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
+    return max(k.geoms, key=lambda g: g.area) if hasattr(k, "geoms") else k
+IC_KABUK = _ic_kabuk()
+
 ISLAK = islak_alt_mekanlar()
 # Alt mekân bölünmesinden gelen yinelenen köşeleri ayıkla (ISO/çizim kontrolü:
 # "sıfır uzunluklu / tekrarlı geometri olmamalı").
@@ -1076,10 +1087,40 @@ _ALT_KAPI = {("ERKEK", "wc"): ("K05", kapi_en("K05")),
              ("KADIN", "wc"): ("K06", kapi_en("K06")),
              ("ERKEK", "dus"): ("K07", kapi_en("K07")),
              ("KADIN", "dus"): ("K08", kapi_en("K08"))}
+def _salon_duvarina_kapi(blok, seed, gen):
+    """Soyunma giriş kapısı: bloğun SALONA bakan (mevcut olmayan, alt mekân
+    paylaşmayan) çeper kenarları arasından tohum noktaya en yakınına
+    izdüşürülür. Kapı konumu artık duvarın dışında kalamaz; geometri
+    değişince kapı da duvarla birlikte gider."""
+    soy = ISLAK[blok]["soyunma"]; tum = ISLAK[blok]["tum"]
+    c = list(soy.exterior.coords)
+    from shapely.ops import unary_union as _bir
+    kabuk = _bir([SALON, ERKEK, KADIN]).buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
+    dis = _bir([g.exterior for g in (kabuk.geoms if hasattr(kabuk, "geoms") else [kabuk])])
+    en = None
+    for a, b in zip(c, c[1:]):
+        seg = LineString([a, b])
+        if seg.length < gen + 0.20: continue
+        m = seg.interpolate(0.5, normalized=True)
+        if m.distance(dis) < 0.06: continue                     # mevcut bina duvarı
+        if any(ISLAK[blok][n].distance(m) < 0.15 for n in ("dus", "wc")): continue
+        if tum.exterior.distance(m) > 0.02: continue             # blok çeperinde değil
+        d = seg.distance(Point(seed))
+        if en is None or d < en[0]: en = (d, seg)
+    if en is None: return None
+    seg = en[1]
+    q = seg.interpolate(max(gen/2 + 0.12, min(seg.length - gen/2 - 0.12,
+                                               seg.project(Point(seed)))))
+    (ax, ay), (bx, by) = seg.coords[0], seg.coords[-1]
+    return (round(q.x, 3), round(q.y, 3)), round(math.degrees(math.atan2(by-ay, bx-ax)) % 180, 1)
+
 KAPI_GEOM = {"K01": (KAPILAR[0][0], KAPILAR[0][1], KAPILAR[0][2]),
-             "K02": (KAPILAR[3][0], KAPILAR[3][1], KAPILAR[3][2]),
-             "K03": (KAPILAR[1][0], KAPILAR[1][1], KAPILAR[1][2]),
-             "K04": (KAPILAR[2][0], KAPILAR[2][1], KAPILAR[2][2])}
+             "K02": (KAPILAR[3][0], KAPILAR[3][1], KAPILAR[3][2])}
+for _kod, _blok, _i in (("K03", "ERKEK", 1), ("K04", "KADIN", 2)):
+    _r = _salon_duvarina_kapi(_blok, KAPILAR[_i][0], KAPILAR[_i][1])
+    if _r:
+        KAPILAR[_i] = (_r[0], KAPILAR[_i][1], _r[1], KAPILAR[_i][3])
+    KAPI_GEOM[_kod] = (KAPILAR[_i][0], KAPILAR[_i][1], KAPILAR[_i][2])
 for (_blok, _alt), (_kod, _g) in _ALT_KAPI.items():
     _r = _ortak_kenar_kapi(ISLAK[_blok][_alt], ISLAK[_blok]["soyunma"], _g)
     if _r is None: continue
@@ -1102,12 +1143,48 @@ KAPI_GEOM_HARIC = {"K09": "banko arkası teknik dolap kapağı — mobilya imala
 KAPI_DISA = {"K03", "K04"}
 
 
+# Kapı HANGİ MAHALE açılır — açılış yönü buradan türetilir, işaretle değil.
+# Kabin kapıları (WC, duş) küçük hacim kuralı gereği soyunmaya; soyunma
+# kapıları (üç kapı çakışması nedeniyle) salona açılır.
+KAPI_ACILIR = {"K01": "salon", "K02": "dis", "K03": "salon", "K04": "salon",
+               "K05": ("ERKEK", "soyunma"), "K06": ("KADIN", "soyunma"),
+               "K07": ("ERKEK", "soyunma"), "K08": ("KADIN", "soyunma")}
+
+
+def kapi_acilis_aci(kod):
+    """Kapının açıldığı yönün açısı (derece): boşluk doğrultusunun, hedef
+    mahal tarafındaki normali. Çizim de çakışma denetimi de bunu kullanır."""
+    (x, y), gen, aci = KAPI_GEOM[kod]
+    a = math.radians(aci)
+    nx, ny = -math.sin(a), math.cos(a)
+    hedef = KAPI_ACILIR.get(kod, "salon")
+    if hedef == "dis":
+        g = None
+    elif hedef == "salon":
+        g = SALON
+    else:
+        g = ISLAK[hedef[0]][hedef[1]]
+    if g is None:
+        # dışarı: bina kabuğunun dışına bakan taraf
+        from shapely.geometry import Point as _Pt
+        ic = SALON.union(ERKEK).union(KADIN)
+        yon = 1 if not ic.contains(_Pt(x + nx*0.3, y + ny*0.3)) else -1
+    else:
+        from shapely.geometry import Point as _Pt
+        d1 = g.distance(_Pt(x + nx*0.3, y + ny*0.3))
+        d2 = g.distance(_Pt(x - nx*0.3, y - ny*0.3))
+        yon = 1 if d1 <= d2 else -1
+    return math.degrees(math.atan2(ny*yon, nx*yon)) % 360
+
+
 def kapi_yayi(kod):
     """Kapının süpürdüğü çeyrek daire — mobilya ve ekipman bu alana giremez.
     (BYKHY md.32 kaçış kapıları ve genel erişilebilirlik gereği.)"""
     if kod not in KAPI_GEOM: return None
     (x, y), gen, aci = KAPI_GEOM[kod]
-    a = math.radians(aci) + (math.pi if kod in KAPI_DISA else 0.0)
+    # boşluk doğrultusu öyle seçilir ki sol normali açılış yönü olsun
+    ac = kapi_acilis_aci(kod)
+    a = math.radians(ac - 90.0)
     p1 = (x - math.cos(a)*gen/2, y - math.sin(a)*gen/2)
     pts = [p1] + [(p1[0] + math.cos(a - math.pi/2*t/16)*gen,
                    p1[1] + math.sin(a - math.pi/2*t/16)*gen) for t in range(17)]
@@ -1479,36 +1556,37 @@ SUPURGELIK = [
 ]
 
 # ── MAHAL LİSTESİ (finishes schedule) ──────────────────────────────────────────
-# no, ad, m², zemin, süpürgelik, duvar, tavan, tavan_kot, kapı, ıslak?, not
+# no (Z-01… — Mimarlar Odası çizim standardı §12), ad, m², zemin, süpürgelik,
+# duvar, tavan, tavan_kot, kapı, ıslak?, not
 MAHAL_LISTESI = [
- ("101","GİRİŞ · BANKO · SİRKÜLASYON", ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],
+ ("Z-01","GİRİŞ · BANKO · SİRKÜLASYON", ZON_M2["GİRİŞ · BANKO · SİRKÜLASYON"],
   "Z3","S2","D1","T2",2.75,"K01 · K09", False,
   "Cephe vitrini mevcut (P01); alt 1,20 m buzlu folyo. Banko arkası D1 üzeri lake MDF panel."),
- ("102","ARENA · SERBEST AĞIRLIK", ZON_M2["ARENA · SERBEST AĞIRLIK"],
+ ("Z-02","ARENA · SERBEST AĞIRLIK", ZON_M2["ARENA · SERBEST AĞIRLIK"],
   "Z1","S1","D1 + D4 (güney çeper) + D6 (ayna, 4,80 m)","T1",3.20,"—", False,
   "Ring platformu Z6. Ağırlık düşürme kural olarak yasak — uyarı levhası."),
- ("103","FONKSİYONEL · KARDİYO", ZON_M2["FONKSİYONEL · KARDİYO"],
+ ("Z-03","FONKSİYONEL · KARDİYO", ZON_M2["FONKSİYONEL · KARDİYO"],
   "Z2","S1","D1 / D2 (soyunma bloğu cephesi)","T1",3.20,"—", False,
   "Koşu bandı arkasında 60 cm serbest güvenlik mesafesi bırakılacak."),
- ("104","DİNLENME SALONU", ZON_M2["DİNLENME SALONU"],
+ ("Z-04","DİNLENME SALONU", ZON_M2["DİNLENME SALONU"],
   "Z3","S2","D1","T2",2.75,"—", False,
   "Yönetmelik gereği asgari 15 m² dinlenme alanı — sağlanıyor."),
- ("105","ERKEK SOYUNMA", ISLAK_M2_DETAY["ERKEK"]["soyunma"],
+ ("Z-05","ERKEK SOYUNMA", ISLAK_M2_DETAY["ERKEK"]["soyunma"],
   "Z5","S4","D2 / D3","T4",2.60,"K03", False,
   "8 kişilik soyunma dolabı + 1,60 m bank + boy aynası. Yönetmelik asgarisi 8 m² blok bazında."),
- ("106","ERKEK DUŞ", ISLAK_M2_DETAY["ERKEK"]["dus"],
+ ("Z-06","ERKEK DUŞ", ISLAK_M2_DETAY["ERKEK"]["dus"],
   "Z4","S3","D3 + D5 (tavana kadar)","T3",2.40,"K07", True,
   "1 duş yeri; 100×100 mm paslanmaz süzgeç, %1,5 eğim, termostatik batarya."),
- ("107","ERKEK WC", ISLAK_M2_DETAY["ERKEK"]["wc"],
+ ("Z-07","ERKEK WC", ISLAK_M2_DETAY["ERKEK"]["wc"],
   "Z4","S3","D3 + D5 (h=1,60 m)","T3",2.40,"K05", True,
   "1 klozet + 1 lavabo; ekstraktör fan kapı menfezi ile telafi havası."),
- ("108","KADIN SOYUNMA", ISLAK_M2_DETAY["KADIN"]["soyunma"],
+ ("Z-08","KADIN SOYUNMA", ISLAK_M2_DETAY["KADIN"]["soyunma"],
   "Z5","S4","D2 / D3","T4",2.60,"K04", False,
   "8 kişilik soyunma dolabı + 1,60 m bank + boy aynası."),
- ("109","KADIN DUŞ", ISLAK_M2_DETAY["KADIN"]["dus"],
+ ("Z-09","KADIN DUŞ", ISLAK_M2_DETAY["KADIN"]["dus"],
   "Z4","S3","D3 + D5 (tavana kadar)","T3",2.40,"K08", True,
   "1 duş yeri; 100×100 mm paslanmaz süzgeç, %1,5 eğim, termostatik batarya."),
- ("110","KADIN WC", ISLAK_M2_DETAY["KADIN"]["wc"],
+ ("Z-10","KADIN WC", ISLAK_M2_DETAY["KADIN"]["wc"],
   "Z4","S3","D3 + D5 (h=1,60 m)","T3",2.40,"K06", True,
   "1 klozet + 1 lavabo; ekstraktör fan kapı menfezi ile telafi havası."),
 ]
@@ -1522,9 +1600,9 @@ MAHAL_NOKTA = {}
 for _z in ZONES: MAHAL_NOKTA[MAHAL_NO[_z[0]]] = _z[5]
 for _ad, _d in ISLAK.items():
     _blok = "ERKEK" if _ad == "ERKEK" else "KADIN"
-    for _n, _no in (("soyunma", "105" if _blok=="ERKEK" else "108"),
-                    ("dus",     "106" if _blok=="ERKEK" else "109"),
-                    ("wc",      "107" if _blok=="ERKEK" else "110")):
+    for _n, _no in (("soyunma", "Z-05" if _blok=="ERKEK" else "Z-08"),
+                    ("dus",     "Z-06" if _blok=="ERKEK" else "Z-09"),
+                    ("wc",      "Z-07" if _blok=="ERKEK" else "Z-10")):
         _q = _d[_n].representative_point(); MAHAL_NOKTA[_no] = (_q.x, _q.y)
 
 # ── KAPI VE PENCERE LİSTESİ ────────────────────────────────────────────────────
@@ -1610,12 +1688,12 @@ KESIT_HATLARI = {
 
 # hangi hacimde olduğumuzu döndüren yardımcı (kesit üretimi için)
 _MAHAL_GEOM = ([(z[0], MAHAL_NO[z[0]], z[1]) for z in ZONES] +
-               [("ERKEK SOYUNMA","105",ISLAK["ERKEK"]["soyunma"]),
-                ("ERKEK DUŞ",    "106",ISLAK["ERKEK"]["dus"]),
-                ("ERKEK WC",     "107",ISLAK["ERKEK"]["wc"]),
-                ("KADIN SOYUNMA","108",ISLAK["KADIN"]["soyunma"]),
-                ("KADIN DUŞ",    "109",ISLAK["KADIN"]["dus"]),
-                ("KADIN WC",     "110",ISLAK["KADIN"]["wc"])])
+               [("ERKEK SOYUNMA","Z-05",ISLAK["ERKEK"]["soyunma"]),
+                ("ERKEK DUŞ",    "Z-06",ISLAK["ERKEK"]["dus"]),
+                ("ERKEK WC",     "Z-07",ISLAK["ERKEK"]["wc"]),
+                ("KADIN SOYUNMA","Z-08",ISLAK["KADIN"]["soyunma"]),
+                ("KADIN DUŞ",    "Z-09",ISLAK["KADIN"]["dus"]),
+                ("KADIN WC",     "Z-10",ISLAK["KADIN"]["wc"])])
 _MAHAL_BILGI = {m[0]: m for m in MAHAL_LISTESI}
 
 def kesit_dizisi(a, b, adim=0.01):
@@ -1732,11 +1810,11 @@ YANGIN_EKIPMAN = [
  ("YT3", (6.60, 0.55), "6 kg ABC kuru kimyevi tozlu yangın söndürücü — acil çıkış yanında"),
 ]
 TAHLIYE_YOL = [  # (mahal_no, [nokta...], çıkış kodu) — kapılardan geçer, ekipmanın etrafından dolaşır
- ("104", [(8.05,11.10),(7.05,9.70),(6.55,8.88),(5.00,8.10),(2.60,6.50),(0.45,4.35)], "Ç1"),
- ("103", [(6.40,7.45),(4.60,7.30),(2.40,6.30),(0.45,4.35)], "Ç1"),
- ("102", [(5.30,1.62),(4.30,0.95),(3.40,0.40)], "Ç2"),
- ("105", [(9.80,6.30),(8.95,7.05),(8.40,7.28),(6.80,7.55),(4.20,6.70),(2.00,5.70),(0.45,4.35)], "Ç1"),
- ("108", [(10.10,3.30),(9.35,3.38),(8.60,3.50),(7.85,5.30),(7.55,7.00),(5.00,7.50),(2.20,6.10),(0.45,4.35)], "Ç1"),
+ ("Z-04", [(8.05,11.10),(7.05,9.70),(6.55,8.88),(5.00,8.10),(2.60,6.50),(0.45,4.35)], "Ç1"),
+ ("Z-03", [(6.40,7.45),(4.60,7.30),(2.40,6.30),(0.45,4.35)], "Ç1"),
+ ("Z-02", [(5.30,1.62),(4.30,0.95),(3.40,0.40)], "Ç2"),
+ ("Z-05", [(9.80,6.30),(8.95,7.05),(8.40,7.28),(6.80,7.55),(4.20,6.70),(2.00,5.70),(0.45,4.35)], "Ç1"),
+ ("Z-08", [(10.10,3.30),(9.35,3.38),(8.60,3.50),(7.85,5.30),(7.55,7.00),(5.00,7.50),(2.20,6.10),(0.45,4.35)], "Ç1"),
 ]
 def tahliye_uzunluk(yol): return round(sum(math.dist(yol[i],yol[i+1]) for i in range(len(yol)-1)),1)
 TAHLIYE_MAX = max(tahliye_uzunluk(y[1]) for y in TAHLIYE_YOL)

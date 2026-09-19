@@ -21,7 +21,10 @@ from dxf_lib import M, ML, yazi, poli, cizgi, tarama, sekil, blok, K
 
 ROOT = Path(__file__).resolve().parent.parent
 CAD  = ROOT/"cad"; CAD.mkdir(exist_ok=True)
-IC   = unary_union([P.SALON, P.ERKEK, P.KADIN])
+# Ölçülmüş rölövede salon ile ıslak bloklar arasında 98 mm bölme boşluğu var;
+# poligonlar DEĞMEZ. Bina iç kabuğu için boşluk kapat–aç ile kapatılır; aksi
+# hâlde IC üç parçalı olur ve .exterior yoktur (build_dxf bu yüzden çöküyordu).
+IC   = P.IC_KABUK
 BB   = IC.buffer(P.V["duvar_kalinlik"][0]).bounds
 CX, CY = (BB[0]+BB[2])/2*K, (BB[1]+BB[3])/2*K
 
@@ -209,14 +212,13 @@ def mimari_mahal(msp, olcek=50, pafta_ref="A-06"):
         _balon(msp, q, no, 320)
         if math.dist(q, (pt[0], pt[1]-0.72)) > 0.45:
             cizgi(msp, pt, q, "A-MAHAL")
-    # kapı balonları — kapı kanadının dışına, çakışmadan
-    KP = {0: "K01", 1: "K03", 2: "K04", 3: "K02"}
-    for i, ((x, y), gen, aci, lbl) in enumerate(P.KAPILAR):
-        q = balon_yerlestir((x, y), _halkalar(0.30, 0.42, 5))
-        _balon(msp, q, KP[i], 290)
-        cizgi(msp, (x, y), q, "A-MAHAL")
-    for kod, pt in (("K05",(10.05,8.35)), ("K06",(9.62,0.92)), ("K07",(8.62,7.45)),
-                    ("K08",(11.05,1.78)), ("K09",(2.55,7.05))):
+    # kapı balonları — konum KAPI_GEOM'dan (tek kaynak); K05–K08 önceden
+    # elle yazılmıştı ve plandaki kapıyla ilişkisizdi
+    for kod, (pt, gen, aci) in sorted(P.KAPI_GEOM.items()):
+        q = balon_yerlestir(pt, _halkalar(0.30, 0.42, 5))
+        _balon(msp, q, kod, 290)
+        cizgi(msp, pt, q, "A-MAHAL")
+    for kod, pt in (("K09", (2.55, 7.05)),):          # mobilya kapağı — mahal kapısı değil
         q = balon_yerlestir(pt, _halkalar(0.30, 0.42, 5))
         _balon(msp, q, kod, 290)
         cizgi(msp, pt, q, "A-MAHAL")

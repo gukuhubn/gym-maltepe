@@ -342,6 +342,30 @@ _Y
 _QSAVE
 _CLOSE
 _OPEN
+"DWG/P-00_SEMBOL_VE_ÖLÇEÐE_GÖRE_ÝFADE_PAFTASI.dwg"
+_-PLOT
+_Y
+P-00 SEMBOL VE ÖLÇEÐE GÖRE ÝFADE PAFTASI
+DWG To PDF.pc3
+ISO_full_bleed_A2_(594.00_x_420.00_MM)
+_M
+_L
+_N
+_E
+1=1
+_C
+_Y
+acad.ctb
+_Y
+_N
+_N
+_N
+"PDF/P-00_SEMBOL_VE_ÖLÇEÐE_GÖRE_ÝFADE_PAFTASI.pdf"
+_N
+_Y
+_QSAVE
+_CLOSE
+_OPEN
 "DWG/P-01_ÖLÇÜLÜ_PLAN.dwg"
 _-PLOT
 _Y

@@ -32,7 +32,7 @@ HARF = "ABCDEFGHJKLMNPRSTUVYZ"
 
 
 def _cevre():
-    ic = unary_union([P.SALON, P.ERKEK, P.KADIN])
+    ic = P.IC_KABUK
     return ic, list(ic.exterior.coords)
 
 

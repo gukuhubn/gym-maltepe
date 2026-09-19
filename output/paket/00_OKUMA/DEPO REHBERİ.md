@@ -21,7 +21,9 @@
 | `Gym_Mekanik_Proje_A3.pdf` | Mekanik tesisat projesi — A3 yatay, 9 pafta (havalandırma prensip, sıhhi kolon şeması ve iklimlendirme prensip şemaları **ayrı paftalarda**) |
 | `Gym_Elektrik_Proje_A3.pdf` | Elektrik projesi — A3 yatay, 8 pafta (E-08 topraklama ve potansiyel dengeleme planı dâhil) |
 | `Gym_ADP_Sema_A3.pdf` | **ADP çok hatlı şema seti** — 12 pafta A3: kapak, pano karakteristiği (IEC 61439), sembol listesi, ana besleme, 4 şematik diyagram, klemens planı, pano önden görünüş, yükleme cetveli, malzeme listesi |
-| `Gym_Pilot_Paftalar.pdf` | **PİLOT BÖLGE — 5 pafta A2**: ölçülü plan 1:20 · tavan planı 1:20 · koordinasyon kesiti 1:20 · iç görünüş 1:20 · birleşim detayı 1:5 (ERKEK ıslak blok 105·106·107) |
+| `Gym_Pilot_Paftalar.pdf` | **PİLOT BÖLGE — 6 pafta A2**: sembol/ifade paftası · ölçülü plan 1:20 · tavan planı 1:20 · koordinasyon kesiti 1:20 · iç görünüş 1:20 · birleşim detayı 1:5 (ERKEK ıslak blok Z-05·Z-06·Z-07). Duvarlar katman katman (levha · dikme · yalıtım · kaplama), kapı boşlukları duvarı keser, doğrama etiketi Mimarlar Odası biçiminde |
+| `Gym_AutoCAD_Kiti.zip` | **AutoCAD doğrulama kiti** — 20 DWG (ACAD2018), denetim ve toplu baskı betikleri, kalem tablosu, adım adım yönerge |
+| `docs/CIZIM_STANDARDI.md` | **Ofis çizim standardı** — Mimarlar Odası *Çizim ve Sunuş Standartları* (verbatim: `docs/kaynak/`), MEGEP gösterim kuralları, ISO 5457/7200/128/3098; kod karşılığı `tools/standart.py`, ajan ikisinin ayrışmasını denetler |
 | `Gym_Pilot_Raporu.pdf` | **Pilot çalışma raporu** — kabiliyet/eksik envanteri, kaynak envanteri (erişilen · izin gereken · erişilemeyen · uygulanmayan), eksik girdiler, düzeltilen hatalar, kontrol sonuçları |
 | `Gym_Denetim_Raporu.pdf` | **Otomatik denetim raporu** — 7 kontrol ajanının bulguları, dayanak standartlarıyla; dört sonuçlu (geçti · kaldı · veri eksik · uygulanmaz) |
 | `Gym_Donusum_Dosyasi_A3.pdf` | Yatırım / fizibilite dosyası — A3 yatay, 12 sayfa |
@@ -71,7 +73,9 @@ python3 tools/build_butce.py          # bütçe takibi + nakit akışı .xlsx
 python3 tools/build_pano_cetveli.py   # ADP pano yükleme cetveli .xlsx
 python3 tools/build_paket.py          # disiplin klasörlü teslim paketi .zip
 python3 tools/kontrol.py              # çizim kontrolü (çakışma, kot, yük, kaçış)
-python3 tools/pilot.py                # PİLOT BÖLGE — 5 pafta A2 (plan·tavan·kesit·görünüş·detay)
+python3 tools/pilot.py                # PİLOT BÖLGE — 6 pafta A2 (sembol·plan·tavan·kesit·görünüş·detay)
+python3 tools/autocad_kit.py          # AutoCAD doğrulama kiti (DWG + .scr + yönerge)
+python3 tools/kaynak.py               # kaynak envanteri (talimat §3: erişim · izin · doğrulama)
 python3 tools/revizyon.py --bolme 125 # ilişkilendirme deneyi: bir girdi → kaç türev?
 python3 tools/build_pilot_raporu.py   # pilot çalışma raporu (talimat §13)
 python3 tools/dwg.py <dosya.dwg>      # DWG ↔ DXF dönüştürücü (ODA File Converter)

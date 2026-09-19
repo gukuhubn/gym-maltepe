@@ -248,16 +248,29 @@ def _ozel_su_yalitimi(msp, dortgen, olcek, u_yon):
     return n
 
 
-def _ozel_c_profil(msp, dortgen, olcek, u_yon, ara=0.40, et=0.006):
+def _ozel_c_profil(msp, dortgen, olcek, u_yon, ara=0.40, et=0.006,
+                   kenar_dikme=False):
     """MEGEP Alçı Levha Şekil 1.3 — yatay kesitte C dikme profilleri.
 
     Dikmeler GERÇEK aks aralığında (varsayılan 400 mm) dizilir; sayıları
-    duvarın gerçek uzunluğundan çıkar, elle yazılmaz.
+    duvarın gerçek uzunluğundan çıkar, elle yazılmaz. `kenar_dikme` ile
+    parçanın iki ucuna da dikme konur (kapı/pencere kenarı — Knauf W11
+    "boşluk kenarında UA profil veya takviyeli C").
     """
     o, du, dv, U, V = _uv_kutu(dortgen, u_yon)
     n = 0
+    f = V*0.62
+    if kenar_dikme:
+        for t in (0.004, U - f - 0.004):
+            if 0 <= t <= U - f:
+                pts = [(t, V), (t, 0.0), (t+f, 0.0), (t+f, et), (t+et, et),
+                       (t+et, V-et), (t+f, V-et), (t+f, V), (t, V)]
+                _pl(msp, [_xy(o, du, dv, a, b) for a, b in pts], KAT_DIKME, kapali=False)
+                n += 1
     t = ara/2
     while t < U - 0.02:
+        if kenar_dikme and (t < f + 0.02 or t > U - f - 0.02):
+            t += ara; continue
         # C kesiti: sırt + iki flanş (flanş boyu gövdenin %62'si — DC profil oranı)
         f = V*0.62
         pts = [(t+et, f), (t, f), (t, 0.0), (t+et, 0.0)] if False else [
@@ -378,8 +391,19 @@ def katmanlari_coz(tablo):
     return out
 
 
+def _parcala(L, bosluklar):
+    """[0,L] aralığını boşluklar dışında kalan dolu parçalara böler."""
+    kes = sorted((max(0.0, a), min(L, b)) for a, b in (bosluklar or []) if b > a)
+    dolu, t = [], 0.0
+    for a, b in kes:
+        if a > t + 1e-6: dolu.append((t, a))
+        t = max(t, b)
+    if L > t + 1e-6: dolu.append((t, L))
+    return dolu
+
+
 def duvar_kesiti(msp, a, b, katmanlar, olcek, taraf=1, dikme_ara=0.40,
-                 ceper_dis=True):
+                 ceper_dis=True, bosluklar=None, sove=True):
     """İki nokta arasında ÇOK KATMANLI duvarı çizer.
 
     a, b        : duvarın referans yüzü (metre)
@@ -387,6 +411,13 @@ def duvar_kesiti(msp, a, b, katmanlar, olcek, taraf=1, dikme_ara=0.40,
     taraf       : +1 sol normal, -1 sağ normal
     dikme_ara   : karkas aks aralığı (m) — C profiller bu aralıkla dizilir
     ceper_dis   : en dıştaki katmanın dış yüzü kesilen çeper kalınlığında
+    bosluklar   : [(u0, u1)] — a'dan ölçülen KAPI/PENCERE boşlukları (m).
+                  MEGEP Şekil 2.51: "duvar üzerinde kapı genişliği kadar
+                  boşluk açılır" — bütün katmanlar boşlukta KESİLİR; duvar
+                  kapının içinden geçmez. Boşluk kenarına söve (reveal)
+                  çizgisi konur: kesilen çeper kalınlığında, tüm katmanları
+                  bir uçtan öbür uca kapatır.
+    sove        : boşluk kenarlarına söve çizgisi çizilsin mi
 
     Döner: (toplam_kalinlik, cizilen_katman_sayisi)
     """
@@ -395,26 +426,37 @@ def duvar_kesiti(msp, a, b, katmanlar, olcek, taraf=1, dikme_ara=0.40,
     if L < 1e-6: return (0.0, 0)
     ux, uy = (bx-ax)/L, (by-ay)/L
     nx, ny = -uy*taraf, ux*taraf
-    t0 = 0.0; n = 0
-    for i, k in enumerate(katmanlar):
-        t1 = t0 + k["m"]
-        q = Polygon([(ax+nx*t0, ay+ny*t0), (bx+nx*t0, by+ny*t0),
-                     (bx+nx*t1, by+ny*t1), (ax+nx*t1, ay+ny*t1)])
-        son = (i == len(katmanlar)-1)
-        ceper = (i == 0) or (son and ceper_dis)
-        if k["malzeme"] == "dikme":
-            # karkas: önce boşluğun dolgusu (taşyünü), sonra C profiller
-            if k.get("dolgu") and k["dolgu"] != "bosalan":
-                katman_ciz(msp, q, k["dolgu"], olcek, (ux, uy), ceper=False)
-                _pl(msp, list(q.exterior.coords)[:-1], KAT_KATMAN)
+    toplam = sum(k["m"] for k in katmanlar)
+    parcalar = _parcala(L, bosluklar)
+    def P(u, t): return (ax + ux*u + nx*t, ay + uy*u + ny*t)
+    n = 0
+    for u0, u1 in parcalar:
+        t0 = 0.0
+        for i, k in enumerate(katmanlar):
+            t1 = t0 + k["m"]
+            q = Polygon([P(u0, t0), P(u1, t0), P(u1, t1), P(u0, t1)])
+            son = (i == len(katmanlar)-1)
+            ceper = (i == 0) or (son and ceper_dis)
+            if k["malzeme"] == "dikme":
+                if k.get("dolgu") and k["dolgu"] != "bosalan":
+                    katman_ciz(msp, q, k["dolgu"], olcek, (ux, uy), ceper=False)
+                    _pl(msp, list(q.exterior.coords)[:-1], KAT_KATMAN)
+                else:
+                    _pl(msp, list(q.exterior.coords)[:-1], KAT_KATMAN)
+                if olcek <= bilgi("dikme")["asgari"]:
+                    # Kapı kenarında takviyeli dikme (UA profil) — Knauf W11:
+                    # boşluk kenarına her zaman bir dikme gelir.
+                    _ozel_c_profil(msp, q, olcek, (ux, uy), ara=dikme_ara,
+                                   kenar_dikme=bool(bosluklar))
             else:
-                _pl(msp, list(q.exterior.coords)[:-1], KAT_KATMAN)
-            if olcek <= bilgi("dikme")["asgari"]:
-                _ozel_c_profil(msp, q, olcek, (ux, uy), ara=dikme_ara)
-        else:
-            katman_ciz(msp, q, k["malzeme"], olcek, (ux, uy), ceper=ceper)
-        t0 = t1; n += 1
-    return (t0, n)
+                katman_ciz(msp, q, k["malzeme"], olcek, (ux, uy), ceper=ceper)
+            t0 = t1; n += 1
+    if sove and bosluklar:
+        for u0, u1 in bosluklar:
+            for u in (u0, u1):
+                if 1e-6 < u < L - 1e-6:
+                    _ln(msp, P(u, 0.0), P(u, toplam), KAT_CEPER)
+    return (toplam, n)
 
 
 def altlik_ayikla(kaplama):

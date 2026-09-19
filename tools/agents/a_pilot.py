@@ -99,7 +99,7 @@ class PilotAjani(Ajan):
             r.bilgi("yazı", f"{no}: tüm yazılar basılı ölçekte ≥ {YAZI_MIN_MM} mm")
         # ÖLÇÜ nesneleri gerçek DIMENSION mı, ölçü metni elle değiştirilmiş mi
         dims = list(msp.query("DIMENSION"))
-        if not dims and no != "P-05":
+        if not dims and no not in ("P-05", "P-00"):
             r.hata("ölçü", f"{no}: hiç DIMENSION nesnesi yok")
         elle = [d for d in dims if (d.dxf.get("text", "") or "") not in ("", "<>")]
         if elle:

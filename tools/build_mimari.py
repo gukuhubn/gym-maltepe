@@ -643,8 +643,8 @@ def s9(c):
     yy2 = h.notkutu(c, x2, yy-4*mm, w2, "Yönetmelik bağlantısı",
       "Özel Beden Eğitimi ve Spor Tesisleri Yönetmeliği; soyunma mahalleri için blok başına asgari 8 m², "
       "dinlenme alanı için asgari 15 m² aramaktadır. Mahal listesinde 105+106+107 = "
-      f"{h.tl(sum(m[2] for m in P.MAHAL_LISTESI if m[0] in ('105','106','107')),2)} m² ve "
-      f"108+109+110 = {h.tl(sum(m[2] for m in P.MAHAL_LISTESI if m[0] in ('108','109','110')),2)} m², "
+      f"{h.tl(sum(m[2] for m in P.MAHAL_LISTESI if m[0] in ('Z-05','Z-06','Z-07')),2)} m² ve "
+      f"108+109+110 = {h.tl(sum(m[2] for m in P.MAHAL_LISTESI if m[0] in ('Z-08','Z-09','Z-10')),2)} m², "
       f"104 dinlenme salonu {h.tl(P.ZON_M2['DİNLENME SALONU'],2)} m² ile her iki şart sağlanmaktadır. "
       "Salon alanına ilişkin GSİM uygulaması için ana dosyanın uygunluk sayfasına bakınız.",
       fs=6.3, acc=h.GREEN)

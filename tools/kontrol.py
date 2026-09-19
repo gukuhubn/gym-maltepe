@@ -178,7 +178,7 @@ def calistir():
          " · ".join(f"{t} {v}" for t, v in P.TAVAN_SERBESTLIK.items()))
     # 10g kaçış yolu genişliği / mahal kapsamı
     _kapsanan = {y_[0] for y_ in P.TAHLIYE_YOL}
-    _gereken = {m[0] for m in P.MAHAL_LISTESI if not m[9] and m[0] != "101"}
+    _gereken = {m[0] for m in P.MAHAL_LISTESI if not m[9] and m[0] != "Z-01"}
     if _gereken - _kapsanan:
         ekle("UYARI", "yangın", f"tahliye yolu tanımlanmamış mahal: {', '.join(sorted(_gereken-_kapsanan))}")
     if P.TAHLIYE_MAX > P.TAHLIYE_SINIR:

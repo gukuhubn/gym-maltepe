@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # TÜM ÇIKTILARI SIFIRDAN ÜRET — tek kaynak (tools/proj.py) → tüm paftalar ve tablolar.
 set -e
+set -o pipefail   # borulu adımlarda gerçek hata gizlenmesin
 cd "$(dirname "$0")/.."
 echo "── ölçülmüş rölöve → geometri ──────────────────────────────────────"
 python3 tools/roleve.py | tail -6
@@ -19,7 +20,7 @@ for m in build_boq build_boq_mep build_kesif build_hakedis build_butce \
   python3 tools/$m.py
 done
 echo "── CAD ─────────────────────────────────────────────────────────────"
-python3 tools/build_dxf.py | tail -4
+python3 tools/build_dxf.py 2>&1 | tail -4
 python3 tools/build_sema.py
 echo "── PİLOT BÖLGE (ölçülü plan · tavan · kesit · görünüş · detay) ─────"
 python3 tools/pilot.py

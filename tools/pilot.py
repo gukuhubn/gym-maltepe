@@ -33,6 +33,8 @@ from shapely.geometry import Polygon, Point, LineString
 import proj as P
 import dxf_lib as X
 import malzeme as MZ
+import standart as ST
+import blok_kutuphanesi as BK
 from dxf_lib import M, ML, yazi, poli, cizgi, tarama, sekil, K
 import pafta as PF
 from pafta import Pafta
@@ -44,7 +46,7 @@ BLOK   = "ERKEK"
 OLCEK  = 20
 OLCEK_DETAY = 5
 BOY    = "A2"
-MAHAL  = {"soyunma": "105", "dus": "106", "wc": "107"}
+MAHAL  = {"soyunma": "Z-05", "dus": "Z-06", "wc": "Z-07"}
 
 PROJE_BILGI = {
     "isveren": "ÖZEL — MALTEPE / İDEALTEPE",
@@ -56,6 +58,7 @@ MUELLIF = "—  (proje müellifi imzası için ayrılmıştır)"
 SICIL   = "—"
 
 PAFTALAR = {
+ "P-00": ("SEMBOL VE ÖLÇEĞE GÖRE İFADE PAFTASI", "MİMARİ", 20),
  "P-01": ("ÖLÇÜLÜ PLAN — ERKEK ISLAK BLOK", "MİMARİ", OLCEK),
  "P-02": ("TAVAN PLANI (RCP) — ERKEK ISLAK BLOK", "MİMARİ", OLCEK),
  "P-03": ("KOORDİNASYON KESİTİ K1-K1", "KOORDİNASYON", OLCEK),
@@ -275,9 +278,7 @@ def ceper_govdesi():
     DIŞ kabuğuna uzaklığından ayrılır; elle işaretlenmez.
     """
     tum = P.ISLAK[BLOK]["tum"]
-    kab = _IC.buffer(0.06, join_style=2).buffer(-0.06, join_style=2)
-    dis_kabuk = unary_union([g.exterior for g in
-                             (kab.geoms if hasattr(kab, "geoms") else [kab])])
+    dis_kabuk = P.IC_KABUK.exterior
     parcalar = []
     c = list(tum.exterior.coords)
     for a, b in zip(c, c[1:]):
@@ -299,7 +300,7 @@ CEPER = ceper_govdesi()
 
 # ══════════════════════════ P-01  ÖLÇÜLÜ PLAN ═════════════════════════════════
 KESIT_U = 0.55          # m — K1-K1 kesit düzleminin yerel u koordinatı
-DETAY_UV = (0.08, 2.40)  # m — D-02 detay çağrısı: duşun zemin/duvar köşesi
+DETAY_UV = (1.02, 3.62)  # m — D-02 detay çağrısı: duşun kuzeydoğu zemin/duvar köşesi
 
 
 def _kutu_uv(msp, u0, v0, w, d, kat, kapali=True):
@@ -400,6 +401,35 @@ def _taraf(a, b, disa_normal):
     return 1 if (-uy/L*disa_normal[0] + ux/L*disa_normal[1]) > 0 else -1
 
 
+KAPI_KASA_PAY = 0.015     # m — kaba yapı boşluğu = kanat + her yanda kasa payı
+
+
+def _kenar_bosluklari(a, b, mahal=None):
+    """a→b kenarı üzerine düşen kapıların u-aralıkları (kaba yapı boşluğu).
+
+    Kapı, kenarın 6 cm yakınında ve açıklığı kenar boyunca yer alıyorsa bu
+    kenara aittir. Boşluk = kanat genişliği + iki yanda kasa payı — Mimarlar
+    Odası standardı "kaba yapı boşluğu K7 90/220" tanımı budur.
+    """
+    L = math.dist(a, b)
+    if L < 1e-6: return []
+    ux, uy = (b[0]-a[0])/L, (b[1]-a[1])/L
+    out = []
+    for kod, (pt, gen, aci) in P.KAPI_GEOM.items():
+        dx, dy = pt[0]-a[0], pt[1]-a[1]
+        u = dx*ux + dy*uy
+        d = abs(-dx*uy + dy*ux)
+        # kapı MERKEZİ bu parçanın üzerinde olmalı; yoksa aynı doğrultudaki
+        # komşu parçaya (iki mahalin ortak duvarı) yanlışlıkla atanır
+        if d > 0.08 or u < 0.02 or u > L - 0.02: continue
+        # kapı ekseni kenara paralel mi? (dik kapı bu kenarda değil)
+        ka = math.radians(aci)
+        if abs(math.cos(ka)*ux + math.sin(ka)*uy) < 0.7: continue
+        bos = gen/2 + KAPI_KASA_PAY
+        out.append((max(0.0, u-bos), min(L, u+bos), kod))
+    return out
+
+
 def duvarlari_ciz(msp, olcek):
     """Bütün duvarları KATMAN KATMAN çizer — üç aşama:
 
@@ -420,10 +450,12 @@ def duvarlari_ciz(msp, olcek):
         # Köşelerin kapanması için kenar iki uçtan duvar kalınlığı kadar uzatılır;
         # uzatma yalnız GÖVDE sınırını kapatmak içindir, katman çizgileri
         # kendi kenarında kalır.
+        bos = _kenar_bosluklari(c["a"], c["b"])
         t, k = MZ.duvar_kesiti(msp, c["a"], c["b"], karkas, olcek,
-                               taraf=tr, dikme_ara=DIKME_ARA)
+                               taraf=tr, dikme_ara=DIKME_ARA,
+                               bosluklar=[(u0, u1) for u0, u1, _ in bos])
         nd += k
-        govde.append(_bant(c["a"], c["b"], kal, tr, uzat=kal))
+        govde.append(_bant(c["a"], c["b"], kal, tr, uzat=kal, bosluklar=bos))
         if not c["mevcut"] and olcek <= 25: ndk += 1
     for b in IC_BOLME:
         ic = P.ISLAK[BLOK][b["ic"]]
@@ -432,11 +464,13 @@ def duvarlari_ciz(msp, olcek):
         nx, ny = -uy/L, ux/L
         m = ((b["a"][0]+b["b"][0])/2, (b["a"][1]+b["b"][1])/2)
         disa = -1 if ic.contains(Point(m[0]+nx*0.02, m[1]+ny*0.02)) else 1
+        bos = _kenar_bosluklari(b["a"], b["b"])
         t, k = MZ.duvar_kesiti(msp, b["a"], b["b"], KARKAS_BOLME, olcek,
-                               taraf=disa, dikme_ara=DIKME_ARA)
+                               taraf=disa, dikme_ara=DIKME_ARA,
+                               bosluklar=[(u0, u1) for u0, u1, _ in bos])
         nd += k
         govde.append(_bant(b["a"], b["b"], sum(x["m"] for x in KARKAS_BOLME),
-                           disa, uzat=0.0))
+                           disa, uzat=0.0, bosluklar=bos))
         if olcek <= 25: ndk += 1
     for ad in MAHAL:
         g = P.ISLAK[BLOK][ad]
@@ -448,7 +482,9 @@ def duvarlari_ciz(msp, olcek):
             nx, ny = -(b[1]-a[1])/L, (b[0]-a[0])/L
             ice = 1 if g.contains(Point((a[0]+b[0])/2 + nx*0.02,
                                         (a[1]+b[1])/2 + ny*0.02)) else -1
-            MZ.duvar_kesiti(msp, a, b, kap, olcek, taraf=ice)
+            bos = _kenar_bosluklari(a, b)
+            MZ.duvar_kesiti(msp, a, b, kap, olcek, taraf=ice, sove=False,
+                            bosluklar=[(u0, u1) for u0, u1, _ in bos])
             nd += len(kap)
     # DIŞ ÇEPER: bütün duvar gövdelerinin birleşimi, kesilen eleman kaleminde
     # tek sürekli çizgi. Kenarlar tek tek çizildiği için köşeler aksi hâlde
@@ -477,13 +513,21 @@ def _sadelestir(pts, esik=0.0015):
     return out
 
 
-def _bant(a, b, kal, taraf, uzat=0.0):
-    """a→b kenarının `taraf` yönünde `kal` kalınlığında bandı (gövde sınırı)."""
+def _bant(a, b, kal, taraf, uzat=0.0, bosluklar=None):
+    """a→b kenarının `taraf` yönünde `kal` kalınlığında bandı (gövde sınırı).
+    Kapı boşlukları banttan ÇIKARILIR — gövde çizgisi kapının içinden geçmez."""
     L = math.dist(a, b) or 1.0
     ux, uy = (b[0]-a[0])/L, (b[1]-a[1])/L
     nx, ny = -uy*taraf, ux*taraf
     a2 = (a[0]-ux*uzat, a[1]-uy*uzat); b2 = (b[0]+ux*uzat, b[1]+uy*uzat)
-    return Polygon([a2, b2, (b2[0]+nx*kal, b2[1]+ny*kal), (a2[0]+nx*kal, a2[1]+ny*kal)])
+    g = Polygon([a2, b2, (b2[0]+nx*kal, b2[1]+ny*kal), (a2[0]+nx*kal, a2[1]+ny*kal)])
+    for u0, u1, _ in (bosluklar or []):
+        p0 = (a[0]+ux*u0, a[1]+uy*u0); p1 = (a[0]+ux*u1, a[1]+uy*u1)
+        kes = Polygon([(p0[0]-nx*0.01, p0[1]-ny*0.01), (p1[0]-nx*0.01, p1[1]-ny*0.01),
+                       (p1[0]+nx*(kal+0.01), p1[1]+ny*(kal+0.01)),
+                       (p0[0]+nx*(kal+0.01), p0[1]+ny*(kal+0.01))])
+        g = g.difference(kes)
+    return g
 
 
 def plan(msp):
@@ -494,32 +538,12 @@ def plan(msp):
     # 2) bitmiş mahal yüzü
     for ad, g in BITMIS.items():
         sekil(msp, g, "A-ZEMIN-SINIR")
-    # 3) kapılar — kod, kanat ve açılım
+    # 3) kapılar — MEGEP Şekil 2.51–2.55 sırasıyla: boşluk (duvarda açıldı) ·
+    #    KASA · PERVAZ · KANAT · AÇILIŞ YAYI; Mimarlar Odası etiketi eksende:
+    #    çizgi üstünde yükseklik, altında genişlik (kaba yapı boşluğu, cm)
     for kod, (pt, gen, aci) in P.KAPI_GEOM.items():
         if not P.ISLAK[BLOK]["tum"].buffer(0.35).contains(Point(*pt)): continue
-        a = math.radians(aci) + (math.pi if kod in P.KAPI_DISA else 0.0)
-        dx, dy = math.cos(a)*gen/2, math.sin(a)*gen/2
-        p1 = (pt[0]-dx, pt[1]-dy); p2 = (pt[0]+dx, pt[1]+dy)
-        nx, ny = math.cos(a-math.pi/2), math.sin(a-math.pi/2)
-        t = BOLME_T/2 + 0.02
-        # söve (kapı boşluğunun iki kenarı) — boşluğun karşıdan karşıya çizgisi YOK
-        for q in (p1, p2):
-            _ln(msp, (q[0]-nx*t, q[1]-ny*t), (q[0]+nx*t, q[1]+ny*t), "A-KAPI")
-        # kanat (40 mm) ve açılım yayı — menteşe p1'de
-        uc = (p1[0]+nx*gen, p1[1]+ny*gen)
-        _pl(msp, [p1, uc, (uc[0]-math.cos(a)*0.04, uc[1]-math.sin(a)*0.04),
-                  (p1[0]-math.cos(a)*0.04, p1[1]-math.sin(a)*0.04)], "A-KAPI")
-        msp.add_arc((p1[0]*K, p1[1]*K), gen*K,
-                    math.degrees(math.atan2(ny, nx)),
-                    math.degrees(math.atan2(p2[1]-p1[1], p2[0]-p1[0])),
-                    dxfattribs={"layer": "A-KAPI"})
-        # kapı kodu balonu
-        bu, bv = uv(pt)
-        bp = xy(bu, bv)
-        msp.add_circle((bp[0]*K, bp[1]*K), 0.115*OLCEK/1000.0*K*2.4,
-                       dxfattribs={"layer": "A-MAHAL"})
-        _tx(msp, bp, kod, 2.5, "A-MAHAL", hiza="ORTA")
-        n["kapi"] += 1
+        n["kapi"] += kapi_sembolu(msp, kod, pt, gen, aci, OLCEK)
     # 4) vitrifiye + süzgeç + eğim
     yer = _vitrifiye(msp)
     du = ALT_UV["dus"]; szd = yer["SZ-DUS"]
@@ -537,19 +561,26 @@ def plan(msp):
         no = MAHAL[ad]
         bilgi = P._MAHAL_BILGI[no]
         u0, v0, u1, v1 = ALT_UV[ad]
-        etk = xy(u0+0.09, v1-0.12)
-        # mahal numarası balonu
-        bc = xy(u0+0.20, v1-0.20)
-        msp.add_circle((bc[0]*K, bc[1]*K), 0.17*K, dxfattribs={"layer": "A-MAHAL"})
+        # Etiket, kapı etiketlerinin bulunmadığı kenara: kabinlerde üst,
+        # soyunmada ALT köşe (kabin kapı etiketleri üst kenarından sarkar).
+        vy = (v0 + 0.62) if ad == "soyunma" else (v1 - 0.20)
+        bc = xy(u0+0.22, vy)
+        # Mimarlar Odası §12: mahal numarası ELİPS içinde
+        msp.add_ellipse((bc[0]*K, bc[1]*K),
+                        major_axis=(0.17*K*math.cos(math.radians(ACI_DER)),
+                                    0.17*K*math.sin(math.radians(ACI_DER))),
+                        ratio=0.62, dxfattribs={"layer": "A-MAHAL"})
         _tx(msp, bc, no, 2.5, "A-MAHAL", hiza="ORTA")
-        _etiket(msp, xy(u0+0.44, v1-0.13), [
+        _etiket(msp, xy(u0+0.46, vy+0.07), [
             bilgi[1].upper(),
             f"{NET_M2[ad]:.2f} m²".replace(".", ",") + f"   {bilgi[3]} / {bilgi[6]}",
         ], OLCEK, "A-YAZI", "SOL", 2.2)
         kot = (P.ZEMIN_TABAN.get(bilgi[3], 0.0)
                + sum(k[1] for k in
                      next(z for z in P.ZEMIN_TIPLERI if z[0] == bilgi[3])[2])/1000.0)
-        _kot_isareti(msp, xy(u0+0.50, v0+0.22), kot, OLCEK)
+        # kot işareti: kapı etiketiyle çakışmasın — kabinlerde sağ üst, soyunmada sol alt
+        kp = xy(u1-0.42, v1-0.62) if ad != "soyunma" else xy(u0+0.50, v0+0.22)
+        _kot_isareti(msp, kp, kot, OLCEK)
     # 7) ölçü zincirleri — bloğun KENDİ eksenlerinde
     off = 0.62
     # v ekseni (uzun): soyunma / duş sınırları
@@ -569,13 +600,36 @@ def plan(msp):
         kapi_u += [round(cu-gen/2, 3), round(cu+gen/2, 3)]
     if kapi_u:
         nok = sorted(set([0.0] + kapi_u + [W_BLOK]))
-        n["olcu"] += _zincir(msp, [xy(t, ALT_UV["dus"][1]-off*0.5) for t in nok],
+        n["olcu"] += _zincir(msp, [xy(t, ALT_UV["dus"][1]-off*0.95) for t in nok],
                              -off*0.30, toplam=False)
     # 8) kesit işareti K1-K1
     _kesit_isareti(msp)
     # 9) detay çağrısı D-02
     _detay_cagri(msp, DETAY_UV, "D-02", "P-05")
     return n
+
+
+def kapi_sembolu(msp, kod, pt, gen, aci, olcek):
+    """Kapı planı — tools/blok_kutuphanesi.kapi_plan (MEGEP 2.51–2.55, MO etiketi)."""
+    kl = next((t for t in P.KAPI_LISTESI if t[0] == kod), None)
+    et = ST.dograma_etiketi(kod, kl[3], kl[4]) if kl else None
+    tip = "cam" if kl and "cam" in kl[5].lower() else "panel"
+    # boşluk doğrultusu = açılış yönünün 90° gerisi → kütüphane sol normale açar
+    a = P.kapi_acilis_aci(kod) - 90.0
+    kal = _kapi_duvar_kalinligi(pt)
+    # soyunma kapıları (salona açılan) etiketi açılış tarafına: iç ölçü zinciriyle çakışmasın
+    taraf = +1 if kod in P.KAPI_DISA else -1
+    return BK.kapi_plan(msp, pt, gen, a, kal, olcek, tip=tip, mentese="sol",
+                        etiket=et, etiket_taraf=taraf)
+
+
+def _kapi_duvar_kalinligi(pt):
+    """Kapının oturduğu duvarın karkas kalınlığı (m)."""
+    q = Point(*pt)
+    for c in CEPER:
+        if c["seg"].distance(q) < 0.08:
+            return sum(x["m"] for x in (KARKAS_MEVCUT if c["mevcut"] else KARKAS_BOLME))
+    return sum(x["m"] for x in KARKAS_BOLME)
 
 
 def _kesit_isareti(msp):
@@ -628,10 +682,10 @@ def _detay_cagri(msp, uv_p, detay, pafta_no, r=0.26):
     msp.add_circle((c[0]*K, c[1]*K), r*K,
                    dxfattribs={"layer": "A-DETAY-CAGRI", "linetype": "DASHED"})
     # kılavuz SOLA (bloğun dışına) çıkar; mahal balonlarıyla çakışmaz
-    uc = xy(uv_p[0]-r*0.71, uv_p[1]+r*0.71)
-    kir = xy(uv_p[0]-r*0.71-0.55, uv_p[1]+r*0.71+0.55)
+    uc = xy(uv_p[0]+r*0.71, uv_p[1]+r*0.71)
+    kir = xy(uv_p[0]+r*0.71+0.55, uv_p[1]+r*0.71+0.55)
     _ln(msp, uc, kir, "A-DETAY-CAGRI")
-    bal = xy(uv_p[0]-r*0.71-0.55-0.32, uv_p[1]+r*0.71+0.55)
+    bal = xy(uv_p[0]+r*0.71+0.55+0.32, uv_p[1]+r*0.71+0.55)
     msp.add_circle((bal[0]*K, bal[1]*K), 0.30*K, dxfattribs={"layer": "A-DETAY-CAGRI"})
     _ln(msp, (bal[0]-0.30, bal[1]), (bal[0]+0.30, bal[1]), "A-DETAY-CAGRI")
     _tx(msp, (bal[0], bal[1]+0.12), detay, 2.5, "A-DETAY-CAGRI", hiza="ORTA")
@@ -668,6 +722,7 @@ def _gosterim_metni(a):
 
 
 MALZEME_LEJANTI = {
+ "P-00": [],
  "P-01": _malzeme_lejanti("tugla", "alcipan", "dikme", "yalitim_isi",
                           "yalitim_su", "seramik"),
  "P-02": [],
@@ -677,6 +732,12 @@ MALZEME_LEJANTI = {
 }
 
 NOTLAR = {
+ "P-00": [
+  "Her sembol GERÇEK ölçüyle çizilir; ölçek küçüldükçe sadeleşir, büyüdükçe ayrıntı kazanır.",
+  "Soldan sağa: panel kapı K1 · cam duş kapağı K7 · çift kanat pencere P1 · kapı görünüşü · pencere görünüşü.",
+  "Satırlar: 1/100 · 1/50 · 1/20 — aynı eleman üç ölçekte.",
+  "Bu pafta kütüphanenin doğrulama paftasıdır; projeye ait bir yeri göstermez.",
+ ],
  "P-01": [
   "Geometri ölçülmüş rölöveden alınmıştır (ESAT-FINAL.dwg, TRIMODE).",
   "Mahal alanları BİTMİŞ YÜZ net alanıdır: karkas yüzünden kaplama\n  kalınlığı (ıslakta 16 mm, kuruda 6 mm) düşülmüştür. Kaba yapı\n  (karkas) alanları malzeme listesindedir.",
@@ -716,6 +777,9 @@ DONEN_PAFTA = ("P-01", "P-02")      # görüntü penceresi bloğa hizalanan paft
 VP_GEN = 232.0                      # mm — görüntü penceresi genişliği (A2)
 
 
+VP_GEN_OZEL = {"P-00": 335.0}     # sembol paftası: malzeme tablosu yok, pencere geniş
+
+
 def _pafta(doc, no, olcek, merkez, tablo_fn=None):
     ad, disiplin, olc = PAFTALAR[no]
     pf = Pafta(doc, no, ad, disiplin, boy=BOY, proje=PROJE_BILGI,
@@ -726,20 +790,21 @@ def _pafta(doc, no, olcek, merkez, tablo_fn=None):
              birim="milimetre (mm)", revizyonlar=REVIZYONLAR,
              sonraki=PAFTA_SONRAKI.get(no, ""))
     x = pf.x0 + PF.ZON_BANT + 4
+    vpg = VP_GEN_OZEL.get(no, VP_GEN)
     pf.gorunum(merkez=(merkez[0]*K, merkez[1]*K), olcek=olcek,
-               x=x, w=VP_GEN, donme=-ACI_DER if no in DONEN_PAFTA else 0.0)
+               x=x, w=vpg, donme=-ACI_DER if no in DONEN_PAFTA else 0.0)
     pf.olcek_cubugu(olcek, uzunluk_m=0.5 if olcek <= 5 else 2, bolum=4)
     if no in DONEN_PAFTA:
         pf.kuzey(aci=-ACI_DER)
     pf.durum_damgasi()
     pf.dikkat_notu()
     # ORTA SÜTUN — malzeme / ekipman listesi ve lejant
-    mx = x + VP_GEN + 8
+    mx = x + vpg + 8
     mg = pf.ax - 6 - mx
-    y = pf.baslik(mx, pf._ic[3]-6 if hasattr(pf, "_ic") else pf.y1-6,
-                  "MALZEME VE EKİPMAN LİSTESİ") if tablo_fn else \
-        (pf._ic[3]-6 if hasattr(pf, "_ic") else pf.y1-6)
-    if tablo_fn:
+    orta_sigar = mg >= 118          # geniş görüntü penceresinde orta sütun yok
+    if tablo_fn and orta_sigar:
+        y = pf.baslik(mx, pf._ic[3]-6 if hasattr(pf, "_ic") else pf.y1-6,
+                      "MALZEME VE EKİPMAN LİSTESİ")
         y = tablo_fn(pf, mx, y, mg)
     # SAĞ SÜTUN — lejant + notlar
     sx, sy, sw = pf.sag()
@@ -747,6 +812,8 @@ def _pafta(doc, no, olcek, merkez, tablo_fn=None):
     gorunur = [(l[0], l[4]) for l in X.KATMANLAR if l[0] in kullanilan
                and not l[0].startswith(("G-CERCEVE", "G-ANTET", "G-PAFTA", "G-VIEWPORT"))]
     sy2 = pf.kalem_lejanti(y=sy)
+    if tablo_fn and not orta_sigar:
+        sy2 = tablo_fn(pf, sx, sy2-4, sw)     # orta sütun sığmadı → sağ sütuna
     sy2 = pf.lejant(gorunur[:18], y=sy2-2)
     if MALZEME_LEJANTI.get(no):
         sy2 = pf.tablo(["MALZEME", "GÖSTERİM"], MALZEME_LEJANTI[no],
@@ -760,6 +827,20 @@ def _tablo(pf, x, y, gen, basliklar, satirlar, sutunlar, baslik=None):
 
 
 # ── pafta bazlı malzeme listeleri (hepsi veri modelinden) ────────────────────
+def _liste_sembol(pf, x, y, gen):
+    sat = [["1/100", ST.IFADE[100]], ["1/50", ST.IFADE[50]], ["1/20", ST.IFADE[20]],
+           ["1/10", ST.IFADE[10]], ["1/5", ST.IFADE[5]]]
+    y = pf.tablo(["ÖLÇEK", "İFADE KURALI (MEGEP Tablo 2.1 · 2.7 · 2.8)"], sat,
+                 [16, 104], x=x, y=y, baslik="ÖLÇEĞE GÖRE İFADE")
+    kap = [["Kasa", f"{ST.KASA_KALINLIK_M*1000:.0f} mm"], ["Pervaz", f"{ST.PERVAZ_GENISLIK_M*1000:.0f} mm"],
+           ["Kanat", f"{ST.KANAT_KALINLIK_M*1000:.0f} mm"],
+           ["Etiket", "eksene dik çizgi: üstte yükseklik, altta genişlik (cm); solda kod"],
+           ["Açılan kanat", "görünüşte kesik 'V' — tepe menteşe kenarında"]]
+    y = pf.tablo(["ELEMAN", "KURAL"], kap, [26, 94], x=x, y=y-6,
+                 baslik="DOĞRAMA SEMBOL KURALLARI (MEGEP 2.51–2.55 · MO)")
+    return y
+
+
 def _liste_plan(pf, x, y, gen):
     sat = []
     for ad in ("soyunma", "dus", "wc"):
@@ -819,7 +900,29 @@ def onizleme(dosyalar, cikti=None, dpi=170):
             fig.savefig(pp, dpi=dpi, facecolor="white")
             png.append(pp)
             plt.close(fig)
+    _pdf_normalize(cikti)
     return cikti, png
+
+
+def _pdf_normalize(yol):
+    """matplotlib'in yazdığı PDF'i yeniden yazar: nesne tablosu ve sayfa
+    ağacı normalleşir. (PdfPages çıktısında 'too many kids in page tree' /
+    'expected object number' uyarıları görüldü; AutoCAD/Acrobat bazı sürümleri
+    bunu açmayabilir. Yeniden yazım kayıpsızdır.)"""
+    import pymupdf, shutil
+    yol = Path(yol)
+    tmp = yol.with_suffix(".tmp.pdf")
+    pymupdf.TOOLS.mupdf_warnings(reset=True)
+    d = pymupdf.open(yol)
+    d.save(tmp, garbage=4, deflate=True, clean=True)
+    d.close()
+    shutil.move(tmp, yol)
+    pymupdf.TOOLS.mupdf_warnings(reset=True)
+    d2 = pymupdf.open(yol); n = d2.page_count; d2.close()
+    uy = pymupdf.TOOLS.mupdf_warnings()
+    if uy:
+        print(f"  ! PDF uyarısı ({yol.name}): {uy[:120]}")
+    return n
 
 
 # ══════════════════════════ ÜRETİM ════════════════════════════════════════════
@@ -837,7 +940,10 @@ def uret_pafta(no):
     doc = _belge(no)
     msp = doc.modelspace()
     olcek = PAFTALAR[no][2]
-    if no == "P-01":
+    if no == "P-00":
+        w, h = BK.sembol_paftasi(msp, 0.0, 0.0)
+        merkez = (w/2 - 0.55, h/2 - 0.75); tablo = _liste_sembol
+    elif no == "P-01":
         plan(msp); merkez = _merkez_blok(); tablo = _liste_plan
     elif no == "P-02":
         tavan(msp); merkez = _merkez_blok(); tablo = _liste_tavan

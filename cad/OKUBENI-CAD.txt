@@ -56,7 +56,7 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
   durumlarıyla gösterir. Bir katmanı bir paftada görmek isterseniz o paftanın
   görüntü penceresini seçip katmanı çözün — diğer paftalar etkilenmez.
 
-5 · KATMAN STANDARDI (85 katman)
+5 · KATMAN STANDARDI (98 katman)
 --------------------------------------------------------------------------------
   Önek:  A- mimari · M- mekanik · E- elektrik · G- genel (ölçü, antet, yazı)
 
@@ -76,6 +76,19 @@ biçimde YAZAMAZ. Bu nedenle set, AutoCAD'in kendi değişim formatı olan DXF i
   A-TAVAN-SINIR      renk 150  Continuous   25  Mimari — asma tavan tipi sınırı
   A-TAVAN-YAZI       renk 150  Continuous   13  Mimari — asma tavan tipi ve kotu
   A-TAVAN-KAPAK      renk 150  Continuous   18  Mimari — revizyon kapağı 300×300
+  A-KESIT-KESILEN    renk   7  Continuous   70  Kesit — kesilen eleman çeperi
+  A-KESIT-GORUNEN    renk   7  Continuous   35  Kesit — kesit düzlemi arkasında görünen
+  A-KESIT-ARKA       renk   8  Continuous   18  Kesit — arkada kalan / ikincil eleman
+  A-KESIT-TARAMA     renk 253  Continuous   13  Kesit — malzeme taraması
+  A-KESIT-YAPISAL    renk   8  Continuous   50  Kesit — mevcut betonarme döşeme ve duvar
+  A-KATMAN-CIZGI     renk 251  Continuous   13  Detay — katman ayrım çizgisi
+  A-KATMAN-YALITIM   renk   6  Continuous   35  Detay — su yalıtımı ve bandı
+  A-KOT-ISARET       renk 250  Continuous   25  Kot işareti ve değeri
+  A-GORUNUS-SINIR    renk   7  Continuous   50  İç görünüş — eleman dış sınırı
+  A-GORUNUS-IC       renk   8  Continuous   25  İç görünüş — iç bölüntü ve donatı
+  A-GORUNUS-DERZ     renk 254  Continuous   13  İç görünüş — seramik derz ızgarası
+  A-DETAY-CAGRI      renk   1  Continuous   25  Detay çağrı balonu ve kopuş çizgisi
+  A-TESISAT-KESIT    renk   4  Continuous   35  Kesit — tavan içi tesisat gövdesi
   A-YANGIN-KACIS     renk   3  Continuous   50  Mimari — kaçış yolu ve çıkış
   A-YANGIN-EKIP      renk   1  Continuous   35  Mimari — söndürücü, dolap, ihbar
   M-HAVA-BESLEME     renk   3  Continuous   35  Mekanik — taze hava kanalı

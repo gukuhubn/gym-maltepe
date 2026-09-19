@@ -49,7 +49,27 @@ KAYNAKLAR = [
       "işveren klasörü", "Şema düzeni, antet ve sembol referansı",
       "DOĞRULANDI — çok hatlı şema düzeni buradan alındı"),
 
-    # ── ÇİZİM TEKNİĞİ (bu turda öğrenilen) ───────────────────────────────
+    # ── ÇİZİM STANDARDI (resmî) ──────────────────────────────────────────
+    K("STD-01", "Mimari Proje Çizim ve Sunuş Standartları", "TMMOB Mimarlar Odası",
+      "docs/kaynak/MIMARLAR_ODASI_CIZIM_SUNUS_STANDARTLARI.md", "TR",
+      "mimari çizim", "—", "ERİŞİLDİ", "oda yayını, kamuya açık",
+      "OFİS ÇİZİM STANDARDININ ANA KAYNAĞI — plan/kesit/görünüş/detay içeriği, "
+      "ölçü çizgisi düzeni, doğrama etiketi, kot gösterimi, numaralandırma",
+      "DOĞRULANDI — uygulama projesi, sistem detayı ve imalat detayı "
+      "bölümleri verbatim alındı", erisim="2026-09-19"),
+    K("STD-02", "Mimari Proje Çizim ve Sunuş Standartları (ders notu)",
+      "İTÜ Mimarlık Fakültesi",
+      "input/standart/ITU_Mimari_Proje_Cizim_Sunus_Standartlari.pdf", "TR",
+      "mimari çizim", "—", "ERİŞİLDİ", "üniversite, kamuya açık",
+      "STD-01'in ders düzeni", "DOĞRULANDI", erisim="2026-09-19"),
+    K("STD-03", "Mimari Projelerin Hazırlanmasına İlişkin Teknik Şartname",
+      "İller Bankası A.Ş.",
+      "input/standart/ILBANK_Mimari_Projeler_Teknik_Sartname.pdf", "TR",
+      "mimari çizim", "—", "ERİŞİLDİ", "kamu kurumu, kamuya açık",
+      "Kamu işveren şartnamesi — pafta içeriği ve teslim kapsamı",
+      "DOĞRULANDI", erisim="2026-09-19"),
+
+    # ── ÇİZİM TEKNİĞİ (öğrenilen) ────────────────────────────────────────
     K("CZM-01", "Yapı Elemanları Ölçülendirme ve Tarama (İnşaat Teknolojisi modülü)",
       "T.C. Millî Eğitim Bakanlığı — MEGEP",
       "input/standart/MEGEP_Yapi_Elemanlari_Olculendirme_ve_Tarama.pdf",
@@ -193,6 +213,8 @@ def yaz(yol=None):
 
 
 if __name__ == "__main__":
+    import signal
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)      # `| head` ile sessiz bitsin
     print(f"KAYNAK ENVANTERİ — {len(KAYNAKLAR)} kayıt\n")
     for d, n in ozet().most_common():
         print(f"  {d:14s} {n}")

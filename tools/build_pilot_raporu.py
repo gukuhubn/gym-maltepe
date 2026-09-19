@@ -47,6 +47,15 @@ KABILIYET = [
   "uygulanmaz). Pilot ajanı üretilen DXF'i diskten açıp ölçer."),
  ("VAR", "Kesit · görünüş · detay", "Bu turda eklendi: veri modelinden türeyen "
   "koordinasyon kesiti, iç görünüş ve 1:5 birleşim detayı."),
+ ("VAR", "Katmanlı duvar", "Duvar tek bant değil: levha · C dikme @400 · karkas "
+  "boşluğu + taşyünü · su yalıtımı · yapıştırıcı · seramik, her biri kendi gösterimiyle "
+  "(MEGEP Şekil 2.24–2.47; Alçı Levha Şekil 1.3)."),
+ ("VAR", "Kapı boşluğu duvarı keser", "Bütün katmanlar boşlukta kesilir; söve, kasa, "
+  "pervaz, kanat, yay ve Mimarlar Odası etiketi (K5 · 200/70) — MEGEP 2.51–2.55."),
+ ("VAR", "Yazılı ofis standardı", "docs/CIZIM_STANDARDI.md ↔ tools/standart.py; "
+  "ajan ikisinin ayrışmasını hata verir. Ana kaynak: Mimarlar Odası standardı (STD-01)."),
+ ("VAR", "Doğrama kütüphanesi", "tools/blok_kutuphanesi.py — kapı/pencere plan · görünüş, "
+  "ölçeğe göre ifade (1/100 · 1/50 · 1/20); P-00 sembol paftası bunu gözle doğrular."),
  ("VAR", "İlişkilendirme (sınırlı)", "tools/revizyon.py ölçüyor: bölme kalınlığı "
   "100→125 mm değişince 9 türev kendiliğinden güncelleniyor."),
  ("EKSİK", "BIM / IFC yok", "Üretim 2B DXF'tir. IFC/RVT çıktısı, nesne özellikleri "
@@ -105,6 +114,24 @@ KARAR = [
 ]
 
 DUZELTILEN = [
+ ("A1 (1/50) CAD seti sessizce ESKİ geometriyle kalmıştı",
+  "build_dxf ve aks ölçülü geometride çöküyordu; derleme betiğindeki borular hatayı gizliyordu",
+  "Bina iç kabuğu tek tanım (proj.IC_KABUK); betikte pipefail; teslim ajanına TAZELİK kuralı — "
+  "çizim dosyası veri modelinden eskiyse RED"),
+ ("Kapı boşluğundan duvar geçiyordu", "Kullanıcı bulgusu — katmanlar kapının içinden devam ediyordu",
+  "duvar_kesiti(bosluklar=…): her katman boşlukta kesilir; söve çizgisi; ajan kuralı eklendi"),
+ ("Tarama taban aralıkları elle yazılmıştı", "~25 kat hata; beton taraması paftayı kesiyor, yalıtım görünmüyordu",
+  "Taban aralığı desen tanımından hesaplanıyor (ANSI31 3,175 · INSUL 9,525)"),
+ ("Duvar tek bant + tek taramaydı", "İçindeki levha, dikme, boşluk, yalıtım yoktu",
+  "Malzeme kütüphanesi + katman katman duvar; ölçeğe göre ifade"),
+ ("K03/K04 elle yazılmış noktadaydı", "Ölçülmüş geometride duvarın dışında kalmıştı",
+  "Salona bakan çeper kenarına geometriden oturtuldu"),
+ ("Kabin kapıları içeri açılıyordu", "Kanat ile yay ters taraftaydı",
+  "KAPI_ACILIR: kapı hangi mahale açılır — yön geometriden; çizim ve çakışma denetimi aynı kaynağı kullanır"),
+ ("Mahal kodları 101… idi", "Zemin kat için standart Z-01… (Mimarlar Odası §12)",
+  "Tüm modüllerde Z-01…Z-10; numara elips içinde"),
+ ("Kaplama alanı düşülmüyordu", "Mahal alanı karkas yüzünden ölçülüyordu",
+  "Üç kademe: brüt ⊃ kaba ⊃ bitmiş (ıslak 16 mm, kuru 6 mm kaplama)"),
  ("Geometri raster paftadan türetiliyordu", "±%3 beyan, gerçekte 21,7 cm sapma",
   "Ölçülmüş rölöve vektörüne geçildi; rijit kayıt uyumu %97,49"),
  ("K05–K08 kapıları planda yoktu", "Kapı cetvelinde vardı, çizimde karşılığı yoktu",

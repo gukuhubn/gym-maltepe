@@ -25,6 +25,83 @@ class StandartAjani(Ajan):
 
     def denetle(self, r):
         self._katman(r); self._pafta(r); self._yazi(r); self._antet(r)
+        self._belge_kod_uyumu(r); self._kapi_boslugu(r); self._mahal_kodu(r)
+
+    # 5 ── docs/CIZIM_STANDARDI.md ↔ tools/standart.py — ikisi ayrışamaz
+    def _belge_kod_uyumu(self, r):
+        from pathlib import Path
+        import standart as ST
+        md = Path(__file__).resolve().parents[2]/"docs"/"CIZIM_STANDARDI.md"
+        if not md.exists():
+            r.eksik("standart", "docs/CIZIM_STANDARDI.md yok — yazılı standart eksik"); return
+        t = md.read_text(encoding="utf-8")
+        eksik = []
+        for k, v in ST.KALEM.items():
+            if str(v) not in t: eksik.append(f"kalem {k}={v}")
+        for k, v in ST.YAZI.items():
+            if f"{v:g}".replace(".", ",") not in t and f"{v:g}" not in t:
+                eksik.append(f"yazı {k}={v}")
+        for n in ("Z-01", "K1", "elips", "kaba yapı"):
+            if n not in t: eksik.append(n)
+        if eksik:
+            r.hata("standart", f"belge ile kod ayrışmış: {', '.join(eksik[:6])}",
+                   dayanak="docs/CIZIM_STANDARDI.md ↔ tools/standart.py")
+        else:
+            r.bilgi("standart", "yazılı standart ile kod sabitleri uyumlu "
+                                f"({len(ST.KALEM)} kalem · {len(ST.YAZI)} yazı boyu)")
+
+    # 6 ── kapı boşluğunun içinden duvar geçmiyor (MEGEP 2.51; kullanıcı bulgusu)
+    def _kapi_boslugu(self, r):
+        from pathlib import Path
+        import math, ezdxf
+        from shapely.geometry import LineString, Polygon, Point
+        yol = Path(__file__).resolve().parents[2]/"cad"/"pilot"
+        dosya = next(iter(sorted(yol.glob("P-01_*.dxf"))), None)
+        if dosya is None:
+            r.eksik("kapı", "P-01 DXF yok — kapı boşluğu denetlenemedi"); return
+        try:
+            import pilot as PL
+        except Exception as e:
+            r.eksik("kapı", f"pilot modülü yüklenemedi: {e}"); return
+        doc = ezdxf.readfile(dosya); msp = doc.modelspace()
+        DUVAR_KAT = {"A-KATMAN-CIZGI", "A-KESIT-TARAMA", "A-KESIT-GORUNEN",
+                     "A-KATMAN-YALITIM"}
+        ihlal = []
+        for kod, (pt, gen, aci) in P.KAPI_GEOM.items():
+            if not P.ISLAK[PL.BLOK]["tum"].buffer(0.35).contains(Point(*pt)): continue
+            kal = PL._kapi_duvar_kalinligi(pt)
+            a = math.radians(aci); ux, uy = math.cos(a), math.sin(a); nx, ny = -uy, ux
+            h = gen/2 - 0.02; t = kal/2 - 0.004
+            bos = Polygon([(pt[0]-ux*h-nx*t, pt[1]-uy*h-ny*t), (pt[0]+ux*h-nx*t, pt[1]+uy*h-ny*t),
+                           (pt[0]+ux*h+nx*t, pt[1]+uy*h+ny*t), (pt[0]-ux*h+nx*t, pt[1]-uy*h+ny*t)])
+            n = 0
+            for e in msp:
+                if e.dxf.layer not in DUVAR_KAT: continue
+                if e.dxftype() == "LINE":
+                    g = LineString([(e.dxf.start.x/1000, e.dxf.start.y/1000),
+                                    (e.dxf.end.x/1000, e.dxf.end.y/1000)])
+                elif e.dxftype() == "LWPOLYLINE":
+                    q = [(p[0]/1000, p[1]/1000) for p in e.get_points("xy")]
+                    if len(q) < 2: continue
+                    g = LineString(q)
+                else: continue
+                if g.intersection(bos).length > 0.01: n += 1
+            if n: ihlal.append(f"{kod} ({n} parça)")
+        if ihlal:
+            r.hata("kapı", "kapı boşluğunun içinden duvar katmanı geçiyor: " + ", ".join(ihlal),
+                   dayanak="MEGEP Şekil 2.51 — duvarda kapı genişliği kadar boşluk açılır")
+        else:
+            r.bilgi("kapı", "pilot bölgedeki kapı boşluklarının içinden duvar katmanı geçmiyor")
+
+    # 7 ── mahal kodları Mimarlar Odası §12 biçiminde
+    def _mahal_kodu(self, r):
+        kotu = [no for no in P.MAHAL_NO.values()
+                if not re.match(r"^(B-\d{2}|Z-\d{2}|\d{3,4})$", no)]
+        if kotu:
+            r.hata("mahal", f"mahal kodu standart dışı: {kotu}",
+                   dayanak="Mimarlar Odası çizim standardı §12 (B-01 · Z-01 · 101)")
+        else:
+            r.bilgi("mahal", f"{len(P.MAHAL_NO)} mahal kodu §12 biçiminde (Z-01…)")
 
     # 1 ── katman tablosu
     def _katman(self, r):
