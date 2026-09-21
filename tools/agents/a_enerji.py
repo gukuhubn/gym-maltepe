@@ -230,6 +230,36 @@ class AjanEnerji(Ajan):
                        oneri="python3 tools/build_enerji_raporu.py")
         else:
             r.bilgi("tazelik", "Rapor bütün model dosyalarından yeni")
+        # sunum
+        sun = ROOT/"output"/"Nusret_Elektrik_Sunum_16x9.pdf"
+        if not sun.exists():
+            r.uyari("teslim", "Yönetim sunumu üretilmemiş", konum=str(sun))
+        else:
+            try:
+                import pypdfium2 as pdfium
+                ns = len(pdfium.PdfDocument(str(sun)))
+            except Exception:
+                ns = 0
+            r.bilgi("teslim", f"Yönetim sunumu üretildi: {ns} slayt · "
+                    f"{sun.stat().st_size/1024:.0f} KB")
+            if sun.stat().st_mtime < (ROOT/"tools"/"enerji.py").stat().st_mtime:
+                r.hata("tazelik", "Sunum modelden ESKİ — bayat",
+                       oneri="python3 tools/build_enerji_sunum.py")
+
+        # alan verisi beyandır, ölçüm değildir
+        r.eksik("doğrulama",
+                f"Tesis alanı {E.ALAN_M2:.0f} m² olarak işveren beyanından "
+                f"alındı; Aqua Florya'ya ait çizim elimizde YOK ve alan "
+                f"ölçülmedi. Terasın dâhil olup olmadığı bilinmiyor",
+                oneri="Mimari projeden net alan tablosu (kapalı · teras · "
+                      "mutfak · depo ayrı ayrı).")
+        if E.ozgul() > 900:
+            r.uyari("kıyas",
+                    f"Özgül tüketim {E.ozgul():.0f} kWh/m²/yıl — uluslararası "
+                    f"restoran kıyaslarının üst bandında. Sonuç doğrudan "
+                    f"beyan edilen alana bağlıdır.",
+                    oneri="Alan doğrulanmadan bu bulgu kesinleştirilmemeli.")
+
         # ölçülmemiş alanlar açıkça UYGULANMAZ / VERİ EKSİK
         r.eksik("doğrulama", "Hiçbir elektrik faturası görülmedi — birim fiyat, "
                 "tarife tipi, reaktif ceza ve sözleşme gücü doğrulanmadı",
@@ -237,9 +267,6 @@ class AjanEnerji(Ajan):
         r.eksik("doğrulama", "Sahada ölçüm yapılmadı — işletme saatleri ve yük "
                 "faktörleri mühendislik kabulüdür (±%20)",
                 oneri="ADP'deki -EA1 analizörüne kaydedici bağlanmalı.")
-        r.eksik("doğrulama", f"Tesis alanı bilinmiyor; {E.ALAN_M2:.0f} m² "
-                f"varsayıldı (V-04) — kWh/m² kıyası buna bağlıdır",
-                oneri="Mimari projeden net alan tablosu istenmeli.")
         r.disi("kapsam", "Doğal gaz tüketimi ve maliyeti bu raporun kapsamı "
                "dışındadır; yalnız elektrik modellenmiştir")
         r.disi("kapsam", "AVM ortak alan yansıtma faturası kapsam dışıdır — "

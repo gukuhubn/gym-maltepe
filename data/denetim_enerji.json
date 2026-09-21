@@ -1,12 +1,13 @@
 {
  "durum": "ŞARTLI",
  "hata": 0,
- "uyari": 1,
- "bilgi": 20,
+ "uyari": 2,
+ "bilgi": 21,
  "eksik": 15,
  "disi": 2,
  "uyari_metin": [
-  "Üç zamanlı ticarethane birim fiyatları TEK KAYNAKTAN alındı, çapraz doğrulanmadı"
+  "Üç zamanlı ticarethane birim fiyatları TEK KAYNAKTAN alındı, çapraz doğrulanmadı",
+  "Özgül tüketim 1266 kWh/m²/yıl — uluslararası restoran kıyaslarının üst bandında. Sonuç doğrudan beyan edilen alana bağlıdır."
  ],
  "hata_metin": []
 }

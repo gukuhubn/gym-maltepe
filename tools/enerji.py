@@ -190,10 +190,13 @@ VARSAYIM = [
  ("V-03", "Mutfak saati", "09:00–01:00 (16 saat)",
   "Hazırlık + servis + kapanış temizliği.",
   "Personel vardiya çizelgesi."),
- ("V-04", "Salon + teras alanı", "1 200 m² (kapalı 750 + teras 450)",
-  "Cetvelde alan yok. Yük yoğunluğundan geri hesap: 373,65 kW / 1 200 m² "
-  "= 311 W/m², tam donanımlı restoran için üst banttır.",
-  "Mimari projeden net alan tablosu — RAPORUN EN KRİTİK EKSİK VERİSİ."),
+ ("V-04", "Tesis alanı", "550 m² (işveren beyanı)",
+  "İşveren, kendi CAD dosyasından 550 m² olduğunu bildirdi. Elimizde Aqua "
+  "Florya'ya ait çizim YOKTUR; sayı beyandır, ölçülmemiştir. Kapalı alan / "
+  "teras ayrımı bilinmiyor; teras alanı bu 550 m²'nin içindeyse güç "
+  "yoğunluğu daha da yükselir, dışındaysa düşer.",
+  "Mimari projeden net alan tablosu (kapalı salon · teras · mutfak · depo "
+  "ayrı ayrı). Kıyaslamanın tamamı bu sayıya bağlıdır."),
  ("V-05", "Abone grubu ve tarife tipi",
   "AG · ticarethane · TARİFE TİPİ BİLİNMİYOR",
   "630 A giriş ve 333 kW talep gücüyle tesis alçak gerilim ticarethane "
@@ -569,6 +572,11 @@ ISLETME_ORT_KW = round(YILLIK_TOPLAM/(365*ISLETME_SAAT_GUN), 1)
 
 
 # ═══════════════════════ 9 · TARİFE ÖNLEMLERİNİN TL ETKİSİ ═══════════════════
+def _tr(x, ond=0):
+    """Türkçe sayı biçimi: binlik nokta, ondalık virgül."""
+    return f"{x:,.{ond}f}".replace(",", "\u00a0").replace(".", ",").replace("\u00a0", ".")
+
+
 def tarife_etkileri(T):
     """Fiyat tarafındaki önlemlerin yıllık TL etkisi. T = enerji_tarife modülü.
     Her kalem: (kod, TL/yıl, açıklama, güven)"""
@@ -583,41 +591,41 @@ def tarife_etkileri(T):
         "Aktif enerjide %10–15 indirim. İndirim YALNIZCA aktif enerji "
         "bileşenine uygulanır; dağıtım bedeli, BTV, fon ve KDV kapsam "
         "dışıdır. Bu yüzden aktif enerjideki %10 indirim toplam faturada "
-        f"%{100*d10/(mev*yil):.1f} tasarruf demektir.", "B")
+        f"%{_tr(100*d10/(mev*yil),1)} tasarruf demektir.", "B")
 
     # T-02 · reaktif ceza — tasarım cos φ'si ile ceza senaryosu
     r = reaktif_analiz(CETVEL_COSFI, birim=T.REAKTIF_BEDEL)
     ceza_yil = r["ceza"]*12*(1+T.VERGI["kdv"][0])
     out["T-02"] = (0.0, ceza_yil,
-        f"Cetvel cos φ'yi {CETVEL_COSFI} veriyor. Bu değerde reaktif oranı "
-        f"%{100*r['tanfi']:.1f} olur ve %{100*r['esik']:.0f} eşiğini aşar. "
+        f"Cetvel cos φ'yi {_tr(CETVEL_COSFI,2)} veriyor. Bu değerde reaktif oranı "
+        f"%{_tr(100*r['tanfi'],1)} olur ve %{_tr(100*r['esik'],0)} eşiğini aşar. "
         f"Eşik aşıldığında ölçülen reaktif enerjinin TAMAMI bedellendirilir: "
-        f"ayda {r['kvarh']:,.0f} kVArh × {T.REAKTIF_BEDEL:.3f} TL/kVArh = "
-        f"{r['ceza']*1.2:,.0f} TL (KDV dâhil). Kompanzasyon çalışıyorsa bu "
+        f"ayda {_tr(r['kvarh'],0)} kVArh × {_tr(T.REAKTIF_BEDEL,3)} TL/kVArh = "
+        f"{_tr(r['ceza']*1.2,0)} TL (KDV dâhil). Kompanzasyon çalışıyorsa bu "
         f"ceza SIFIRDIR; çalışmıyorsa faturanın "
-        f"%{100*r['ceza']*1.2/(ORT_AY_KWH*mev):.0f}'ini oluşturur. "
-        f"Eşiğin altında kalmak için cos φ ≥ {r['gereken_cosfi']} gerekir."
-        .replace(",", "."), "A")
+        f"%{_tr(100*r['ceza']*1.2/(ORT_AY_KWH*mev),0)}'ini oluşturur. "
+        f"Eşiğin altında kalmak için cos φ ≥ {_tr(r['gereken_cosfi'],4)} gerekir."
+        .replace("\u00a0", "."), "A")
 
     # T-03 · tarife tipi (üç zamanlı ↔ tek zamanlı)
     uz = T.uc_zamanli_birim(ZAMAN_PAY)
     fark = (uz - mev)*yil
     out["T-03"] = (max(0.0, fark), max(0.0, fark),
         f"Restoranın servis yükü 17:00–22:00 puant dilimine denk gelir ve o "
-        f"dilim gündüzün {T.UC_ZAMANLI['T2'][0]/T.UC_ZAMANLI['T1'][0]:.2f} "
-        f"katıdır. Modelin zaman dağılımıyla (T1 %{100*ZAMAN_PAY['T1']:.0f} · "
-        f"T2 %{100*ZAMAN_PAY['T2']:.0f} · T3 %{100*ZAMAN_PAY['T3']:.0f}) üç "
-        f"zamanlı birim fiyat {uz:.2f} TL/kWh, tek zamanlı {mev:.2f} TL/kWh "
-        f"çıkar — üç zamanlı %{100*(uz/mev-1):.0f} DAHA PAHALIDIR. Tesis üç "
+        f"dilim gündüzün {_tr(T.UC_ZAMANLI['T2'][0]/T.UC_ZAMANLI['T1'][0],2)} "
+        f"katıdır. Modelin zaman dağılımıyla (T1 %{_tr(100*ZAMAN_PAY['T1'],0)} · "
+        f"T2 %{_tr(100*ZAMAN_PAY['T2'],0)} · T3 %{_tr(100*ZAMAN_PAY['T3'],0)}) üç "
+        f"zamanlı birim fiyat {_tr(uz,2)} TL/kWh, tek zamanlı {_tr(mev,2)} TL/kWh "
+        f"çıkar — üç zamanlı %{_tr(100*(uz/mev-1),0)} DAHA PAHALIDIR. Tesis üç "
         f"zamanlı tarifedeyse tek zamanlıya geçiş yılda "
-        f"{fark:,.0f} TL kazandırır; tek zamanlıdaysa ÜÇ ZAMANLIYA GEÇİLMEMELİDİR."
-        .replace(",", "."), "B")
+        f"{_tr(fark,0)} TL kazandırır; tek zamanlıdaysa ÜÇ ZAMANLIYA GEÇİLMEMELİDİR.",
+        "B")
 
     # T-04 · güç / abonelik
     out["T-04"] = (None, None,
-        f"Cetvel talep gücünü {CETVEL_TALEP_KW:.0f} kW veriyor; modelin "
-        f"işletme saatlerindeki ortalama gücü {ISLETME_ORT_KW:.0f} kW, yıllık "
-        f"ortalaması {ORT_GUC_KW:.0f} kW. Yük faktörü çok düşüktür. Çift "
+        f"Cetvel talep gücünü {_tr(CETVEL_TALEP_KW,0)} kW veriyor; modelin "
+        f"işletme saatlerindeki ortalama gücü {_tr(ISLETME_ORT_KW,0)} kW, yıllık "
+        f"ortalaması {_tr(ORT_GUC_KW,0)} kW. Yük faktörü çok düşüktür. Çift "
         f"terimli tarifedeyse güç bedeli kullanılmayan kapasiteye ödenir; "
         f"tek terimli tarifedeyse güç bedeli yoktur ve bu kalem geçersizdir. "
         f"Güvence bedeli 2026'da 746 TL/kW'dır — sözleşme gücü gereğinden "
@@ -627,10 +635,11 @@ def tarife_etkileri(T):
 
 
 # ═══════════════════════ 10 · KIYASLAMA ══════════════════════════════════════
-ALAN_M2      = 1200.0       # V-04 · varsayım — yerinde doğrulanacak
-ALAN_KAPALI  = 750.0
-ALAN_TERAS   = 450.0
-ALAN_BANT    = (900.0, 1500.0)   # duyarlılık için makul aralık
+ALAN_M2   = 550.0     # V-04 · işveren beyanı (kendi CAD dosyasından)
+ALAN_BANT = (450.0, 750.0)      # duyarlılık aralığı — teras dâhil/hariç belirsizliği
+ALAN_KAYNAK = ("İşveren beyanı — kendi CAD dosyasından. Aqua Florya'ya ait "
+               "çizim elimizde YOKTUR; sayı ölçülmemiştir. Kapalı alan / "
+               "teras ayrımı bilinmiyor.")
 
 def ozgul(alan=None):
     return YILLIK_TOPLAM/(alan or ALAN_M2)
@@ -642,6 +651,24 @@ def guc_yogunlugu(alan=None):
 # Tesis pratikte TAMAMEN ELEKTRİKLİDİR — pişirme, ısıtma, teras ısıtması,
 # sıcak su, hepsi elektrik. Kıyas tabloları ise fosil yakıtlı mutfak ve
 # ısıtma varsayar. Bu fark raporun yapısal bulgusudur.
+def kiyas_verdikt(T):
+    """Enerji yoğunluğu testinin sonucunu SAYIDAN türet — elle yazma.
+    Kıyas tabloları TOPLAM enerjidir (elektrik + fosil); bu tesis
+    neredeyse tamamen elektriklidir, o yüzden kıyas doğrudan yapılır."""
+    oz = ozgul()
+    ref = [(ad, v) for ad, v, *_ in T.BENCHMARK if v]
+    ust = max(v for _, v in ref)       # en yüksek kıyas (ABD fast food)
+    med = sorted(v for _, v in ref)[len(ref)//2]
+    if oz > ust:
+        return ("ÇOK YÜKSEK", "bütün uluslararası kıyasların üzerinde")
+    if oz > med:
+        return ("YÜKSEK", "kıyasların medyanının üzerinde, en yüksek "
+                          "kıyasa yakın")
+    if oz > min(v for _, v in ref):
+        return ("BANT İÇİNDE", "uluslararası kıyasların içinde")
+    return ("DÜŞÜK", "bütün kıyasların altında")
+
+
 ELEKTRIK_PAYI = 1.00
 ELEKTRIK_PAYI_NOT = (
     "Yük cetvelindeki 155 linyeden yalnız biri (MC10) doğalgazlı bir cihazı "

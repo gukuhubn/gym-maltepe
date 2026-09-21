@@ -261,15 +261,17 @@ def kapak(c):
     c.setFillColor(COPPER); c.setFont(FB, 8)
     c.drawString(SOL+7*mm, Y-121*mm, "RAPORUN BULDUĞU")
     c.setFillColor(PAPER); c.setFont(F, 8.2)
-    ozet = ("Tesisin elektrik faturası, kurulu yüküne ve İstanbul'daki cari "
-            "ticarethane tarifesine göre açıklanabilir durumdadır: model "
-            f"{bin(E.ORT_AY_KWH)} kWh/ay veriyor ve bu, beyan edilen "
-            f"{bin(E.BEYAN_TL[0]/1000)}–{bin(E.BEYAN_TL[1]/1000)} bin TL "
-            "bandının ortasına düşüyor. Anormal olan tüketimin miktarı değil, "
-            "tesisin normalde doğal gazla yapılan ısıtma işlerini elektrikli "
-            "dirençle yapması ve havalandırmanın pişirme olsun olmasın tam "
-            "debide çalışmasıdır. İkisi de geri alınabilir tasarım "
-            "tercihleridir.")
+    ozet = ("Faturanın FİYATI normal, TÜKETİMİ değil. Model "
+            f"{bin(E.ORT_AY_KWH)} kWh/ay veriyor; cari ticarethane tarifesiyle "
+            f"çarpınca beyan edilen {bin(E.BEYAN_TL[0]/1000)}–"
+            f"{bin(E.BEYAN_TL[1]/1000)} bin TL bandının ortasına düşüyor — "
+            f"yani kWh piyasadan pahalıya alınmıyor. Ama {bin(E.ALAN_M2)} m²'ye "
+            f"{bin(E.BAGLI_KW)} kW sığdırılmış: {bin(E.guc_yogunlugu())} W/m², "
+            f"tipik restoran bandının (150–250) üç katı. Özgül tüketim "
+            f"{bin(E.ozgul())} kWh/m²/yıl ile ABD fast-food seviyesinde. "
+            "Nedeni: normalde doğal gazla yapılan ısıtma işleri elektrikli "
+            "dirençle yapılıyor ve havalandırma pişirme olsun olmasın tam "
+            "debide çalışıyor. İkisi de geri alınabilir tasarım tercihleridir.")
     for i, ln in enumerate(sarw(ozet, GEN-14*mm, F, 8.2)):
         c.drawString(SOL+7*mm, Y-128*mm-i*4.6*mm, ln)
 
@@ -282,8 +284,8 @@ def kapak(c):
        "Hayır — iki koşulla: tarife tek zamanlı olmalı ve kompanzasyon "
        "çalışıyor olmalı. İkisi de henüz doğrulanmadı."),
       ("Metrekare başına çok mu tüketiyoruz?",
-       "Hayır — uluslararası restoran kıyaslarının içinde, ABD "
-       "medyanlarının altında."),
+       f"EVET. {bin(E.ozgul())} kWh/m²/yıl ve {bin(E.guc_yogunlugu())} W/m² "
+       f"kurulu güç — tipik restoran bandının üç katı."),
       ("Doğru enerjiyi mi kullanıyoruz?",
        "HAYIR. Asıl kaldıraç burada: teras ısıtıcısı, hava perdesi ve "
        "boiler elektrikli dirençtir."),
@@ -301,13 +303,13 @@ def kapak(c):
         yy -= 7*mm
 
     # ── KPI şeridi
-    kutular = [("Bağlı güç", f"{E.BAGLI_KW:.0f} kW", "155 linye · ADP R00"),
+    kutular = [("Bağlı güç", f"{bin(E.BAGLI_KW,0)} kW", "155 linye · ADP R00"),
                ("Model tüketimi", bin(E.ORT_AY_KWH), "kWh / ay"),
                ("Model faturası",
                 (bin(E.ORT_AY_KWH*m["birim"]/1000)+" bin") if m else "—",
                 "TL / ay · KDV dâhil"),
                ("Tasarruf potansiyeli",
-                f"%{100*E.teknik_toplam()/E.YILLIK_TOPLAM:.0f}",
+                f"%{bin(100*E.teknik_toplam()/E.YILLIK_TOPLAM,0)}",
                 "tüketim tarafı · tarife hariç")]
     g = (GEN-3*4*mm)/4; x = SOL; yb = 52*mm
     for ust, deg, alt in kutular:
@@ -365,19 +367,25 @@ def s0_ozet(r):
                ("Fark", f"%{100*(ort-model_tl)/model_tl:+.0f}",
                 "beyan ile model arası", RED if ort > model_tl*1.12 else GREEN)])
     else:
-        r.kpi([("Bağlı güç", f"{E.BAGLI_KW:.0f} kW", "155 linye · ADP R00", COPPER),
-               ("Talep gücü", f"{E.CETVEL_TALEP_KW:.0f} kW", "cetvel beyanı", NAVY),
+        r.kpi([("Bağlı güç", f"{bin(E.BAGLI_KW,0)} kW", "155 linye · ADP R00", COPPER),
+               ("Talep gücü", f"{bin(E.CETVEL_TALEP_KW,0)} kW", "cetvel beyanı", NAVY),
                ("Model tüketimi", f"{bin(E.ORT_AY_KWH)}", "kWh/ay", AMBER),
-               ("Tasarruf", f"%{100*E.teknik_toplam()/E.YILLIK_TOPLAM:.0f}",
+               ("Tasarruf", f"%{bin(100*E.teknik_toplam()/E.YILLIK_TOPLAM,0)}",
                 "teknik potansiyel", GREEN)])
 
     r.h2("Sorunun cevabı: harcama normal mi?")
+    vd, vac = E.kiyas_verdikt(T) if T else ("—", "")
     if birim:
-        r.p(f"Hayır — tam olarak normal değil, ama nedeni çoğu kişinin sandığı yerde "
-            f"değil. Tesisin tükettiği enerji miktarı, {E.BAGLI_KW:.0f} kW bağlı güce ve "
-            f"ağır bir çelik ızgara/fritöz mutfağına sahip bir restoran için makul "
-            f"bandın İÇİNDEDİR. Anormal olan, o enerjinin NE KADARA alındığı ve "
-            f"tüketimin NEREYE gittiğidir.")
+        r.p(f"Faturanın TUTARI normal, TÜKETİMİ değil. Tesis kWh'i piyasadan "
+            f"pahalıya almıyor: beyan edilen tutarın ima ettiği birim fiyat, "
+            f"İstanbul'daki cari ticarethane tarifesiyle uyumlu. Buna karşılık "
+            f"{bin(E.ALAN_M2)} m²'lik bir tesiste yılda {bin(E.YILLIK_TOPLAM)} "
+            f"kWh, metrekare başına {bin(E.ozgul())} kWh/yıl demektir — bu "
+            f"{vac}. Kurulu güç yoğunluğu {bin(E.guc_yogunlugu())} W/m²'dir; "
+            f"tam donanımlı bir restoran için tipik değer 150–250 W/m² "
+            f"bandındadır. Yani tesis, alanına göre olağanüstü elektrik "
+            f"yoğundur ve bunun nedeni §5'te açıktır: normalde doğal gazla "
+            f"yapılan işler elektrikle yapılıyor.")
     r.p("Üç ayrı soruyu birbirinden ayırmak gerekir; çoğu enerji tartışması bunları "
         "karıştırdığı için sonuçsuz kalır:")
     r.madde("KAÇ kWh tüketiyoruz? — Bu bir mühendislik sorusudur; cevabı yük "
@@ -392,8 +400,8 @@ def s0_ozet(r):
     top5 = sorted(E.YILLIK.items(), key=lambda kv: -kv[1])[:5]
     sat = []
     for s, v in top5:
-        sat.append([E.SINIF_AD[s], f"{E.SINIF[s]['kw']:.1f}", bin(v),
-                    f"%{100*v/E.YILLIK_TOPLAM:.1f}",
+        sat.append([E.SINIF_AD[s], f"{bin(E.SINIF[s]['kw'],1)}", bin(v),
+                    f"%{bin(100*v/E.YILLIK_TOPLAM,1)}",
                     bin(v*birim/12) if birim else "—"])
     r.tablo(["Tüketim kalemi", "Bağlı kW", "kWh/yıl", "Pay", "TL/ay"],
             sat, [62*mm, 18*mm, 26*mm, 16*mm, 26*mm], sag=(1, 2, 3, 4))
@@ -427,8 +435,8 @@ def s1_veri(r):
     r.tablo(["Belge", "İçerik", "Bu raporda ne için kullanıldı"], [
         ["ADP_Yukleme_Cetveli_REF.xlsx",
          f"“{E.TESIS} ADP Elektrik Pano Yükleme Cetveli R00” · {len(E.DEVRE)} "
-         f"linye · bağlı güç {E.BAGLI_KW:.2f} kW · talep gücü "
-         f"{E.CETVEL_TALEP_KW:.2f} kW · cos φ {E.CETVEL_COSFI}",
+         f"linye · bağlı güç {bin(E.BAGLI_KW,2)} kW · talep gücü "
+         f"{bin(E.CETVEL_TALEP_KW,2)} kW · cos φ {bin(E.CETVEL_COSFI,2)}",
          "Bütün cihaz güçleri, devre sayıları ve yük sınıflandırması. "
          "Tüketim modelinin tek girdisi."],
         ["ADP_REFERANS.pdf",
@@ -479,8 +487,8 @@ def s1_veri(r):
             "çifte sayım yapılmaz.")
     r.kutu("MODELİN DOĞRULUK SINIRI",
            f"Model, cetvelin kendi beyanıyla karşılaştırılarak sınandı: model "
-           f"{E.BAGLI_KW:.2f} kW okuyor, cetvel {E.CETVEL_BAGLI_KW:.2f} kW "
-           f"beyan ediyor — fark {abs(E.BAGLI_KW-E.CETVEL_BAGLI_KW):.2f} kW "
+           f"{bin(E.BAGLI_KW,2)} kW okuyor, cetvel {bin(E.CETVEL_BAGLI_KW,2)} kW "
+           f"beyan ediyor — fark {bin(abs(E.BAGLI_KW-E.CETVEL_BAGLI_KW),2)} kW "
            f"(pano aydınlatması). Bağlı güç tarafı güvenilirdir. Buna karşılık "
            f"işletme profilleri (saat ve yük faktörü) ÖLÇÜME DEĞİL MÜHENDİSLİK "
            f"KABULÜNE dayanır; gerçek tüketim bu modelden ±%20 sapabilir. "
@@ -492,16 +500,16 @@ def s2_yuk(r, g):
     r.h1("2", "Tesisin elektrik yükü — pano cetvelinin söyledikleri")
     r.p(f"Ana dağıtım panosu (ADP) 3×{E.CETVEL_GIRIS_A} A termik manyetik şalterle "
         f"beslenir, kolon 8×(1×95) mm² N2XH'dir. Cetvel toplam bağlı gücü "
-        f"{E.CETVEL_BAGLI_KW:.2f} kW, diversite sonrası talep gücünü "
-        f"{E.CETVEL_TALEP_KW:.2f} kW ve talep akımını {E.CETVEL_TALEP_A:.0f} A "
+        f"{bin(E.CETVEL_BAGLI_KW,2)} kW, diversite sonrası talep gücünü "
+        f"{bin(E.CETVEL_TALEP_KW,2)} kW ve talep akımını {bin(E.CETVEL_TALEP_A,0)} A "
         f"olarak veriyor. Bu, bir restoran için çok yüksek bir değerdir ve "
         f"tesisin elektrik ağırlıklı kurulduğunu gösterir.")
 
     r.h2("2.1 Cetvelin kendi diversite dökümü")
     sat = []
     for ad, (w, div) in E.CETVEL_GRUP.items():
-        sat.append([ad, bin(w/1000/div, 1), f"{div:.2f}", bin(w/1000, 1),
-                    f"%{100*w/sum(v[0] for v in E.CETVEL_GRUP.values()):.0f}"])
+        sat.append([ad, bin(w/1000/div, 1), f"{bin(div,2)}", bin(w/1000, 1),
+                    f"%{bin(100*w/sum(v[0] for v in E.CETVEL_GRUP.values()),0)}"])
     sat.append(["TOPLAM", "", "",
                 bin(sum(v[0] for v in E.CETVEL_GRUP.values())/1000, 1), "%100"])
     r.tablo(["Grup", "Bağlı kW", "Diversite", "Talep kW", "Talep payı"],
@@ -576,8 +584,8 @@ def s3_model(r, g):
         if s == "YEDEK": continue
         saat, lf, ay, ger = E.PROFIL[s]
         mev = "sabit" if all(abs(k-1.0) < 1e-9 for k in ay) else "mevsimsel"
-        sat.append([E.SINIF_AD[s], f"{E.SINIF[s]['kw']:.1f}", f"{saat:.0f}",
-                    f"{lf:.2f}", mev, bin(v), ger])
+        sat.append([E.SINIF_AD[s], f"{bin(E.SINIF[s]['kw'],1)}", f"{bin(saat,0)}",
+                    f"{bin(lf,2)}", mev, bin(v), ger])
     r.tablo(["Sınıf", "kW", "sa/gün", "YF", "Mevsim", "kWh/yıl", "Gerekçe"],
             sat, [36*mm, 12*mm, 13*mm, 11*mm, 17*mm, 20*mm, 69*mm],
             s=6.2, sag=(1, 2, 3, 5))
@@ -588,16 +596,16 @@ def s3_model(r, g):
     r.h2("3.2 Modelin ana çıktıları")
     r.kpi([("Yıllık tüketim", bin(E.YILLIK_TOPLAM), "kWh/yıl", COPPER),
            ("Aylık ortalama", bin(E.ORT_AY_KWH), "kWh/ay", NAVY),
-           ("Ortalama güç", f"{E.ORT_GUC_KW:.0f} kW", f"talep gücünün "
-            f"%{100*E.ORT_GUC_KW/E.CETVEL_TALEP_KW:.0f}'i", AMBER),
-           ("Yük faktörü", f"%{100*E.ORT_GUC_KW/E.CETVEL_TALEP_KW:.0f}",
+           ("Ortalama güç", f"{bin(E.ORT_GUC_KW,0)} kW", f"talep gücünün "
+            f"%{bin(100*E.ORT_GUC_KW/E.CETVEL_TALEP_KW,0)}'i", AMBER),
+           ("Yük faktörü", f"%{bin(100*E.ORT_GUC_KW/E.CETVEL_TALEP_KW,0)}",
             "ort. güç / talep gücü", BLUE)])
     en_yuksek = E.AY_AD[E.AYLIK_TOPLAM.index(max(E.AYLIK_TOPLAM))]
     en_dusuk  = E.AY_AD[E.AYLIK_TOPLAM.index(min(E.AYLIK_TOPLAM))]
     r.p(f"Model, en yüksek tüketimi {en_yuksek} ayında "
         f"({bin(max(E.AYLIK_TOPLAM))} kWh), en düşüğünü {en_dusuk} ayında "
         f"({bin(min(E.AYLIK_TOPLAM))} kWh) veriyor. Aradaki fark yalnız "
-        f"%{100*(max(E.AYLIK_TOPLAM)/min(E.AYLIK_TOPLAM)-1):.0f}'dir. Bu düzlük "
+        f"%{bin(100*(max(E.AYLIK_TOPLAM)/min(E.AYLIK_TOPLAM)-1),0)}'dir. Bu düzlük "
         f"önemli bir bulgudur: tüketimin büyük kısmı mevsimden bağımsız, "
         f"7/24 veya her gün aynı saat çalışan yüklerden gelir. Yani tasarruf, "
         f"“yazın klimayı kıs” türü mevsimsel tedbirlerle değil, SÜREKLİ ÇALIŞAN "
@@ -650,7 +658,7 @@ def s6_onlem(r, g):
         else:
             tl_txt = bin(tl) if tl else "—"
         if tl and yat is not None:
-            gd = "anında" if yat == 0 else f"{yat/tl:.1f} yıl"
+            gd = "anında" if yat == 0 else f"{bin(yat/tl,1)} yıl"
         elif yat == 0:      gd = "yatırımsız"
         elif not tl:        gd = "faturaya bağlı"
         else:               gd = "maliyet verisi yok"
@@ -678,7 +686,7 @@ def s6_onlem(r, g):
             r.c.setFillColor(GREEN); r.c.setFont(FB, 6.6)
             ek = f"  ·  {bin(t*birim)} TL/yıl" if birim else ""
             r.c.drawString(SOL, r.y, f"modellenen tasarruf: {bin(t)} kWh/yıl "
-                           f"(toplamın %{100*t/E.YILLIK_TOPLAM:.1f}'i){ek}"
+                           f"(toplamın %{bin(100*t/E.YILLIK_TOPLAM,1)}'i){ek}"
                            f"   ·   yatırım: {yat_txt} TL")
             r.y -= 4.2*mm
         elif o["kod"] in (E.tarife_etkileri(T) if T else {}):
@@ -694,7 +702,7 @@ def s6_onlem(r, g):
 
     r.h2("6.3 Birleşik etki ve çifte sayım")
     tt = E.teknik_toplam()
-    r.kpi([("Teknik potansiyel", f"%{100*tt/E.YILLIK_TOPLAM:.0f}",
+    r.kpi([("Teknik potansiyel", f"%{bin(100*tt/E.YILLIK_TOPLAM,0)}",
             "tüketim tarafı · çarpımsal", GREEN),
            ("kWh tasarrufu", bin(tt), "kWh/yıl", COPPER),
            ("TL karşılığı", bin(tt*birim) if birim else "—",
@@ -729,18 +737,18 @@ def s4_fatura(r):
            "ve §11'de istenen ilk belgedir.", AMBER)
 
     r.h2("4.1 Birim fiyatın oluşumu (ticarethane · AG · tek terimli)")
-    sat = [[ad, f"{v:.4f}", f"%{100*v/m['birim']:.1f}"] for ad, v in m["bilesen"]]
-    sat.append(["TOPLAM · KDV dâhil", f"{m['birim']:.4f}", "%100"])
+    sat = [[ad, f"{bin(v,4)}", f"%{bin(100*v/m['birim'],1)}"] for ad, v in m["bilesen"]]
+    sat.append(["TOPLAM · KDV dâhil", f"{bin(m['birim'],4)}", "%100"])
     r.tablo(["Bileşen", "TL/kWh", "Pay"], sat,
             [96*mm, 40*mm, 42*mm], sag=(1, 2), vurgu=(len(sat)-1,))
     r.p(T.TARIFE_NOT)
     r.p("Buradaki en önemli yapısal gerçek şudur: birim fiyatın yalnızca "
-        f"%{100*m['aktif']/m['birim']:.0f}'i AKTİF ENERJİDİR. Geri kalanı "
-        f"dağıtım bedeli (%{100*m['dagitim']/m['birim']:.0f}) ve vergilerdir "
-        f"(%{100*(m['fon']+m['btv']+m['kdv'])/m['birim']:.0f}). Tedarikçi "
+        f"%{bin(100*m['aktif']/m['birim'],0)}'i AKTİF ENERJİDİR. Geri kalanı "
+        f"dağıtım bedeli (%{bin(100*m['dagitim']/m['birim'],0)}) ve vergilerdir "
+        f"(%{bin(100*(m['fon']+m['btv']+m['kdv'])/m['birim'],0)}). Tedarikçi "
         "pazarlığı yalnız aktif enerji bileşenine etki eder. Bu yüzden "
         "“tedarikçiden %10 indirim aldık” demek, faturanın %10'unu kurtarmak "
-        f"değil, yaklaşık %{100*0.10*m['aktif']/m['birim']:.0f}'ini kurtarmak "
+        f"değil, yaklaşık %{bin(100*0.10*m['aktif']/m['birim'],0)}'ini kurtarmak "
         "demektir. Faturanın kalan dörtte üçü ancak DAHA AZ kWh tüketerek "
         "azaltılabilir.")
 
@@ -756,7 +764,7 @@ def s4_fatura(r):
         f"bağımsız olarak kurulan tüketim modeli, 2026 ticarethane tarifesiyle "
         f"çarpıldığında ayda {bin(model_tl)} TL veriyor. İşverenin beyan ettiği "
         f"{bin(alt)}–{bin(ust)} TL bandının tam ortasına düşüyor; sapma "
-        f"%{abs(100*(ort-model_tl)/model_tl):.1f}. Yani fatura, tesisin "
+        f"%{bin(abs(100*(ort-model_tl)/model_tl),1)}. Yani fatura, tesisin "
         f"kurulu yüküne ve İstanbul'daki cari elektrik fiyatına göre "
         f"AÇIKLANABİLİR DURUMDADIR. Ortada gizli bir kaçak, hatalı sayaç ya da "
         f"yanlış okuma aramaya gerek yoktur — sorun tesisin ne kadar elektrik "
@@ -774,19 +782,19 @@ def s4_fatura(r):
     sat = []
     for k in ("T1", "T2", "T3"):
         f, ar, ad = T.UC_ZAMANLI[k]
-        sat.append([f"{k} · {ad}", ar, f"{f:.2f}",
-                    f"%{100*E.ZAMAN_PAY[k]:.0f}", f"{f*E.ZAMAN_PAY[k]:.3f}"])
-    sat.append(["AĞIRLIKLI ORTALAMA", "", "", "%100", f"{uz:.3f}"])
-    sat.append(["Tek zamanlı tarife", "", "", "", f"{m['birim']:.3f}"])
+        sat.append([f"{k} · {ad}", ar, f"{bin(f,2)}",
+                    f"%{bin(100*E.ZAMAN_PAY[k],0)}", f"{bin(f*E.ZAMAN_PAY[k],3)}"])
+    sat.append(["AĞIRLIKLI ORTALAMA", "", "", "%100", f"{bin(uz,3)}"])
+    sat.append(["Tek zamanlı tarife", "", "", "", f"{bin(m['birim'],3)}"])
     r.tablo(["Dilim", "Saat", "TL/kWh", "Tüketim payı", "Katkı TL/kWh"],
             sat, [40*mm, 32*mm, 26*mm, 38*mm, 42*mm], sag=(2, 3, 4),
             vurgu=(len(sat)-2, len(sat)-1))
     r.p(f"Bir restoranın en yoğun saati (17:00–22:00) tam olarak en pahalı "
         f"dilime denk gelir; puant birim fiyatı gündüzün "
-        f"{T.UC_ZAMANLI['T2'][0]/T.UC_ZAMANLI['T1'][0]:.2f} katıdır. Modelin "
-        f"zaman dağılımıyla üç zamanlı tarife {uz:.2f} TL/kWh, tek zamanlı "
-        f"{m['birim']:.2f} TL/kWh çıkıyor: üç zamanlı "
-        f"%{100*(uz/m['birim']-1):.0f} DAHA PAHALI. Yıllık farkı "
+        f"{bin(T.UC_ZAMANLI['T2'][0]/T.UC_ZAMANLI['T1'][0],2)} katıdır. Modelin "
+        f"zaman dağılımıyla üç zamanlı tarife {bin(uz,2)} TL/kWh, tek zamanlı "
+        f"{bin(m['birim'],2)} TL/kWh çıkıyor: üç zamanlı "
+        f"%{bin(100*(uz/m['birim']-1),0)} DAHA PAHALI. Yıllık farkı "
         f"{bin((uz-m['birim'])*E.YILLIK_TOPLAM)} TL'dir.")
     r.kutu("İLK KONTROL EDİLECEK TEK SATIR",
            "Faturanın üst bilgisinde tarife tipi yazar. Eğer “üç zamanlı” "
@@ -802,31 +810,31 @@ def s4_fatura(r):
     sat = []
     for cf in (0.90, 0.95, 0.98, 0.99, 1.00):
         a = E.reaktif_analiz(min(cf, 0.9999), birim=T.REAKTIF_BEDEL)
-        sat.append([f"{cf:.2f}", f"%{100*a['tanfi']:.1f}",
+        sat.append([f"{bin(cf,2)}", f"%{bin(100*a['tanfi'],1)}",
                     "AŞIM" if a["asim"] else "temiz", bin(a["kvarh"]),
                     bin(a["ceza"]*1.2)])
     r.tablo(["cos φ", "Reaktif oranı", "Eşik (%20)", "kVArh/ay",
              "Ceza TL/ay · KDV dâhil"],
             sat, [24*mm, 32*mm, 26*mm, 34*mm, 62*mm], sag=(1, 3, 4))
-    r.p(f"Pano yükleme cetveli tesisin güç katsayısını {E.CETVEL_COSFI} olarak "
-        f"veriyor. Bu değerde reaktif oranı %{100*rk['tanfi']:.1f} olur ve "
-        f"%{100*rk['esik']:.0f}'lik yasal eşiği ikiye katlar. Eşik aşıldığında "
+    r.p(f"Pano yükleme cetveli tesisin güç katsayısını {bin(E.CETVEL_COSFI,2)} olarak "
+        f"veriyor. Bu değerde reaktif oranı %{bin(100*rk['tanfi'],1)} olur ve "
+        f"%{bin(100*rk['esik'],0)}'lik yasal eşiği ikiye katlar. Eşik aşıldığında "
         f"— muhafazakâr yorumla — ölçülen reaktif enerjinin TAMAMI "
         f"bedellendirilir: ayda {bin(rk['kvarh'])} kVArh × "
-        f"{T.REAKTIF_BEDEL:.3f} TL/kVArh, KDV ile birlikte "
+        f"{bin(T.REAKTIF_BEDEL,3)} TL/kVArh, KDV ile birlikte "
         f"{bin(rk['ceza']*1.2)} TL. Bu, beyan edilen faturanın yaklaşık "
-        f"%{100*rk['ceza']*1.2/(E.ORT_AY_KWH*m['birim']):.0f}'idir.")
+        f"%{bin(100*rk['ceza']*1.2/(E.ORT_AY_KWH*m['birim']),0)}'idir.")
     r.kutu("KOMPANZASYON ÇALIŞIYOR MU? — DERHAL CEVAPLANMASI GEREKEN SORU",
-           f"Cetveldeki {E.CETVEL_COSFI} değeri tesisin KOMPANZASYONSUZ doğal "
+           f"Cetveldeki {bin(E.CETVEL_COSFI,2)} değeri tesisin KOMPANZASYONSUZ doğal "
            f"güç katsayısıdır; panoda kompanzasyon beslemesi olduğuna göre "
-           f"sahada cos φ'nin {rk['gereken_cosfi']} üzerine çıkarılmış olması "
+           f"sahada cos φ'nin {bin(rk['gereken_cosfi'],4)} üzerine çıkarılmış olması "
            f"beklenir. Çıkarılmışsa ceza sıfırdır. Çıkarılmamışsa ya da "
            f"kondansatörler zamanla bozulmuşsa, tesis yılda "
            f"{bin(rk['ceza']*1.2*12)} TL'ye kadar KARŞILIĞINDA HİÇBİR ŞEY "
            f"ALMADAN ödüyor olabilir. Cevap faturanın reaktif satırında ve "
            f"kompanzasyon rölesinin ekranındadır. Eşiğin altında kalmak için "
-           f"cos φ ≥ {rk['gereken_cosfi']} gerekir; bunun için talep gücünde "
-           f"yaklaşık {E.kompanzasyon_kvar(E.CETVEL_TALEP_KW, 0.90, 0.99):.0f} "
+           f"cos φ ≥ {bin(rk['gereken_cosfi'],4)} gerekir; bunun için talep gücünde "
+           f"yaklaşık {bin(E.kompanzasyon_kvar(E.CETVEL_TALEP_KW, 0.90, 0.99),0)} "
            f"kVAr kademeli ve HARMONİK REAKTÖRLÜ (detuned) kompanzasyon "
            f"gerekir. VRF/WSHP sürücüleri ve LED sürücüleri harmonik ürettiği "
            f"için reaktörsüz klasik kondansatör grubu bu tesiste hızla bozulur.",
@@ -836,15 +844,15 @@ def s4_fatura(r):
     r.tablo(["Parametre", "2026 değeri", "Tesisin durumu"], [
         ["Serbest tüketici limiti", f"{bin(T.SERBEST_LIMIT_KWH)} kWh/yıl",
          f"Tesis {bin(E.YILLIK_TOPLAM)} kWh/yıl tüketiyor — limitin "
-         f"{E.YILLIK_TOPLAM/T.SERBEST_LIMIT_KWH:.0f} katı. KESİNLİKLE serbest "
+         f"{bin(E.YILLIK_TOPLAM/T.SERBEST_LIMIT_KWH,0)} katı. KESİNLİKLE serbest "
          f"tüketicidir ve dilediği tedarikçiyle ikili anlaşma yapabilir."],
         ["SKTT limiti (ticarethane)", f"{bin(T.SKTT_LIMIT_TIC_KWH)} kWh/yıl",
-         f"Limitin {E.YILLIK_TOPLAM/T.SKTT_LIMIT_TIC_KWH:.0f} katı. İkili "
+         f"Limitin {bin(E.YILLIK_TOPLAM/T.SKTT_LIMIT_TIC_KWH,0)} katı. İkili "
          f"anlaşma YOKSA tesis Son Kaynak Tedarik Tarifesine düşer ve "
          f"(PTF + YEKDEM) × {T.SKTT_KBK} formülüyle faturalanır — yani spot "
          f"piyasa dalgalanmasına açık hâle gelir."],
         ["Tedarikçi indirim bandı",
-         f"%{100*T.TEDARIKCI_INDIRIM[0]:.0f}–{100*T.TEDARIKCI_INDIRIM[1]:.0f}",
+         f"%{bin(100*T.TEDARIKCI_INDIRIM[0],0)}–{bin(100*T.TEDARIKCI_INDIRIM[1],0)}",
          "Yalnız aktif enerjiye uygulanır. Zincirin bütün şubeleri tek "
          "portföyde ihale edilirse pazarlık gücü belirgin artar."],
     ], [42*mm, 34*mm, 102*mm], s=6.6)
@@ -871,12 +879,12 @@ def s5_normal(r):
         ima_alt = alt/E.ORT_AY_KWH; ima_ust = ust/E.ORT_AY_KWH
         r.tablo(["Ölçüt", "Değer", "Piyasa karşılığı (2026)", "Sonuç"], [
             ["Beyan bandından ima edilen birim fiyat",
-             f"{ima_alt:.2f} – {ima_ust:.2f} TL/kWh",
-             f"{m['birim']:.2f} TL/kWh (ticarethane AG tek zamanlı, "
+             f"{bin(ima_alt,2)} – {bin(ima_ust,2)} TL/kWh",
+             f"{bin(m['birim'],2)} TL/kWh (ticarethane AG tek zamanlı, "
              f"vergiler dâhil); bağımsız kaynak bandı 6,42 – 7,33",
              "NORMAL"],
             ["Üç zamanlı tarifedeyse",
-             f"{T.uc_zamanli_birim(E.ZAMAN_PAY):.2f} TL/kWh",
+             f"{bin(T.uc_zamanli_birim(E.ZAMAN_PAY),2)} TL/kWh",
              "restoran profili puant dilimine yığılır",
              "PAHALI"],
             ["Reaktif ceza varsa",
@@ -886,7 +894,7 @@ def s5_normal(r):
         ], [52*mm, 34*mm, 62*mm, 30*mm], s=6.6,
            renkli={"Beyan bandından ima edilen birim fiyat": INK})
         r.p(f"Sonuç: beyan edilen tutarın ima ettiği birim fiyat "
-            f"({ima_alt:.2f}–{ima_ust:.2f} TL/kWh) İstanbul'daki cari "
+            f"({bin(ima_alt,2)}–{bin(ima_ust,2)} TL/kWh) İstanbul'daki cari "
             f"ticarethane tarifesiyle uyumludur. Tesis kWh'i piyasadan pahalıya "
             f"ALMIYOR — İKİ İSTİSNA DIŞINDA: tarife tipi üç zamanlıysa ve "
             f"kompanzasyon çalışmıyorsa. Bu iki kontrol yapılmadan “fiyatımız "
@@ -894,42 +902,58 @@ def s5_normal(r):
 
     # ── TEST 2
     r.h2("TEST 2 · Enerji yoğunluğu testi — metrekare başına çok mu tüketiyoruz?")
-    r.p(f"Model, yılda {bin(E.YILLIK_TOPLAM)} kWh veriyor. "
-        f"{bin(E.ALAN_M2)} m² kabulüyle (V-04) özgül tüketim "
-        f"{bin(E.ozgul())} kWh/m²/yıl olur. Alan bilinmediği için "
-        f"{bin(E.ALAN_BANT[0])}–{bin(E.ALAN_BANT[1])} m² aralığında "
-        f"{bin(E.ozgul(E.ALAN_BANT[1]))}–{bin(E.ozgul(E.ALAN_BANT[0]))} "
-        f"kWh/m²/yıl bandı çıkar.")
+    vd, vac = E.kiyas_verdikt(T)
+    r.p(f"Model, yılda {bin(E.YILLIK_TOPLAM)} kWh veriyor. İşverenin bildirdiği "
+        f"{bin(E.ALAN_M2)} m² ile (V-04) özgül tüketim {bin(E.ozgul())} "
+        f"kWh/m²/yıl olur. Alan ölçülmediği için {bin(E.ALAN_BANT[0])}–"
+        f"{bin(E.ALAN_BANT[1])} m² aralığında {bin(E.ozgul(E.ALAN_BANT[1]))}–"
+        f"{bin(E.ozgul(E.ALAN_BANT[0]))} kWh/m²/yıl bandı çıkar. Aşağıdaki "
+        f"kıyaslar TOPLAM enerjidir (elektrik + fosil); bu tesis neredeyse "
+        f"tamamen elektrikli olduğu için doğrudan karşılaştırılabilir.")
     sat = []
     for ad, v, br, kap, g, nt in T.BENCHMARK:
         if v is None:
             sat.append([ad, "—", kap, "veri yok", g]); continue
-        oran = E.ozgul()/v
-        sat.append([ad, bin(v), kap, f"×{oran:.2f}", g])
+        sat.append([ad, bin(v), kap, f"×{bin(E.ozgul()/v,2)}", g])
     sat.append([f"BU TESİS (model · {bin(E.ALAN_M2)} m²)", bin(E.ozgul()),
                 "tamamı elektrik", "—", "model"])
     r.tablo(["Kıyas kaynağı", "kWh/m²/yıl", "Kapsam", "Tesis / kıyas", "Güven"],
             sat, [56*mm, 24*mm, 48*mm, 28*mm, 22*mm], s=6.5, sag=(1, 3),
             vurgu=(len(sat)-1,))
-    r.p("Sonuç: tesisin özgül tüketimi, ABD medyanlarının (830–1.027 "
-        "kWh/m²/yıl toplam enerji) ALTINDA, İngiliz CIBSE TM46 restoran "
-        "kıyasının (460 kWh/m²/yıl toplam) hemen üzerindedir. Toplam enerji "
-        "yoğunluğu açısından tesis ANORMAL DEĞİLDİR. Ağır bir et restoranı, "
-        "üç elektrikli fritöz, show kitchen ve geniş bir teras için bu bant "
-        "beklenen yerdedir.")
+    en_yuksek = max((v for _, v, *_ in T.BENCHMARK if v))
+    r.p(f"Sonuç: {vd}. Tesisin özgül tüketimi, ticari binalar içinde en enerji "
+        f"yoğun tip olan ABD fast-food restoranlarının medyanıyla "
+        f"({bin(en_yuksek)} kWh/m²/yıl) aynı seviyede, tam servis restoran "
+        f"medyanının %{bin(100*(E.ozgul()/1027-1),0)} üzerinde ve İngiliz CIBSE "
+        f"TM46 restoran kıyasının {bin(E.ozgul()/460,1)} katıdır. Bir önceki "
+        f"testin aksine bu test NORMAL demiyor.")
+    r.h2("Kurulu güç yoğunluğu — asıl çarpıcı sayı")
+    r.kpi([("Bağlı güç", f"{bin(E.BAGLI_KW,0)} kW", "ADP cetveli", NAVY),
+           ("Alan", f"{bin(E.ALAN_M2)} m²", "işveren beyanı", GREY),
+           ("Güç yoğunluğu", f"{bin(E.guc_yogunlugu())}", "W/m²", RED),
+           ("Tipik restoran", "150–250", "W/m²", GREEN)])
+    r.p(f"{bin(E.BAGLI_KW)} kW'lık bağlı güç {bin(E.ALAN_M2)} m²'ye "
+        f"sığdırıldığında {bin(E.guc_yogunlugu())} W/m² çıkar. Tam donanımlı "
+        f"bir restoranda beklenen değer 150–250 W/m² bandındadır; bu tesis "
+        f"bandın yaklaşık üç katıdır. Bu tek başına bir hata değildir — "
+        f"pahalı bir et restoranında mutfak yoğun olur — ama nereye "
+        f"bakılacağını söyler: fazlalığın nereden geldiği TEST 3'ün konusudur.")
     r.kutu("KIYASLAMANIN SINIRI — DÜRÜSTÇE",
-           "Türkiye'ye özel yayımlanmış restoran kWh/m²/yıl kıyas değeri "
-           "YOKTUR; BEP-TR metodolojisi var ama restoran kategorisi için "
-           "referans tüketim yayımlanmamış. Yukarıdaki kıyaslar ABD ve "
-           "İngiltere verisidir ve kendi aralarında 2,2 kat fark ederler "
-           "(alan tanımı, işletme saati ve iklim farkı). Bu yüzden bu test "
-           "“kesin normal” demez, “bariz anormal değil” der. Kesin cevap, "
-           "zincirin kendi şubelerini birbiriyle kıyaslamaktan çıkar — "
-           "bu rapor bunu §8'de öneriyor.", AMBER)
+           f"Alan ÖLÇÜLMEDİ; {bin(E.ALAN_M2)} m² işverenin kendi CAD "
+           f"dosyasından bildirdiği sayıdır ve Aqua Florya'ya ait çizim "
+           f"elimizde yoktur. Terasın bu alana dâhil olup olmadığı da "
+           f"bilinmiyor: teras hariçse gerçek özgül tüketim daha düşüktür. "
+           f"Ayrıca Türkiye'ye özel yayımlanmış restoran kWh/m²/yıl kıyas "
+           f"değeri YOKTUR; BEP-TR'de restoran kategorisi için referans "
+           f"tüketim yayımlanmamış. Yukarıdaki kıyaslar ABD ve İngiltere "
+           f"verisidir ve kendi aralarında 2,2 kat fark ederler. Kesin cevap, "
+           f"zincirin kendi şubelerini birbiriyle kıyaslamaktan çıkar (§8).",
+           AMBER)
 
     # ── TEST 3
     r.h2("TEST 3 · Yakıt karması testi — asıl sorun burada")
-    r.p("İlk iki test “normal” dedi. Üçüncüsü demiyor. Kıyas tablolarının "
+    r.p("Birinci test fiyatın normal olduğunu, ikincisi tüketimin yüksek "
+        "olduğunu söyledi. Üçüncüsü ikincisinin NEDENİNİ söylüyor. Kıyas tablolarının "
         "hepsi, bir restoranın enerjisinin büyük kısmının FOSİL YAKITTAN "
         "geldiğini varsayar: CIBSE TM46 restoran için 460 kWh/m²/yıl toplamın "
         "yalnız 90'ı elektrik, 370'i fosildir — yani elektrik payı %20'dir.")
@@ -962,8 +986,9 @@ def s5_normal(r):
          "HAYIR — iki koşulla: tarife tek zamanlı olmalı ve kompanzasyon "
          "çalışıyor olmalı. İkisi de henüz doğrulanmadı."],
         ["2 · Enerji yoğunluğu", "Metrekare başına çok mu tüketiyoruz?",
-         "HAYIR — uluslararası restoran kıyaslarının içindedir, ABD "
-         "medyanlarının altındadır."],
+         f"EVET. {bin(E.ozgul())} kWh/m²/yıl — ABD fast-food medyanı "
+         f"seviyesinde, İngiliz restoran kıyasının {bin(E.ozgul()/460,1)} katı. "
+         f"Güç yoğunluğu {bin(E.guc_yogunlugu())} W/m², tipik bandın üç katı."],
         ["3 · Yakıt karması", "Doğru enerjiyi mi kullanıyoruz?",
          "HAYIR. Normalde gazla yapılan ısıtma işleri elektrikli dirençle "
          "yapılıyor. Faturanın asıl kaldıracı buradadır."],
@@ -1075,14 +1100,14 @@ def s8_zincir(r):
     m = T.SENARYO["MEVCUT"] if T else None
     r.p(f"İşveren, şubelerin faturalarının {bin(alt)} – {bin(ust)} TL/ay "
         f"bandında olduğunu beyan ediyor. Bu bandın genişliği "
-        f"{ust/alt:.2f} kattır ve tek başına en değerli bilgidir: aynı marka, "
+        f"{bin(ust/alt,2)} kattır ve tek başına en değerli bilgidir: aynı marka, "
         f"aynı mutfak, aynı menü, benzer işletme saatleriyle çalışan şubeler "
         f"arasında iki kattan fazla fark varsa, farkın bir kısmı BÜYÜKLÜKTEN, "
         f"bir kısmı da KÖTÜ İŞLETMEDEN gelir. İkisini ayırmanın yolu "
         f"normalize etmektir.")
     if m:
         r.tablo(["Fatura (TL/ay)", "İma edilen kWh/ay", "Aqua Florya'ya oranı"],
-                [[bin(v), bin(v/m["birim"]), f"×{v/((alt+ust)/2):.2f}"]
+                [[bin(v), bin(v/m["birim"]), f"×{bin(v/((alt+ust)/2),2)}"]
                  for v in (alt, 400_000, ust)],
                 [40*mm, 50*mm, 88*mm], sag=(0, 1, 2), s=6.8)
     r.h2("8.1 Şubeleri kıyaslamanın doğru yolu")
@@ -1338,21 +1363,21 @@ def s6b_yakit(r):
     r.p("Bu kalemler tüketilen kWh'i azaltmaz; ısıyı BAŞKA BİR KAYNAKTAN "
         "üretir. Bu yüzden §6.3'teki yüzdeyle çakışmazlar ve üzerine eklenirler. "
         "Aşağıdaki tablo, 1 kWh ısı üretmenin maliyetini kaynağa göre veriyor.")
-    sat = [[ad, f"{tl:.2f}", yak, f"×{tl/min(x[1] for x in T.isi_maliyeti(m)):.1f}", g]
+    sat = [[ad, f"{bin(tl,2)}", yak, f"×{bin(tl/min(x[1] for x in T.isi_maliyeti(m)),1)}", g]
            for ad, tl, yak, g in T.isi_maliyeti(m)]
     r.tablo(["Isı kaynağı", "TL/kWh-ısı", "Yakıt", "En ucuza oran", "Güven"],
             sat, [74*mm, 24*mm, 26*mm, 30*mm, 24*mm], sag=(1, 3),
             vurgu=(0,))
     r.p(f"Elektrikli direnç ısıtması, gazlı radyanta göre "
-        f"{(m/1.0)/(T.DOGALGAZ_TL_KWH/T.VERIM['gazli_radyant'][0]):.1f} kat, "
+        f"{bin((m/1.0)/(T.DOGALGAZ_TL_KWH/T.VERIM['gazli_radyant'][0]),1)} kat, "
         f"su kaynaklı ısı pompasına göre "
-        f"{T.VERIM['isi_pompasi_wshp'][0]:.1f} kat pahalıdır. Tesiste elektrikli "
+        f"{bin(T.VERIM['isi_pompasi_wshp'][0],1)} kat pahalıdır. Tesiste elektrikli "
         f"dirençle ısıtılan üç yer vardır: teras ısıtıcıları (40 kW), hava "
         f"perdesinin ısıtıcı kademesi (21 kW içinde) ve sıcak su boyleri "
         f"(9,9 kW). Üçünün toplam bağlı gücü "
-        f"{E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw']:.1f} "
+        f"{bin(E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw'],1)} "
         f"kW'tır — tesisin bağlı gücünün "
-        f"%{100*(E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw'])/E.BAGLI_KW:.0f}'i.")
+        f"%{bin(100*(E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw'])/E.BAGLI_KW,0)}'i.")
     sat = []
     for y in E.YAKIT_ONLEM:
         a = E.yakit_tasarruf(y, T)
@@ -1404,24 +1429,24 @@ def s6b_yakit(r):
     r.kpi([("Model yıllık faturası", bin(p["yillik_fatura"]/1_000_000, 2)+" M",
             "TL/yıl", NAVY),
            ("Kesin potansiyel", bin(kesin/1_000_000, 2)+" M",
-            f"TL/yıl · faturanın %{100*kesin/p['yillik_fatura']:.0f}'i", GREEN),
+            f"TL/yıl · faturanın %{bin(100*kesin/p['yillik_fatura'],0)}'i", GREEN),
            ("Koşullu ek", bin((p["toplam"][1]-kesin)/1_000_000, 2)+" M",
             "TL/yıl · reaktif + tarife tipi + gaz", AMBER),
-           ("Üst sınır", f"%{100*p['toplam'][1]/p['yillik_fatura']:.0f}",
+           ("Üst sınır", f"%{bin(100*p['toplam'][1]/p['yillik_fatura'],0)}",
             "hepsi geçerliyse", COPPER)])
     r.kutu("ÜST SINIRI VAAT OLARAK OKUMAYIN",
-           f"Üst sınır (%{100*p['toplam'][1]/p['yillik_fatura']:.0f}), reaktif "
+           f"Üst sınır (%{bin(100*p['toplam'][1]/p['yillik_fatura'],0)}), reaktif "
            f"cezasının GERÇEKTEN var olduğunu, tarifenin üç zamanlı OLDUĞUNU "
            f"ve AVM'nin terasa gaz izni VERDİĞİNİ aynı anda varsayar. "
            f"Üçünün de doğru çıkma ihtimali düşüktür. Savunulabilir hedef "
            f"kesin potansiyeldir: yılda yaklaşık {bin(kesin)} TL, yani "
-           f"faturanın %{100*kesin/p['yillik_fatura']:.0f}'i. Bu bile ayda "
+           f"faturanın %{bin(100*kesin/p['yillik_fatura'],0)}'i. Bu bile ayda "
            f"{bin(kesin/12)} TL demektir ve çoğu düşük yatırımlı kalemden "
            f"gelir.", NAVY)
 
     r.h2("6.6 Destekler ve yasal yükümlülükler")
     tep = E.YILLIK_TOPLAM/T.TEP_KWH
-    r.p(f"Tesisin yıllık enerji tüketimi {tep:.0f} TEP'tir "
+    r.p(f"Tesisin yıllık enerji tüketimi {bin(tep,0)} TEP'tir "
         f"({bin(E.YILLIK_TOPLAM)} kWh ÷ {bin(T.TEP_KWH)} kWh/TEP). Ticari ve "
         f"hizmet binaları için enerji yöneticisi ve ISO 50001 zorunluluğu "
         f"eşiği 500 TEP/yıl veya 20.000 m²'dir; tek şube bu eşiklerin "
@@ -1455,7 +1480,7 @@ def s12_kart(r):
     r.kpi([("Yıllık fatura", bin(p["yillik_fatura"]/1_000_000, 2)+" M",
             "TL/yıl · model", NAVY),
            ("Kesin hedef", bin(kesin/1_000_000, 2)+" M",
-            f"TL/yıl · %{100*kesin/p['yillik_fatura']:.0f}", GREEN),
+            f"TL/yıl · %{bin(100*kesin/p['yillik_fatura'],0)}", GREEN),
            ("Aylık karşılığı", bin(kesin/12), "TL/ay", COPPER),
            ("Koşullu ek", bin((p["toplam"][1]-kesin)/1_000_000, 2)+" M",
             "TL/yıl · doğrulanırsa", AMBER)])
@@ -1465,7 +1490,7 @@ def s12_kart(r):
         ["1", "Son bir ayın elektrik faturasının PDF'ini iste",
          "işletme", "Tarife tipi · reaktif satırı · gerçek kWh · sözleşme gücü"],
         ["2", "Kompanzasyon panosunun rölesinden cos φ'yi oku ve fotoğrafla",
-         "teknik", f"Değer < {E.reaktif_analiz(0.9)['gereken_cosfi']} ise "
+         "teknik", f"Değer < {bin(E.reaktif_analiz(0.9)['gereken_cosfi'],4)} ise "
          f"yılda {bin(te['T-02'][1])} TL'ye kadar ceza riski"],
         ["3", "ADP'deki enerji analizörünün RS485 çıkışını kaydediciye bağla",
          "teknik", "Dört haftalık gerçek yük profili — bütün yatırım "
@@ -1475,16 +1500,17 @@ def s12_kart(r):
     r.h2("Üç sorunun üç cevabı")
     r.tablo(["Soru", "Cevap", "Dayanak"], [
         ["Harcama normal mi?",
-         "Tüketim ve birim fiyat normal; YAKIT SEÇİMİ normal değil.",
-         f"Model {bin(E.ORT_AY_KWH)} kWh/ay × {m['birim']:.2f} TL/kWh = "
-         f"{bin(E.ORT_AY_KWH*m['birim'])} TL/ay — beyan edilen bandın ortası."],
+         "Birim fiyat normal; tüketim ve yakıt seçimi değil.",
+         f"Model {bin(E.ORT_AY_KWH)} kWh/ay × {bin(m['birim'],2)} TL/kWh = "
+         f"{bin(E.ORT_AY_KWH*m['birim'])} TL/ay — beyan edilen bandın ortası. "
+         f"Ama {bin(E.ozgul())} kWh/m²/yıl, ABD fast-food seviyesinde."],
         ["En büyük tek kaldıraç nedir?",
          "Havalandırmanın sabit debili çalışması ve elektrikli direnç "
          "ısıtma.",
          f"Havalandırma {bin(E.YILLIK['HAVALANDIRMA'])} kWh/yıl "
-         f"(%{100*E.YILLIK['HAVALANDIRMA']/E.YILLIK_TOPLAM:.0f}); "
+         f"(%{bin(100*E.YILLIK['HAVALANDIRMA']/E.YILLIK_TOPLAM,0)}); "
          f"teras ısıtıcı + hava perdesi + boiler "
-         f"{E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw']:.0f} kW."],
+         f"{bin(E.SINIF['TERAS_ISITMA']['kw']+E.SINIF['HAVA_PERDESI']['kw']+E.SINIF['SICAK_SU']['kw'],0)} kW."],
         ["Hemen ne kazanabiliriz?",
          "Yatırımsız kalemler: tarife tipi kontrolü, tedarikçi ihalesi, "
          "işletme disiplini, ayar.",
@@ -1494,12 +1520,13 @@ def s12_kart(r):
     ], [34*mm, 62*mm, 82*mm], s=6.6)
 
     r.kutu("RAPORUN TEK CÜMLELİK ÖZETİ",
-           "Aqua Florya'nın elektrik faturası, tesisin kurulu yüküne ve "
-           "İstanbul'daki cari tarifeye göre açıklanabilir durumdadır; asıl "
-           "sorun tesisin normalde gazla yapılan ısıtma işlerini elektrikli "
-           "dirençle yapması ve havalandırmanın pişirme olsun olmasın tam "
-           "debide çalışmasıdır — ikisi de geri alınabilir tasarım "
-           "tercihleridir.", COPPER)
+           f"Aqua Florya kWh'i pahalıya almıyor, çok kWh tüketiyor: "
+           f"{bin(E.ALAN_M2)} m²'de {bin(E.guc_yogunlugu())} W/m² kurulu güç "
+           f"ve {bin(E.ozgul())} kWh/m²/yıl özgül tüketim, tipik restoran "
+           f"bandının üç katıdır; nedeni normalde gazla yapılan ısıtma "
+           f"işlerinin elektrikli dirençle yapılması ve havalandırmanın "
+           f"pişirme olsun olmasın tam debide çalışmasıdır — ikisi de geri "
+           f"alınabilir tasarım tercihleridir.", COPPER)
 
     r.h2("Bu raporun üretim zinciri")
     r.tablo(["Dosya", "Ne yapar"], [
