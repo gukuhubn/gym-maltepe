@@ -1,0 +1,12 @@
+{
+ "durum": "ŞARTLI",
+ "hata": 0,
+ "uyari": 1,
+ "bilgi": 20,
+ "eksik": 15,
+ "disi": 2,
+ "uyari_metin": [
+  "Üç zamanlı ticarethane birim fiyatları TEK KAYNAKTAN alındı, çapraz doğrulanmadı"
+ ],
+ "hata_metin": []
+}
